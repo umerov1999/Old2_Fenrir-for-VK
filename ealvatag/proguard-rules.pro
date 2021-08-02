@@ -1,0 +1,2 @@
+-keep class ealvatag.tag.id3.framebody.** { *; }
+-keep class ealvatag.tag.datatype.** { *; }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Fenrir VK</string>
+    <string name="full_status" translatable="false">Full</string>
+</resources>

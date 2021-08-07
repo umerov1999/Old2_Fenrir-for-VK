@@ -1081,7 +1081,9 @@
 
     <string name="section_play_title">Воспроизвести</string>
     <string name="play_in_external_player">Играть в стороннем плеере</string>
-    <string name="title_play_fullscreen">Играть в NewPipe</string>
+    <string name="title_play_in_newpipe">Играть в NewPipe</string>
+    <string name="title_play_in_youtube_vanced">Играть в Youtube Vanced</string>
+    <string name="title_play_in_youtube">Играть в Youtube</string>
     <string name="title_play_in_coub">Играть в Coub</string>
     <string name="title_play_in_another_software">Играть через стороннее ПО</string>
     <string name="title_play_in_browser">Играть в браузере</string>
@@ -1626,4 +1628,5 @@
     <string name="lolipop21">Данное приложение не расчитанно для работы на Android 5.0 sdk 21, ибо у этой прошивки есть баг в модуле Skia. Если будет вылетать, отключите нативную библиотеку в настройках, но тогда лишитесь стикеров, анимированных gif, qr</string>
     <string name="ad_block_story_news">Блокировка рекламы</string>
     <string name="ad_block_story_news_summary">Истории, новости</string>
+    <string name="open_comment_thread">Открыть %1$s</string>
 </resources>

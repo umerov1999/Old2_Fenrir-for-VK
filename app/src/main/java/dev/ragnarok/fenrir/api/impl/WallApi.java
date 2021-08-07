@@ -190,7 +190,7 @@ class WallApi extends AbsApi implements IWallApi {
                                                        String sort, Boolean extended, String fields) {
         return provideService(IWallService.class, TokenType.USER)
                 .flatMap(service -> service
-                        .getComments(ownerId, postId, integerFromBoolean(needLikes), startCommentId, offset, count, sort, integerFromBoolean(extended), fields)
+                        .getComments(ownerId, postId, integerFromBoolean(needLikes), startCommentId, offset, count, sort, integerFromBoolean(extended), 10, fields)
                         .map(extractResponseWithErrorHandling()));
     }
 }

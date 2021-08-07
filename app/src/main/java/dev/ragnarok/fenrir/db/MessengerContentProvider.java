@@ -588,6 +588,7 @@ public class MessengerContentProvider extends ContentProvider {
         sCommentsProjectionMap.put(CommentsColumns.TEXT, CommentsColumns.FULL_TEXT);
         sCommentsProjectionMap.put(CommentsColumns.REPLY_TO_USER, CommentsColumns.FULL_REPLY_TO_USER);
         sCommentsProjectionMap.put(CommentsColumns.REPLY_TO_COMMENT, CommentsColumns.FULL_REPLY_TO_COMMENT);
+        sCommentsProjectionMap.put(CommentsColumns.THREADS_COUNT, CommentsColumns.FULL_THREADS_COUNT);
         sCommentsProjectionMap.put(CommentsColumns.THREADS, CommentsColumns.FULL_THREADS);
         sCommentsProjectionMap.put(CommentsColumns.LIKES, CommentsColumns.FULL_LIKES);
         sCommentsProjectionMap.put(CommentsColumns.USER_LIKES, CommentsColumns.FULL_USER_LIKES);

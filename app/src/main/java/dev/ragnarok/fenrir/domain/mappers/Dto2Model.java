@@ -755,9 +755,6 @@ public class Dto2Model {
     }
 
     public static Comment buildComment(@NonNull Commented commented, @NonNull VKApiComment dto, @NonNull IOwnersBundle owners) {
-        if (dto.from_id == 0) {
-            return null;
-        }
         Comment comment = new Comment(commented)
                 .setId(dto.id)
                 .setFromId(dto.from_id)
@@ -769,9 +766,13 @@ public class Dto2Model {
                 .setUserLikes(dto.user_likes)
                 .setCanLike(dto.can_like)
                 .setCanEdit(dto.can_edit)
-                .setThreads(dto.threads)
-                .setPid(dto.pid)
-                .setAuthor(owners.getById(dto.from_id));
+                .setThreadsCount(dto.threads_count)
+                .setThreads(buildComments(commented, dto.threads, owners))
+                .setPid(dto.pid);
+
+        if (dto.from_id != 0) {
+            comment.setAuthor(owners.getById(dto.from_id));
+        }
 
         if (dto.attachments != null) {
             comment.setAttachments(buildAttachments(dto.attachments, owners));
@@ -779,6 +780,20 @@ public class Dto2Model {
         }
 
         return comment;
+    }
+
+    public static List<Comment> buildComments(@NonNull Commented commented, @NonNull List<VKApiComment> dtos, @NonNull IOwnersBundle owners) {
+        if (Utils.isEmpty(dtos)) {
+            return null;
+        }
+        List<Comment> o = new ArrayList<>();
+        for (VKApiComment i : dtos) {
+            Comment u = buildComment(commented, i, owners);
+            if (nonNull(u)) {
+                o.add(u);
+            }
+        }
+        return o;
     }
 
     public static Topic transform(@NonNull VKApiTopic dto, @NonNull IOwnersBundle owners) {

@@ -16,7 +16,7 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class Constants {
     public static final String API_VERSION = "5.131";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 10;
 
     public static final @Account_Types
     int DEFAULT_ACCOUNT_TYPE = BuildConfig.DEFAULT_ACCOUNT_TYPE;
@@ -25,10 +25,10 @@ public class Constants {
     public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == Account_Types.KATE ? API_VERSION : "5.122";
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".file_provider";
 
-    public static final String VK_ANDROID_APP_VERSION_NAME = "6.47";
-    public static final String VK_ANDROID_APP_VERSION_CODE = "8740";
-    public static final String KATE_APP_VERSION_NAME = "76 lite";
-    public static final String KATE_APP_VERSION_CODE = "495";
+    public static final String VK_ANDROID_APP_VERSION_NAME = "6.48";
+    public static final String VK_ANDROID_APP_VERSION_CODE = "8796";
+    public static final String KATE_APP_VERSION_NAME = "77.1 lite";
+    public static final String KATE_APP_VERSION_CODE = "497";
     public static final String KATE_RECEIPT_GMS_TOKEN = BuildConfig.KATE_RECEIPT_GMS_TOKEN;
     public static final int API_ID = BuildConfig.VK_API_APP_ID;
     public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;

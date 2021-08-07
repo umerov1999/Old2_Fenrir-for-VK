@@ -177,7 +177,17 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 applyUpdate(comment, update);
                 int finalI = i;
                 callView(v -> v.notifyItemChanged(finalI));
-                break;
+                return;
+            } else if (comment.hasThreads()) {
+                for (int s = 0; s < comment.getThreads().size(); s++) {
+                    Comment thread = comment.getThreads().get(s);
+                    if (thread.getId() == update.getCommentId()) {
+                        applyUpdate(thread, update);
+                        int finalI = i;
+                        callView(v -> v.notifyItemChanged(finalI));
+                        return;
+                    }
+                }
             }
         }
     }

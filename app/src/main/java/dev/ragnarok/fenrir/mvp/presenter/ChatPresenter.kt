@@ -1221,6 +1221,12 @@ class ChatPresenter(
             return
         }
 
+        message.attachments?.voiceMessages?.let {
+            for (i: VoiceMessage in it) {
+                i.isShowTranscript = true
+            }
+        }
+
         if (message.isChatTitleUpdate) {
             peer.title = message.actionText
             resolveToolbarTitle()

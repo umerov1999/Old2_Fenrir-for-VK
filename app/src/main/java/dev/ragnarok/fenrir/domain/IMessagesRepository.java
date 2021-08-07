@@ -110,6 +110,8 @@ public interface IMessagesRepository {
 
     Single<List<Dialog>> getDialogs(int accountId, int count, Integer startMessageId);
 
+    Completable insertDialog(int accountId, @NonNull Dialog dialog);
+
     Single<List<Message>> findCachedMessages(int accountId, List<Integer> ids);
 
     Single<Message> put(SaveMessageBuilder builder);

@@ -1,21 +1,16 @@
 package dev.ragnarok.fenrir.db;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dev.ragnarok.fenrir.Constants;
-import dev.ragnarok.fenrir.crypt.AesKeyPair;
-import dev.ragnarok.fenrir.crypt.ver.Version;
 import dev.ragnarok.fenrir.db.column.AttachmentsColumns;
 import dev.ragnarok.fenrir.db.column.CommentsAttachmentsColumns;
 import dev.ragnarok.fenrir.db.column.CommentsColumns;
@@ -92,65 +87,35 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void createKeysTableIfNotExist(SQLiteDatabase db) {
+        String sql = "CREATE TABLE IF NOT EXISTS [" + KeyColumns.TABLENAME + "] (\n" +
+                "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "  [" + KeyColumns.VERSION + "] INTEGER, " +
+                "  [" + KeyColumns.PEER_ID + "] INTEGER, " +
+                "  [" + KeyColumns.SESSION_ID + "] INTEGER, " +
+                "  [" + KeyColumns.DATE + "] BIGINT, " +
+                "  [" + KeyColumns.START_SESSION_MESSAGE_ID + "] INTEGER, " +
+                "  [" + KeyColumns.END_SESSION_MESSAGE_ID + "] INTEGER, " +
+                "  [" + KeyColumns.OUT_KEY + "] TEXT, " +
+                "  [" + KeyColumns.IN_KEY + "] TEXT," +
+                "  CONSTRAINT [] UNIQUE ([" + KeyColumns.SESSION_ID + "]) ON CONFLICT REPLACE);";
+        db.execSQL(sql);
+    }
+
     @Override
-    public void onUpgrade(SQLiteDatabase db, int old, int i2) {
-        if (old < Constants.DATABASE_VERSION) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < Constants.DATABASE_VERSION) {
             dropAllTables(db);
             onCreate(db);
         }
-
-        if (old < 114) {
-            addKeyVersioning(db);
-        }
     }
 
-    private void addKeyVersioning(SQLiteDatabase db) {
-        Cursor cursor = db.query(KeyColumns.TABLENAME, new String[]{
-                KeyColumns.PEER_ID,
-                KeyColumns.SESSION_ID,
-                KeyColumns.DATE,
-                KeyColumns.START_SESSION_MESSAGE_ID,
-                KeyColumns.END_SESSION_MESSAGE_ID,
-                KeyColumns.OUT_KEY,
-                KeyColumns.IN_KEY}, null, null, null, null, null);
-
-        ArrayList<AesKeyPair> pairs = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            AesKeyPair pair = new AesKeyPair()
-                    .setPeerId(cursor.getInt(0))
-                    .setSessionId(cursor.getLong(1))
-                    .setDate(cursor.getLong(2))
-                    .setStartMessageId(cursor.getInt(3))
-                    .setEndMessageId(cursor.getInt(4))
-                    .setMyAesKey(cursor.getString(5))
-                    .setHisAesKey(cursor.getString(6))
-                    .setVersion(Version.V1);
-            pairs.add(pair);
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion > Constants.DATABASE_VERSION) {
+            dropAllTables(db);
+            onCreate(db);
         }
-
-        cursor.close();
-
-        db.execSQL("DROP TABLE IF EXISTS " + KeyColumns.TABLENAME);
-
-        createKeysTableIfNotExist(db);
-
-        db.beginTransaction();
-
-        for (AesKeyPair pair : pairs) {
-            ContentValues cv = new ContentValues();
-            cv.put(KeyColumns.VERSION, pair.getVersion());
-            cv.put(KeyColumns.PEER_ID, pair.getPeerId());
-            cv.put(KeyColumns.SESSION_ID, pair.getSessionId());
-            cv.put(KeyColumns.DATE, pair.getDate());
-            cv.put(KeyColumns.START_SESSION_MESSAGE_ID, pair.getStartMessageId());
-            cv.put(KeyColumns.END_SESSION_MESSAGE_ID, pair.getEndMessageId());
-            cv.put(KeyColumns.OUT_KEY, pair.getMyAesKey());
-            cv.put(KeyColumns.IN_KEY, pair.getHisAesKey());
-            db.insert(KeyColumns.TABLENAME, null, cv);
-        }
-
-        db.setTransactionSuccessful();
-        db.endTransaction();
     }
 
     @Override
@@ -207,21 +172,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // for test
         createKeysTableIfNotExist(db);
-    }
-
-    private void createKeysTableIfNotExist(SQLiteDatabase db) {
-        String sql = "CREATE TABLE IF NOT EXISTS [" + KeyColumns.TABLENAME + "] (\n" +
-                "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "  [" + KeyColumns.VERSION + "] INTEGER, " +
-                "  [" + KeyColumns.PEER_ID + "] INTEGER, " +
-                "  [" + KeyColumns.SESSION_ID + "] INTEGER, " +
-                "  [" + KeyColumns.DATE + "] BIGINT, " +
-                "  [" + KeyColumns.START_SESSION_MESSAGE_ID + "] INTEGER, " +
-                "  [" + KeyColumns.END_SESSION_MESSAGE_ID + "] INTEGER, " +
-                "  [" + KeyColumns.OUT_KEY + "] TEXT, " +
-                "  [" + KeyColumns.IN_KEY + "] TEXT," +
-                "  CONSTRAINT [] UNIQUE ([" + KeyColumns.SESSION_ID + "]) ON CONFLICT REPLACE);";
-        db.execSQL(sql);
     }
 
     private void dropAllTables(SQLiteDatabase db) {
@@ -382,7 +332,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + CommentsColumns.TEXT + "] TEXT, " +
                 " [" + CommentsColumns.REPLY_TO_USER + "] INTEGER, " +
                 " [" + CommentsColumns.REPLY_TO_COMMENT + "] INTEGER, " +
-                " [" + CommentsColumns.THREADS + "] INTEGER, " +
+                " [" + CommentsColumns.THREADS_COUNT + "] INTEGER, " +
+                " [" + CommentsColumns.THREADS + "] TEXT, " +
                 " [" + CommentsColumns.LIKES + "] INTEGER, " +
                 " [" + CommentsColumns.USER_LIKES + "] BOOLEAN, " +
                 " [" + CommentsColumns.CAN_LIKE + "] BOOLEAN, " +

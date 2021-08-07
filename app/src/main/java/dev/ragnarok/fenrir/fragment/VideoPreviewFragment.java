@@ -463,9 +463,20 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
 
         if (nonEmpty(external)) {
             if (external.contains("youtube")) {
-                items.add(new Item(Menu.YOUTUBE, new Text(R.string.title_play_fullscreen))
-                        .setIcon(R.drawable.ic_play_youtube)
+                boolean hasVanced = AppPrefs.isVancedYoutubeInstalled(requireActivity());
+                if (hasVanced) {
+                    items.add(new Item(Menu.YOUTUBE_VANCED, new Text(R.string.title_play_in_youtube_vanced))
+                            .setIcon(R.drawable.ic_play_youtube)
+                            .setSection(SECTION_PLAY));
+                }
+                items.add(new Item(Menu.NEW_PIPE, new Text(R.string.title_play_in_newpipe))
+                        .setIcon(R.drawable.ic_new_pipe)
                         .setSection(SECTION_PLAY));
+                if (!hasVanced) {
+                    items.add(new Item(Menu.YOUTUBE, new Text(R.string.title_play_in_youtube))
+                            .setIcon(R.drawable.ic_play_youtube)
+                            .setSection(SECTION_PLAY));
+                }
 
             } else if (external.contains("coub") && AppPrefs.isCoubInstalled(requireActivity())) {
                 items.add(new Item(Menu.COUB, new Text(R.string.title_play_in_coub))
@@ -542,8 +553,12 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
             openInternal(video, InternalVideoSize.SIZE_240);
         } else if (nonEmpty(video.getExternalLink())) {
             if (video.getExternalLink().contains("youtube")) {
-                if (AppPrefs.isNewPipeInstalled(requireActivity())) {
+                if (AppPrefs.isVancedYoutubeInstalled(requireActivity())) {
+                    playWithYoutubeVanced(video);
+                } else if (AppPrefs.isNewPipeInstalled(requireActivity())) {
                     playWithNewPipe(video);
+                } else if (AppPrefs.isYoutubeInstalled(requireActivity())) {
+                    playWithYoutube(video);
                 } else {
                     playWithExternalSoftware(video.getExternalLink());
                 }
@@ -614,12 +629,20 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                 showPlayExternalPlayerMenu(video);
                 break;
 
-            case Menu.YOUTUBE:
+            case Menu.NEW_PIPE:
                 if (AppPrefs.isNewPipeInstalled(requireActivity())) {
                     playWithNewPipe(video);
                 } else {
                     LinkHelper.openLinkInBrowser(requireActivity(), "https://github.com/TeamNewPipe/NewPipe/releases");
                 }
+                break;
+
+            case Menu.YOUTUBE:
+                playWithYoutube(video);
+                break;
+
+            case Menu.YOUTUBE_VANCED:
+                playWithYoutubeVanced(video);
                 break;
 
             case Menu.COUB:
@@ -754,6 +777,26 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         startActivity(intent);
     }
 
+    private void playWithYoutube(Video video) {
+        String outerLink = video.getExternalLink();
+
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(outerLink));
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setComponent(new ComponentName("com.google.android.youtube", "com.google.android.apps.youtube.app.application.Shell$UrlActivity"));
+        startActivity(intent);
+    }
+
+    private void playWithYoutubeVanced(Video video) {
+        String outerLink = video.getExternalLink();
+
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(outerLink));
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setComponent(new ComponentName("com.vanced.android.youtube", "com.google.android.apps.youtube.app.application.Shell$UrlActivity"));
+        startActivity(intent);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -818,18 +861,20 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
         static final int P_480 = 480;
         static final int P_720 = 720;
         static final int P_1080 = 1080;
-        static final int HLS = -9;
-        static final int LIVE = -7;
-        static final int P_EXTERNAL_PLAYER = -1;
+        static final int HLS = -1;
+        static final int LIVE = -2;
+        static final int P_EXTERNAL_PLAYER = -3;
 
-        static final int YOUTUBE = -2;
-        static final int COUB = -3;
+        static final int YOUTUBE = -4;
+        static final int YOUTUBE_VANCED = -5;
+        static final int NEW_PIPE = -6;
+        static final int COUB = -7;
 
-        static final int PLAY_ANOTHER_SOFT = -4;
-        static final int PLAY_BROWSER = -5;
-        static final int DOWNLOAD = -6;
-        static final int COPY_LINK = -8;
+        static final int PLAY_ANOTHER_SOFT = -8;
+        static final int PLAY_BROWSER = -9;
+        static final int DOWNLOAD = -10;
+        static final int COPY_LINK = -11;
 
-        static final int ADD_TO_FAVE = -10;
+        static final int ADD_TO_FAVE = -12;
     }
 }

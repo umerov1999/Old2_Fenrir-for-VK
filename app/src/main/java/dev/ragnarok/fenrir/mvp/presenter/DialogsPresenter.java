@@ -26,6 +26,7 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.crypt.KeyLocationPolicy;
 import dev.ragnarok.fenrir.domain.IAccountsInteractor;
 import dev.ragnarok.fenrir.domain.IMessagesRepository;
+import dev.ragnarok.fenrir.domain.IOwnersRepository;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.exception.UnauthorizedException;
@@ -349,40 +350,57 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         }
 
         int index = indexOf(dialogs, peerId);
-        if (index != -1) {
-            Dialog dialog = dialogs.get(index);
+        Dialog dialog = index == -1 ? new Dialog().setPeerId(peerId) : dialogs.get(index);
 
-            if (update.getReadIn() != null) {
-                dialog.setInRead(update.getReadIn().getMessageId());
-            }
-
-            if (update.getReadOut() != null) {
-                dialog.setOutRead(update.getReadOut().getMessageId());
-            }
-
-            if (update.getUnread() != null) {
-                dialog.setUnreadCount(update.getUnread().getCount());
-            }
-
-            if (messageOptional.nonEmpty()) {
-                Message message = messageOptional.get();
-                dialog.setLastMessageId(message.getId());
-                dialog.setMinor_id(message.getId());
-                dialog.setMessage(message);
-
-                if (dialog.isChat()) {
-                    dialog.setInterlocutor(message.getSender());
-                }
-            }
-
-            if (update.getTitle() != null) {
-                dialog.setTitle(update.getTitle().getTitle());
-            }
-
-            Collections.sort(dialogs, COMPARATOR);
+        if (update.getReadIn() != null) {
+            dialog.setInRead(update.getReadIn().getMessageId());
         }
 
-        safeNotifyDataSetChanged();
+        if (update.getReadOut() != null) {
+            dialog.setOutRead(update.getReadOut().getMessageId());
+        }
+
+        if (update.getUnread() != null) {
+            dialog.setUnreadCount(update.getUnread().getCount());
+        }
+
+        if (messageOptional.nonEmpty()) {
+            Message message = messageOptional.get();
+            dialog.setLastMessageId(message.getId());
+            dialog.setMinor_id(message.getId());
+            dialog.setMessage(message);
+
+            if (dialog.isChat()) {
+                dialog.setInterlocutor(message.getSender());
+            }
+        }
+
+        if (update.getTitle() != null) {
+            dialog.setTitle(update.getTitle().getTitle());
+        }
+        if (index != -1) {
+            Collections.sort(dialogs, COMPARATOR);
+            safeNotifyDataSetChanged();
+        } else {
+            if (Peer.isGroup(peerId) || Peer.isUser(peerId)) {
+                appendDisposable(Repository.INSTANCE.getOwners().getBaseOwnerInfo(accountId, peerId, IOwnersRepository.MODE_ANY)
+                        .compose(RxUtils.applySingleIOToMainSchedulers())
+                        .subscribe(o -> {
+                            dialog.setInterlocutor(o);
+                            appendDisposable(Repository.INSTANCE.getMessages().insertDialog(accountId, dialog)
+                                    .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                                    .subscribe(() -> {
+                                        dialogs.add(dialog);
+                                        Collections.sort(dialogs, COMPARATOR);
+                                        safeNotifyDataSetChanged();
+                                    }, ignore()));
+                        }, ignore()));
+            } else {
+                dialogs.add(dialog);
+                Collections.sort(dialogs, COMPARATOR);
+                safeNotifyDataSetChanged();
+            }
+        }
     }
 
     private void onDialogDeleted(int accountId, int peerId) {

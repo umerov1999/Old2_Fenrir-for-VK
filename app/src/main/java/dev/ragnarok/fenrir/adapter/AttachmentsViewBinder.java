@@ -246,19 +246,34 @@ public class AttachmentsViewBinder {
             holder.mWaveFormView.setWaveForm(DEFAUL_WAVEFORM);
         }
 
-        if (isEmpty(voice.getTranscript()) && messageId != null) {
+        if (isEmpty(voice.getTranscript())) {
             holder.TranscriptText.setVisibility(View.GONE);
-            holder.mDoTranscript.setVisibility(View.VISIBLE);
-            holder.mDoTranscript.setOnClickListener(v -> {
-                if (nonNull(mVoiceActionListener)) {
-                    mVoiceActionListener.onTranscript(voice.getOwnerId() + "_" + voice.getId(), messageId);
-                    holder.mDoTranscript.setVisibility(View.GONE);
-                }
-            });
+            if (messageId == null) {
+                holder.mDoTranscript.setVisibility(View.GONE);
+            } else {
+                holder.mDoTranscript.setVisibility(View.VISIBLE);
+                holder.mDoTranscript.setOnClickListener(v -> {
+                    if (nonNull(mVoiceActionListener)) {
+                        mVoiceActionListener.onTranscript(voice.getOwnerId() + "_" + voice.getId(), messageId);
+                        holder.mDoTranscript.setVisibility(View.GONE);
+                    }
+                });
+            }
         } else {
-            holder.TranscriptText.setVisibility(View.VISIBLE);
-            holder.TranscriptText.setText(voice.getTranscript());
-            holder.mDoTranscript.setVisibility(View.GONE);
+            if (voice.isShowTranscript()) {
+                holder.TranscriptText.setVisibility(View.VISIBLE);
+                holder.TranscriptText.setText(voice.getTranscript());
+                holder.mDoTranscript.setVisibility(View.GONE);
+            } else {
+                holder.TranscriptText.setVisibility(View.GONE);
+                holder.mDoTranscript.setVisibility(View.VISIBLE);
+                holder.mDoTranscript.setOnClickListener(v -> {
+                    voice.setShowTranscript(true);
+                    holder.TranscriptText.setVisibility(View.VISIBLE);
+                    holder.TranscriptText.setText(voice.getTranscript());
+                    holder.mDoTranscript.setVisibility(View.GONE);
+                });
+            }
         }
 
         holder.mWaveFormView.setOnLongClickListener(v -> {

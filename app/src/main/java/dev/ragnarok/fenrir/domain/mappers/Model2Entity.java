@@ -18,6 +18,7 @@ import dev.ragnarok.fenrir.db.model.entity.AudioEntity;
 import dev.ragnarok.fenrir.db.model.entity.AudioMessageEntity;
 import dev.ragnarok.fenrir.db.model.entity.AudioPlaylistEntity;
 import dev.ragnarok.fenrir.db.model.entity.CallEntity;
+import dev.ragnarok.fenrir.db.model.entity.DialogEntity;
 import dev.ragnarok.fenrir.db.model.entity.DocumentEntity;
 import dev.ragnarok.fenrir.db.model.entity.Entity;
 import dev.ragnarok.fenrir.db.model.entity.EventEntity;
@@ -50,6 +51,7 @@ import dev.ragnarok.fenrir.model.AudioPlaylist;
 import dev.ragnarok.fenrir.model.Call;
 import dev.ragnarok.fenrir.model.Conversation;
 import dev.ragnarok.fenrir.model.CryptStatus;
+import dev.ragnarok.fenrir.model.Dialog;
 import dev.ragnarok.fenrir.model.Document;
 import dev.ragnarok.fenrir.model.Event;
 import dev.ragnarok.fenrir.model.GiftItem;
@@ -110,6 +112,22 @@ public class Model2Entity {
                 .setCurrentKeyboard(buildKeyboardEntity(entity.getCurrentKeyboard()))
                 .setMajor_id(entity.getMajor_id())
                 .setMinor_id(entity.getMinor_id());
+    }
+
+    public static DialogEntity buildDialog(Dialog model) {
+        return new DialogEntity(model.getPeerId())
+                .setUnreadCount(model.getUnreadCount())
+                .setInRead(model.getInRead())
+                .setOutRead(model.getOutRead())
+                .setMessage(buildMessageEntity(model.getMessage()))
+                .setLastMessageId(model.getLastMessageId())
+                .setTitle(model.getTitle())
+                .setGroupChannel(model.isGroupChannel())
+                .setPhoto50(model.getPhoto50())
+                .setPhoto100(model.getPhoto100())
+                .setPhoto200(model.getPhoto200())
+                .setMajor_id(model.getMajor_id())
+                .setMinor_id(model.getMinor_id());
     }
 
     public static MessageEntity buildMessageEntity(Message message) {

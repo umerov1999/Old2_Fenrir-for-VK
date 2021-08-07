@@ -1235,16 +1235,40 @@ public class Utils {
     }
 
     public static <K extends Parcelable, V extends Parcelable> Map<K, V> readParcelableMap(
-            Parcel parcel, Class<K> kClass, Class<V> vClass) {
+            Parcel parcel, ClassLoader keyClassLoader, ClassLoader valueClassLoader) {
         int size = parcel.readInt();
         if (size == 0)
             return null;
         Map<K, V> map = new HashMap<>(size);
         for (int i = 0; i < size; i++) {
-            map.put(kClass.cast(parcel.readParcelable(kClass.getClassLoader())),
-                    vClass.cast(parcel.readParcelable(vClass.getClassLoader())));
+            map.put(parcel.readParcelable(keyClassLoader),
+                    parcel.readParcelable(valueClassLoader));
         }
         return map;
+    }
+
+    public static <K extends Parcelable> void writeParcelableArray(
+            Parcel parcel, int flags, List<K> list) {
+        if (isEmpty(list)) {
+            parcel.writeInt(0);
+            return;
+        }
+        parcel.writeInt(list.size());
+        for (K e : list) {
+            parcel.writeParcelable(e, flags);
+        }
+    }
+
+    public static <K extends Parcelable> List<K> readParcelableArray(
+            Parcel parcel, ClassLoader classLoader) {
+        int size = parcel.readInt();
+        if (size == 0)
+            return null;
+        List<K> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(parcel.readParcelable(classLoader));
+        }
+        return list;
     }
 
     public static void writeStringMap(Parcel parcel, Map<String, String> map) {

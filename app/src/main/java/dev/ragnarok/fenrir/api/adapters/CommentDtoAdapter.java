@@ -5,14 +5,18 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import dev.ragnarok.fenrir.api.model.VKApiComment;
 import dev.ragnarok.fenrir.api.model.VkApiAttachments;
 
 public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiComment> {
     private static final String TAG = CommentDtoAdapter.class.getSimpleName();
+    private static final Type THREADS_TYPE = new TypeToken<List<VKApiComment>>() {
+    }.getType();
 
     @Override
     public VKApiComment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -39,7 +43,11 @@ public class CommentDtoAdapter extends AbsAdapter implements JsonDeserializer<VK
         }
 
         if (hasObject(root, "thread")) {
-            dto.threads = optInt(root.get("thread").getAsJsonObject(), "count");
+            JsonObject threadRoot = root.getAsJsonObject("thread");
+            dto.threads_count = optInt(threadRoot, "count");
+            if (hasArray(threadRoot, "items")) {
+                dto.threads = context.deserialize(threadRoot.get("items"), THREADS_TYPE);
+            }
         }
 
         dto.pid = optInt(root, "pid");

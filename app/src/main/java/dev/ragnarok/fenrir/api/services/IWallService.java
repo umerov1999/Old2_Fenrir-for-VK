@@ -186,6 +186,7 @@ public interface IWallService {
                                                               @Field("count") Integer count,
                                                               @Field("sort") String sort,
                                                               @Field("extended") Integer extended,
+                                                              @Field("thread_items_count") Integer thread_items_count,
                                                               @Field("fields") String fields);
 
     @FormUrlEncoded

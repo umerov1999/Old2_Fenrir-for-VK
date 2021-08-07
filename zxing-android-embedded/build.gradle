@@ -22,10 +22,10 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.core:core:1.6.0'
-    implementation 'androidx.activity:activity:1.3.0'
+    implementation 'androidx.activity:activity:1.3.1'
     implementation 'androidx.fragment:fragment:1.3.6'
     implementation fenrirMinSDK >= 26 ? 'com.google.zxing:core:3.4.1' : 'com.google.zxing:core:3.3.3'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation project(path: ':material')
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 }

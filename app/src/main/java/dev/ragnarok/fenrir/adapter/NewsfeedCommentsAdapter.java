@@ -237,7 +237,9 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         holder.commentLikeCounter.setText(String.valueOf(comment.getLikesCount()));
         Utils.setColorFilter(holder.commentLikeIcon, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
 
-        addOwnerAvatarClickHandling(holder.commentAvatar, comment.getFromId());
+        if (comment.getFromId() != 0) {
+            addOwnerAvatarClickHandling(holder.commentAvatar, comment.getFromId());
+        }
     }
 
     private void bindPost(PostHolder holder, int position) {

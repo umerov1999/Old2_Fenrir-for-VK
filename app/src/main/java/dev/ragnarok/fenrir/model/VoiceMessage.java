@@ -23,6 +23,7 @@ public class VoiceMessage extends AbsModel {
     private String linkOgg;
     private String linkMp3;
     private String accessKey;
+    private boolean showTranscript;
     private String transcript;
 
     public VoiceMessage(int id, int ownerId) {
@@ -40,6 +41,16 @@ public class VoiceMessage extends AbsModel {
         linkMp3 = in.readString();
         accessKey = in.readString();
         transcript = in.readString();
+        showTranscript = in.readByte() != 0;
+    }
+
+    public boolean isShowTranscript() {
+        return showTranscript;
+    }
+
+    public VoiceMessage setShowTranscript(boolean showTranscript) {
+        this.showTranscript = showTranscript;
+        return this;
     }
 
     public int getId() {
@@ -120,5 +131,6 @@ public class VoiceMessage extends AbsModel {
         parcel.writeString(linkMp3);
         parcel.writeString(accessKey);
         parcel.writeString(transcript);
+        parcel.writeByte((byte) (showTranscript ? 1 : 0));
     }
 }

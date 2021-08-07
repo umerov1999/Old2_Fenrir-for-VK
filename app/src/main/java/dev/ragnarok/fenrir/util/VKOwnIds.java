@@ -88,9 +88,16 @@ public class VKOwnIds {
     }
 
     public VKOwnIds append(@NonNull VKApiComment comment) {
-        append(comment.from_id);
+        if (comment.from_id != 0) {
+            append(comment.from_id);
+        }
         if (comment.attachments != null) {
             append(comment.attachments);
+        }
+        if (!Utils.isEmpty(comment.threads)) {
+            for (VKApiComment i : comment.threads) {
+                append(i);
+            }
         }
 
         return this;

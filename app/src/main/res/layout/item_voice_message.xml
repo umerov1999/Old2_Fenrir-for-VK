@@ -79,6 +79,7 @@
         android:background="@drawable/background_rectangle_stroke"
         android:padding="9dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:visibility="gone"
         tools:text="Message" />
 
 </RelativeLayout>

@@ -148,7 +148,8 @@ public class CheckDonate {
             404337098,
             320561476,
             460069556,
-            320226488
+            320226488,
+            3398969
     };
 
     public static boolean isFullVersion(@NonNull Context context) {

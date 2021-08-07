@@ -858,6 +858,12 @@ public class MessagesRepository implements IMessagesRepository {
     }
 
     @Override
+    public Completable insertDialog(int accountId, @NonNull Dialog dialog) {
+        IDialogsStorage dialogsStore = storages.dialogs();
+        return dialogsStore.insertDialogs(accountId, Collections.singletonList(Model2Entity.buildDialog(dialog)), false);
+    }
+
+    @Override
     public Single<List<Dialog>> getDialogs(int accountId, int count, Integer startMessageId) {
         boolean clear = isNull(startMessageId);
         IDialogsStorage dialogsStore = storages.dialogs();

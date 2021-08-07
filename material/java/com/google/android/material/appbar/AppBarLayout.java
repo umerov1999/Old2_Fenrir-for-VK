@@ -841,6 +841,21 @@ public class AppBarLayout extends LinearLayout implements CoordinatorLayout.Atta
     return setLiftableState(liftable);
   }
 
+  /**
+   * Sets whether the {@link AppBarLayout} lifted state corresponding to {@link
+   * #setLiftable(boolean)} and {@link #setLifted(boolean)} will be overridden manually.
+   *
+   * <p>If true, this means that the {@link AppBarLayout} will not manage its own lifted state and
+   * it should instead be manually updated via {@link #setLifted(boolean)}. If false, the {@link
+   * AppBarLayout} will manage its lifted state based on the scrolling sibling view.
+   *
+   * <p>Note that calling {@link #setLiftable(boolean)} will result in this liftable override being
+   * enabled and set to true by default.
+   */
+  public void setLiftableOverrideEnabled(boolean enabled) {
+    this.liftableOverride = enabled;
+  }
+
   // Internal helper method that updates liftable state without enabling the override.
   private boolean setLiftableState(boolean liftable) {
     if (this.liftable != liftable) {
@@ -857,7 +872,7 @@ public class AppBarLayout extends LinearLayout implements CoordinatorLayout.Atta
    * @return true if the lifted state changed
    */
   public boolean setLifted(boolean lifted) {
-    return setLiftedState(lifted);
+    return setLiftedState(lifted, /* force= */ true);
   }
 
   /** Returns whether the {@link AppBarLayout} is in a lifted state or not. */
@@ -865,9 +880,13 @@ public class AppBarLayout extends LinearLayout implements CoordinatorLayout.Atta
     return lifted;
   }
 
-  // Internal helper method that updates lifted state.
   boolean setLiftedState(boolean lifted) {
-    if (this.lifted != lifted) {
+    return setLiftedState(lifted, /* force= */ !liftableOverride);
+  }
+
+  // Internal helper method that updates lifted state.
+  boolean setLiftedState(boolean lifted, boolean force) {
+    if (force && this.lifted != lifted) {
       this.lifted = lifted;
       refreshDrawableState();
       if (liftOnScroll && getBackground() instanceof MaterialShapeDrawable) {

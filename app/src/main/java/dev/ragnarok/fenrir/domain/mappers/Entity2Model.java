@@ -466,9 +466,24 @@ public class Entity2Model {
                 .setCanEdit(dbo.isCanEdit())
                 .setAttachments(attachments)
                 .setAuthor(owners.getById(dbo.getFromId()))
-                .setThreads(dbo.getThreads())
+                .setThreadsCount(dbo.getThreadsCount())
+                .setThreads(buildCommentsFromDbo(dbo.getThreads(), owners))
                 .setPid(dbo.getPid())
                 .setDeleted(dbo.isDeleted());
+    }
+
+    public static List<Comment> buildCommentsFromDbo(List<CommentEntity> dbos, IOwnersBundle owners) {
+        if (Utils.isEmpty(dbos)) {
+            return null;
+        }
+        List<Comment> o = new ArrayList<>();
+        for (CommentEntity i : dbos) {
+            Comment u = buildCommentFromDbo(i, owners);
+            if (nonNull(u)) {
+                o.add(u);
+            }
+        }
+        return o;
     }
 
     public static Dialog buildDialogFromDbo(int accountId, DialogEntity entity, IOwnersBundle owners) {
@@ -1191,11 +1206,20 @@ public class Entity2Model {
 
     public static void fillCommentOwnerIds(@NonNull VKOwnIds ids, @Nullable CommentEntity dbo) {
         if (nonNull(dbo)) {
-            ids.append(dbo.getFromId());
-            ids.append(dbo.getReplyToUserId());
+            if (dbo.getFromId() != 0) {
+                ids.append(dbo.getFromId());
+            }
+            if (dbo.getReplyToUserId() != 0) {
+                ids.append(dbo.getReplyToUserId());
+            }
 
             if (nonNull(dbo.getAttachments())) {
                 fillOwnerIds(ids, dbo.getAttachments());
+            }
+            if (!Utils.isEmpty(dbo.getThreads())) {
+                for (CommentEntity i : dbo.getThreads()) {
+                    fillCommentOwnerIds(ids, i);
+                }
             }
         }
     }

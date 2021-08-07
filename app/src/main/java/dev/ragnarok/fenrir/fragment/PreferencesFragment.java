@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.AnyRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -37,8 +35,6 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -50,13 +46,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import dev.ragnarok.fenrir.Account_Types;
 import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Constants;
+import dev.ragnarok.fenrir.Dedicated;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
@@ -99,11 +94,8 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.VkPushRegistration;
 import dev.ragnarok.fenrir.util.AppPerms;
 import dev.ragnarok.fenrir.util.CustomToast;
-import dev.ragnarok.fenrir.util.HelperSimple;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.MySearchView;
-import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
 
@@ -655,16 +647,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 View view = View.inflate(requireActivity(), R.layout.dialog_about_us, null);
                 new MaterialAlertDialogBuilder(requireActivity())
                         .setView(view)
-                        .setOnDismissListener(dialog -> {
-                            showDedicated();
-                        })
+                        .setOnDismissListener(dialog -> Dedicated.showDedicated(requireActivity()))
                         .show();
                 return true;
             });
         }
 
         findPreference("dedicated").setOnPreferenceClickListener(preference -> {
-            showDedicated();
+            Dedicated.showDedicated(requireActivity());
             return true;
         });
 
@@ -1188,47 +1178,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
         lp.setEntryValues(enabledCategoriesValues.toArray(new CharSequence[0]));
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private void showDedicated() {
-        View view = View.inflate(requireActivity(), R.layout.dialog_dedicated, null);
-        RecyclerView pager = view.findViewById(R.id.dedicated_pager);
-        pager.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
-        pager.setAdapter(new ImageDedicatedAdapter(new ImageDedicatedAdapter.SourceType[]{new ImageDedicatedAdapter.SourceType("dedicated1.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated2.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated3.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated4.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated5.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated6.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated7.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated8.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated9.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated10.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated11.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated12.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated13.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated14.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated15.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated16.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated17.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated18.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated19.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated20.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated21.webp"),
-                new ImageDedicatedAdapter.SourceType("dedicated22.webp"),
-                new ImageDedicatedAdapter.SourceType(R.raw.dedicated_video1),
-                new ImageDedicatedAdapter.SourceType(R.raw.dedicated_video2)}));
-        RLottieImageView anim = view.findViewById(R.id.dedicated_anim);
-        pager.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                anim.clearAnimationDrawable();
-            }
-            return false;
-        });
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setView(view)
-                .show();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -1250,72 +1199,5 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 .setBarsColored(requireActivity(), true)
                 .build()
                 .apply(requireActivity());
-    }
-
-    private static final class ImageHolder extends RecyclerView.ViewHolder {
-        ImageHolder(View rootView) {
-            super(rootView);
-        }
-    }
-
-    private static class ImageDedicatedAdapter extends RecyclerView.Adapter<ImageHolder> {
-
-        private final List<SourceType> drawables;
-
-        public ImageDedicatedAdapter(SourceType[] drawables) {
-            this.drawables = Arrays.asList(drawables);
-            if (!HelperSimple.INSTANCE.needHelp(HelperSimple.DEDICATED_COUNTER, 2)) {
-                Collections.shuffle(this.drawables);
-            }
-        }
-
-        @NonNull
-        @Override
-        public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ImageHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dedicated, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ImageHolder holder, int position) {
-            SourceType res = drawables.get(position);
-            AnimatedShapeableImageView imageView = holder.itemView.findViewById(R.id.dedicated_photo);
-            PicassoInstance.with().cancelRequest(imageView);
-            if (!res.isVideo) {
-                imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                PicassoInstance.with().load(res.asset).into(imageView);
-            } else {
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setDecoderCallback(success -> {
-                    if (success) {
-                        imageView.playAnimation();
-                    } else {
-                        imageView.setImageResource(R.drawable.report_red);
-                    }
-                });
-                imageView.fromRes(res.res);
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return drawables.size();
-        }
-
-        public static class SourceType {
-            public boolean isVideo;
-            public @AnyRes
-            int res;
-            public String asset;
-
-            public SourceType(@AnyRes int video_res) {
-                isVideo = true;
-                res = video_res;
-            }
-
-            public SourceType(@NonNull String asset_file) {
-                isVideo = false;
-                asset = "file:///android_asset/dedicated/" + asset_file;
-            }
-        }
     }
 }

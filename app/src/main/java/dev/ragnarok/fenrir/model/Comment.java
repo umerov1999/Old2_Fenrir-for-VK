@@ -2,6 +2,8 @@ package dev.ragnarok.fenrir.model;
 
 import android.os.Parcel;
 
+import java.util.List;
+
 import dev.ragnarok.fenrir.api.model.Identificable;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
@@ -66,8 +68,9 @@ public class Comment extends AbsModel implements Identificable {
     private boolean deleted;
     //not parcelable
     private boolean animationNow;
-    private int threads;
+    private int threads_count;
     private int pid;
+    private List<Comment> threads;
 
     public Comment(Commented commented) {
         this.commented = commented;
@@ -90,7 +93,8 @@ public class Comment extends AbsModel implements Identificable {
         author = ParcelableOwnerWrapper.readOwner(in);
         dbid = in.readInt();
         deleted = in.readByte() != 0;
-        threads = in.readInt();
+        threads_count = in.readInt();
+        threads = Utils.readParcelableArray(in, Comment.class.getClassLoader());
         pid = in.readInt();
     }
 
@@ -104,12 +108,21 @@ public class Comment extends AbsModel implements Identificable {
         return this;
     }
 
-    public int getThreads() {
+    public List<Comment> getThreads() {
         return threads;
     }
 
-    public Comment setThreads(int threads) {
+    public Comment setThreads(List<Comment> threads) {
         this.threads = threads;
+        return this;
+    }
+
+    public int getThreadsCount() {
+        return threads_count;
+    }
+
+    public Comment setThreadsCount(int threads_count) {
+        this.threads_count = threads_count;
         return this;
     }
 
@@ -282,11 +295,20 @@ public class Comment extends AbsModel implements Identificable {
         ParcelableOwnerWrapper.writeOwner(dest, flags, author);
         dest.writeInt(dbid);
         dest.writeByte((byte) (deleted ? 1 : 0));
-        dest.writeInt(threads);
+        dest.writeInt(threads_count);
+        Utils.writeParcelableArray(dest, flags, threads);
         dest.writeInt(pid);
     }
 
     public int getAttachmentsCount() {
         return Objects.isNull(attachments) ? 0 : attachments.size();
+    }
+
+    public boolean hasThreads() {
+        return !Utils.isEmpty(threads);
+    }
+
+    public int receivedThreadsCount() {
+        return Utils.isEmpty(threads) ? 0 : threads.size();
     }
 }

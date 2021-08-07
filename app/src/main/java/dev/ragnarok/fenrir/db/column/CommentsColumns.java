@@ -12,6 +12,7 @@ public final class CommentsColumns implements BaseColumns {
     public static final String DATE = "date";
     public static final String TEXT = "text";
     public static final String REPLY_TO_USER = "reply_to_user";
+    public static final String THREADS_COUNT = "threads_count";
     public static final String THREADS = "threads";
     public static final String REPLY_TO_COMMENT = "reply_to_comment";
     public static final String LIKES = "likes";
@@ -31,6 +32,7 @@ public final class CommentsColumns implements BaseColumns {
     public static final String FULL_TEXT = TABLENAME + "." + TEXT;
     public static final String FULL_REPLY_TO_USER = TABLENAME + "." + REPLY_TO_USER;
     public static final String FULL_REPLY_TO_COMMENT = TABLENAME + "." + REPLY_TO_COMMENT;
+    public static final String FULL_THREADS_COUNT = TABLENAME + "." + THREADS_COUNT;
     public static final String FULL_THREADS = TABLENAME + "." + THREADS;
     public static final String FULL_LIKES = TABLENAME + "." + LIKES;
     public static final String FULL_USER_LIKES = TABLENAME + "." + USER_LIKES;

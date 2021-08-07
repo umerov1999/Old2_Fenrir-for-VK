@@ -1,5 +1,9 @@
 package dev.ragnarok.fenrir.api.model;
 
+import java.util.List;
+
+import dev.ragnarok.fenrir.util.Utils;
+
 /**
  * Comment object describes a comment.
  */
@@ -57,7 +61,9 @@ public class VKApiComment {
      */
     public VkApiAttachments attachments;
 
-    public int threads;
+    public int threads_count;
+
+    public List<VKApiComment> threads;
 
     public int pid;
 
@@ -74,5 +80,9 @@ public class VKApiComment {
 
     public boolean hasAttachments() {
         return getAttachmentsCount() > 0;
+    }
+
+    public boolean hasThreads() {
+        return !Utils.isEmpty(threads);
     }
 }

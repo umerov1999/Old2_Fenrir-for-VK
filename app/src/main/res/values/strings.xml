@@ -1274,7 +1274,9 @@
 
     <string name="section_play_title">Play</string>
     <string name="play_in_external_player">Play in a third-party player</string>
-    <string name="title_play_fullscreen">Play in NewPipe</string>
+    <string name="title_play_in_newpipe">Play in NewPipe</string>
+    <string name="title_play_in_youtube_vanced">Play in Youtube Vanced</string>
+    <string name="title_play_in_youtube">Play in Youtube</string>
     <string name="title_play_in_coub">Play in Coub</string>
     <string name="title_play_in_another_software">Play through third-party software</string>
     <string name="title_play_in_browser">Play in browser</string>
@@ -1837,4 +1839,5 @@
     <string name="lolipop21">This application is not designed to work on Android 5.0 sdk 21, because this firmware has a bug in the Skia module. If it crashes, disable the native library in the settings, but then you will lose stickers, animated gif, qr</string>
     <string name="ad_block_story_news">Blocking ads</string>
     <string name="ad_block_story_news_summary">Stories, news</string>
+    <string name="open_comment_thread">Open %1$s</string>
 </resources>

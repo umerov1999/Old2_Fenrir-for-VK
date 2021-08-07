@@ -42,11 +42,13 @@ public class CommentEntity {
 
     private int attachmentsCount;
 
-    private int threads;
+    private int threads_count;
 
     private int pid;
 
     private AttachmentsEntity attachments;
+
+    private List<CommentEntity> threads;
 
     public CommentEntity(int sourceId, int sourceOwnerId, @CommentedType int sourceType, String sourceAccessKey, int id) {
         this.sourceId = sourceId;
@@ -70,12 +72,21 @@ public class CommentEntity {
         return this;
     }
 
-    public int getThreads() {
+    public List<CommentEntity> getThreads() {
         return threads;
     }
 
-    public CommentEntity setThreads(int threads) {
+    public CommentEntity setThreads(List<CommentEntity> threads) {
         this.threads = threads;
+        return this;
+    }
+
+    public int getThreadsCount() {
+        return threads_count;
+    }
+
+    public CommentEntity setThreadsCount(int threads_count) {
+        this.threads_count = threads_count;
         return this;
     }
 

@@ -504,6 +504,9 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
     @Override
     public void populateCommentContextMenu(ContextMenu menu, Comment comment) {
+        if (comment.getFromId() == 0) {
+            return;
+        }
         ContextView contextView = new ContextView();
         callPresenter(p -> p.fireCommentContextViewCreated(contextView, comment));
 

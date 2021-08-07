@@ -107,7 +107,9 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         Spannable text = OwnerLinkSpanFactory.withSpans(comment.getText(), true, true, new LinkActionAdapter() {
             @Override
             public void onTopicLinkClicked(TopicLink link) {
-                onReplyClick(link.replyToOwner, link.replyToCommentId);
+                if (listener != null) {
+                    listener.onReplyToOwnerClick(link.replyToOwner, link.replyToCommentId);
+                }
             }
 
             @Override
@@ -117,19 +119,31 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
                 }
             }
         });
+        boolean hasOpenButton = comment.getThreadsCount() > 0 && comment.getThreadsCount() > comment.receivedThreadsCount();
 
-        holder.item_comment_thread_counter.setVisibility(comment.getThreads() > 0 ? View.VISIBLE : View.GONE);
-        if (comment.getThreads() > 0) {
-            holder.itemView.setOnClickListener(v -> PlaceFactory.getCommentsThreadPlace(Settings.get().accounts().getCurrent(), comment.getCommented(), null, comment.getId()).tryOpenWith(context));
-            holder.item_comment_thread_counter.setText(String.valueOf(comment.getThreads()));
+        holder.ivOpenThread.setVisibility(hasOpenButton ? View.VISIBLE : View.GONE);
+        if (hasOpenButton) {
+            holder.ivOpenThread.setOnClickListener(v -> PlaceFactory.getCommentsThreadPlace(Settings.get().accounts().getCurrent(), comment.getCommented(), null, comment.getId()).tryOpenWith(context));
+            holder.ivOpenThread.setText(context.getString(R.string.open_comment_thread, AppTextUtils.getCounterWithK(comment.getThreadsCount())));
+        } else if (comment.getThreadsCount() > 0) {
+            holder.item_comment_thread_counter.setOnClickListener(v -> PlaceFactory.getCommentsThreadPlace(Settings.get().accounts().getCurrent(), comment.getCommented(), null, comment.getId()).tryOpenWith(context));
+            holder.item_comment_thread_counter.setText(AppTextUtils.getCounterWithK(comment.getThreadsCount()));
         }
-        holder.tvText.setText(text, TextView.BufferType.SPANNABLE);
-        holder.tvText.setVisibility(TextUtils.isEmpty(comment.getText()) ? View.GONE : View.VISIBLE);
-        holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.item_comment_thread_counter.setVisibility(comment.getThreadsCount() > 0 && !hasOpenButton ? View.VISIBLE : View.GONE);
+        holder.threads.setVisibility(comment.getThreadsCount() > 0 ? View.VISIBLE : View.GONE);
+        holder.threads.displayComments(comment.getThreads(), attachmentsViewBinder, listener, onHashTagClickListener);
+        if (Utils.isEmpty(text) && comment.getFromId() == 0) {
+            holder.tvText.setVisibility(View.VISIBLE);
+            holder.tvText.setText(R.string.deleted);
+        } else {
+            holder.tvText.setText(text, TextView.BufferType.SPANNABLE);
+            holder.tvText.setVisibility(TextUtils.isEmpty(comment.getText()) ? View.GONE : View.VISIBLE);
+            holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
+        }
 
         holder.ivLike.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         Utils.setColorFilter(holder.ivLike, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
-        holder.tvLikeCounter.setText(String.valueOf(comment.getLikesCount()));
+        holder.tvLikeCounter.setText(AppTextUtils.getCounterWithK(comment.getLikesCount()));
         holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         holder.tvLikeCounter.setTextColor(comment.isUserLikes() ? iconColorActive : colorTextSecondary);
 
@@ -147,6 +161,9 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         });
 
         holder.ivOwnerAvatar.setOnClickListener(v -> {
+            if (comment.getFromId() == 0) {
+                return;
+            }
             if (listener != null) {
                 listener.onAvatarClick(comment.getFromId());
             }
@@ -168,18 +185,14 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         ClickableSpan span = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                onReplyClick(comment.getReplyToUser(), comment.getReplyToComment());
+                if (listener != null) {
+                    listener.onReplyToOwnerClick(comment.getReplyToUser(), comment.getReplyToComment());
+                }
             }
         };
 
         spannable.setSpan(span, start, target.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
-    }
-
-    private void onReplyClick(int ownerId, int commentId) {
-        if (listener != null) {
-            listener.onReplyToOwnerClick(ownerId, commentId);
-        }
     }
 
     @Override
@@ -259,6 +272,9 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         final TextView tvLikeCounter;
         final View selectionView;
         final View vAttachmentsRoot;
+        final MaterialButton ivOpenThread;
+        final CommentContainer threads;
+        final ViewGroup click;
         final TextView item_comment_thread_counter;
 
         final AttachmentsHolder attachmentContainers;
@@ -277,6 +293,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
                 }
             });
 
+            ivOpenThread = root.findViewById(R.id.item_open_threads);
             item_comment_thread_counter = root.findViewById(R.id.item_comment_thread_counter);
             tvTime = root.findViewById(R.id.item_comment_time);
             ivLike = root.findViewById(R.id.item_comment_like);
@@ -285,8 +302,9 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(context));
             Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(context));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
-
-            itemView.setOnCreateContextMenuListener(this);
+            threads = root.findViewById(R.id.item_comment_threads);
+            click = root.findViewById(R.id.comment_click_container);
+            click.setOnCreateContextMenuListener(this);
 
             attachmentContainers = AttachmentsHolder.forComment((ViewGroup) vAttachmentsRoot);
             animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
@@ -329,7 +347,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             if (isNull(recyclerView)) return;
 
-            int position = recyclerView.getChildAdapterPosition(v) - getHeadersCount();
+            int position = recyclerView.getChildAdapterPosition(itemView) - getHeadersCount();
             if (listener != null) {
                 listener.populateCommentContextMenu(menu, getItem(position));
             }

@@ -13,6 +13,14 @@ public class AppPrefs {
         return isPackageIntalled(context, "org.schabi.newpipe");
     }
 
+    public static boolean isYoutubeInstalled(Context context) {
+        return isPackageIntalled(context, "com.google.android.youtube");
+    }
+
+    public static boolean isVancedYoutubeInstalled(Context context) {
+        return isPackageIntalled(context, "com.vanced.android.youtube");
+    }
+
     private static boolean isPackageIntalled(Context context, String name) {
         PackageManager pm = context.getPackageManager();
         try {

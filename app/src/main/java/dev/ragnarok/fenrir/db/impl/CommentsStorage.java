@@ -13,6 +13,10 @@ import android.provider.BaseColumns;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +45,8 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 
 class CommentsStorage extends AbsStorage implements ICommentsStorage {
 
+    private static final Type THREADS_TYPE = new TypeToken<List<CommentEntity>>() {
+    }.getType();
     private final PublishSubject<CommentUpdate> minorUpdatesPublisher;
     private final Object mStoreLock = new Object();
 
@@ -57,7 +63,8 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
         cv.put(CommentsColumns.TEXT, dbo.getText());
         cv.put(CommentsColumns.REPLY_TO_USER, dbo.getReplyToUserId());
         cv.put(CommentsColumns.REPLY_TO_COMMENT, dbo.getReplyToComment());
-        cv.put(CommentsColumns.THREADS, dbo.getThreads());
+        cv.put(CommentsColumns.THREADS_COUNT, dbo.getThreadsCount());
+        cv.put(CommentsColumns.THREADS, new Gson().toJson(dbo.getThreads()));
         cv.put(CommentsColumns.LIKES, dbo.getLikesCount());
         cv.put(CommentsColumns.USER_LIKES, dbo.isUserLikes());
         cv.put(CommentsColumns.CAN_LIKE, dbo.isCanLike());
@@ -230,7 +237,8 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
             contentValues.put(CommentsColumns.DATE, Unixtime.now());
             contentValues.put(CommentsColumns.REPLY_TO_USER, replyToUser);
             contentValues.put(CommentsColumns.REPLY_TO_COMMENT, replyToComment);
-            contentValues.put(CommentsColumns.THREADS, 0);
+            contentValues.put(CommentsColumns.THREADS_COUNT, 0);
+            contentValues.put(CommentsColumns.THREADS, "null");
             contentValues.put(CommentsColumns.LIKES, 0);
             contentValues.put(CommentsColumns.USER_LIKES, 0);
 
@@ -336,9 +344,10 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
                 .setDate(cursor.getLong(cursor.getColumnIndex(CommentsColumns.DATE)))
                 .setText(cursor.getString(cursor.getColumnIndex(CommentsColumns.TEXT)))
                 .setReplyToUserId(cursor.getInt(cursor.getColumnIndex(CommentsColumns.REPLY_TO_USER)))
-                .setThreads(cursor.getInt(cursor.getColumnIndex(CommentsColumns.THREADS)))
+                .setThreadsCount(cursor.getInt(cursor.getColumnIndex(CommentsColumns.THREADS_COUNT)))
                 .setReplyToComment(cursor.getInt(cursor.getColumnIndex(CommentsColumns.REPLY_TO_COMMENT)))
                 .setLikesCount(cursor.getInt(cursor.getColumnIndex(CommentsColumns.LIKES)))
+                .setThreads(new Gson().fromJson(cursor.getString(cursor.getColumnIndex(CommentsColumns.THREADS)), THREADS_TYPE))
                 .setUserLikes(cursor.getInt(cursor.getColumnIndex(CommentsColumns.USER_LIKES)) == 1)
                 .setCanLike(cursor.getInt(cursor.getColumnIndex(CommentsColumns.CAN_LIKE)) == 1)
                 .setCanEdit(cursor.getInt(cursor.getColumnIndex(CommentsColumns.CAN_EDIT)) == 1)

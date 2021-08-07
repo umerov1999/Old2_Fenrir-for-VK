@@ -696,8 +696,20 @@ public class Dto2Entity {
                 .setDeleted(false)
                 .setAttachmentsCount(comment.getAttachmentsCount())
                 .setAttachments(attachmentsEntities)
-                .setThreads(comment.threads)
+                .setThreadsCount(comment.threads_count)
+                .setThreads(mapComments(sourceId, sourceOwnerId, sourceType, sourceAccessKey, comment.threads))
                 .setPid(comment.pid);
+    }
+
+    public static List<CommentEntity> mapComments(int sourceId, int sourceOwnerId, int sourceType, String sourceAccessKey, List<VKApiComment> comments) {
+        if (Utils.isEmpty(comments)) {
+            return null;
+        }
+        List<CommentEntity> o = new ArrayList<>(comments.size());
+        for (VKApiComment i : comments) {
+            o.add(mapComment(sourceId, sourceOwnerId, sourceType, sourceAccessKey, i));
+        }
+        return o;
     }
 
     public static SimpleDialogEntity mapConversation(VkApiConversation dto) {

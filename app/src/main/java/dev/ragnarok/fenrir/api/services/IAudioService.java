@@ -12,6 +12,7 @@ import dev.ragnarok.fenrir.api.model.response.AddToPlaylistResponse;
 import dev.ragnarok.fenrir.api.model.response.BaseResponse;
 import dev.ragnarok.fenrir.api.model.response.BlockResponse;
 import dev.ragnarok.fenrir.api.model.response.CatalogResponse;
+import dev.ragnarok.fenrir.api.model.response.ServicePlaylistResponse;
 import dev.ragnarok.fenrir.api.model.server.VkApiAudioUploadServer;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.Field;
@@ -131,6 +132,10 @@ public interface IAudioService {
     Single<BaseResponse<Items<VKApiAudioPlaylist>>> getPlaylists(@Field("owner_id") int owner_id,
                                                                  @Field("offset") int offset,
                                                                  @Field("count") int count);
+
+    @FormUrlEncoded
+    @POST("execute")
+    Single<ServicePlaylistResponse> getPlaylistsCustom(@Field("code") String code);
 
     @FormUrlEncoded
     @POST("audio.deletePlaylist")

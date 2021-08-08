@@ -78,6 +78,11 @@ class MainSettings implements ISettings.IMainSettings {
         return getDefaultPreferences().getBoolean("messages_menu_down", false);
     }
 
+    @Override
+    public boolean isExpand_voice_transcript() {
+        return getDefaultPreferences().getBoolean("expand_voice_transcript", false);
+    }
+
     @Nullable
     @Override
     public Integer getUploadImageSize() {

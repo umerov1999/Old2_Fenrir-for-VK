@@ -1,6 +1,5 @@
 package dev.ragnarok.fenrir.adapter;
 
-import static dev.ragnarok.fenrir.util.Objects.isNull;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 
 import android.animation.Animator;
@@ -11,7 +10,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -94,6 +92,13 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             holder.startSelectionAnimation();
             comment.setAnimationNow(false);
         }
+
+        holder.click.setOnLongClickListener(v -> {
+            if (listener != null) {
+                listener.populateCommentContextMenu(comment);
+            }
+            return true;
+        });
 
         if (!comment.hasAttachments()) {
             holder.vAttachmentsRoot.setVisibility(View.GONE);
@@ -249,7 +254,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
         void onCommentLikeClick(Comment comment, boolean add);
 
-        void populateCommentContextMenu(ContextMenu menu, Comment comment);
+        void populateCommentContextMenu(Comment comment);
     }
 
     private static class DeletedHolder extends RecyclerView.ViewHolder {
@@ -262,7 +267,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         }
     }
 
-    private class NormalCommentHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    private class NormalCommentHolder extends RecyclerView.ViewHolder {
 
         final TextView tvOwnerName;
         final ImageView ivOwnerAvatar;
@@ -304,7 +309,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
             threads = root.findViewById(R.id.item_comment_threads);
             click = root.findViewById(R.id.comment_click_container);
-            click.setOnCreateContextMenuListener(this);
 
             attachmentContainers = AttachmentsHolder.forComment((ViewGroup) vAttachmentsRoot);
             animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
@@ -341,16 +345,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             }
 
             selectionView.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            if (isNull(recyclerView)) return;
-
-            int position = recyclerView.getChildAdapterPosition(itemView) - getHeadersCount();
-            if (listener != null) {
-                listener.populateCommentContextMenu(menu, getItem(position));
-            }
         }
     }
 }

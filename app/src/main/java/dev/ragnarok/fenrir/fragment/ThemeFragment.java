@@ -45,7 +45,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
-        int columns = getContext().getResources().getInteger(R.integer.photos_column_count);
+        int columns = getResources().getInteger(R.integer.photos_column_count);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), columns);
         recyclerView.setLayoutManager(gridLayoutManager);
 

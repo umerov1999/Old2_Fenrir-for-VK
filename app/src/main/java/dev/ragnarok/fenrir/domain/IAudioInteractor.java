@@ -34,6 +34,8 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> get(int accountId, Integer playlist_id, int ownerId, int offset, int count, String accessKey);
 
+    Single<List<AudioPlaylist>> getPlaylistsCustom(int accountId, String code);
+
     Single<List<Audio>> getAudiosByArtist(int accountId, String artist_id, int offset, int count);
 
     Single<List<Audio>> getById(int accountId, @NonNull List<Audio> audios);
@@ -71,8 +73,6 @@ public interface IAudioInteractor {
     Single<AudioPlaylist> getPlaylistById(int accountId, int playlist_id, int ownerId, String accessKey);
 
     Single<Integer> deletePlaylist(int accountId, int playlist_id, int ownerId);
-
-    Single<List<AudioPlaylist>> getDualPlaylists(int accountId, int owner_id, int first_playlist, int second_playlist);
 
     Single<Integer> reorder(int accountId, int ownerId, int audio_id, Integer before, Integer after);
 

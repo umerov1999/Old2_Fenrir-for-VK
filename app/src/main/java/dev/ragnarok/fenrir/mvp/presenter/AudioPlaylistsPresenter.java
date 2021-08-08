@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.model.AccessIdPair;
 import dev.ragnarok.fenrir.domain.IAudioInteractor;
@@ -25,6 +26,7 @@ import dev.ragnarok.fenrir.model.Audio;
 import dev.ragnarok.fenrir.model.AudioPlaylist;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
 import dev.ragnarok.fenrir.mvp.view.IAudioPlaylistsView;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.FindAtWithContent;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
@@ -120,13 +122,44 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
         }
         callResumedView(IAudioPlaylistsView::showHelper);
         if (getAccountId() == owner_id) {
-            appendDisposable(fInteractor.getDualPlaylists(getAccountId(), owner_id, -21, -22)
-                    .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(pl -> {
-                        addon.clear();
-                        addon.addAll(pl);
-                        loadActualData(0);
-                    }, i -> loadActualData(0)));
+            List<Integer> ids = Settings.get().other().getServicePlaylist();
+            if (!Utils.isEmpty(ids)) {
+                if (ids.size() == 1) {
+                    appendDisposable(fInteractor.getPlaylistById(getAccountId(), ids.get(0), owner_id, null)
+                            .compose(RxUtils.applySingleIOToMainSchedulers())
+                            .subscribe(pl -> {
+                                addon.clear();
+                                addon.add(pl);
+                                loadActualData(0);
+                            }, i -> loadActualData(0)));
+                } else {
+                    StringBuilder code = new StringBuilder();
+                    StringBuilder code_addon = new StringBuilder("return [");
+                    boolean code_first = true;
+                    int tick = 0;
+                    for (Integer i : ids) {
+                        code.append("var playlist_").append(tick).append(" = API.audio.getPlaylistById({\"v\":\"" + Constants.API_VERSION + "\", \"owner_id\":").append(owner_id).append(", \"playlist_id\": ").append(i).append("});");
+                        if (code_first) {
+                            code_first = false;
+                        } else {
+                            code_addon.append(", ");
+                        }
+                        code_addon.append("playlist_").append(tick);
+                        tick++;
+                    }
+                    code_addon.append("];");
+                    code.append(code_addon);
+                    appendDisposable(fInteractor.getPlaylistsCustom(getAccountId(), code.toString())
+                            .compose(RxUtils.applySingleIOToMainSchedulers())
+                            .subscribe(pl -> {
+                                addon.clear();
+                                addon.addAll(pl);
+                                loadActualData(0);
+                            }, i -> loadActualData(0)));
+                }
+            } else {
+                loadActualData(0);
+            }
         } else {
             loadActualData(0);
         }
@@ -225,7 +258,7 @@ public class AudioPlaylistsPresenter extends AccountDependencyPresenter<IAudioPl
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> {
                     callView(v -> v.getCustomToast().showToast(R.string.success));
-                    if (clone && (album.getId() == -21 || album.getId() == -22)) {
+                    if (clone && (Utils.isValueAssigned(album.getId(), Settings.get().other().getServicePlaylist()))) {
                         fireRefresh();
                     }
                 }, throwable ->

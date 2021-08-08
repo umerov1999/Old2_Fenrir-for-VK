@@ -1629,4 +1629,6 @@
     <string name="ad_block_story_news">Блокировка рекламы</string>
     <string name="ad_block_story_news_summary">Истории, новости</string>
     <string name="open_comment_thread">Открыть %1$s</string>
+    <string name="expand_voice_transcript">Развернуть голосовую расшифровку</string>
+    <string name="service_playlists">Сервисные плейлисты</string>
 </resources>

@@ -64,6 +64,9 @@ public interface ISettings {
 
         int getMaxBitmapResolution();
 
+        @NonNull
+        List<Integer> getServicePlaylist();
+
         boolean isNative_parcel();
 
         boolean isExtra_debug();
@@ -295,6 +298,8 @@ public interface ISettings {
         boolean isNotification_bubbles_enabled();
 
         boolean isMessages_menu_down();
+
+        boolean isExpand_voice_transcript();
 
         boolean isAmoledTheme();
 

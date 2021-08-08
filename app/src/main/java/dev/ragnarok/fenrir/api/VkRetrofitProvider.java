@@ -44,6 +44,7 @@ import dev.ragnarok.fenrir.api.adapters.PostSourceDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.PrivacyDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.ProfileInfoResponceDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.SchoolClazzDtoAdapter;
+import dev.ragnarok.fenrir.api.adapters.ServicePlaylistResponseDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.StoryDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.TopicDtoAdapter;
 import dev.ragnarok.fenrir.api.adapters.UserDtoAdapter;
@@ -87,6 +88,7 @@ import dev.ragnarok.fenrir.api.model.response.ChatsInfoResponse;
 import dev.ragnarok.fenrir.api.model.response.CustomCommentsResponse;
 import dev.ragnarok.fenrir.api.model.response.LikesListResponse;
 import dev.ragnarok.fenrir.api.model.response.NewsfeedCommentsResponse;
+import dev.ragnarok.fenrir.api.model.response.ServicePlaylistResponse;
 import dev.ragnarok.fenrir.model.AnswerVKOfficialList;
 import dev.ragnarok.fenrir.settings.IProxySettings;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -138,6 +140,7 @@ public class VkRetrofitProvider implements IVkRetrofitProvider {
             .registerTypeAdapter(VkApiJsonString.class, new JsonStringDtoAdapter())
             .registerTypeAdapter(VkApiProfileInfoResponce.class, new ProfileInfoResponceDtoAdapter())
             .registerTypeAdapter(VkApiMarket.class, new MarketDtoAdapter())
+            .registerTypeAdapter(ServicePlaylistResponse.class, new ServicePlaylistResponseDtoAdapter())
             .create();
 
     private static final GsonConverterFactory GSON_CONVERTER_FACTORY = GsonConverterFactory.create(VKGSON);

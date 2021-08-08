@@ -16,6 +16,7 @@ import dev.ragnarok.fenrir.api.model.VkApiArtist;
 import dev.ragnarok.fenrir.api.model.VkApiLyrics;
 import dev.ragnarok.fenrir.api.model.response.AddToPlaylistResponse;
 import dev.ragnarok.fenrir.api.model.response.CatalogResponse;
+import dev.ragnarok.fenrir.api.model.response.ServicePlaylistResponse;
 import dev.ragnarok.fenrir.api.model.server.VkApiAudioUploadServer;
 import dev.ragnarok.fenrir.model.Audio;
 import io.reactivex.rxjava3.core.Single;
@@ -107,6 +108,9 @@ public interface IAudioApi {
 
     @CheckResult
     Single<Items<VKApiAudioPlaylist>> getPlaylists(int owner_id, int offset, int count);
+
+    @CheckResult
+    Single<ServicePlaylistResponse> getPlaylistsCustom(String code);
 
     @CheckResult
     Single<Items<VKApiAudioCatalog>> getCatalog(String artist_id, String query);

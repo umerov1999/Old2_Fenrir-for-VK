@@ -9,7 +9,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,11 +46,14 @@ import dev.ragnarok.fenrir.fragment.base.PlaceSupportMvpFragment;
 import dev.ragnarok.fenrir.listener.BackPressCallback;
 import dev.ragnarok.fenrir.listener.EndlessRecyclerOnScrollListener;
 import dev.ragnarok.fenrir.listener.OnSectionResumeCallback;
+import dev.ragnarok.fenrir.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import dev.ragnarok.fenrir.modalbottomsheetdialogfragment.OptionRequest;
 import dev.ragnarok.fenrir.model.Comment;
 import dev.ragnarok.fenrir.model.Commented;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.Sticker;
 import dev.ragnarok.fenrir.model.User;
+import dev.ragnarok.fenrir.model.menu.options.CommentsOption;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.CommentsPresenter;
 import dev.ragnarok.fenrir.mvp.view.ICommentsView;
@@ -503,85 +505,80 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
     }
 
     @Override
-    public void populateCommentContextMenu(ContextMenu menu, Comment comment) {
+    public void populateCommentContextMenu(Comment comment) {
         if (comment.getFromId() == 0) {
             return;
         }
+        ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+        menus.header(comment.getFullAuthorName(), R.drawable.comment, comment.getMaxAuthorAvaUrl());
+        menus.columns(2);
+
         ContextView contextView = new ContextView();
         callPresenter(p -> p.fireCommentContextViewCreated(contextView, comment));
 
-        menu.setHeaderTitle(comment.getFullAuthorName());
-
         if (!Utils.isEmpty(comment.getText())) {
-            menu.add(R.string.copy).setOnMenuItemClickListener(item -> {
-                ClipboardManager clipboard = (ClipboardManager) requireActivity()
-                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("comment", comment.getText());
-                clipboard.setPrimaryClip(clip);
-                CustomToast.CreateCustomToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
-                return true;
-            });
+            menus.add(new OptionRequest(CommentsOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy));
         }
-
-        menu.add(R.string.reply).setOnMenuItemClickListener(item -> {
-            callPresenter(p -> p.fireReplyToCommentClick(comment));
-            return true;
-        });
-
-        menu.add(R.string.report).setOnMenuItemClickListener(item -> {
-            callPresenter(p -> p.fireReport(comment));
-            return true;
-        });
+        menus.add(new OptionRequest(CommentsOption.reply_item_comment, getString(R.string.reply), R.drawable.reply));
+        menus.add(new OptionRequest(CommentsOption.report_item_comment, getString(R.string.report), R.drawable.report));
 
         if (contextView.canDelete) {
-            menu.add(R.string.delete)
-                    .setOnMenuItemClickListener(item -> {
-                        callPresenter(p -> p.fireCommentDeleteClick(comment));
-                        return true;
-                    });
+            menus.add(new OptionRequest(CommentsOption.delete_item_comment, getString(R.string.delete), R.drawable.ic_outline_delete));
         }
 
         if (contextView.canEdit) {
-            menu.add(R.string.edit)
-                    .setOnMenuItemClickListener(item -> {
-                        callPresenter(p -> p.fireCommentEditClick(comment));
-                        return true;
-                    });
+            menus.add(new OptionRequest(CommentsOption.edit_item_comment, getString(R.string.edit), R.drawable.pencil));
         }
 
         if (contextView.canBan) {
-            menu.add(R.string.ban_author)
-                    .setOnMenuItemClickListener(item -> {
-                        callPresenter(p -> p.fireBanClick(comment));
-                        return true;
-                    });
+            menus.add(new OptionRequest(CommentsOption.block_author_item_comment, getString(R.string.ban_author), R.drawable.block_outline));
         }
 
-        menu.add(R.string.like)
-                .setVisible(!comment.isUserLikes())
-                .setOnMenuItemClickListener(item -> {
+        if (!comment.isUserLikes()) {
+            menus.add(new OptionRequest(CommentsOption.like_item_comment, getString(R.string.like), R.drawable.heart));
+        } else {
+            menus.add(new OptionRequest(CommentsOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart));
+        }
+        menus.add(new OptionRequest(CommentsOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled));
+        menus.add(new OptionRequest(CommentsOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends));
+        menus.show(requireActivity().getSupportFragmentManager(), "comments_options", option -> {
+            switch (option.getId()) {
+                case CommentsOption.copy_item_comment:
+                    ClipboardManager clipboard = (ClipboardManager) requireActivity()
+                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("comment", comment.getText());
+                    clipboard.setPrimaryClip(clip);
+                    CustomToast.CreateCustomToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
+                    break;
+                case CommentsOption.reply_item_comment:
+                    callPresenter(p -> p.fireReplyToCommentClick(comment));
+                    break;
+                case CommentsOption.report_item_comment:
+                    callPresenter(p -> p.fireReport(comment));
+                    break;
+                case CommentsOption.delete_item_comment:
+                    callPresenter(p -> p.fireCommentDeleteClick(comment));
+                    break;
+                case CommentsOption.edit_item_comment:
+                    callPresenter(p -> p.fireCommentEditClick(comment));
+                    break;
+                case CommentsOption.block_author_item_comment:
+                    callPresenter(p -> p.fireBanClick(comment));
+                    break;
+                case CommentsOption.like_item_comment:
                     callPresenter(p -> p.fireCommentLikeClick(comment, true));
-                    return true;
-                });
-
-        menu.add(R.string.dislike)
-                .setVisible(comment.isUserLikes())
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsOption.dislike_item_comment:
                     callPresenter(p -> p.fireCommentLikeClick(comment, false));
-                    return true;
-                });
-
-        menu.add(R.string.who_likes)
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsOption.who_like_item_comment:
                     callPresenter(p -> p.fireWhoLikesClick(comment));
-                    return true;
-                });
-
-        menu.add(R.string.send_to_friend)
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsOption.send_to_friend_item_comment:
                     callPresenter(p -> p.fireReplyToChat(comment));
-                    return true;
-                });
+                    break;
+            }
+        });
     }
 
     @Override

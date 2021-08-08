@@ -1840,4 +1840,6 @@
     <string name="ad_block_story_news">Blocking ads</string>
     <string name="ad_block_story_news_summary">Stories, news</string>
     <string name="open_comment_thread">Open %1$s</string>
+    <string name="expand_voice_transcript">Expand Voice Transcript</string>
+    <string name="service_playlists">Service Playlists</string>
 </resources>

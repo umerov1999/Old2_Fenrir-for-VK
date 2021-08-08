@@ -8,7 +8,6 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,10 +88,16 @@ public class CommentContainer extends LinearLayout {
                 Comment comment = comments.get(g);
                 CommentHolder check = (CommentHolder) root.getTag();
                 if (check == null) {
-                    check = new CommentHolder(root, comment, listener, onHashTagClickListener);
+                    check = new CommentHolder(root, onHashTagClickListener);
                     root.setTag(check);
                 }
                 CommentHolder holder = check;
+                root.setOnLongClickListener(v -> {
+                    if (listener != null) {
+                        listener.populateCommentContextMenu(comment);
+                    }
+                    return true;
+                });
                 if (!comment.hasAttachments()) {
                     holder.vAttachmentsRoot.setVisibility(View.GONE);
                 } else {
@@ -162,7 +167,7 @@ public class CommentContainer extends LinearLayout {
         }
     }
 
-    private class CommentHolder implements View.OnCreateContextMenuListener {
+    private class CommentHolder {
 
         final TextView tvOwnerName;
         final ImageView ivOwnerAvatar;
@@ -173,12 +178,8 @@ public class CommentContainer extends LinearLayout {
         final View vAttachmentsRoot;
 
         final AttachmentsHolder attachmentContainers;
-        final Comment comment;
-        final CommentsAdapter.OnCommentActionListener listener;
 
-        CommentHolder(View root, Comment comment, CommentsAdapter.OnCommentActionListener listener, EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
-            this.comment = comment;
-            this.listener = listener;
+        CommentHolder(View root, EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
             ivOwnerAvatar = root.findViewById(R.id.item_comment_owner_avatar);
             tvOwnerName = root.findViewById(R.id.item_comment_owner_name);
             tvText = root.findViewById(R.id.item_comment_text);
@@ -194,16 +195,8 @@ public class CommentContainer extends LinearLayout {
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);
             Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(getContext()));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
-            root.setOnCreateContextMenuListener(this);
 
             attachmentContainers = AttachmentsHolder.forComment((ViewGroup) vAttachmentsRoot);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            if (listener != null) {
-                listener.populateCommentContextMenu(menu, comment);
-            }
         }
     }
 }

@@ -2,6 +2,7 @@ package dev.ragnarok.fenrir.domain.impl;
 
 import static dev.ragnarok.fenrir.util.Utils.listEmptyIfNull;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -88,6 +89,20 @@ public class AudioInteractor implements IAudioInteractor {
                 .map(items -> listEmptyIfNull(items.getItems()))
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
+                    for (int i = 0; i < out.size(); i++)
+                        ret.add(Dto2Model.transform(out.get(i)));
+                    return ret;
+                });
+    }
+
+    @Override
+    public Single<List<AudioPlaylist>> getPlaylistsCustom(int accountId, String code) {
+        return networker.vkDefault(accountId)
+                .audio()
+                .getPlaylistsCustom(code)
+                .map(items -> listEmptyIfNull(items.playlists))
+                .map(out -> {
+                    List<AudioPlaylist> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
                         ret.add(Dto2Model.transform(out.get(i)));
                     return ret;
@@ -270,22 +285,6 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<AudioPlaylist>> getDualPlaylists(int accountId, int owner_id, int first_playlist, int second_playlist) {
-        return networker.vkDefault(accountId)
-                .audio()
-                .getPlaylistById(first_playlist, owner_id, null)
-                .flatMap(out -> networker.vkDefault(accountId)
-                        .audio()
-                        .getPlaylistById(second_playlist, owner_id, null)
-                        .flatMap(out2 -> {
-                            List<AudioPlaylist> ret = new ArrayList<>(2);
-                            ret.add(Dto2Model.transform(out));
-                            ret.add(Dto2Model.transform(out2));
-                            return Single.just(ret);
-                        }));
-    }
-
-    @Override
     public Single<Integer> reorder(int accountId, int ownerId, int audio_id, Integer before, Integer after) {
         return networker.vkDefault(accountId)
                 .audio()
@@ -293,9 +292,10 @@ public class AudioInteractor implements IAudioInteractor {
                 .map(resultId -> resultId);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public Completable trackEvents(int accountId, @NonNull Audio audio) {
-        String events = String.format("[{\"e\":\"audio_play\",\"audio_id\":\"%s\",\"source\":\"%s\",\"uuid\":%s,\"duration\":%d,\"start_time\":%d}]", audio.getOwnerId() + "_" + audio.getId(), "my", Long.valueOf(System.nanoTime()), audio.getDuration(), Long.valueOf(System.currentTimeMillis() / 1000));
+        String events = String.format("[{\"e\":\"audio_play\",\"audio_id\":\"%s\",\"source\":\"%s\",\"uuid\":%s,\"duration\":%d,\"start_time\":%d}]", audio.getOwnerId() + "_" + audio.getId(), "my", System.nanoTime(), audio.getDuration(), System.currentTimeMillis() / 1000);
         return networker.vkDefault(accountId)
                 .audio()
                 .trackEvents(events)

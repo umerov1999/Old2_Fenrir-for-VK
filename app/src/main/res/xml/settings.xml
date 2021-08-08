@@ -386,6 +386,12 @@
             android:title="@string/messages_menu_down"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="expand_voice_transcript"
+            android:title="@string/expand_voice_transcript"
+            app:iconSpaceReserved="false" />
+
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/array_chat_background_names"
@@ -876,6 +882,14 @@
             android:inputType="number"
             android:key="max_bitmap_resolution"
             android:title="@string/max_bitmap_resolution"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="-21 -22 -25 -26 -27 -28"
+            android:inputType="text"
+            android:key="service_playlists"
+            android:title="@string/service_playlists"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 

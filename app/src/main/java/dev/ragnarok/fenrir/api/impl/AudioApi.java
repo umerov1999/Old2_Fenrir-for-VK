@@ -18,6 +18,7 @@ import dev.ragnarok.fenrir.api.model.VkApiArtist;
 import dev.ragnarok.fenrir.api.model.VkApiLyrics;
 import dev.ragnarok.fenrir.api.model.response.AddToPlaylistResponse;
 import dev.ragnarok.fenrir.api.model.response.CatalogResponse;
+import dev.ragnarok.fenrir.api.model.response.ServicePlaylistResponse;
 import dev.ragnarok.fenrir.api.model.server.VkApiAudioUploadServer;
 import dev.ragnarok.fenrir.api.services.IAudioService;
 import dev.ragnarok.fenrir.model.Audio;
@@ -229,6 +230,13 @@ class AudioApi extends AbsApi implements IAudioApi {
                 .flatMap(service -> service
                         .getPlaylists(owner_id, offset, count)
                         .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<ServicePlaylistResponse> getPlaylistsCustom(String code) {
+        return provideService(IAudioService.class)
+                .flatMap(service -> service
+                        .getPlaylistsCustom(code));
     }
 
     @Override

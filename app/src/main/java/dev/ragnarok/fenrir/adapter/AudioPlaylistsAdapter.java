@@ -159,7 +159,7 @@ public class AudioPlaylistsAdapter extends RecyclerView.Adapter<AudioPlaylistsAd
             int position = recyclerView.getChildAdapterPosition(v);
             AudioPlaylist playlist = data.get(position);
 
-            if (playlist.getId() != -21 && playlist.getId() != -22) {
+            if (!Utils.isValueAssigned(playlist.getId(), Settings.get().other().getServicePlaylist())) {
                 if (Settings.get().accounts().getCurrent() == playlist.getOwnerId()) {
                     menu.add(0, v.getId(), 0, R.string.delete).setOnMenuItemClickListener(item -> {
                         if (clickListener != null) {

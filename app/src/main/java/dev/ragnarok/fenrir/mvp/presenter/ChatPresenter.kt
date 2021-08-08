@@ -1221,9 +1221,11 @@ class ChatPresenter(
             return
         }
 
-        message.attachments?.voiceMessages?.let {
-            for (i: VoiceMessage in it) {
-                i.isShowTranscript = true
+        if (!Settings.get().main().isExpand_voice_transcript) {
+            message.attachments?.voiceMessages?.let {
+                for (i: VoiceMessage in it) {
+                    i.isShowTranscript = true
+                }
             }
         }
 

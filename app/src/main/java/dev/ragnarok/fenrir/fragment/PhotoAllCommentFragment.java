@@ -8,7 +8,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,10 @@ import dev.ragnarok.fenrir.adapter.CommentsAdapter;
 import dev.ragnarok.fenrir.fragment.base.PlaceSupportMvpFragment;
 import dev.ragnarok.fenrir.listener.EndlessRecyclerOnScrollListener;
 import dev.ragnarok.fenrir.listener.PicassoPauseOnScrollListener;
+import dev.ragnarok.fenrir.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import dev.ragnarok.fenrir.modalbottomsheetdialogfragment.OptionRequest;
 import dev.ragnarok.fenrir.model.Comment;
+import dev.ragnarok.fenrir.model.menu.options.CommentsPhotoOption;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.PhotoAllCommentPresenter;
 import dev.ragnarok.fenrir.mvp.view.IPhotoAllCommentView;
@@ -230,56 +232,57 @@ public class PhotoAllCommentFragment extends PlaceSupportMvpFragment<PhotoAllCom
     }
 
     @Override
-    public void populateCommentContextMenu(ContextMenu menu, Comment comment) {
-        menu.setHeaderTitle(comment.getFullAuthorName());
+    public void populateCommentContextMenu(Comment comment) {
+        ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
+        menus.header(comment.getFullAuthorName(), R.drawable.comment, comment.getMaxAuthorAvaUrl());
+        menus.columns(2);
 
-        menu.add(R.string.photo)
-                .setOnMenuItemClickListener(item -> {
-                    callPresenter(p -> p.fireGoPhotoClick(comment));
-                    return true;
-                });
+        menus.add(new OptionRequest(CommentsPhotoOption.go_to_photo_item_comment, getString(R.string.photo), R.drawable.dir_photo));
 
         if (!Utils.isEmpty(comment.getText())) {
-            menu.add(R.string.copy).setOnMenuItemClickListener(item -> {
-                ClipboardManager clipboard = (ClipboardManager) requireActivity()
-                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("comment", comment.getText());
-                clipboard.setPrimaryClip(clip);
-                CustomToast.CreateCustomToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
-                return true;
-            });
+            menus.add(new OptionRequest(CommentsPhotoOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy));
         }
 
-        menu.add(R.string.report).setOnMenuItemClickListener(item -> {
-            callPresenter(p -> p.fireReport(comment, requireActivity()));
-            return true;
-        });
+        menus.add(new OptionRequest(CommentsPhotoOption.report_item_comment, getString(R.string.report), R.drawable.report));
 
-        menu.add(R.string.like)
-                .setVisible(!comment.isUserLikes())
-                .setOnMenuItemClickListener(item -> {
+        if (!comment.isUserLikes()) {
+            menus.add(new OptionRequest(CommentsPhotoOption.like_item_comment, getString(R.string.like), R.drawable.heart));
+        } else {
+            menus.add(new OptionRequest(CommentsPhotoOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart));
+        }
+
+        menus.add(new OptionRequest(CommentsPhotoOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled));
+
+        menus.add(new OptionRequest(CommentsPhotoOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends));
+        menus.show(requireActivity().getSupportFragmentManager(), "comments_photo_options", option -> {
+            switch (option.getId()) {
+                case CommentsPhotoOption.go_to_photo_item_comment:
+                    callPresenter(p -> p.fireGoPhotoClick(comment));
+                    break;
+                case CommentsPhotoOption.copy_item_comment:
+                    ClipboardManager clipboard = (ClipboardManager) requireActivity()
+                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("comment", comment.getText());
+                    clipboard.setPrimaryClip(clip);
+                    CustomToast.CreateCustomToast(requireActivity()).setDuration(Toast.LENGTH_LONG).showToast(R.string.copied_to_clipboard);
+                    break;
+                case CommentsPhotoOption.report_item_comment:
+                    callPresenter(p -> p.fireReport(comment, requireActivity()));
+                    break;
+                case CommentsPhotoOption.like_item_comment:
                     callPresenter(p -> p.fireCommentLikeClick(comment, true));
-                    return true;
-                });
-
-        menu.add(R.string.dislike)
-                .setVisible(comment.isUserLikes())
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsPhotoOption.dislike_item_comment:
                     callPresenter(p -> p.fireCommentLikeClick(comment, false));
-                    return true;
-                });
-
-        menu.add(R.string.who_likes)
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsPhotoOption.who_like_item_comment:
                     callPresenter(p -> p.fireWhoLikesClick(comment));
-                    return true;
-                });
-
-        menu.add(R.string.send_to_friend)
-                .setOnMenuItemClickListener(item -> {
+                    break;
+                case CommentsPhotoOption.send_to_friend_item_comment:
                     callPresenter(p -> p.fireReplyToChat(comment, requireActivity()));
-                    return true;
-                });
+                    break;
+            }
+        });
     }
 
     @Override

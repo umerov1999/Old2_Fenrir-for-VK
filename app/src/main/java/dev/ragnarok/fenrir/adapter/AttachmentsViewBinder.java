@@ -92,6 +92,7 @@ public class AttachmentsViewBinder {
     private final OnAttachmentsActionCallback mAttachmentsActionCallback;
     private final Context mContext;
     private final boolean isNightStiker;
+    private final boolean expandVoiceTranscript;
     private VoiceActionListener mVoiceActionListener;
     private EmojiconTextView.OnHashTagClickListener mOnHashTagClickListener;
 
@@ -104,6 +105,7 @@ public class AttachmentsViewBinder {
         mActiveWaveFormColor = CurrentTheme.getColorPrimary(context);
         mNoactiveWaveFormColor = Utils.adjustAlpha(mActiveWaveFormColor, 0.5f);
         isNightStiker = Settings.get().ui().isStickers_by_theme() && Settings.get().ui().isDarkModeEnabled(context);
+        expandVoiceTranscript = Settings.get().main().isExpand_voice_transcript();
     }
 
     private static void safeSetVisibitity(@Nullable View view, int visibility) {
@@ -260,7 +262,7 @@ public class AttachmentsViewBinder {
                 });
             }
         } else {
-            if (voice.isShowTranscript()) {
+            if (voice.isShowTranscript() || expandVoiceTranscript) {
                 holder.TranscriptText.setVisibility(View.VISIBLE);
                 holder.TranscriptText.setText(voice.getTranscript());
                 holder.mDoTranscript.setVisibility(View.GONE);

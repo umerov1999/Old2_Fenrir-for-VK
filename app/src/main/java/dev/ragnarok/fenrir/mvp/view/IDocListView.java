@@ -22,6 +22,8 @@ public interface IDocListView extends IAccountDependencyView, IMvpView, IErrorVi
 
     void notifyDataAdd(int position, int count);
 
+    void notifyDataRemoved(int position);
+
     void openDocument(int accountId, @NonNull Document document);
 
     void returnSelection(ArrayList<Document> docs);

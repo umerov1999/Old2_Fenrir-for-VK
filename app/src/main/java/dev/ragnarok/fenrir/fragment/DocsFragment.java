@@ -232,7 +232,14 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
     @Override
     public void notifyDataAdd(int position, int count) {
         if (nonNull(mDocsAdapter)) {
-            mDocsAdapter.notifyItemRangeInserted(position, count);
+            mDocsAdapter.notifyItemBindableRangeInserted(position, count);
+        }
+    }
+
+    @Override
+    public void notifyDataRemoved(int position) {
+        if (nonNull(mDocsAdapter)) {
+            mDocsAdapter.notifyItemBindableRemoved(position);
         }
     }
 
@@ -378,7 +385,8 @@ public class DocsFragment extends BaseMvpFragment<DocsListPresenter, IDocListVie
 
     @Override
     public boolean onDocLongClick(int index, @NonNull Document doc) {
-        return false;
+        callPresenter(p -> p.fireMenuClick(requireActivity(), index, doc));
+        return true;
     }
 
     @Override

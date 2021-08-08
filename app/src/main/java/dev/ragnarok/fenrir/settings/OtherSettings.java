@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -135,6 +137,28 @@ class OtherSettings implements ISettings.IOtherSettings {
             return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("max_bitmap_resolution", "4000").trim());
         } catch (Exception e) {
             return 4000;
+        }
+    }
+
+    @Override
+    public @NonNull
+    List<Integer> getServicePlaylist() {
+        try {
+            String rs = PreferenceManager.getDefaultSharedPreferences(app).getString("service_playlists", "-21 -22 -25 -26 -27 -28").trim();
+            if (Utils.isEmpty(rs)) {
+                return Collections.emptyList();
+            }
+            String[] integerStrings = rs.split(" ");
+            if (integerStrings.length <= 0) {
+                return Collections.emptyList();
+            }
+            List<Integer> integers = new ArrayList<>(integerStrings.length);
+            for (int i = 0; i < integerStrings.length; i++) {
+                integers.add(i, Integer.parseInt(integerStrings[i].trim()));
+            }
+            return integers;
+        } catch (Exception e) {
+            return Arrays.asList(-21, -22, -25, -26, -27, -28);
         }
     }
 

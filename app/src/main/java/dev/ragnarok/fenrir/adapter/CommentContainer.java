@@ -98,6 +98,12 @@ public class CommentContainer extends LinearLayout {
                     }
                     return true;
                 });
+                holder.tvText.setOnLongClickListener(v -> {
+                    if (listener != null) {
+                        listener.populateCommentContextMenu(comment);
+                    }
+                    return true;
+                });
                 if (!comment.hasAttachments()) {
                     holder.vAttachmentsRoot.setVisibility(View.GONE);
                 } else {

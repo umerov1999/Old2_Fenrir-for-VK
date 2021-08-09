@@ -147,6 +147,12 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
     }
 
     @Override
+    public Uri getNewPostRingtoneUri() {
+        String path = "android.resource://" + app.getPackageName() + "/" + R.raw.new_post_sound;
+        return Uri.parse(path);
+    }
+
+    @Override
     public String getDefNotificationRingtone() {
         return "android.resource://" + app.getPackageName() + "/" + R.raw.notification_sound;
     }

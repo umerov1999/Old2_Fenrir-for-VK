@@ -101,6 +101,9 @@ public class NotificationUtils {
     }
 
     public static void configOtherPushNotification(Notification notification) {
+        if (Utils.hasOreo()) {
+            return;
+        }
         int mask = Settings.get()
                 .notifications()
                 .getOtherNotificationMask();

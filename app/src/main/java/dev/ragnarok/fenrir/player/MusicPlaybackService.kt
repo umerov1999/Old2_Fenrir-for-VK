@@ -929,7 +929,8 @@ class MusicPlaybackService : Service() {
             }
             val url = Utils.firstNonEmptyString(
                 res,
-                RawResourceDataSource.buildRawResourceUri(R.raw.audio_error).toString()
+                //RawResourceDataSource.buildRawResourceUri(R.raw.audio_error).toString()
+                "file:///android_asset/audio_error.ogg"
             )
             val mediaSource: MediaSource =
                 if (url.contains("file://") || url.contains("content://") || url.contains(

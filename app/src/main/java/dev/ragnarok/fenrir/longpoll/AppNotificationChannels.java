@@ -9,6 +9,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.settings.Settings;
 
 public class AppNotificationChannels {
     public static final String CHAT_MESSAGE_CHANNEL_ID = "chat_message_channel";
@@ -68,6 +69,7 @@ public class AppNotificationChannels {
         String channelName = context.getString(R.string.likes_channel);
         NotificationChannel channel = new NotificationChannel(LIKES_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
@@ -86,15 +88,17 @@ public class AppNotificationChannels {
         NotificationChannel channel = new NotificationChannel(COMMENTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static NotificationChannel getNewPostChannel(Context context) {
         String channelName = context.getString(R.string.new_posts_channel);
-        NotificationChannel channel = new NotificationChannel(NEW_POST_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel(NEW_POST_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getNewPostRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
@@ -104,6 +108,7 @@ public class AppNotificationChannels {
         NotificationChannel channel = new NotificationChannel(MENTION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
@@ -122,6 +127,7 @@ public class AppNotificationChannels {
         NotificationChannel channel = new NotificationChannel(GROUP_INVITES_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
@@ -131,6 +137,7 @@ public class AppNotificationChannels {
         NotificationChannel channel = new NotificationChannel(FRIEND_REQUESTS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 
@@ -140,6 +147,7 @@ public class AppNotificationChannels {
         NotificationChannel channel = new NotificationChannel(BIRTHDAYS_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_LOW);
         channel.enableLights(true);
         channel.enableVibration(true);
+        channel.setSound(Settings.get().notifications().getFeedbackRingtoneUri(), ATTRIBUTES);
         return channel;
     }
 }

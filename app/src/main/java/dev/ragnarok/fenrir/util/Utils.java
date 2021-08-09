@@ -639,6 +639,11 @@ public class Utils {
         return (mask & flag) != 0;
     }
 
+    public static int removeFlag(int mask, int flag) {
+        mask &= ~flag;
+        return mask;
+    }
+
     public static int addFlagIf(int mask, int flag, boolean ifTrue) {
         if (ifTrue) {
             return mask + flag;

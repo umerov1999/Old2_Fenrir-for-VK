@@ -3,7 +3,6 @@ package dev.ragnarok.fenrir.fragment
 import android.Manifest
 import android.app.Dialog
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import dev.ragnarok.fenrir.player.MusicPlaybackService.Companion.startForPlayLis
 import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
+import dev.ragnarok.fenrir.util.MessagesReplyItemCallback
 import dev.ragnarok.fenrir.util.Utils
 
 class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.ClickListener,
@@ -92,36 +92,18 @@ class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.Click
                 } else CreateCustomToast(requireActivity()).showToast(R.string.audio_not_found)
             } else CreateCustomToast(requireActivity()).showToastError(R.string.null_audio)
         }
-        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(mRecyclerView)
+        ItemTouchHelper(MessagesReplyItemCallback {
+            mAdapter?.let { it1 ->
+                startForPlayList(
+                    requireActivity(),
+                    mData,
+                    it1.getItemRawPosition(it),
+                    false
+                )
+            }
+        }).attachToRecyclerView(mRecyclerView)
         return root
     }
-
-    private var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
-        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                mAdapter?.notifyItemChanged(viewHolder.bindingAdapterPosition)
-                mAdapter?.let { it1 ->
-                    startForPlayList(
-                        requireActivity(),
-                        mData,
-                        it1.getItemRawPosition(viewHolder.bindingAdapterPosition),
-                        false
-                    )
-                }
-            }
-
-            override fun isLongPressDragEnabled(): Boolean {
-                return false
-            }
-        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

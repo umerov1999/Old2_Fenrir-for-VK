@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -85,6 +84,7 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.backup.SettingsBackup;
 import dev.ragnarok.fenrir.util.AppPerms;
 import dev.ragnarok.fenrir.util.CustomToast;
+import dev.ragnarok.fenrir.util.MessagesReplyItemCallback;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.ShortcutUtils;
@@ -101,31 +101,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AccountAdapter mAdapter;
-    private final ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView,
-                              @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            mAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
-            Account account = mAdapter.getByPosition(viewHolder.getBindingAdapterPosition());
-            boolean idCurrent = account.getId() == Settings.get()
-                    .accounts()
-                    .getCurrent();
-            if (!idCurrent) {
-                setAsActive(account);
-            }
-        }
-
-        @Override
-        public boolean isLongPressDragEnabled() {
-            return false;
-        }
-    };
     private int temp_to_show;
     private final ActivityResultLauncher<Intent> requestEnterPin = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -214,7 +190,15 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         mSwipeRefreshLayout.setOnRefreshListener(() -> load(true));
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
-        new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(mRecyclerView);
+        new ItemTouchHelper(new MessagesReplyItemCallback(o -> {
+            Account account = mAdapter.getByPosition(o);
+            boolean idCurrent = account.getId() == Settings.get()
+                    .accounts()
+                    .getCurrent();
+            if (!idCurrent) {
+                setAsActive(account);
+            }
+        })).attachToRecyclerView(mRecyclerView);
 
         root.findViewById(R.id.fab).setOnClickListener(this);
         return root;

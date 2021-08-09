@@ -1,13 +1,16 @@
 package dev.ragnarok.fenrir.fragment;
 
+import static dev.ragnarok.fenrir.settings.ISettings.INotificationSettings.FLAG_SHOW_NOTIF;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
+import static dev.ragnarok.fenrir.util.Utils.addFlagIf;
+import static dev.ragnarok.fenrir.util.Utils.hasFlag;
+import static dev.ragnarok.fenrir.util.Utils.removeFlag;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,6 +72,7 @@ import dev.ragnarok.fenrir.util.AssertUtils;
 import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.HelperSimple;
 import dev.ragnarok.fenrir.util.InputTextDialog;
+import dev.ragnarok.fenrir.util.MessagesReplyItemCallback;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
 
@@ -86,26 +90,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             });
     private RecyclerView mRecyclerView;
     private DialogsAdapter mAdapter;
-    private final ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView,
-                              @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            mAdapter.notifyItemChanged(viewHolder.getBindingAdapterPosition());
-            Dialog dialog = mAdapter.getByPosition(viewHolder.getBindingAdapterPosition());
-            callPresenter(p -> p.fireRepost(dialog));
-        }
-
-        @Override
-        public boolean isLongPressDragEnabled() {
-            return false;
-        }
-    };
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isCreateChat = true;
     private FloatingActionButton mFab;
@@ -275,7 +259,10 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void notifyHasAttachments(boolean has) {
         if (has) {
-            new ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(mRecyclerView);
+            new ItemTouchHelper(new MessagesReplyItemCallback(o -> {
+                Dialog dialog = mAdapter.getByPosition(o);
+                callPresenter(p -> p.fireRepost(dialog));
+            })).attachToRecyclerView(mRecyclerView);
             if (HelperSimple.INSTANCE.needHelp(HelperSimple.DIALOG_SEND_HELPER, 3)) {
                 showSnackbar(R.string.dialog_send_helper, true);
             }
@@ -303,6 +290,8 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         String delete = getString(R.string.delete);
         String addToHomeScreen = getString(R.string.add_to_home_screen);
         String notificationSettings = getString(R.string.peer_notification_settings);
+        String notificationEnable = getString(R.string.enable_notifications);
+        String notificationDisable = getString(R.string.disable_notifications);
         String addToShortcuts = getString(R.string.add_to_launcher_shortcuts);
 
         String setHide = getString(R.string.hide_dialog);
@@ -322,7 +311,18 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         }
 
         if (contextView.canConfigNotifications) {
-            menus.add(new OptionRequest(4, notificationSettings, R.drawable.feed));
+            if (Utils.hasOreo()) {
+                int mask = Settings.get()
+                        .notifications()
+                        .getNotifPref(Settings.get().accounts().getCurrent(), dialog.getPeerId());
+                if (hasFlag(mask, FLAG_SHOW_NOTIF)) {
+                    menus.add(new OptionRequest(4, notificationDisable, R.drawable.notification_disable));
+                } else {
+                    menus.add(new OptionRequest(4, notificationEnable, R.drawable.feed));
+                }
+            } else {
+                menus.add(new OptionRequest(4, notificationSettings, R.drawable.feed));
+            }
         }
 
         if (contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -360,7 +360,23 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                     callPresenter(p -> p.fireCreateShortcutClick(dialog));
                     break;
                 case 4:
-                    callPresenter(p -> p.fireNotificationsSettingsClick(dialog));
+                    if (Utils.hasOreo()) {
+                        int accountId = Settings.get().accounts().getCurrent();
+                        int mask = Settings.get()
+                                .notifications()
+                                .getNotifPref(accountId, dialog.getPeerId());
+                        if (hasFlag(mask, FLAG_SHOW_NOTIF)) {
+                            mask = removeFlag(mask, FLAG_SHOW_NOTIF);
+                        } else {
+                            mask = addFlagIf(mask, FLAG_SHOW_NOTIF, true);
+                        }
+                        Settings.get()
+                                .notifications()
+                                .setNotifPref(accountId, dialog.getPeerId(), mask);
+                        callPresenter(DialogsPresenter::changedNotifications);
+                    } else {
+                        callPresenter(p -> p.fireNotificationsSettingsClick(dialog));
+                    }
                     break;
                 case 5:
                     callPresenter(p -> p.fireAddToLauncherShortcuts(dialog));

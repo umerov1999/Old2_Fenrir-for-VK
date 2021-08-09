@@ -100,7 +100,7 @@
     <string name="first_pagan">Первый языческий</string>
     <string name="repo">Репозиторий: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Репозиторий: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Проект посвящён Арнольдове Екатерине, https://vk.com/id255645173</string>
+    <string name="project_dedicated_summary">Проект посвящён Екатерине Арнольдовой, https://vk.com/id255645173</string>
     <string name="project_dedicated">Проект посвящён</string>
     <string name="in_full_version">Доступно в полной версии!</string>
     <string name="features">Функции:</string>
@@ -1631,4 +1631,6 @@
     <string name="open_comment_thread">Открыть %1$s</string>
     <string name="expand_voice_transcript">Развернуть голосовую расшифровку</string>
     <string name="service_playlists">Сервисные плейлисты</string>
+    <string name="enable_notifications">Включить уведомления</string>
+    <string name="disable_notifications">Выключить уведомления</string>
 </resources>

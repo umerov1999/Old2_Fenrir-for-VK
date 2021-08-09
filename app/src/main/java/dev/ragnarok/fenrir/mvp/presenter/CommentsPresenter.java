@@ -631,6 +631,21 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         }
     }
 
+    public void fireReplyToCommentClick(int index) {
+        if (data.size() <= index || index < 0) {
+            return;
+        }
+        Comment comment = data.get(index);
+        if (commented.getSourceType() == CommentedType.TOPIC) {
+            // в топиках механизм ответа отличается
+            String replyText = buildReplyTextFor(comment);
+            callView(v -> v.replaceBodySelectionTextTo(replyText));
+        } else {
+            replyTo = comment;
+            resolveReplyViews();
+        }
+    }
+
     public void fireReport(Comment comment) {
         CharSequence[] items = {"Спам", "Детская порнография", "Экстремизм", "Насилие", "Пропаганда наркотиков", "Материал для взрослых", "Оскорбление", "Призывы к суициду"};
         new MaterialAlertDialogBuilder(context)

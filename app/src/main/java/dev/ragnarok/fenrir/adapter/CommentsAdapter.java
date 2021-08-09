@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -50,7 +49,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
     private final int iconColorActive;
     private EmojiconTextView.OnHashTagClickListener onHashTagClickListener;
     private OnCommentActionListener listener;
-    private RecyclerView recyclerView;
 
     public CommentsAdapter(Context context, List<Comment> items, AttachmentsViewBinder.OnAttachmentsActionCallback attachmentsActionCallback) {
         super(items);
@@ -92,8 +90,13 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             holder.startSelectionAnimation();
             comment.setAnimationNow(false);
         }
-
         holder.click.setOnLongClickListener(v -> {
+            if (listener != null) {
+                listener.populateCommentContextMenu(comment);
+            }
+            return true;
+        });
+        holder.tvText.setOnLongClickListener(v -> {
             if (listener != null) {
                 listener.populateCommentContextMenu(comment);
             }
@@ -226,18 +229,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
 
     public void setListener(OnCommentActionListener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        this.recyclerView = null;
     }
 
     @Override

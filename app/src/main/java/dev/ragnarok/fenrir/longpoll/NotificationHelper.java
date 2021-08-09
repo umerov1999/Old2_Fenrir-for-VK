@@ -1,6 +1,7 @@
 package dev.ragnarok.fenrir.longpoll;
 
 import static dev.ragnarok.fenrir.util.Utils.hasFlag;
+import static dev.ragnarok.fenrir.util.Utils.hasOreo;
 import static dev.ragnarok.fenrir.util.Utils.isEmpty;
 
 import android.annotation.SuppressLint;
@@ -228,7 +229,7 @@ public class NotificationHelper {
             return;
         }
 
-        if (Utils.hasOreo()) {
+        if (hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getChatMessageChannel(context));
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }
@@ -279,14 +280,6 @@ public class NotificationHelper {
                 .setSortKey("" + (Long.MAX_VALUE - message.getDate() * 1000))
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setAutoCancel(true);
-
-        int notificationMask = Settings.get()
-                .notifications()
-                .getNotifPref(accountId, message.getPeerId());
-
-        if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_HIGH_PRIORITY)) {
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-        }
 
         //Our quickreply
         Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, message, text != null ? text.toString() : context.getString(R.string.error), peer.getAvaUrl(), peer.getTitle());
@@ -341,18 +334,28 @@ public class NotificationHelper {
 
         builder.extend(War);
 
-        if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_LED)) {
-            builder.setLights(0xFF0000FF, 100, 1000);
-        }
-
-        if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_VIBRO)) {
-            builder.setVibrate(Settings.get()
+        if (!hasOreo()) {
+            int notificationMask = Settings.get()
                     .notifications()
-                    .getVibrationLength());
-        }
+                    .getNotifPref(accountId, message.getPeerId());
 
-        if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_SOUND)) {
-            builder.setSound(findNotificationSound());
+            if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_HIGH_PRIORITY)) {
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            }
+
+            if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_LED)) {
+                builder.setLights(0xFF0000FF, 100, 1000);
+            }
+
+            if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_VIBRO)) {
+                builder.setVibrate(Settings.get()
+                        .notifications()
+                        .getVibrationLength());
+            }
+
+            if (hasFlag(notificationMask, ISettings.INotificationSettings.FLAG_SOUND)) {
+                builder.setSound(findNotificationSound());
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Peer.isGroupChat(peer.getId()) && Settings.get().main().isNotification_bubbles_enabled()) {
@@ -385,7 +388,7 @@ public class NotificationHelper {
             return;
         }
 
-        if (Utils.hasOreo()) {
+        if (hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getChatMessageChannel(context));
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }

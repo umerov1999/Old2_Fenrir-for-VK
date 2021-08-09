@@ -1428,7 +1428,7 @@
     <string name="friend_requests_channel">Friend requests</string>
     <string name="group_invites_channel">Group invitations</string>
     <string name="likes_channel">Like this</string>
-    <string name="new_posts_channel">New entries</string>
+    <string name="new_posts_channel">New post</string>
 
     <string name="api_error_900">Can\'t send message to blacklisted user</string>
     <string name="api_error_901">You cannot be the first to write to the user on behalf of the community</string>
@@ -1842,4 +1842,6 @@
     <string name="open_comment_thread">Open %1$s</string>
     <string name="expand_voice_transcript">Expand Voice Transcript</string>
     <string name="service_playlists">Service Playlists</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="disable_notifications">Disable Notifications</string>
 </resources>

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,6 +65,7 @@ import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.spots.SpotsDialog;
 import dev.ragnarok.fenrir.util.CustomToast;
+import dev.ragnarok.fenrir.util.MessagesReplyItemCallback;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.CommentsInputViewController;
 import dev.ragnarok.fenrir.view.LoadMoreFooterHelperComment;
@@ -180,6 +182,8 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
 
         mCenterProgressBar = root.findViewById(R.id.progress_bar);
         mEmptyView = root.findViewById(R.id.empty_text);
+
+        new ItemTouchHelper(new MessagesReplyItemCallback(o -> callPresenter(p -> p.fireReplyToCommentClick(mAdapter.getItemRawPosition(o))))).attachToRecyclerView(mRecyclerView);
         return root;
     }
 

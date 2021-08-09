@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 class MessagesReplyItemCallback(
-    private val onReplySwiped: (Int) -> Unit
+    private val swipe: SwipeConsumer
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private var invoked = false
@@ -45,12 +45,16 @@ class MessagesReplyItemCallback(
             !invoked && dX < INVOKE_THRESHOLD_PX -> {
                 invoked = true
                 viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                onReplySwiped(viewHolder.bindingAdapterPosition)
+                swipe.onReplySwiped(viewHolder.bindingAdapterPosition)
             }
             dX == .0f -> {
                 invoked = false
             }
         }
+    }
+
+    fun interface SwipeConsumer {
+        fun onReplySwiped(adapterPosition: Int)
     }
 
     companion object {

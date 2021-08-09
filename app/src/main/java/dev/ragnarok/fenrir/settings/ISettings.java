@@ -392,6 +392,8 @@ public interface ISettings {
 
         Uri getFeedbackRingtoneUri();
 
+        Uri getNewPostRingtoneUri();
+
         String getDefNotificationRingtone();
 
         String getNotificationRingtone();

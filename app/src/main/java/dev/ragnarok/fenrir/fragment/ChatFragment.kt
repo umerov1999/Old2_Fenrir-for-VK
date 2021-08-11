@@ -619,26 +619,34 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPresenter, IChatView>(), IChatV
     override fun displayToolbarAvatar(peer: Peer?) {
         if (nonEmpty(peer?.avaUrl)) {
             EmptyAvatar?.visibility = View.GONE
-            PicassoInstance.with()
-                .load(peer?.avaUrl)
-                .transform(RoundTransformation())
-                .into(Avatar!!)
+            Avatar?.let {
+                PicassoInstance.with()
+                    .load(peer?.avaUrl)
+                    .transform(RoundTransformation())
+                    .into(it)
+            }
         } else {
-            PicassoInstance.with().cancelRequest(Avatar!!)
-            EmptyAvatar?.visibility = View.VISIBLE
-            var name: String = peer!!.title
-            if (name.length > 2) name = name.substring(0, 2)
-            name = name.trim { it <= ' ' }
-            EmptyAvatar?.text = name
-            Avatar?.setImageBitmap(
-                RoundTransformation().localTransform(
-                    Utils.createGradientChatImage(
-                        200,
-                        200,
-                        peer.id
+            Avatar?.let { PicassoInstance.with().cancelRequest(it) }
+            peer?.let { itv ->
+                if (!Utils.isEmpty(itv.title)) {
+                    EmptyAvatar?.visibility = View.VISIBLE
+                    var name: String = itv.title
+                    if (name.length > 2) name = name.substring(0, 2)
+                    name = name.trim { it <= ' ' }
+                    EmptyAvatar?.text = name
+                } else {
+                    EmptyAvatar?.visibility = View.GONE
+                }
+                Avatar?.setImageBitmap(
+                    RoundTransformation().localTransform(
+                        Utils.createGradientChatImage(
+                            200,
+                            200,
+                            itv.id
+                        )
                     )
                 )
-            )
+            }
         }
     }
 

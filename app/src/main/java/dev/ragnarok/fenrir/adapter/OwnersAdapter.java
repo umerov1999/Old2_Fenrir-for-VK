@@ -139,9 +139,8 @@ public class OwnersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mData.get(position) instanceof User ? TYPE_USER : TYPE_COMMUNITY;
     }
 
-    public OwnersAdapter setLongClickListener(LongClickListener longClickListener) {
+    public void setLongClickListener(LongClickListener longClickListener) {
         this.longClickListener = longClickListener;
-        return this;
     }
 
     public void setClickListener(ClickListener clickListener) {

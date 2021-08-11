@@ -15,7 +15,6 @@ import dev.ragnarok.fenrir.model.Photo
 import dev.ragnarok.fenrir.model.PhotoSize
 import dev.ragnarok.fenrir.model.Video
 import dev.ragnarok.fenrir.picasso.PicassoInstance
-import dev.ragnarok.fenrir.settings.CurrentTheme
 import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.util.AppTextUtils
 import dev.ragnarok.fenrir.util.Utils
@@ -32,7 +31,6 @@ class PhotosViewHelper internal constructor(
 ) {
     @PhotoSize
     private val mPhotoPreviewSize = Settings.get().main().prefPreviewImageSize
-    private val mIconColorActive = CurrentTheme.getColorPrimary(context)
     private val isAutoplay_gif = Settings.get().other().isAutoplay_gif
 
     @SuppressLint("SetTextI18n")

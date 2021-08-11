@@ -145,7 +145,7 @@ public class AudioDuplicateDialog extends BaseMvpDialogFragment<AudioDuplicatePr
 
     private void updateAudioStatus(AudioHolder holder, Audio audio) {
         if (!audio.equals(MusicPlaybackController.getCurrentAudio())) {
-            holder.visual.setImageResource(Utils.isEmpty(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
+            holder.visual.setImageResource(audio.getSongIcon());
             holder.play_cover.clearColorFilter();
             return;
         }

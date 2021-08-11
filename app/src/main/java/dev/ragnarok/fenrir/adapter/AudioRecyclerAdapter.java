@@ -239,7 +239,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
 
     private void updateAudioStatus(AudioHolder holder, Audio audio) {
         if (!audio.equals(currAudio)) {
-            holder.visual.setImageResource(Utils.isEmpty(audio.getUrl()) ? R.drawable.audio_died : R.drawable.song);
+            holder.visual.setImageResource(audio.getSongIcon());
             holder.play_cover.clearColorFilter();
             return;
         }

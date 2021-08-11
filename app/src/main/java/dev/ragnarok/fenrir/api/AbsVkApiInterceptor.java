@@ -75,6 +75,9 @@ abstract class AbsVkApiInterceptor implements Interceptor {
      */
 
     private boolean upgradeTokenKate() {
+        if (Utils.isHiddenAccount(getAccountId())) {
+            return false;
+        }
         String gms = Settings.get().other().getKateGMSToken();
         String oldToken = getToken();
         String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;
@@ -87,6 +90,9 @@ abstract class AbsVkApiInterceptor implements Interceptor {
     }
 
     private boolean upgradeTokenOfficial() {
+        if (Utils.isHiddenAccount(getAccountId())) {
+            return false;
+        }
         String gms = TokenMod.requestToken();
         String oldToken = getToken();
         String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;

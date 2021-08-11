@@ -80,6 +80,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener {
     private val PLAYER_TAG = "PicassoPlayerTag"
@@ -857,6 +858,9 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener
                 isEmpty(current.url) -> {
                     ivSave?.setImageResource(R.drawable.audio_died)
                 }
+                ("https://vk.com/mp3/audio_api_unavailable.mp3" == current.url) -> {
+                    ivSave?.setImageResource(R.drawable.report)
+                }
                 else -> ivSave?.setImageResource(R.drawable.save)
             }
         } else ivSave?.setImageResource(R.drawable.save)
@@ -1131,11 +1135,11 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener
             }
             val smoothrefreshtime = duration / width
             if (smoothrefreshtime > remaining) {
-                return remaining
+                return min(remaining, 500)
             }
             return if (smoothrefreshtime < 20) {
                 20
-            } else smoothrefreshtime
+            } else min(smoothrefreshtime, 500)
         } catch (ignored: Exception) {
         }
         return 500

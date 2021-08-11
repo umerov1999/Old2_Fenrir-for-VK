@@ -7,8 +7,10 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import dev.ragnarok.fenrir.domain.IAccountsInteractor;
 import dev.ragnarok.fenrir.domain.IRelationshipInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Owner;
@@ -24,6 +26,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
 
     private final int userId;
     private final IRelationshipInteractor relationshipInteractor;
+    private final IAccountsInteractor accountsInteractor;
     private final CompositeDisposable actualDataDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
     private boolean actualDataLoading;
@@ -36,6 +39,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
         super(accountId, savedInstanceState);
         this.userId = userId;
         relationshipInteractor = InteractorFactory.createRelationshipInteractor();
+        accountsInteractor = InteractorFactory.createAccountInteractor();
     }
 
     private void requestActualData(int offset, boolean do_scan) {
@@ -46,6 +50,18 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
         actualDataDisposable.add(relationshipInteractor.getFollowers(accountId, userId, Settings.get().other().isNot_friend_show() ? 1000 : 200, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(users -> onActualDataReceived(offset, users, do_scan), this::onActualDataGetError));
+    }
+
+    public void removeFollower(Owner owner) {
+        appendDisposable(accountsInteractor.banUsers(getAccountId(), Collections.singletonList((User) owner))
+                .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                .subscribe(() -> {
+                    int pos = Utils.indexOfOwner(data, owner);
+                    if (pos >= 0) {
+                        data.remove(pos);
+                        callView(v -> v.notifyRemoved(pos));
+                    }
+                }, RxUtils.ignore()));
     }
 
     @Override

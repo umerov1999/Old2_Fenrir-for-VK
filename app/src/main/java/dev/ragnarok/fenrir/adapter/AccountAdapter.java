@@ -81,6 +81,10 @@ public class AccountAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return data.get(position);
     }
 
+    public boolean checkPosition(int position) {
+        return position >= 0 && data.size() > position;
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder dualHolder, int position) {

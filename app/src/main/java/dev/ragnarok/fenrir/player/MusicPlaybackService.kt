@@ -46,7 +46,6 @@ import dev.ragnarok.fenrir.util.RxUtils
 import dev.ragnarok.fenrir.util.Utils
 import dev.ragnarok.fenrir.util.Utils.makeMediaItem
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -542,11 +541,11 @@ class MusicPlaybackService : Service() {
                 } else {
                     val ps = mPlayListOrig?.indexOf(mPlayList?.get(mPlayPos))
                     ps?.let {
-                        if (it < 0) {
+                        mPlayPos = if (it < 0) {
                             mPlayList?.get(mPlayPos)?.let { it1 -> mPlayListOrig?.add(0, it1) }
-                            mPlayPos = 0
+                            0
                         } else {
-                            mPlayPos = it
+                            it
                         }
                     }
                     mPlayList?.clear()
@@ -775,7 +774,7 @@ class MusicPlaybackService : Service() {
         }
     }
 
-    fun pauseNonSync() {
+    private fun pauseNonSync() {
         if (D) Logger.d(TAG, "Pausing playback")
         if (isPlaying) {
             mPlayer?.pause()
@@ -1067,7 +1066,7 @@ class MusicPlaybackService : Service() {
                     }
                 }
 
-                override fun onPlayerError(error: ExoPlaybackException) {
+                override fun onPlayerError(error: PlaybackException) {
                     mService.get()?.let {
                         it.errorsCount++
                         if (it.errorsCount > 10) {
@@ -1279,24 +1278,12 @@ class MusicPlaybackService : Service() {
         @JvmStatic
         fun startForPlayList(
             context: Context,
-            audios_private: ArrayList<Audio>,
+            audios: ArrayList<Audio>,
             position: Int,
             forceShuffle: Boolean
         ) {
-            if (Utils.isEmpty(audios_private)) {
+            if (Utils.isEmpty(audios)) {
                 return
-            }
-            var audios = audios_private
-            val url = audios[0].url
-            val interactor = InteractorFactory.createAudioInteractor()
-            if (Utils.isEmpty(url) || "https://vk.com/mp3/audio_api_unavailable.mp3" == url) {
-                try {
-                    audios = interactor
-                        .getById(Settings.get().accounts().current, audios)
-                        .subscribeOn(Schedulers.io())
-                        .blockingGet() as ArrayList<Audio>
-                } catch (ignore: Throwable) {
-                }
             }
             Logger.d(TAG, "startForPlayList, count: " + audios.size + ", position: " + position)
             val target: ArrayList<Audio>

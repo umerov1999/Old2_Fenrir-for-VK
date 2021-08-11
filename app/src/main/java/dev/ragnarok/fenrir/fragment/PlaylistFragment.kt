@@ -27,6 +27,7 @@ import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.MessagesReplyItemCallback
 import dev.ragnarok.fenrir.util.Utils
 
+
 class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.ClickListener,
     BackPressCallback {
     private var mRecyclerView: RecyclerView? = null
@@ -93,16 +94,22 @@ class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.Click
             } else CreateCustomToast(requireActivity()).showToastError(R.string.null_audio)
         }
         ItemTouchHelper(MessagesReplyItemCallback {
-            mAdapter?.let { it1 ->
-                startForPlayList(
-                    requireActivity(),
-                    mData,
-                    it1.getItemRawPosition(it),
-                    false
-                )
+            if (checkPosition(it)) {
+                mAdapter?.let { it1 ->
+                    startForPlayList(
+                        requireActivity(),
+                        mData,
+                        it1.getItemRawPosition(it),
+                        false
+                    )
+                }
             }
         }).attachToRecyclerView(mRecyclerView)
         return root
+    }
+
+    private fun checkPosition(position: Int): Boolean {
+        return position >= 0 && mData.size > position
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

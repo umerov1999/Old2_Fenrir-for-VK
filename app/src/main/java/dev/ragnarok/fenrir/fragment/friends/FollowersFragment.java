@@ -52,6 +52,17 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
     }
 
     @Override
+    public void notifyRemoved(int position) {
+        mOwnersAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    protected boolean onLongClick(Owner owner) {
+        callPresenter(p -> p.removeFollower(owner));
+        return true;
+    }
+
+    @Override
     public void showAddFollowers(List<Owner> add, List<Owner> remove, int accountId) {
         if (add.size() <= 0 && remove.size() > 0) {
             showNotFollowers(remove, accountId);

@@ -233,14 +233,15 @@ class LocalJsonToChatFragment :
             }
         } else {
             Avatar?.let { PicassoInstance.with().cancelRequest(it) }
-            var name: String? = peer.title
-            if (name == null) {
-                return
+            if (!Utils.isEmpty(peer.title)) {
+                EmptyAvatar?.visibility = View.VISIBLE
+                var name: String = peer.title
+                if (name.length > 2) name = name.substring(0, 2)
+                name = name.trim { it <= ' ' }
+                EmptyAvatar?.text = name
+            } else {
+                EmptyAvatar?.visibility = View.GONE
             }
-            EmptyAvatar?.visibility = View.VISIBLE
-            if (name.length > 2) name = name.substring(0, 2)
-            name = name.trim { it <= ' ' }
-            EmptyAvatar?.text = name
             Avatar?.setImageBitmap(
                 RoundTransformation().localTransform(
                     Utils.createGradientChatImage(

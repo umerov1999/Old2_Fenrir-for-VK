@@ -355,11 +355,15 @@ public class NotReadMessagesFragment extends PlaceSupportMvpFragment<NotReadMess
                     .into(Avatar);
         } else {
             PicassoInstance.with().cancelRequest(Avatar);
-            EmptyAvatar.setVisibility(View.VISIBLE);
-            String name = peer.getTitle();
-            if (name.length() > 2) name = name.substring(0, 2);
-            name = name.trim();
-            EmptyAvatar.setText(name);
+            if (!Utils.isEmpty(peer.getTitle())) {
+                String name = peer.getTitle();
+                EmptyAvatar.setVisibility(View.VISIBLE);
+                if (name.length() > 2) name = name.substring(0, 2);
+                name = name.trim();
+                EmptyAvatar.setText(name);
+            } else {
+                EmptyAvatar.setVisibility(View.GONE);
+            }
             Avatar.setImageBitmap(
                     new RoundTransformation().localTransform(
                             Utils.createGradientChatImage(

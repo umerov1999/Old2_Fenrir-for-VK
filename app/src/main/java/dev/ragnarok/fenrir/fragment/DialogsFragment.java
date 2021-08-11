@@ -260,8 +260,10 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     public void notifyHasAttachments(boolean has) {
         if (has) {
             new ItemTouchHelper(new MessagesReplyItemCallback(o -> {
-                Dialog dialog = mAdapter.getByPosition(o);
-                callPresenter(p -> p.fireRepost(dialog));
+                if (mAdapter.checkPosition(o)) {
+                    Dialog dialog = mAdapter.getByPosition(o);
+                    callPresenter(p -> p.fireRepost(dialog));
+                }
             })).attachToRecyclerView(mRecyclerView);
             if (HelperSimple.INSTANCE.needHelp(HelperSimple.DIALOG_SEND_HELPER, 3)) {
                 showSnackbar(R.string.dialog_send_helper, true);

@@ -4,10 +4,13 @@ import static dev.ragnarok.fenrir.util.Utils.stringEmptyIfNull;
 
 import android.os.Parcel;
 
+import androidx.annotation.DrawableRes;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.model.VKApiAudio;
 import dev.ragnarok.fenrir.util.Utils;
 
@@ -196,6 +199,16 @@ public class Audio extends AbsModel {
     public Audio setDuration(int duration) {
         this.duration = duration;
         return this;
+    }
+
+    public @DrawableRes
+    int getSongIcon() {
+        if (Utils.isEmpty(url)) {
+            return R.drawable.audio_died;
+        } else if ("https://vk.com/mp3/audio_api_unavailable.mp3".equals(url)) {
+            return R.drawable.report;
+        }
+        return R.drawable.song;
     }
 
     public String getUrl() {

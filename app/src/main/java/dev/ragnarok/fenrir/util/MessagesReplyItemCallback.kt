@@ -59,7 +59,7 @@ class MessagesReplyItemCallback(
 
     companion object {
         private const val UNREACHABLE_VALUE = 100000f
-        private const val SWIPE_LIMIT_FACTOR = 3
-        private const val INVOKE_THRESHOLD_PX = -300f
+        private const val SWIPE_LIMIT_FACTOR = 2
+        private const val INVOKE_THRESHOLD_PX = -250f
     }
 }

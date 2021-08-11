@@ -191,12 +191,14 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
         new ItemTouchHelper(new MessagesReplyItemCallback(o -> {
-            Account account = mAdapter.getByPosition(o);
-            boolean idCurrent = account.getId() == Settings.get()
-                    .accounts()
-                    .getCurrent();
-            if (!idCurrent) {
-                setAsActive(account);
+            if (mAdapter.checkPosition(o)) {
+                Account account = mAdapter.getByPosition(o);
+                boolean idCurrent = account.getId() == Settings.get()
+                        .accounts()
+                        .getCurrent();
+                if (!idCurrent) {
+                    setAsActive(account);
+                }
             }
         })).attachToRecyclerView(mRecyclerView);
 

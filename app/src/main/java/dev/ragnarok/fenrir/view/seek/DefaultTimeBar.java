@@ -46,7 +46,7 @@ import dev.ragnarok.fenrir.R;
  *
  * <p>A DefaultTimeBar can be customized by setting attributes, as outlined below.
  *
- * <h3>Attributes</h3>
+ * <h2>Attributes</h2>
  * <p>
  * The following attributes can be set on a DefaultTimeBar when used in a layout XML file:
  *
@@ -174,7 +174,6 @@ public class DefaultTimeBar extends View implements TimeBar {
     public static final long TIME_UNSET = Long.MIN_VALUE + 1;
     public static final int INDEX_UNSET = -1;
 
-    // LINT.IfChange
     /**
      * Vertical gravity for progress bar to be located at the center in the view.
      */
@@ -183,7 +182,6 @@ public class DefaultTimeBar extends View implements TimeBar {
      * Vertical gravity for progress bar to be located at the bottom in the view.
      */
     public static final int BAR_GRAVITY_BOTTOM = 1;
-    // LINT.ThenChange(../../../../../../../../../ui/src/main/res/values/attrs.xml)
 
     /**
      * The threshold in dps above the bar at which touch events trigger fine scrub mode.
@@ -276,7 +274,7 @@ public class DefaultTimeBar extends View implements TimeBar {
     }
 
     // Suppress warnings due to usage of View methods in the constructor.
-    @SuppressWarnings("nullness:method.invocation.invalid")
+    @SuppressWarnings("nullness:method.invocation")
     public DefaultTimeBar(
             Context context,
             @Nullable AttributeSet attrs,

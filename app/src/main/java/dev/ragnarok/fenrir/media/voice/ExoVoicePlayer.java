@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
@@ -107,7 +107,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
             }
 
             @Override
-            public void onPlayerError(@NonNull ExoPlaybackException error) {
+            public void onPlayerError(@NonNull PlaybackException error) {
                 onExoPlayerException(error);
             }
         });
@@ -119,7 +119,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
         exoPlayer.prepare();
     }
 
-    private void onExoPlayerException(ExoPlaybackException e) {
+    private void onExoPlayerException(@NonNull PlaybackException e) {
         if (nonNull(errorListener)) {
             errorListener.onPlayError(new PrepareException(e));
         }

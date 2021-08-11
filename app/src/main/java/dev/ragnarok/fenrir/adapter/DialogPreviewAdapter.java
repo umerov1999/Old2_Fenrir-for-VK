@@ -52,12 +52,16 @@ public class DialogPreviewAdapter extends RecyclerView.Adapter<DialogPreviewAdap
             ViewUtils.displayAvatar(holder.mAvatar, mTransformation, item.getMaxSquareAvatar(), Constants.PICASSO_TAG);
         } else {
             PicassoInstance.with().cancelRequest(holder.mAvatar);
-            holder.EmptyAvatar.setVisibility(View.VISIBLE);
-            String name = item.getTitle();
-            if (name.length() > 2)
-                name = name.substring(0, 2);
-            name = name.trim();
-            holder.EmptyAvatar.setText(name);
+            if (!Utils.isEmpty(item.getTitle())) {
+                holder.EmptyAvatar.setVisibility(View.VISIBLE);
+                String name = item.getTitle();
+                if (name.length() > 2)
+                    name = name.substring(0, 2);
+                name = name.trim();
+                holder.EmptyAvatar.setText(name);
+            } else {
+                holder.EmptyAvatar.setVisibility(View.INVISIBLE);
+            }
             holder.mAvatar.setImageBitmap(mTransformation.localTransform(Utils.createGradientChatImage(200, 200, item.getId())));
         }
 

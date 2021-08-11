@@ -74,9 +74,14 @@ public abstract class AbsOwnersListFragment<P extends SimpleOwnersPresenter<V>, 
 
         mOwnersAdapter = new OwnersAdapter(requireActivity(), Collections.emptyList());
         mOwnersAdapter.setClickListener(owner -> callPresenter(p -> p.fireOwnerClick(owner)));
+        mOwnersAdapter.setLongClickListener(this::onLongClick);
 
         mRecyclerView.setAdapter(mOwnersAdapter);
         return root;
+    }
+
+    protected boolean onLongClick(Owner owner) {
+        return false;
     }
 
     @Override

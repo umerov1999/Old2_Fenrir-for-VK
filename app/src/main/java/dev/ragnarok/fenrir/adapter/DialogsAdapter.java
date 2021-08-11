@@ -109,6 +109,10 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mDialogs.get(position);
     }
 
+    public boolean checkPosition(int position) {
+        return position >= 0 && mDialogs.size() > position;
+    }
+
     public void cleanup() {
         unregisterAdapterDataObserver(mDataObserver);
     }
@@ -350,12 +354,16 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ViewUtils.displayAvatar(holder.ivAvatar, mTransformation, dialog.getImageUrl(), PICASSO_TAG);
         } else {
             PicassoInstance.with().cancelRequest(holder.ivAvatar);
-            holder.EmptyAvatar.setVisibility(View.VISIBLE);
-            String name = dialog.getTitle();
-            if (name.length() > 2)
-                name = name.substring(0, 2);
-            name = name.trim();
-            holder.EmptyAvatar.setText(name);
+            if (!Utils.isEmpty(dialog.getDisplayTitle(mContext))) {
+                holder.EmptyAvatar.setVisibility(View.VISIBLE);
+                String name = dialog.getDisplayTitle(mContext);
+                if (name.length() > 2)
+                    name = name.substring(0, 2);
+                name = name.trim();
+                holder.EmptyAvatar.setText(name);
+            } else {
+                holder.EmptyAvatar.setVisibility(View.INVISIBLE);
+            }
             holder.ivAvatar.setImageBitmap(mTransformation.localTransform(Utils.createGradientChatImage(200, 200, dialog.getId())));
         }
 

@@ -21,6 +21,7 @@ import java.util.List;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
 import dev.ragnarok.fenrir.adapter.fave.FaveArticlesAdapter;
 import dev.ragnarok.fenrir.fragment.base.BaseMvpFragment;
 import dev.ragnarok.fenrir.listener.EndlessRecyclerOnScrollListener;
@@ -31,6 +32,7 @@ import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.FaveArticlesPresenter;
 import dev.ragnarok.fenrir.mvp.view.IFaveArticlesView;
 import dev.ragnarok.fenrir.place.PlaceFactory;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.ViewUtils;
 
 public class FaveArticlesFragment extends BaseMvpFragment<FaveArticlesPresenter, IFaveArticlesView>
@@ -153,5 +155,10 @@ public class FaveArticlesFragment extends BaseMvpFragment<FaveArticlesPresenter,
     @Override
     public void onDelete(int index, Article article) {
         callPresenter(p -> p.fireArticleDelete(index, article));
+    }
+
+    @Override
+    public void onShare(Article article) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), Settings.get().accounts().getCurrent(), article);
     }
 }

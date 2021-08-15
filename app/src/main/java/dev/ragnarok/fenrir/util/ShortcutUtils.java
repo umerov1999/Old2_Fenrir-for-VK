@@ -43,31 +43,16 @@ public class ShortcutUtils {
     }
 
     public static void createAccountShortcut(Context context, int accountId, String title, String url) throws IOException {
-        //Bitmap immutableIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
-        //Bitmap mutableBitmap = immutableIcon.copy(Bitmap.Config.ARGB_8888, true);
-
         Bitmap avatar = null;
 
         if (nonEmpty(url)) {
             int size = getLauncherIconSize(context);
-
-            //int size = getLauncherIconSize(mContext);
-            //int size = mutableBitmap.getWidth();
-            //int avatarSize = (int) (size / 2.6);
 
             avatar = PicassoInstance.with()
                     .load(url)
                     .transform(new RoundTransformation())
                     .resize(size, size)
                     .get();
-
-            //Canvas canvas = new Canvas(mutableBitmap);
-            //Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-            //canvas.drawBitmap(avatar, size - avatarSize, size - avatarSize, paint);
-
-            //canvas.drawBitmap(avatar, 0, 0, paint);
-
-            // avatar.recycle();
         }
 
         Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
@@ -177,15 +162,6 @@ public class ShortcutUtils {
                 .flatMapCompletable(bitmap -> Completable.fromAction(() -> {
                     ShortcutManager manager = app.getSystemService(ShortcutManager.class);
                     List<ShortcutInfo> infos = new ArrayList<>(manager.getDynamicShortcuts());
-
-                    /*ShortcutInfo createPost = new ShortcutInfo.Builder(app, "create_new_post")
-                            .setShortLabel(app.getString(R.string.new_post_title))
-                            .setIcon(Icon.createWithResource(app, R.mipmap.ic_home_indigo))
-                            .setIntent(new Intent(app, MainActivity.class).setAction(MainActivity.ACTION_CREATE_POST))
-                            .setRank(0)
-                            .build();
-
-                    infos.set(0, createPost);*/
 
                     List<String> mustBeRemoved = new ArrayList<>(1);
 

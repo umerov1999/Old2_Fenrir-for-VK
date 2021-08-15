@@ -411,14 +411,14 @@ public abstract class PreferenceGroup extends Preference {
         if (str == null) {
             throw new IllegalArgumentException("Str cannot be null");
         }
-        if (findNoCase(safeToString(getTitle()), str) || findNoCase(safeToString(getSummary()), str)) {
+        if (findNoCase(safeToString(getTitle()), str) || findNoCase(safeToString(getSummary()), str) || findNoCase(getKey(), str)) {
             return (T) this;
         }
         int preferenceCount = getPreferenceCount();
         for (int i = 0; i < preferenceCount; i++) {
             Preference preference = getPreference(i);
 
-            if (findNoCase(safeToString(preference.getTitle()), str) || findNoCase(safeToString(preference.getSummary()), str)) {
+            if (findNoCase(safeToString(preference.getTitle()), str) || findNoCase(safeToString(preference.getSummary()), str) || findNoCase(preference.getKey(), str)) {
                 return (T) preference;
             }
 

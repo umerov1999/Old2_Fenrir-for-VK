@@ -57,7 +57,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/edit_enabled"
+            android:id="@+id/enabled_server"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"

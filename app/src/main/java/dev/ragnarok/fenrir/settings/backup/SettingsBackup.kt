@@ -64,6 +64,7 @@ class SettingsBackup {
         SettingCollector("autoplay_gif", SettingTypes.TYPE_BOOL),
         SettingCollector("strip_news_repost", SettingTypes.TYPE_BOOL),
         SettingCollector("ad_block_story_news", SettingTypes.TYPE_BOOL),
+        SettingCollector("new_loading_dialog", SettingTypes.TYPE_BOOL),
         SettingCollector("vk_api_domain", SettingTypes.TYPE_STRING),
         SettingCollector("vk_auth_domain", SettingTypes.TYPE_STRING),
         SettingCollector("developer_mode", SettingTypes.TYPE_BOOL),
@@ -132,7 +133,8 @@ class SettingsBackup {
         SettingCollector("chats_notification_backup", SettingTypes.TYPE_STRING),
         SettingCollector("notification_force_link", SettingTypes.TYPE_BOOL),
         SettingCollector("recording_to_opus", SettingTypes.TYPE_BOOL),
-        SettingCollector("service_playlists", SettingTypes.TYPE_STRING)
+        SettingCollector("service_playlists", SettingTypes.TYPE_STRING),
+        SettingCollector("rendering_mode", SettingTypes.TYPE_STRING)
     )
 
     fun doBackup(): JsonObject? {

@@ -254,6 +254,11 @@ public class QuickAnswerActivity extends AppCompatActivity {
                 }
 
                 @Override
+                public void onShareArticle(@NonNull Article article) {
+
+                }
+
+                @Override
                 public void onWikiPageOpen(@NonNull WikiPage page) {
 
                 }

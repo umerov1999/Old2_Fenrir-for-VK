@@ -722,6 +722,10 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
+    public static boolean hasPie() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+    }
+
     public static int indexOf(List<? extends Identificable> data, int id) {
         if (data == null) {
             return -1;
@@ -1472,6 +1476,10 @@ public class Utils {
             return vk_official;
         }
         return kate;
+    }
+
+    public static boolean isKateDeault() {
+        return Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE;
     }
 
     public static String getErrorString(Activity context, Throwable throwable) {

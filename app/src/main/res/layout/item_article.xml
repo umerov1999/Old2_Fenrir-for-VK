@@ -86,6 +86,16 @@
                     android:textColor="@android:color/black"
                     app:icon="@drawable/view"
                     app:iconTint="@android:color/black" />
+
+                <ImageView
+                    android:id="@+id/item_article_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/share"
+                    android:stateListAnimator="@animator/clicked"
+                    app:tint="#fff" />
             </LinearLayout>
         </LinearLayout>
 

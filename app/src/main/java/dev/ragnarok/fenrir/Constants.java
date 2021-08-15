@@ -78,6 +78,15 @@ public class Constants {
     }
 
     @NonNull
+    public static String USER_AGENT_ACCOUNT() {
+        int account_id = Settings.get().accounts().getCurrent();
+        if (account_id == ISettings.IAccountsSettings.INVALID_ID) {
+            return Utils.BY_DEFAULT_ACCOUNT_TYPE(VK_ANDROID_USER_AGENT, KATE_USER_AGENT);
+        }
+        return getTypedUserAgent(Settings.get().accounts().getType(account_id));
+    }
+
+    @NonNull
     public static String USER_AGENT(@Account_Types int type) {
         if (type != Account_Types.BY_TYPE) {
             return getTypedUserAgent(type);

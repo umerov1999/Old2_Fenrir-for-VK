@@ -852,6 +852,7 @@ public class AttachmentsViewBinder {
                 TextView ivName = itemView.findViewById(R.id.item_article_name);
 
                 ImageView btFave = itemView.findViewById(R.id.item_article_to_fave);
+                ImageView btShare = itemView.findViewById(R.id.item_article_share);
                 Button ivButton = itemView.findViewById(R.id.item_article_read);
                 if (article.getURL() != null) {
                     btFave.setVisibility(View.VISIBLE);
@@ -867,6 +868,8 @@ public class AttachmentsViewBinder {
                     ivButton.setVisibility(View.GONE);
                     btFave.setVisibility(View.GONE);
                 }
+
+                btShare.setOnClickListener(v -> mAttachmentsActionCallback.onShareArticle(article));
 
                 String photo_url = null;
                 if (article.getPhoto() != null) {
@@ -985,6 +988,8 @@ public class AttachmentsViewBinder {
         void onUrlOpen(@NonNull String url);
 
         void onFaveArticle(@NonNull Article article);
+
+        void onShareArticle(@NonNull Article article);
 
         void onWikiPageOpen(@NonNull WikiPage page);
 

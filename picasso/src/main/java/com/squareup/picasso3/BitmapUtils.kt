@@ -223,6 +223,17 @@ object BitmapUtils {
     @Throws(IOException::class)
     private fun decodeImageSource(imageSource: ImageDecoder.Source, request: Request): Bitmap {
         return ImageDecoder.decodeBitmap(imageSource) { imageDecoder, imageInfo, _ ->
+            imageDecoder.allocator = when {
+                BitmapSafeResize.isHardwareRendering() == 1 -> {
+                    ImageDecoder.ALLOCATOR_DEFAULT
+                }
+                BitmapSafeResize.isHardwareRendering() == 2 -> {
+                    ImageDecoder.ALLOCATOR_HARDWARE
+                }
+                else -> {
+                    ImageDecoder.ALLOCATOR_SOFTWARE
+                }
+            }
             if (request.hasSize()) {
                 val size = imageInfo.size
                 if (shouldResize(

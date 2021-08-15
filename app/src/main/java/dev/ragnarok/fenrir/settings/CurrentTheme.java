@@ -77,6 +77,9 @@ public class CurrentTheme {
                 File bitmap = getDrawerBackgroundFile(activity, !dark);
                 if (bitmap.exists()) {
                     Drawable d = Drawable.createFromPath(bitmap.getAbsolutePath());
+                    if (d == null) {
+                        return getStatic(activity);
+                    }
                     if (Settings.get().other().isCustom_chat_color())
                         Utils.setColorFilter(d, Settings.get().other().getColorChat());
                     return d;

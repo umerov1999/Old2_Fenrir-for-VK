@@ -4,18 +4,25 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Objects;
 
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.settings.CurrentTheme;
+import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.util.Utils;
+import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class SpotsDialog extends AlertDialog {
 
@@ -71,12 +78,10 @@ public class SpotsDialog extends AlertDialog {
     }
 
     private void initMessage() {
-        if (message != null && message.length() > 0) {
-            ((TextView) findViewById(R.id.dmax_spots_title)).setText(message);
+        if (!Utils.isEmpty(message)) {
+            ((MaterialTextView) findViewById(R.id.dmax_spots_title)).setText(message);
         }
     }
-
-    //~
 
     private void initProgress() {
         FrameLayout progress = findViewById(R.id.dmax_spots_progress);
@@ -154,12 +159,22 @@ public class SpotsDialog extends AlertDialog {
         }
 
         public AlertDialog build() {
-            return new SpotsDialog(
-                    context,
-                    messageId != 0 ? context.getString(messageId) : message,
-                    cancelable,
-                    cancelListener
-            );
+            if (!Settings.get().other().isNew_loading_dialog() || !Utils.hasMarshmallow() || !FenrirNative.isNativeLoaded()) {
+                return new SpotsDialog(
+                        context,
+                        messageId != 0 ? context.getString(messageId) : message,
+                        cancelable,
+                        cancelListener
+                );
+            }
+            View root = View.inflate(context, R.layout.dialog_progress, null);
+            ((MaterialTextView) root.findViewById(R.id.item_progress_text)).setText(messageId != 0 ? context.getString(messageId) : message);
+            RLottieImageView anim = root.findViewById(R.id.lottie_animation);
+            anim.fromRes(R.raw.s_loading, Utils.dp(180), Utils.dp(180), new int[]{0x333333, CurrentTheme.getColorPrimary(context), 0x777777, CurrentTheme.getColorSecondary(context)});
+            anim.playAnimation();
+            return new MaterialAlertDialogBuilder(context).setView(root)
+                    .setCancelable(cancelable)
+                    .setOnCancelListener(cancelListener).create();
         }
     }
 }

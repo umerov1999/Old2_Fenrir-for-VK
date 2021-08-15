@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings;
 import dev.ragnarok.fenrir.settings.Settings;
 
@@ -84,8 +85,14 @@ public final class FadeAnimDrawable extends BitmapDrawable implements Animatable
                 }
 
                 canvas.rotate((float) Math.toDegrees(targetRotation), (float) getBitmap().getWidth() / 2, (float) getBitmap().getHeight() / 2);
-                super.draw(canvas);
-                invalidateInternal();
+                try {
+                    super.draw(canvas);
+                    invalidateInternal();
+                } catch (Exception e) {
+                    if (Constants.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 canvas.rotate((float) Math.toDegrees(targetRotation), (float) getBitmap().getWidth() / 2, (float) getBitmap().getHeight() / 2);
                 super.draw(canvas);
@@ -94,15 +101,27 @@ public final class FadeAnimDrawable extends BitmapDrawable implements Animatable
             float normalized = (SystemClock.uptimeMillis() - startTimeMillis) / FADE_DURATION;
             if (normalized >= 1f) {
                 animatingFade = false;
-                super.draw(canvas);
-                if (animating) {
-                    invalidateInternal();
+                try {
+                    super.draw(canvas);
+                    if (animating) {
+                        invalidateInternal();
+                    }
+                } catch (Exception e) {
+                    if (Constants.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 // setAlpha will call invalidateSelf and drive the animation.
                 int partialAlpha = (int) (alpha * normalized);
                 super.setAlpha(partialAlpha);
-                super.draw(canvas);
+                try {
+                    super.draw(canvas);
+                } catch (Exception e) {
+                    if (Constants.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
                 super.setAlpha(alpha);
             }
         }

@@ -11,6 +11,7 @@ import java.util.Collections;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
 import dev.ragnarok.fenrir.adapter.AttachmentsViewBinder;
 import dev.ragnarok.fenrir.link.LinkHelper;
 import dev.ragnarok.fenrir.model.Article;
@@ -221,6 +222,11 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onFaveArticle(@NonNull Article article) {
 
+    }
+
+    @Override
+    public void onShareArticle(@NonNull Article article) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), Settings.get().accounts().getCurrent(), article);
     }
 
     @Override

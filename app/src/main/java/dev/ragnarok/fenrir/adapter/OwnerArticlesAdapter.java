@@ -48,6 +48,7 @@ public class OwnerArticlesAdapter extends RecyclerView.Adapter<OwnerArticlesAdap
                 clickListener.onAdd(position, article);
             }
         });
+        holder.btShare.setOnClickListener(v -> clickListener.onShare(article));
         if (article.getURL() != null) {
             holder.ivButton.setVisibility(View.VISIBLE);
             holder.ivButton.setOnClickListener(v -> clickListener.onUrlClick(article.getURL()));
@@ -110,12 +111,15 @@ public class OwnerArticlesAdapter extends RecyclerView.Adapter<OwnerArticlesAdap
         void onDelete(int index, Article article);
 
         void onAdd(int index, Article article);
+
+        void onShare(Article article);
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
 
         final ImageView ivPhoto;
         final ImageView btFave;
+        final ImageView btShare;
         final TextView ivSubTitle;
         final TextView ivTitle;
         final TextView ivName;
@@ -130,6 +134,7 @@ public class OwnerArticlesAdapter extends RecyclerView.Adapter<OwnerArticlesAdap
             ivName = itemView.findViewById(R.id.item_article_name);
             ivButton = itemView.findViewById(R.id.item_article_read);
             btFave = itemView.findViewById(R.id.item_article_to_fave);
+            btShare = itemView.findViewById(R.id.item_article_share);
         }
     }
 }

@@ -133,6 +133,11 @@ public abstract class PlaceSupportMvpFragment<P extends PlaceSupportPresenter<V>
     }
 
     @Override
+    public void onShareArticle(@NonNull Article article) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), Settings.get().accounts().getCurrent(), article);
+    }
+
+    @Override
     public void onWikiPageOpen(@NonNull WikiPage page) {
         callPresenter(p -> p.fireWikiPageClick(page));
     }

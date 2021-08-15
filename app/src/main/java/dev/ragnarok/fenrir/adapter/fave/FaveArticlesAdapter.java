@@ -48,6 +48,8 @@ public class FaveArticlesAdapter extends RecyclerView.Adapter<FaveArticlesAdapte
         } else
             holder.ivButton.setVisibility(View.GONE);
 
+        holder.btShare.setOnClickListener(v -> clickListener.onShare(article));
+
         String photo_url = null;
         if (article.getPhoto() != null) {
             photo_url = article.getPhoto().getUrlForSize(Settings.get().main().getPrefPreviewImageSize(), false);
@@ -102,12 +104,15 @@ public class FaveArticlesAdapter extends RecyclerView.Adapter<FaveArticlesAdapte
         void onPhotosOpen(Photo photo);
 
         void onDelete(int index, Article article);
+
+        void onShare(Article article);
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
 
         final ImageView ivPhoto;
         final ImageView btFave;
+        final ImageView btShare;
         final TextView ivSubTitle;
         final TextView ivTitle;
         final TextView ivName;
@@ -122,6 +127,7 @@ public class FaveArticlesAdapter extends RecyclerView.Adapter<FaveArticlesAdapte
             ivName = itemView.findViewById(R.id.item_article_name);
             ivButton = itemView.findViewById(R.id.item_article_read);
             btFave = itemView.findViewById(R.id.item_article_to_fave);
+            btShare = itemView.findViewById(R.id.item_article_share);
         }
     }
 }

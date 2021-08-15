@@ -201,6 +201,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isNew_loading_dialog() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("new_loading_dialog", true);
+    }
+
+    @Override
     public String get_Api_Domain() {
         return PreferenceManager.getDefaultSharedPreferences(app).getString("vk_api_domain", "api.vk.com").trim();
     }
@@ -634,6 +639,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public int getLanguage() {
         return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("language_ui", "0")));
+    }
+
+    @Override
+    public int getRendering_mode() {
+        return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("rendering_mode", "0")));
     }
 
     @Override

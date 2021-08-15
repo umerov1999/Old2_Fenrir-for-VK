@@ -13,7 +13,7 @@
         android:maxLines="2"
         android:padding="2dp"
         android:text="@string/select_icon"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textSize="18sp" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:maxLines="2"
         android:padding="2dp"
         android:text="@string/default_icon"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textSize="14sp" />
 
     <ImageView
@@ -48,7 +48,7 @@
         android:maxLines="2"
         android:padding="2dp"
         android:text="@string/custom_icon"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textSize="14sp" />
 
     <LinearLayout

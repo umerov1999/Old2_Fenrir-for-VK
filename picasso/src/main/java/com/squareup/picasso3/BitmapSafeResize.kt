@@ -5,6 +5,16 @@ import android.graphics.Canvas
 
 object BitmapSafeResize {
     private var maxResolution = -1
+    private var hardwareRendering = 0
+
+    fun isHardwareRendering(): Int {
+        return hardwareRendering
+    }
+
+    fun setHardwareRendering(state: Int) {
+        hardwareRendering = state
+    }
+
     fun getMaxResolution(): Int {
         return maxResolution
     }

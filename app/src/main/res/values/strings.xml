@@ -14,6 +14,18 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="array_rendering_mode_names">
+        <item>Software</item>
+        <item>Hardware enabled</item>
+        <item>Force Hardware</item>
+    </string-array>
+
+    <string-array name="array_rendering_mode_items" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="array_end_list_anim_names">
         <item>Success</item>
         <item>Balls</item>
@@ -1844,4 +1856,6 @@
     <string name="service_playlists">Service Playlists</string>
     <string name="enable_notifications">Enable Notifications</string>
     <string name="disable_notifications">Disable Notifications</string>
+    <string name="rendering_mode">Bitmap rendering mode</string>
+    <string name="new_loading_dialog">New loading dialog</string>
 </resources>

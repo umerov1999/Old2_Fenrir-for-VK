@@ -25,6 +25,7 @@ import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityFeatures;
 import dev.ragnarok.fenrir.activity.ActivityUtils;
+import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
 import dev.ragnarok.fenrir.adapter.OwnerArticlesAdapter;
 import dev.ragnarok.fenrir.fragment.base.BaseMvpFragment;
 import dev.ragnarok.fenrir.listener.EndlessRecyclerOnScrollListener;
@@ -36,6 +37,7 @@ import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.OwnerArticlesPresenter;
 import dev.ragnarok.fenrir.mvp.view.IOwnerArticlesView;
 import dev.ragnarok.fenrir.place.PlaceFactory;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.ViewUtils;
 
 public class OwnerArticlesFragment extends BaseMvpFragment<OwnerArticlesPresenter, IOwnerArticlesView>
@@ -186,5 +188,10 @@ public class OwnerArticlesFragment extends BaseMvpFragment<OwnerArticlesPresente
     @Override
     public void onAdd(int index, Article article) {
         callPresenter(p -> p.fireArticleAdd(index, article));
+    }
+
+    @Override
+    public void onShare(Article article) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), Settings.get().accounts().getCurrent(), article);
     }
 }

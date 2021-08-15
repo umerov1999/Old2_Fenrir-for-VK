@@ -6,6 +6,12 @@
         <item>Русский</item>
     </string-array>
 
+    <string-array name="array_rendering_mode_names">
+        <item>Software</item>
+        <item>Hardware разрешён</item>
+        <item>Принудительно Hardware</item>
+    </string-array>
+
     <string-array name="array_end_list_anim_names">
         <item>Успешно</item>
         <item>Круги</item>
@@ -1633,4 +1639,6 @@
     <string name="service_playlists">Сервисные плейлисты</string>
     <string name="enable_notifications">Включить уведомления</string>
     <string name="disable_notifications">Выключить уведомления</string>
+    <string name="rendering_mode">Режим отрисовки изображений</string>
+    <string name="new_loading_dialog">Новый диалог прогресса</string>
 </resources>

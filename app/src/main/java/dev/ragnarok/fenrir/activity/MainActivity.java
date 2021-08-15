@@ -443,11 +443,11 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                     }
 
                     if (!Settings.get().other().appStoredVersionEqual()) {
-                        PreferencesFragment.CleanUICache(this, false);
+                        PreferencesFragment.cleanUICache(this, false);
                     }
 
                     if (Settings.get().other().isDelete_cache_images()) {
-                        PreferencesFragment.CleanCache(this, false);
+                        PreferencesFragment.cleanCache(this, false);
                     }
                 }
 

@@ -2,7 +2,6 @@ package dev.ragnarok.fenrir.fragment.base;
 
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

@@ -75,6 +75,7 @@ class PicassoInstance @SuppressLint("CheckResult") private constructor(
             })
         ProxyUtil.applyProxyConfig(builder, proxySettings.activeProxy)
         BitmapSafeResize.setMaxResolution(Settings.get().other().maxBitmapResolution)
+        BitmapSafeResize.setHardwareRendering(Settings.get().other().rendering_mode)
         return Picasso.Builder(app)
             .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
             .client(builder.build())

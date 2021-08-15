@@ -27,7 +27,6 @@ import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.MessagesReplyItemCallback
 import dev.ragnarok.fenrir.util.Utils
 
-
 class PlaylistFragment : BottomSheetDialogFragment(), AudioRecyclerAdapter.ClickListener,
     BackPressCallback {
     private var mRecyclerView: RecyclerView? = null

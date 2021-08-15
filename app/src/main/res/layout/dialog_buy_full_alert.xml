@@ -17,7 +17,7 @@
             android:gravity="center"
             android:padding="2dp"
             android:text="@string/in_full_version"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="18sp" />
 
         <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
@@ -68,8 +68,8 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="@string/features_full"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textSize="17sp"
             android:visibility="gone" />
 
     </LinearLayout>

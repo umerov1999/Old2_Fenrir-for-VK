@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import dev.ragnarok.fenrir.Constants;
+
 public final class FadeDrawable extends BitmapDrawable {
     // Only accessed from main thread.
     private static final float FADE_DURATION = 200f; //ms
@@ -41,17 +43,35 @@ public final class FadeDrawable extends BitmapDrawable {
     @Override
     public void draw(Canvas canvas) {
         if (!animating) {
-            super.draw(canvas);
+            try {
+                super.draw(canvas);
+            } catch (Exception e) {
+                if (Constants.IS_DEBUG) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             float normalized = (SystemClock.uptimeMillis() - startTimeMillis) / FADE_DURATION;
             if (normalized >= 1f) {
                 animating = false;
-                super.draw(canvas);
+                try {
+                    super.draw(canvas);
+                } catch (Exception e) {
+                    if (Constants.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 // setAlpha will call invalidateSelf and drive the animation.
                 int partialAlpha = (int) (alpha * normalized);
                 super.setAlpha(partialAlpha);
-                super.draw(canvas);
+                try {
+                    super.draw(canvas);
+                } catch (Exception e) {
+                    if (Constants.IS_DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
                 super.setAlpha(alpha);
             }
         }

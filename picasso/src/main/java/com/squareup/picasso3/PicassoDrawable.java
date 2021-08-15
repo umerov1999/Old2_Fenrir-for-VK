@@ -114,22 +114,46 @@ final class PicassoDrawable extends BitmapDrawable {
     @Override
     public void draw(Canvas canvas) {
         if (!animating) {
-            super.draw(canvas);
+            try {
+                super.draw(canvas);
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             float normalized = (SystemClock.uptimeMillis() - startTimeMillis) / FADE_DURATION;
             if (normalized >= 1f) {
                 animating = false;
                 placeholder = null;
-                super.draw(canvas);
+                try {
+                    super.draw(canvas);
+                } catch (Exception e) {
+                    if (BuildConfig.DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
             } else {
                 if (placeholder != null) {
-                    placeholder.draw(canvas);
+                    try {
+                        placeholder.draw(canvas);
+                    } catch (Exception e) {
+                        if (BuildConfig.DEBUG) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
                 // setAlpha will call invalidateSelf and drive the animation.
                 int partialAlpha = (int) (alpha * normalized);
                 super.setAlpha(partialAlpha);
-                super.draw(canvas);
+                try {
+                    super.draw(canvas);
+                } catch (Exception e) {
+                    if (BuildConfig.DEBUG) {
+                        e.printStackTrace();
+                    }
+                }
                 super.setAlpha(alpha);
             }
         }

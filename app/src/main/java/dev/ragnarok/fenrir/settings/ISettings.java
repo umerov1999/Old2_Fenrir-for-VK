@@ -79,6 +79,8 @@ public interface ISettings {
 
         boolean isAd_block_story_news();
 
+        boolean isNew_loading_dialog();
+
         String get_Api_Domain();
 
         String get_Auth_Domain();
@@ -224,6 +226,8 @@ public interface ISettings {
 
         @Lang
         int getLanguage();
+
+        int getRendering_mode();
 
         int getEndListAnimation();
 

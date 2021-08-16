@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-
+import dev.ragnarok.fenrir.activity.slidr.Slidr;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.MainActivityTransforms;
 import dev.ragnarok.fenrir.util.ViewUtils;

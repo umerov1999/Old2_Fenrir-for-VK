@@ -1,4 +1,4 @@
-package com.r0adkll.slidr.util;
+package dev.ragnarok.fenrir.activity.slidr.util;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +8,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
 import androidx.core.view.ScrollingView;
-import androidx.viewpager.widget.ViewPager;
-
-import com.r0adkll.slidr.model.SlidrPosition;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.Stack;
+
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrPosition;
+import dev.ragnarok.fenrir.view.TouchImageView;
 
 public class ViewHelper {
 
@@ -65,7 +66,8 @@ public class ViewHelper {
                 || mView instanceof HorizontalScrollView
                 || mView instanceof AbsListView
                 || mView instanceof ScrollingView
-                || mView instanceof ViewPager
+                || mView instanceof TouchImageView
+                || mView instanceof ViewPager2
                 || mView instanceof WebView;
     }
 

@@ -1858,4 +1858,5 @@
     <string name="disable_notifications">Disable Notifications</string>
     <string name="rendering_mode">Bitmap rendering mode</string>
     <string name="new_loading_dialog">New loading dialog</string>
+    <string name="open_branch">Open Branch?</string>
 </resources>

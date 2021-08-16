@@ -533,6 +533,17 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 callView(v -> v.notifyItemChanged(finalY));
                 callView(v -> v.moveFocusTo(finalY, true));
                 return;
+            } else if (comment.hasThreads()) {
+                for (int s = 0; s < comment.getThreads().size(); s++) {
+                    Comment thread = comment.getThreads().get(s);
+                    if (thread.getId() == commentId) {
+                        thread.setAnimationNow(true);
+                        int finalY = y;
+                        callView(v -> v.notifyItemChanged(finalY));
+                        callView(v -> v.moveFocusTo(finalY, true));
+                        return;
+                    }
+                }
             }
         }
 

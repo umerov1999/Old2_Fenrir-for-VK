@@ -22,6 +22,8 @@ public interface IStoryPagerView extends IMvpView, IErrorView, IToastView, IAcco
 
     void setToolbarSubtitle(@NonNull Story story, int account_id);
 
+    void onShare(@NonNull Story story, int account_id);
+
     void configHolder(int adapterPosition, boolean progress, int aspectRatioW, int aspectRatioH);
 
     void onNext();

@@ -1,11 +1,11 @@
-package com.r0adkll.slidr;
+package dev.ragnarok.fenrir.activity.slidr;
 
 
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
-import com.r0adkll.slidr.model.SlidrConfig;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 
 
 class ConfigPanelSlideListener extends ColorPanelSlideListener {

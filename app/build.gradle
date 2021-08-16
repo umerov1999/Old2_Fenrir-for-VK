@@ -162,7 +162,6 @@ dependencies {
     fenrir_vk_liteImplementation 'com.google.firebase:firebase-datatransport:18.0.1'
     //implementation project(path: ':libfenrir')
     implementation project(path: ':picasso')
-    implementation project(path: ':slidr')
     implementation project(path: ':ucrop')
     implementation project(path: ':image')
     implementation project(path: ':material')

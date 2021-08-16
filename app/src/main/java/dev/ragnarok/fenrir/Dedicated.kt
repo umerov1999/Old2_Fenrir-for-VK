@@ -1,13 +1,18 @@
 package dev.ragnarok.fenrir
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.AnyRes
+import androidx.annotation.NonNull
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.C
@@ -28,20 +33,21 @@ import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
 import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView
 import java.util.*
 
-object Dedicated {
-    private fun createPlayer(context: Context): SimpleExoPlayer {
+class Dedicated : DialogFragment() {
+    private var exoPlayer: SimpleExoPlayer? = null
+    private fun createPlayer(context: Context) {
         var extensionRenderer = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
         when (Settings.get().other().fFmpegPlugin) {
             0 -> extensionRenderer = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF
             1 -> extensionRenderer = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON
             2 -> extensionRenderer = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
         }
-        val exoPlayer = SimpleExoPlayer.Builder(
+        exoPlayer = SimpleExoPlayer.Builder(
             context,
             DefaultRenderersFactory(context).setExtensionRendererMode(extensionRenderer)
         ).build()
-        exoPlayer.setWakeMode(C.WAKE_MODE_NETWORK)
-        exoPlayer.setMediaSource(
+        exoPlayer?.setWakeMode(C.WAKE_MODE_NETWORK)
+        exoPlayer?.setMediaSource(
             ProgressiveMediaSource.Factory(
                 DefaultDataSourceFactory(
                     context,
@@ -50,19 +56,20 @@ object Dedicated {
             )
                 .createMediaSource(Utils.makeMediaItem("file:///android_asset/dedicated/dedicated_audio.ogg"))
         )
-        exoPlayer.prepare()
-        exoPlayer.setAudioAttributes(
+        exoPlayer?.prepare()
+        exoPlayer?.setAudioAttributes(
             AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC)
                 .setUsage(C.USAGE_MEDIA).build(), true
         )
-        ExoUtil.startPlayer(exoPlayer)
-        return exoPlayer
+        exoPlayer?.let {
+            ExoUtil.startPlayer(it)
+        }
     }
 
-    @JvmStatic
     @SuppressLint("ClickableViewAccessibility")
-    fun showDedicated(context: Context) {
-        val exoPlayer = createPlayer(context)
+    @NonNull
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        createPlayer(requireActivity())
         val view = View.inflate(context, R.layout.dialog_dedicated, null)
         val swipe: ImageView = view.findViewById(R.id.dedicated_swipe)
         val pager: RecyclerView = view.findViewById(R.id.dedicated_pager)
@@ -104,17 +111,27 @@ object Dedicated {
         pager.setOnTouchListener { _: View?, event: MotionEvent ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 anim.clearAnimationDrawable()
+                anim.visibility = View.GONE
+                pager.setOnTouchListener(null)
             }
             false
         }
-        MaterialAlertDialogBuilder(context)
+        return MaterialAlertDialogBuilder(requireActivity())
             .setView(view)
-            .setOnDismissListener {
-                exoPlayer.stop()
-                exoPlayer.release()
-            }
             .setCancelable(true)
-            .show()
+            .create()
+    }
+
+    override fun dismiss() {
+        super.dismiss()
+        exoPlayer?.stop()
+        exoPlayer?.release()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer?.stop()
+        exoPlayer?.release()
     }
 
     private class ImageHolder(rootView: View) : RecyclerView.ViewHolder(
@@ -177,6 +194,12 @@ object Dedicated {
             if (shuffle) {
                 this.drawables.shuffle()
             }
+        }
+    }
+
+    companion object {
+        fun showDedicated(activity: FragmentActivity) {
+            Dedicated().show(activity.supportFragmentManager, "dedicated")
         }
     }
 }

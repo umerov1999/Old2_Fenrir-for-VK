@@ -1,4 +1,4 @@
-package com.r0adkll.slidr;
+package dev.ragnarok.fenrir.activity.slidr;
 
 
 import android.app.Activity;
@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.model.SlidrInterface;
-import com.r0adkll.slidr.widget.SliderPanel;
+import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface;
+import dev.ragnarok.fenrir.activity.slidr.widget.SliderPanel;
 
 
 /**
@@ -24,7 +25,7 @@ public final class Slidr {
      * Attach a slideable mechanism to an activity that adds the slide to dismiss functionality
      *
      * @param activity the activity to attach the slider to
-     * @return a {@link com.r0adkll.slidr.model.SlidrInterface} that allows
+     * @return a {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -41,7 +42,7 @@ public final class Slidr {
      * @param statusBarColor1 the primaryDark status bar color of the interface that this will slide back to
      * @param statusBarColor2 the primaryDark status bar color of the activity this is attaching to that will transition
      *                        back to the statusBarColor1 color
-     * @return a {@link com.r0adkll.slidr.model.SlidrInterface} that allows
+     * @return a {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -60,11 +61,11 @@ public final class Slidr {
 
 
     /**
-     * Attach a slider mechanism to an activity based on the passed {@link com.r0adkll.slidr.model.SlidrConfig}
+     * Attach a slider mechanism to an activity based on the passed {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig}
      *
      * @param activity the activity to attach the slider to
      * @param config   the slider configuration to make
-     * @return a {@link com.r0adkll.slidr.model.SlidrInterface} that allows
+     * @return a {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -106,7 +107,7 @@ public final class Slidr {
      *
      * @param oldScreen the view within a fragment to replace
      * @param config    the slider configuration to attach with
-     * @return a {@link com.r0adkll.slidr.model.SlidrInterface} that allows
+     * @return a {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull

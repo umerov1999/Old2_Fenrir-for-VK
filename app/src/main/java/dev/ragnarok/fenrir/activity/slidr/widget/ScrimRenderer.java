@@ -1,4 +1,4 @@
-package com.r0adkll.slidr.widget;
+package dev.ragnarok.fenrir.activity.slidr.widget;
 
 
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.r0adkll.slidr.model.SlidrPosition;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrPosition;
 
 
 final class ScrimRenderer {

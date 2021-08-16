@@ -21,7 +21,6 @@ import dev.ragnarok.fenrir.fragment.GifPagerFragment;
 import dev.ragnarok.fenrir.fragment.LocalJsonToChatFragment;
 import dev.ragnarok.fenrir.fragment.PhotoPagerFragment;
 import dev.ragnarok.fenrir.fragment.SinglePhotoFragment;
-import dev.ragnarok.fenrir.fragment.StoryPagerFragment;
 import dev.ragnarok.fenrir.listener.AppStyleable;
 import dev.ragnarok.fenrir.place.Place;
 import dev.ragnarok.fenrir.place.PlaceProvider;
@@ -107,9 +106,6 @@ public class LocalJsonToChatActivity extends NoMainActivity implements PlaceProv
 
             case Place.GIF_PAGER:
                 attachFrontFragment(GifPagerFragment.newInstance(args));
-                break;
-            case Place.STORY_PLAYER:
-                attachFrontFragment(StoryPagerFragment.newInstance(args));
                 break;
             case Place.PLAYER:
                 Fragment player = getSupportFragmentManager().findFragmentByTag("audio_player");

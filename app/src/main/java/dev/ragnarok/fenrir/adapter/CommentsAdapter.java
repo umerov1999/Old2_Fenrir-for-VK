@@ -259,7 +259,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
     }
 
     private class NormalCommentHolder extends RecyclerView.ViewHolder {
-
         final TextView tvOwnerName;
         final ImageView ivOwnerAvatar;
         final EmojiconTextView tvText;

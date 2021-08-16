@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +9,8 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -18,8 +19,8 @@
         android:background="@drawable/toolbar_semitransparent"
         android:clipToPadding="true"
         android:theme="@style/Theme.Toolbar.Video"
-        custom:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
-        custom:subtitleTextColor="?colorSecondary">
+        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:subtitleTextColor="?colorSecondary">
 
         <LinearLayout
             android:layout_width="56dp"
@@ -64,11 +65,11 @@
             android:layout_weight="25"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:stateListAnimator="@animator/clicked"
-            custom:active="true"
-            custom:active_background_color="?attr/icon_color_active"
-            custom:always_counter="false"
-            custom:button_icon="@drawable/download"
-            custom:noactive_icon_color="#fff" />
+            app:active="true"
+            app:active_background_color="?attr/icon_color_active"
+            app:always_counter="false"
+            app:button_icon="@drawable/download"
+            app:noactive_icon_color="#fff" />
 
         <dev.ragnarok.fenrir.view.CircleCounterButton
             android:id="@+id/button_link"
@@ -77,11 +78,34 @@
             android:layout_weight="25"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:stateListAnimator="@animator/clicked"
-            custom:active="true"
-            custom:active_background_color="?attr/icon_color_active"
-            custom:always_counter="false"
-            custom:button_icon="@drawable/web"
-            custom:noactive_icon_color="#fff" />
+            app:active="true"
+            app:active_background_color="?attr/icon_color_active"
+            app:always_counter="false"
+            app:button_icon="@drawable/web"
+            app:noactive_icon_color="#fff" />
+
+        <dev.ragnarok.fenrir.view.CircleCounterButton
+            android:id="@+id/button_share"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:stateListAnimator="@animator/clicked"
+            app:active="true"
+            app:active_background_color="?attr/icon_color_active"
+            app:always_counter="false"
+            app:button_icon="@drawable/share"
+            app:noactive_icon_color="#fff" />
     </LinearLayout>
+
+    <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
+        android:id="@+id/swipe_helper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:loopAnimation="true" />
 
 </RelativeLayout>

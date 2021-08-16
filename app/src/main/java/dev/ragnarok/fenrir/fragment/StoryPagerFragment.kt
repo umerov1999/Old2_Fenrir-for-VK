@@ -1,8 +1,6 @@
 package dev.ragnarok.fenrir.fragment
 
 import android.Manifest
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.SparseArray
@@ -20,13 +18,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso3.Callback
 import com.squareup.picasso3.Transformation
 import dev.ragnarok.fenrir.Constants
+import dev.ragnarok.fenrir.Extensions.Companion.fromIOToMain
 import dev.ragnarok.fenrir.Extra
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.activity.ActivityFeatures
 import dev.ragnarok.fenrir.activity.ActivityUtils
+import dev.ragnarok.fenrir.activity.SendAttachmentsActivity
 import dev.ragnarok.fenrir.fragment.base.BaseMvpFragment
 import dev.ragnarok.fenrir.link.LinkHelper
-import dev.ragnarok.fenrir.listener.BackPressCallback
 import dev.ragnarok.fenrir.media.gif.IGifPlayer
 import dev.ragnarok.fenrir.model.PhotoSize
 import dev.ragnarok.fenrir.model.Story
@@ -43,32 +42,29 @@ import dev.ragnarok.fenrir.util.Objects
 import dev.ragnarok.fenrir.util.Utils.nonEmpty
 import dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout
 import dev.ragnarok.fenrir.view.CircleCounterButton
-import dev.ragnarok.fenrir.view.FlingRelativeLayout
 import dev.ragnarok.fenrir.view.TouchImageView
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
-import dev.ragnarok.fenrir.view.pager.CloseOnFlingListener
-import dev.ragnarok.fenrir.view.pager.GoBackCallback
-import dev.ragnarok.fenrir.view.pager.WeakGoBackAnimationAdapter
 import dev.ragnarok.fenrir.view.pager.WeakPicassoLoadCallback
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior.Companion.from
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior.SettleOnTopAction
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
-class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>(), IStoryPagerView,
-    GoBackCallback, BackPressCallback {
+class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>(),
+    IStoryPagerView {
     private val mHolderSparseArray = SparseArray<WeakReference<MultiHolder>>()
-    private val mGoBackAnimationAdapter = WeakGoBackAnimationAdapter(this)
     private var mViewPager: ViewPager2? = null
     private var mToolbar: Toolbar? = null
-    private var Avatar: ImageView? = null
+    private var mAvatar: ImageView? = null
     private var mExp: TextView? = null
     private var transformation: Transformation? = null
     private var mDownload: CircleCounterButton? = null
+    private var mShare: CircleCounterButton? = null
     private var mLink: CircleCounterButton? = null
     private var mFullscreen = false
+    private var helpDisposable = Disposable.disposed()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -91,6 +87,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         requestWritePermission.launch()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -99,7 +96,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         val root = inflater.inflate(R.layout.fragment_story_pager, container, false)
         mToolbar = root.findViewById(R.id.toolbar)
         (requireActivity() as AppCompatActivity).setSupportActionBar(mToolbar)
-        Avatar = root.findViewById(R.id.toolbar_avatar)
+        mAvatar = root.findViewById(R.id.toolbar_avatar)
         mViewPager = root.findViewById(R.id.view_pager)
         mViewPager?.offscreenPageLimit = 1
         mViewPager?.setPageTransformer(
@@ -108,6 +105,25 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             )
         )
         mExp = root.findViewById(R.id.item_story_expires)
+        val mHelper = root.findViewById<RLottieImageView?>(R.id.swipe_helper)
+        if (HelperSimple.needHelp(HelperSimple.STORY_HELPER, 2)) {
+            mHelper?.visibility = View.VISIBLE
+            mHelper?.fromRes(
+                R.raw.story_guide_hand_swipe,
+                Utils.dp(500F),
+                Utils.dp(500F),
+                intArrayOf(0x333333, CurrentTheme.getColorSecondary(requireActivity()))
+            )
+            mHelper?.playAnimation()
+            helpDisposable = Completable.create {
+                it.onComplete()
+            }.delay(3, TimeUnit.SECONDS).fromIOToMain().subscribe({
+                mHelper?.clearAnimationDrawable()
+                mHelper?.visibility = View.GONE
+            }, RxUtils.ignore())
+        } else {
+            mHelper?.visibility = View.GONE
+        }
         mViewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -115,31 +131,12 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             }
         })
         mDownload = root.findViewById(R.id.button_download)
+        mShare = root.findViewById(R.id.button_share)
+        mShare?.setOnClickListener { presenter?.fireShareButtonClick() }
         mDownload?.setOnClickListener { presenter?.fireDownloadButtonClick() }
         mLink = root.findViewById(R.id.button_link)
         resolveFullscreenViews()
         return root
-    }
-
-    override fun goBack() {
-        if (isAdded && canGoBack()) {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-    }
-
-    private fun canGoBack(): Boolean {
-        return requireActivity().supportFragmentManager.backStackEntryCount > 1
-    }
-
-    override fun onBackPressed(): Boolean {
-        val objectAnimatorPosition = ObjectAnimator.ofFloat(view, "translationY", -600f)
-        val objectAnimatorAlpha = ObjectAnimator.ofFloat(view, View.ALPHA, 1f, 0f)
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(objectAnimatorPosition, objectAnimatorAlpha)
-        animatorSet.duration = 200
-        animatorSet.addListener(mGoBackAnimationAdapter)
-        animatorSet.start()
-        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -165,6 +162,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
     private fun resolveFullscreenViews() {
         mToolbar?.visibility = if (mFullscreen) View.GONE else View.VISIBLE
         mDownload?.visibility = if (mFullscreen) View.GONE else View.VISIBLE
+        mShare?.visibility = if (mFullscreen) View.GONE else View.VISIBLE
     }
 
     override fun getPresenterFactory(saveInstanceState: Bundle?): IPresenterFactory<StoryPagerPresenter> =
@@ -191,7 +189,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
     }
 
     override fun setAspectRatioAt(position: Int, w: Int, h: Int) {
-        findByPosition(position)?.SetAspectRatio(w, h)
+        findByPosition(position)?.setAspectRatio(w, h)
     }
 
     override fun setPreparingProgressVisible(position: Int, preparing: Boolean) {
@@ -218,11 +216,11 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
 
     override fun setToolbarSubtitle(story: Story, account_id: Int) {
         ActivityUtils.supportToolbarFor(this)?.subtitle = story.owner.fullName
-        Avatar?.setOnClickListener {
+        mAvatar?.setOnClickListener {
             PlaceFactory.getOwnerWallPlace(account_id, story.owner)
                 .tryOpenWith(requireActivity())
         }
-        Avatar?.let {
+        mAvatar?.let {
             ViewUtils.displayAvatar(
                 it,
                 transformation,
@@ -258,6 +256,10 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         }
     }
 
+    override fun onShare(story: Story, account_id: Int) {
+        SendAttachmentsActivity.startForSendAttachments(requireActivity(), account_id, story)
+    }
+
     override fun configHolder(
         adapterPosition: Int,
         progress: Boolean,
@@ -266,14 +268,21 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
     ) {
         val holder = findByPosition(adapterPosition)
         holder?.setProgressVisible(progress)
-        holder?.SetAspectRatio(aspectRatioW, aspectRatioH)
+        holder?.setAspectRatio(aspectRatioW, aspectRatioH)
         holder?.setSurfaceVisible(if (progress) View.GONE else View.VISIBLE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        helpDisposable.dispose()
     }
 
     override fun onNext() {
         mViewPager?.let {
-            if (it.adapter!!.itemCount > it.currentItem + 1) {
-                it.setCurrentItem(it.currentItem + 1, true)
+            it.adapter?.let { so ->
+                if (so.itemCount > it.currentItem + 1) {
+                    it.setCurrentItem(it.currentItem + 1, true)
+                }
             }
         }
     }
@@ -294,13 +303,13 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             get() = false
 
         open fun setProgressVisible(visible: Boolean) {}
-        open fun SetAspectRatio(w: Int, h: Int) {}
+        open fun setAspectRatio(w: Int, h: Int) {}
         open fun setSurfaceVisible(Vis: Int) {}
         open fun bindTo(story: Story) {}
     }
 
     private inner class Holder(rootView: View) : MultiHolder(rootView), SurfaceHolder.Callback {
-        val mSurfaceView: SurfaceView
+        val mSurfaceView: SurfaceView = rootView.findViewById(R.id.surface_view)
         val mProgressBar: RLottieImageView
         val mAspectRatioLayout: AlternativeAspectRatioFrameLayout
         override var isSurfaceReady = false
@@ -334,7 +343,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             }
         }
 
-        override fun SetAspectRatio(w: Int, h: Int) {
+        override fun setAspectRatio(w: Int, h: Int) {
             mAspectRatioLayout.setAspectRatio(w, h)
         }
 
@@ -343,21 +352,6 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         }
 
         init {
-            val flingRelativeLayout: FlingRelativeLayout =
-                rootView.findViewById(R.id.fling_root_view)
-            flingRelativeLayout.setOnClickListener { toggleFullscreen() }
-            flingRelativeLayout.setOnLongClickListener {
-                presenter?.fireDownloadButtonClick()
-                true
-            }
-            flingRelativeLayout.setOnSingleFlingListener(object :
-                CloseOnFlingListener(rootView.context) {
-                override fun onVerticalFling(distanceByY: Float): Boolean {
-                    goBack()
-                    return true
-                }
-            })
-            mSurfaceView = rootView.findViewById(R.id.surface_view)
             mSurfaceHolder = mSurfaceView.holder
             mSurfaceHolder.addCallback(this)
             mAspectRatioLayout = rootView.findViewById(R.id.aspect_ratio_layout)
@@ -462,51 +456,23 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         override fun onCreateViewHolder(container: ViewGroup, viewType: Int): MultiHolder {
             if (viewType == 0) return Holder(
                 LayoutInflater.from(container.context)
-                    .inflate(R.layout.content_gif_page, container, false)
+                    .inflate(R.layout.content_story_page, container, false)
             )
             val ret = PhotoViewHolder(
                 LayoutInflater.from(container.context)
-                    .inflate(R.layout.content_photo_page, container, false)
+                    .inflate(R.layout.content_story_photo_page, container, false)
             )
-            val ui = from(ret.photo)
-            ui.settle = SettleOnTopAction()
-            ui.sideEffect =
-                VerticalSwipeBehavior.PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y)
-            val clampDelegate = VerticalSwipeBehavior.BelowFractionalClamp(3f, 3f)
-            ui.clamp = VerticalSwipeBehavior.SensitivityClamp(0.5f, clampDelegate, 0.5f)
-            ui.listener = object : VerticalSwipeBehavior.SwipeListener {
-                override fun onReleased() {
-                    container.requestDisallowInterceptTouchEvent(false)
-                }
-
-                override fun onCaptured() {
-                    container.requestDisallowInterceptTouchEvent(true)
-                }
-
-                override fun onPreSettled(diff: Int) {}
-                override fun onPostSettled(success: Boolean) {
-                    if (success) {
-                        goBack()
-                    } else container.requestDisallowInterceptTouchEvent(false)
-                }
-            }
-            ret.photo.setOnLongClickListener {
-                presenter?.fireDownloadButtonClick()
-                true
-            }
             ret.photo.setOnTouchListener { view: View, event: MotionEvent ->
-                if (event.pointerCount >= 2 || view.canScrollHorizontally(1) && view.canScrollHorizontally(
+                if (event.pointerCount >= 2 || view.canScrollVertically(1) && view.canScrollVertically(
                         -1
                     )
                 ) {
                     when (event.action) {
                         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                            ui.canSwipe = false
                             container.requestDisallowInterceptTouchEvent(true)
                             return@setOnTouchListener false
                         }
                         MotionEvent.ACTION_UP -> {
-                            ui.canSwipe = true
                             container.requestDisallowInterceptTouchEvent(false)
                             return@setOnTouchListener true
                         }
@@ -518,9 +484,9 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
         }
 
         override fun onBindViewHolder(holder: MultiHolder, position: Int) {
-            if (presenter == null)
-                return
-            if (!presenter!!.isStoryIsVideo(position)) holder.bindTo(presenter!!.getStory(position))
+            presenter?.let {
+                if (!it.isStoryIsVideo(position)) holder.bindTo(it.getStory(position))
+            }
         }
 
         override fun getItemViewType(position: Int): Int {

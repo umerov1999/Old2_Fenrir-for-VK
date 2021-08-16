@@ -14,17 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.slidr.Slidr;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 import dev.ragnarok.fenrir.fragment.AudioPlayerFragment;
 import dev.ragnarok.fenrir.fragment.ChatFragment;
 import dev.ragnarok.fenrir.fragment.GifPagerFragment;
 import dev.ragnarok.fenrir.fragment.PhotoPagerFragment;
 import dev.ragnarok.fenrir.fragment.SinglePhotoFragment;
-import dev.ragnarok.fenrir.fragment.StoryPagerFragment;
 import dev.ragnarok.fenrir.listener.AppStyleable;
 import dev.ragnarok.fenrir.model.Peer;
 import dev.ragnarok.fenrir.place.Place;
@@ -104,9 +102,6 @@ public class ChatActivity extends NoMainActivity implements PlaceProvider, AppSt
 
             case Place.GIF_PAGER:
                 attachToFront(GifPagerFragment.newInstance(args));
-                break;
-            case Place.STORY_PLAYER:
-                attachToFront(StoryPagerFragment.newInstance(args));
                 break;
             case Place.PLAYER:
                 Fragment player = getSupportFragmentManager().findFragmentByTag("audio_player");

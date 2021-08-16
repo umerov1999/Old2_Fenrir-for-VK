@@ -1,4 +1,4 @@
-package com.r0adkll.slidr;
+package dev.ragnarok.fenrir.activity.slidr;
 
 import android.animation.ArgbEvaluator;
 import android.app.Activity;
@@ -6,7 +6,7 @@ import android.os.Build;
 
 import androidx.annotation.ColorInt;
 
-import com.r0adkll.slidr.widget.SliderPanel;
+import dev.ragnarok.fenrir.activity.slidr.widget.SliderPanel;
 
 
 class ColorPanelSlideListener implements SliderPanel.OnPanelSlideListener {

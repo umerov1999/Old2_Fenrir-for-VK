@@ -182,6 +182,11 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
         callView(v -> v.configHolder(adapterPosition, isProgress, finalSize.getWidth(), finalSize.getWidth()));
     }
 
+    public void fireShareButtonClick() {
+        Story story = mStories.get(mCurrentIndex);
+        callView(v -> v.onShare(story, getAccountId()));
+    }
+
     public void fireDownloadButtonClick() {
         if (!AppPerms.hasReadWriteStoragePermission(App.getInstance())) {
             callView(IStoryPagerView::requestWriteExternalStoragePermission);

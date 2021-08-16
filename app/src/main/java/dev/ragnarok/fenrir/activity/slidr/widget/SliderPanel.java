@@ -1,4 +1,4 @@
-package com.r0adkll.slidr.widget;
+package dev.ragnarok.fenrir.activity.slidr.widget;
 
 
 import android.annotation.SuppressLint;
@@ -13,10 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.model.SlidrInterface;
-import com.r0adkll.slidr.model.SlidrPosition;
-import com.r0adkll.slidr.util.ViewHelper;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrPosition;
+import dev.ragnarok.fenrir.activity.slidr.util.ViewHelper;
 
 
 public class SliderPanel extends FrameLayout {

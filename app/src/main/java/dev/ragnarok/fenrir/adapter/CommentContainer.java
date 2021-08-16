@@ -3,10 +3,14 @@ package dev.ragnarok.fenrir.adapter;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 import static dev.ragnarok.fenrir.util.Utils.safeIsEmpty;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +34,7 @@ import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
+import dev.ragnarok.fenrir.view.WeakViewAnimatorAdapter;
 import dev.ragnarok.fenrir.view.emoji.EmojiconTextView;
 
 public class CommentContainer extends LinearLayout {
@@ -98,6 +103,12 @@ public class CommentContainer extends LinearLayout {
                     }
                     return true;
                 });
+                holder.cancelSelectionAnimation();
+
+                if (comment.isAnimationNow()) {
+                    holder.startSelectionAnimation();
+                    comment.setAnimationNow(false);
+                }
                 holder.tvText.setOnLongClickListener(v -> {
                     if (listener != null) {
                         listener.populateCommentContextMenu(comment);
@@ -148,7 +159,7 @@ public class CommentContainer extends LinearLayout {
 
                 ViewUtils.displayAvatar(holder.ivOwnerAvatar, transformation, comment.getMaxAuthorAvaUrl(), Constants.PICASSO_TAG);
 
-                holder.tvTime.setText(AppTextUtils.getDateFromUnixTime(comment.getDate()));
+                holder.tvTime.setText(genTimeAndReplyText(comment, listener), TextView.BufferType.SPANNABLE);
                 holder.tvTime.setTextColor(colorTextSecondary);
 
                 holder.ivLike.setOnClickListener(v -> {
@@ -173,8 +184,32 @@ public class CommentContainer extends LinearLayout {
         }
     }
 
-    private class CommentHolder {
+    private Spannable genTimeAndReplyText(Comment comment, CommentsAdapter.OnCommentActionListener listener) {
+        String time = AppTextUtils.getDateFromUnixTime(comment.getDate());
+        if (comment.getReplyToUser() == 0) {
+            return Spannable.Factory.getInstance().newSpannable(time);
+        }
 
+        String commentText = getContext().getString(R.string.comment).toLowerCase();
+        String target = getContext().getString(R.string.in_response_to, time, commentText);
+
+        int start = target.indexOf(commentText);
+
+        Spannable spannable = Spannable.Factory.getInstance().newSpannable(target);
+        ClickableSpan span = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (listener != null) {
+                    listener.onReplyToOwnerClick(comment.getReplyToUser(), comment.getReplyToComment());
+                }
+            }
+        };
+
+        spannable.setSpan(span, start, target.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
+    }
+
+    private class CommentHolder {
         final TextView tvOwnerName;
         final ImageView ivOwnerAvatar;
         final EmojiconTextView tvText;
@@ -182,8 +217,11 @@ public class CommentContainer extends LinearLayout {
         final ImageView ivLike;
         final TextView tvLikeCounter;
         final View vAttachmentsRoot;
+        final View selectionView;
 
         final AttachmentsHolder attachmentContainers;
+        final Animator.AnimatorListener animationAdapter;
+        ObjectAnimator animator;
 
         CommentHolder(View root, EmojiconTextView.OnHashTagClickListener onHashTagClickListener) {
             ivOwnerAvatar = root.findViewById(R.id.item_comment_owner_avatar);
@@ -199,10 +237,46 @@ public class CommentContainer extends LinearLayout {
             tvTime = root.findViewById(R.id.item_comment_time);
             ivLike = root.findViewById(R.id.item_comment_like);
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);
+            selectionView = root.findViewById(R.id.item_comment_selection);
+            selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(getContext()));
             Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(getContext()));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
 
             attachmentContainers = AttachmentsHolder.forComment((ViewGroup) vAttachmentsRoot);
+            animationAdapter = new WeakViewAnimatorAdapter<View>(selectionView) {
+                @Override
+                public void onAnimationEnd(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationStart(View view) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onAnimationCancel(View view) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+
+        void startSelectionAnimation() {
+            selectionView.setAlpha(0.5f);
+
+            animator = ObjectAnimator.ofFloat(selectionView, View.ALPHA, 0.0f);
+            animator.setDuration(1500);
+            animator.addListener(animationAdapter);
+            animator.start();
+        }
+
+        void cancelSelectionAnimation() {
+            if (animator != null) {
+                animator.cancel();
+                animator = null;
+            }
+
+            selectionView.setVisibility(View.INVISIBLE);
         }
     }
 }

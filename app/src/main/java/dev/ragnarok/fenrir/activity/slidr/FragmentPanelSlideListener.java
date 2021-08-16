@@ -1,4 +1,4 @@
-package com.r0adkll.slidr;
+package dev.ragnarok.fenrir.activity.slidr;
 
 
 import android.view.View;
@@ -6,8 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.widget.SliderPanel;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
+import dev.ragnarok.fenrir.activity.slidr.widget.SliderPanel;
 
 
 class FragmentPanelSlideListener implements SliderPanel.OnPanelSlideListener {

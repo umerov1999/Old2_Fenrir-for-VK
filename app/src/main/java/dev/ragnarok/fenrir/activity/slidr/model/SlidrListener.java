@@ -1,4 +1,4 @@
-package com.r0adkll.slidr.model;
+package dev.ragnarok.fenrir.activity.slidr.model;
 
 import androidx.customview.widget.ViewDragHelper;
 

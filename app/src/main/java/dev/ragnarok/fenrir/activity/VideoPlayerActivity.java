@@ -25,12 +25,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.slidr.Slidr;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 import dev.ragnarok.fenrir.media.video.ExoVideoPlayer;
 import dev.ragnarok.fenrir.media.video.IVideoPlayer;
 import dev.ragnarok.fenrir.model.Commented;

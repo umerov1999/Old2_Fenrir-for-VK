@@ -13,9 +13,6 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +20,8 @@ import java.util.regex.Pattern;
 import dev.ragnarok.fenrir.Account_Types;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.slidr.Slidr;
+import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 import dev.ragnarok.fenrir.api.Auth;
 import dev.ragnarok.fenrir.api.util.VKStringUtils;
 import dev.ragnarok.fenrir.model.Token;

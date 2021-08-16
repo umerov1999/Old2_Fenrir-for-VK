@@ -1641,4 +1641,5 @@
     <string name="disable_notifications">Выключить уведомления</string>
     <string name="rendering_mode">Режим отрисовки изображений</string>
     <string name="new_loading_dialog">Новый диалог прогресса</string>
+    <string name="open_branch">Открыть ветку?</string>
 </resources>

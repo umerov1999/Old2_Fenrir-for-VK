@@ -1162,7 +1162,14 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 break;
 
             case Place.STORY_PLAYER:
-                attachToFront(StoryPagerFragment.newInstance(args));
+                if (getMainActivityTransform() == MainActivityTransforms.SWIPEBLE) {
+                    attachToFront(StoryPagerFragment.newInstance(args));
+                } else {
+                    Intent intent = new Intent(this, SwipebleActivity.class);
+                    intent.setAction(ACTION_OPEN_PLACE);
+                    intent.putExtra(Extra.PLACE, place);
+                    SwipebleActivity.start(this, intent);
+                }
                 break;
 
             case Place.FRIENDS_AND_FOLLOWERS:

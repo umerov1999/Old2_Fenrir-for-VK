@@ -14,6 +14,8 @@ import android.net.Uri;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -105,9 +107,13 @@ public class LinkHelper {
 
             case AbsLink.WALL_COMMENT_THREAD:
                 WallCommentThreadLink wallCommentThreadLink = (WallCommentThreadLink) link;
-
                 Commented commentedThread = new Commented(wallCommentThreadLink.getPostId(), wallCommentThreadLink.getOwnerId(), CommentedType.POST, null);
-                PlaceFactory.getCommentsThreadPlace(accountId, commentedThread, wallCommentThreadLink.getCommentId(), wallCommentThreadLink.getThreadId()).tryOpenWith(activity);
+                new MaterialAlertDialogBuilder(activity)
+                        .setTitle(R.string.info)
+                        .setMessage(R.string.open_branch)
+                        .setPositiveButton(R.string.button_yes, (dialog, which) -> PlaceFactory.getCommentsThreadPlace(accountId, commentedThread, wallCommentThreadLink.getCommentId(), wallCommentThreadLink.getThreadId()).tryOpenWith(activity))
+                        .setNegativeButton(R.string.button_no, (dialog, which) -> PlaceFactory.getCommentsPlace(accountId, commentedThread, wallCommentThreadLink.getThreadId()).tryOpenWith(activity))
+                        .show();
                 break;
 
             case AbsLink.WALL_COMMENT:

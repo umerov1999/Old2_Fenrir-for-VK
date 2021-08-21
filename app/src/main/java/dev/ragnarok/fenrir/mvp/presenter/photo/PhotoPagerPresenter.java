@@ -241,7 +241,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         if (photo.getAlbumId() == -311) {
             return;
         }
-        String album_info = (album == null ? context.getString(R.string.open_photo_album) : album.getTitle());
+        String album_info = (album == null ? context.getString(R.string.open_photo_album) : album.getDisplayTitle(context));
         String user = (photo.getOwnerId() >= 0 ? context.getString(R.string.goto_user) : context.getString(R.string.goto_community));
         if (bundle != null) {
             user = bundle.getById(photo.getOwnerId()).getFullName();

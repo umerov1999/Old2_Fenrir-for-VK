@@ -5,6 +5,7 @@ import static dev.ragnarok.fenrir.util.Objects.nonNull;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -149,8 +151,8 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        holder.ivLike.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
-        Utils.setColorFilter(holder.ivLike, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
+        holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
+        TextViewCompat.setCompoundDrawableTintList(holder.tvLikeCounter, ColorStateList.valueOf(comment.isUserLikes() ? iconColorActive : colorTextSecondary));
         holder.tvLikeCounter.setText(AppTextUtils.getCounterWithK(comment.getLikesCount()));
         holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         holder.tvLikeCounter.setTextColor(comment.isUserLikes() ? iconColorActive : colorTextSecondary);
@@ -162,7 +164,7 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         holder.tvTime.setText(genTimeAndReplyText(comment), TextView.BufferType.SPANNABLE);
         holder.tvTime.setTextColor(colorTextSecondary);
 
-        holder.ivLike.setOnClickListener(v -> {
+        holder.tvLikeCounter.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onCommentLikeClick(comment, !comment.isUserLikes());
             }
@@ -263,7 +265,6 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
         final ImageView ivOwnerAvatar;
         final EmojiconTextView tvText;
         final TextView tvTime;
-        final ImageView ivLike;
         final TextView tvLikeCounter;
         final View selectionView;
         final View vAttachmentsRoot;
@@ -291,11 +292,10 @@ public class CommentsAdapter extends RecyclerBindableAdapter<Comment, RecyclerVi
             ivOpenThread = root.findViewById(R.id.item_open_threads);
             item_comment_thread_counter = root.findViewById(R.id.item_comment_thread_counter);
             tvTime = root.findViewById(R.id.item_comment_time);
-            ivLike = root.findViewById(R.id.item_comment_like);
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);
             selectionView = root.findViewById(R.id.item_comment_selection);
             selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(context));
-            Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(context));
+            TextViewCompat.setCompoundDrawableTintList(tvLikeCounter, ColorStateList.valueOf(CurrentTheme.getSecondaryTextColorCode(tvLikeCounter.getContext())));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
             threads = root.findViewById(R.id.item_comment_threads);
             click = root.findViewById(R.id.comment_click_container);

@@ -605,6 +605,10 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         callView(v -> v.showAvatarContextMenu(isMyWall()));
     }
 
+    public void fireAvatarLongClick() {
+        callView(v -> v.showMention(getAccountId(), ownerId));
+    }
+
     public void fireOpenAvatarsPhotoAlbum() {
         prepareUserAvatarsAndShow();
     }

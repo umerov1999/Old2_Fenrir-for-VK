@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -8,6 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/item_future"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="2dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?colorPrimary"
+            android:textSize="18sp"
+            tools:text="Future" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
@@ -67,7 +81,6 @@
             android:ellipsize="end"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="@string/features_full"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="17sp"
             android:visibility="gone" />

@@ -137,15 +137,15 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
     private void doMenu(AudioHolder holder, int position, View view, Audio audio) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
-        menus.add(new OptionRequest(AudioLocalServerOption.save_item_audio, mContext.getString(R.string.download), R.drawable.save));
-        menus.add(new OptionRequest(AudioLocalServerOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play));
+        menus.add(new OptionRequest(AudioLocalServerOption.save_item_audio, mContext.getString(R.string.download), R.drawable.save, true));
+        menus.add(new OptionRequest(AudioLocalServerOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play, true));
         if (MusicPlaybackController.canPlayAfterCurrent(audio)) {
-            menus.add(new OptionRequest(AudioLocalServerOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next));
+            menus.add(new OptionRequest(AudioLocalServerOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next, false));
         }
-        menus.add(new OptionRequest(AudioLocalServerOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
-        menus.add(new OptionRequest(AudioLocalServerOption.delete_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
-        menus.add(new OptionRequest(AudioLocalServerOption.update_time_item_audio, mContext.getString(R.string.update_time), R.drawable.ic_recent));
-        menus.add(new OptionRequest(AudioLocalServerOption.edit_item_audio, mContext.getString(R.string.edit), R.drawable.about_writed));
+        menus.add(new OptionRequest(AudioLocalServerOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality, false));
+        menus.add(new OptionRequest(AudioLocalServerOption.delete_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete, true));
+        menus.add(new OptionRequest(AudioLocalServerOption.update_time_item_audio, mContext.getString(R.string.update_time), R.drawable.ic_recent, false));
+        menus.add(new OptionRequest(AudioLocalServerOption.edit_item_audio, mContext.getString(R.string.edit), R.drawable.about_writed, true));
 
         menus.header(firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle(), R.drawable.song, audio.getThumb_image_little());
         menus.columns(2);

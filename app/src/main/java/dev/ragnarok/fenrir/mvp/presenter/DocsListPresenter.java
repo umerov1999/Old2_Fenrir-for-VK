@@ -166,13 +166,13 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
 
     public void fireMenuClick(Context context, int index, @NonNull Document doc) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-        menus.add(new OptionRequest(DocsOption.open_item_doc, context.getString(R.string.open), R.drawable.view));
-        menus.add(new OptionRequest(DocsOption.share_item_doc, context.getString(R.string.share), R.drawable.share));
-        menus.add(new OptionRequest(DocsOption.go_to_owner_doc, context.getString(R.string.goto_user), R.drawable.person));
+        menus.add(new OptionRequest(DocsOption.open_item_doc, context.getString(R.string.open), R.drawable.view, true));
+        menus.add(new OptionRequest(DocsOption.share_item_doc, context.getString(R.string.share), R.drawable.share, true));
+        menus.add(new OptionRequest(DocsOption.go_to_owner_doc, context.getString(R.string.goto_user), R.drawable.person, false));
         if (isMy()) {
-            menus.add(new OptionRequest(DocsOption.delete_item_doc, context.getString(R.string.delete), R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(DocsOption.delete_item_doc, context.getString(R.string.delete), R.drawable.ic_outline_delete, true));
         } else {
-            menus.add(new OptionRequest(DocsOption.add_item_doc, context.getString(R.string.action_add), R.drawable.plus));
+            menus.add(new OptionRequest(DocsOption.add_item_doc, context.getString(R.string.action_add), R.drawable.plus, true));
         }
         menus.header(doc.getTitle(), R.drawable.book, doc.getPreviewWithSize(PhotoSize.X, true));
         menus.columns(2);

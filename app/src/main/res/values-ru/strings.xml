@@ -106,26 +106,26 @@
     <string name="first_pagan">Первый языческий</string>
     <string name="repo">Репозиторий: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Репозиторий: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Проект посвящён Екатерине Арнольдовой, https://vk.com/id255645173</string>
+    <string name="project_dedicated_summary">Кате Арнольдовой</string>
     <string name="project_dedicated">Проект посвящён</string>
     <string name="in_full_version">Доступно в полной версии!</string>
     <string name="features">Функции:</string>
-    <string name="features_full">
-        Функции:
-        \n
-        \n1.Скачивание музыки
-        \n2.Скачивание видео
-        \n3.Скачивание голосовых
-        \n4.Скачивание стикеров
-        \n5.Отправка своих стикеров
-        \n6.Скачивание переписок
-        \n7.Упоминания
-        \n8.Скрытие чатов (удерживать кнопку карандаш, чтобы показать скрытые)
-        \n9.Товары
-        \n10.Все коментарии фоток
-        \n11.Смена иконки (Android >= 8.1)
-        \n12.Локальный медиа сервер
-        \n13.Настройки фона плеера</string>
+    <string-array name="array_features_full">
+        <item>Скачивание музыки</item>
+        <item>Скачивание видео</item>
+        <item>Скачивание голосовых</item>
+        <item>Скачивание стикеров</item>
+        <item>Отправка своих стикеров</item>
+        <item>Скачивание переписок</item>
+        <item>Упоминания</item>
+        <item>Скрытие чатов</item>
+        <item>Товары</item>
+        <item>Все коментарии фоток</item>
+        <item>Смена иконки приложения</item>
+        <item>Локальный медиа сервер</item>
+        <item>Настройки фона плеера</item>
+        <item>Отправка своих голосовых</item>
+    </string-array>
 
     <!-- Dialogs-->
     <string name="dialogs">Диалоги</string>
@@ -1341,8 +1341,8 @@
     <string name="user_readed_yor_message">Прочитал(а) ваше сообщение</string>
     <string name="user_readed_yor_message_woman">Прочитала ваше сообщение</string>
     <string name="user_readed_yor_message_man">Прочитал ваше сообщение</string>
-    <string name="copy_track_info">Скопировать информацию трека</string>
-    <string name="search_by_artist">Поиск по исполнителю</string>
+    <string name="copy_track_info">Информация</string>
+    <string name="search_by_artist">Исполнитель</string>
     <string name="info_reading">Уведомлять о прочтении вашего сообщения</string>
     <string name="use_stop_audio">Стоп вместо паузы аудио</string>
     <string name="use_long_click_download">Скачивать по долгому нажатию</string>

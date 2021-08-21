@@ -34,10 +34,13 @@ import com.google.android.material.textview.MaterialTextView
 import com.squareup.picasso3.BitmapSafeResize.isOverflowCanvas
 import com.squareup.picasso3.BitmapSafeResize.setHardwareRendering
 import com.squareup.picasso3.BitmapSafeResize.setMaxResolution
+import dev.ragnarok.fenrir.CheckDonate.DonateFutures.*
 import dev.ragnarok.fenrir.CheckDonate.isFullVersion
-import dev.ragnarok.fenrir.Constants
-import dev.ragnarok.fenrir.Dedicated
-import dev.ragnarok.fenrir.Extra
+import dev.ragnarok.fenrir.Constants.API_VERSION
+import dev.ragnarok.fenrir.Constants.USER_AGENT_ACCOUNT
+import dev.ragnarok.fenrir.Dedicated.Companion.showDedicated
+import dev.ragnarok.fenrir.Extra.ACCOUNT_ID
+import dev.ragnarok.fenrir.Extra.PHOTOS
 import dev.ragnarok.fenrir.Injection.provideApplicationContext
 import dev.ragnarok.fenrir.Injection.provideProxySettings
 import dev.ragnarok.fenrir.R
@@ -230,7 +233,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             }
         findPreference<Preference>("player_background")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                if (!isFullVersion(requireActivity())) {
+                if (!isFullVersion(requireActivity(), PAYER_BACKGROUND_SETTINGS)) {
                     return@OnPreferenceClickListener false
                 }
                 val view = View.inflate(requireActivity(), R.layout.entry_player_background, null)
@@ -315,7 +318,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             }
         findPreference<Preference>("local_media_server")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                if (!isFullVersion(requireActivity())) {
+                if (!isFullVersion(requireActivity(), LOCAL_MEDIA_SERVER)) {
                     return@OnPreferenceClickListener false
                 }
                 val view = View.inflate(requireActivity(), R.layout.entry_local_server, null)
@@ -470,13 +473,13 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("version")?.let {
             it.summary =
-                Utils.getAppVersionName(requireActivity()) + ", VK API " + Constants.API_VERSION
+                Utils.getAppVersionName(requireActivity()) + ", VK API " + API_VERSION
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val view = View.inflate(requireActivity(), R.layout.dialog_about_us, null)
                 MaterialAlertDialogBuilder(requireActivity())
                     .setView(view)
                     .setOnDismissListener {
-                        Dedicated.showDedicated(
+                        showDedicated(
                             requireActivity()
                         )
                     }
@@ -487,7 +490,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("dedicated")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                Dedicated.showDedicated(requireActivity())
+                showDedicated(requireActivity())
                 true
             }
 
@@ -832,7 +835,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun changeDrawerBackground(isDark: Boolean, data: Intent?) {
-        val photos: ArrayList<LocalPhoto?>? = data?.getParcelableArrayListExtra(Extra.PHOTOS)
+        val photos: ArrayList<LocalPhoto?>? = data?.getParcelableArrayListExtra(PHOTOS)
         if (Utils.isEmpty(photos)) {
             return
         }
@@ -879,7 +882,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     private fun showAdditionalInfo() {
         val view = View.inflate(requireActivity(), R.layout.dialog_additional_us, null)
         (view.findViewById<View>(R.id.item_user_agent) as TextView).text =
-            "User-Agent: " + Constants.USER_AGENT_ACCOUNT()
+            "User-Agent: " + USER_AGENT_ACCOUNT()
         (view.findViewById<View>(R.id.item_device_id) as TextView).text =
             "Device-ID: " + Utils.getDeviceId(requireActivity())
         (view.findViewById<View>(R.id.item_gcm_token) as TextView).text =
@@ -890,7 +893,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun showSelectIcon() {
-        if (!isFullVersion(requireActivity())) {
+        if (!isFullVersion(requireActivity(), CHANGE_APP_ICON)) {
             return
         }
         val view = View.inflate(requireActivity(), R.layout.icon_select_alert, null)
@@ -1019,7 +1022,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private val accountId: Int
-        get() = requireArguments().getInt(Extra.ACCOUNT_ID)
+        get() = requireArguments().getInt(ACCOUNT_ID)
 
     private fun initStartPagePreference(lp: ListPreference?) {
         val drawerSettings = Settings.get()
@@ -1104,7 +1107,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         @JvmStatic
         fun buildArgs(accountId: Int): Bundle {
             val args = Bundle()
-            args.putInt(Extra.ACCOUNT_ID, accountId)
+            args.putInt(ACCOUNT_ID, accountId)
             return args
         }
 

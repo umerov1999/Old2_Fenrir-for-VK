@@ -8,6 +8,7 @@ import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 import static dev.ragnarok.fenrir.util.ViewUtils.displayAvatar;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso3.Transformation;
@@ -41,7 +43,6 @@ import dev.ragnarok.fenrir.model.VideoWithOwner;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.AppTextUtils;
-import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.AspectRatioImageView;
 import dev.ragnarok.fenrir.view.VideoServiceIcons;
 import dev.ragnarok.fenrir.view.emoji.EmojiconTextView;
@@ -233,9 +234,9 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         holder.commentText.setText(text, TextView.BufferType.SPANNABLE);
         holder.commentText.setVisibility(isEmpty(comment.getText()) ? View.GONE : View.VISIBLE);
 
-        holder.commentLikeRoot.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
+        holder.commentLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
         holder.commentLikeCounter.setText(String.valueOf(comment.getLikesCount()));
-        Utils.setColorFilter(holder.commentLikeIcon, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
+        TextViewCompat.setCompoundDrawableTintList(holder.commentLikeCounter, ColorStateList.valueOf(comment.isUserLikes() ? iconColorActive : colorTextSecondary));
 
         if (comment.getFromId() != 0) {
             addOwnerAvatarClickHandling(holder.commentAvatar, comment.getFromId());
@@ -349,9 +350,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
         final EmojiconTextView commentText;
         final TextView commentDatetime;
 
-        final View commentLikeRoot;
         final TextView commentLikeCounter;
-        final ImageView commentLikeIcon;
 
         final ViewGroup commentAttachmentRoot;
         final AttachmentsHolder commentAttachmentHolder;
@@ -365,9 +364,7 @@ public class NewsfeedCommentsAdapter extends AbsRecyclerViewAdapter<NewsfeedComm
             commentText = itemView.findViewById(R.id.item_comment_text);
             commentDatetime = itemView.findViewById(R.id.item_comment_time);
 
-            commentLikeRoot = itemView.findViewById(R.id.item_comment_like_root);
             commentLikeCounter = itemView.findViewById(R.id.item_comment_like_counter);
-            commentLikeIcon = itemView.findViewById(R.id.item_comment_like);
 
             commentAttachmentRoot = commentRoot.findViewById(R.id.item_comment_attachments_root);
             commentAttachmentHolder = AttachmentsHolder.forComment(commentAttachmentRoot);

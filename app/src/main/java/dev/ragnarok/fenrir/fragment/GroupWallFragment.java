@@ -537,7 +537,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                     .setOnClickListener(v -> callPresenter(GroupWallPresenter::fireHeaderArticlesClick));
             root.findViewById(R.id.header_group_products_container)
                     .setOnClickListener(v -> {
-                        if (CheckDonate.isFullVersion(requireActivity())) {
+                        if (CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.PRODUCTS)) {
                             callPresenter(GroupWallPresenter::fireHeaderProductsClick);
                         }
                     });

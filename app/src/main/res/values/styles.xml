@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Base.App.DayNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.App.DayNight" parent="Theme.Material3.DayNight.NoActionBar">
         <!--        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">?dividerColor</item>-->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">?attr/colorPrimary</item>
@@ -386,7 +386,7 @@
         <item name="cardElevation">1dp</item>
     </style>
 
-    <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
+    <style name="QuickReply" parent="Theme.Material3.DayNight.Dialog">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
         <item name="colorSecondary">#82B1FF</item>

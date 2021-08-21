@@ -6,6 +6,7 @@ import static dev.ragnarok.fenrir.util.Utils.safeIsEmpty;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -18,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.TextViewCompat;
 
 import com.squareup.picasso3.Transformation;
 
@@ -149,8 +152,8 @@ public class CommentContainer extends LinearLayout {
                     holder.tvText.setMovementMethod(LinkMovementMethod.getInstance());
                 }
 
-                holder.ivLike.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
-                Utils.setColorFilter(holder.ivLike, comment.isUserLikes() ? iconColorActive : colorTextSecondary);
+                holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
+                TextViewCompat.setCompoundDrawableTintList(holder.tvLikeCounter, ColorStateList.valueOf(comment.isUserLikes() ? iconColorActive : colorTextSecondary));
                 holder.tvLikeCounter.setText(AppTextUtils.getCounterWithK(comment.getLikesCount()));
                 holder.tvLikeCounter.setVisibility(comment.getLikesCount() > 0 ? View.VISIBLE : View.GONE);
                 holder.tvLikeCounter.setTextColor(comment.isUserLikes() ? iconColorActive : colorTextSecondary);
@@ -162,7 +165,7 @@ public class CommentContainer extends LinearLayout {
                 holder.tvTime.setText(genTimeAndReplyText(comment, listener), TextView.BufferType.SPANNABLE);
                 holder.tvTime.setTextColor(colorTextSecondary);
 
-                holder.ivLike.setOnClickListener(v -> {
+                holder.tvLikeCounter.setOnClickListener(v -> {
                     if (listener != null) {
                         listener.onCommentLikeClick(comment, !comment.isUserLikes());
                     }
@@ -214,7 +217,6 @@ public class CommentContainer extends LinearLayout {
         final ImageView ivOwnerAvatar;
         final EmojiconTextView tvText;
         final TextView tvTime;
-        final ImageView ivLike;
         final TextView tvLikeCounter;
         final View vAttachmentsRoot;
         final View selectionView;
@@ -235,11 +237,10 @@ public class CommentContainer extends LinearLayout {
             });
 
             tvTime = root.findViewById(R.id.item_comment_time);
-            ivLike = root.findViewById(R.id.item_comment_like);
             tvLikeCounter = root.findViewById(R.id.item_comment_like_counter);
             selectionView = root.findViewById(R.id.item_comment_selection);
             selectionView.setBackgroundColor(CurrentTheme.getColorPrimary(getContext()));
-            Utils.setColorFilter(ivLike, CurrentTheme.getSecondaryTextColorCode(getContext()));
+            TextViewCompat.setCompoundDrawableTintList(tvLikeCounter, ColorStateList.valueOf(CurrentTheme.getSecondaryTextColorCode(getContext())));
             vAttachmentsRoot = root.findViewById(R.id.item_comment_attachments_root);
 
             attachmentContainers = AttachmentsHolder.forComment((ViewGroup) vAttachmentsRoot);

@@ -259,36 +259,36 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
     private void doMenu(AudioHolder holder, int position, View view, Audio audio) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
-        menus.add(new OptionRequest(AudioOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play));
+        menus.add(new OptionRequest(AudioOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play, true));
         if (MusicPlaybackController.canPlayAfterCurrent(audio)) {
-            menus.add(new OptionRequest(AudioOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next));
+            menus.add(new OptionRequest(AudioOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next, false));
         }
         if (audio.getOwnerId() != Settings.get().accounts().getCurrent()) {
-            menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.action_add), R.drawable.list_add));
-            menus.add(new OptionRequest(AudioOption.add_and_download_button, mContext.getString(R.string.add_and_download_button), R.drawable.add_download));
+            menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.action_add), R.drawable.list_add, true));
+            menus.add(new OptionRequest(AudioOption.add_and_download_button, mContext.getString(R.string.add_and_download_button), R.drawable.add_download, false));
         } else {
             if (playlist_id == null) {
-                menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
+                menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete, true));
             } else {
-                menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.delete_from_playlist), R.drawable.ic_outline_delete));
+                menus.add(new OptionRequest(AudioOption.add_item_audio, mContext.getString(R.string.delete_from_playlist), R.drawable.ic_outline_delete, false));
             }
-            menus.add(new OptionRequest(AudioOption.edit_track, mContext.getString(R.string.edit), R.drawable.about_writed));
+            menus.add(new OptionRequest(AudioOption.edit_track, mContext.getString(R.string.edit), R.drawable.about_writed, true));
         }
-        menus.add(new OptionRequest(AudioOption.share_button, mContext.getString(R.string.share), R.drawable.ic_outline_share));
-        menus.add(new OptionRequest(AudioOption.save_item_audio, mContext.getString(R.string.save), R.drawable.save));
+        menus.add(new OptionRequest(AudioOption.share_button, mContext.getString(R.string.share), R.drawable.ic_outline_share, true));
+        menus.add(new OptionRequest(AudioOption.save_item_audio, mContext.getString(R.string.save), R.drawable.save, true));
         if (audio.getAlbumId() != 0)
-            menus.add(new OptionRequest(AudioOption.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album));
-        menus.add(new OptionRequest(AudioOption.get_recommendation_by_audio, mContext.getString(R.string.get_recommendation_by_audio), R.drawable.music_mic));
+            menus.add(new OptionRequest(AudioOption.open_album, mContext.getString(R.string.open_album), R.drawable.audio_album, false));
+        menus.add(new OptionRequest(AudioOption.get_recommendation_by_audio, mContext.getString(R.string.get_recommendation_by_audio), R.drawable.music_mic, false));
 
         if (!Utils.isEmpty(audio.getMain_artists()))
-            menus.add(new OptionRequest(AudioOption.goto_artist, mContext.getString(R.string.audio_goto_artist), R.drawable.artist_icon));
+            menus.add(new OptionRequest(AudioOption.goto_artist, mContext.getString(R.string.audio_goto_artist), R.drawable.artist_icon, false));
 
         if (audio.getLyricsId() != 0)
-            menus.add(new OptionRequest(AudioOption.get_lyrics_menu, mContext.getString(R.string.get_lyrics_menu), R.drawable.lyric));
+            menus.add(new OptionRequest(AudioOption.get_lyrics_menu, mContext.getString(R.string.get_lyrics_menu), R.drawable.lyric, false));
 
-        menus.add(new OptionRequest(AudioOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
-        menus.add(new OptionRequest(AudioOption.search_by_artist, mContext.getString(R.string.search_by_artist), R.drawable.magnify));
-        menus.add(new OptionRequest(AudioOption.copy_url, mContext.getString(R.string.copy_url), R.drawable.content_copy));
+        menus.add(new OptionRequest(AudioOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality, false));
+        menus.add(new OptionRequest(AudioOption.search_by_artist, mContext.getString(R.string.search_by_artist), R.drawable.magnify, true));
+        menus.add(new OptionRequest(AudioOption.copy_url, mContext.getString(R.string.copy_url), R.drawable.content_copy, false));
 
 
         menus.header(firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle(), R.drawable.song, audio.getThumb_image_little());

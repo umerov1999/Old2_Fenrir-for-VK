@@ -525,10 +525,10 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 mToolbar.setNavigationOnClickListener(v -> {
 
                     ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline));
-                    menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web));
-                    menus.add(new OptionRequest(R.id.action_preferences, getString(R.string.settings), R.drawable.preferences));
-                    menus.add(new OptionRequest(R.id.button_camera, getString(R.string.scan_qr), R.drawable.qr_code));
+                    menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline, true));
+                    menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web, false));
+                    menus.add(new OptionRequest(R.id.action_preferences, getString(R.string.settings), R.drawable.preferences, true));
+                    menus.add(new OptionRequest(R.id.button_camera, getString(R.string.scan_qr), R.drawable.qr_code, false));
                     menus.show(getSupportFragmentManager(), "left_options", option -> {
                         if (option.getId() == R.id.button_ok) {
                             mCompositeDisposable.add(InteractorFactory.createAccountInteractor().setOffline(Settings.get().accounts().getCurrent())

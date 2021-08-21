@@ -1,11 +1,11 @@
 buildscript {
-    ext.fenrirCompileSDK = 30
-    ext.fenrirBuildTools = '30.0.3'
+    ext.fenrirCompileSDK = 31
+    ext.fenrirBuildTools = '31.0.0'
     ext.fenrirNdk = '21.4.7075529'
     ext.fenrirMinSDK = 21
     ext.fenrirTargetSDK = 29
-    ext.FenrirVersionCode = 151
-    ext.FenrirVersionName = '2.41'
+    ext.FenrirVersionCode = 152
+    ext.FenrirVersionName = '2.42'
 
     ext.kotlin_version = '1.5.21'
     ext.retrofitLibraryVersion = '2.9.0'
@@ -21,7 +21,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0'
+        classpath 'com.android.tools.build:gradle:7.0.1'
         classpath 'com.google.gms:google-services:4.3.10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

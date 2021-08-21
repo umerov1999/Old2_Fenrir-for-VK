@@ -117,7 +117,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             mHelper?.playAnimation()
             helpDisposable = Completable.create {
                 it.onComplete()
-            }.delay(3, TimeUnit.SECONDS).fromIOToMain().subscribe({
+            }.delay(5, TimeUnit.SECONDS).fromIOToMain().subscribe({
                 mHelper?.clearAnimationDrawable()
                 mHelper?.visibility = View.GONE
             }, RxUtils.ignore())
@@ -356,6 +356,7 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             mSurfaceHolder.addCallback(this)
             mAspectRatioLayout = rootView.findViewById(R.id.aspect_ratio_layout)
             mProgressBar = rootView.findViewById(R.id.preparing_progress_bar)
+            mSurfaceView.setOnClickListener { toggleFullscreen() }
         }
     }
 

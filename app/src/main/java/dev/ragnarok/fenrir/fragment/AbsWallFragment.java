@@ -324,14 +324,14 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 FindAttachmentType.TYPE_LINK, FindAttachmentType.TYPE_ALBUM, FindAttachmentType.TYPE_POST_WITH_COMMENT, FindAttachmentType.TYPE_POST_WITH_QUERY};
 
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-        menus.add(new OptionRequest(0, getString(R.string.photos), R.drawable.photo_album));
-        menus.add(new OptionRequest(1, getString(R.string.videos), R.drawable.video));
-        menus.add(new OptionRequest(2, getString(R.string.documents), R.drawable.book));
-        menus.add(new OptionRequest(3, getString(R.string.music), R.drawable.song));
-        menus.add(new OptionRequest(4, getString(R.string.links), R.drawable.web));
-        menus.add(new OptionRequest(5, getString(R.string.photo_album), R.drawable.album_photo));
-        menus.add(new OptionRequest(6, getString(R.string.posts_with_comment), R.drawable.comment));
-        menus.add(new OptionRequest(7, getString(R.string.posts_with_query), R.drawable.magnify));
+        menus.add(new OptionRequest(0, getString(R.string.photos), R.drawable.photo_album, true));
+        menus.add(new OptionRequest(1, getString(R.string.videos), R.drawable.video, true));
+        menus.add(new OptionRequest(2, getString(R.string.documents), R.drawable.book, true));
+        menus.add(new OptionRequest(3, getString(R.string.music), R.drawable.song, true));
+        menus.add(new OptionRequest(4, getString(R.string.links), R.drawable.web, true));
+        menus.add(new OptionRequest(5, getString(R.string.photo_album), R.drawable.album_photo, false));
+        menus.add(new OptionRequest(6, getString(R.string.posts_with_comment), R.drawable.comment, false));
+        menus.add(new OptionRequest(7, getString(R.string.posts_with_query), R.drawable.magnify, false));
 
         menus.show(getChildFragmentManager(), "attachments_select", option -> PlaceFactory.getWallAttachmentsPlace(accountId, ownerId, types[option.getId()]).tryOpenWith(requireActivity()));
     }
@@ -361,8 +361,8 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             return true;
         } else if (item.getItemId() == R.id.search_stories) {
             ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-            menus.add(new OptionRequest(R.id.button_ok, getString(R.string.by_name), R.drawable.pencil));
-            menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.by_owner), R.drawable.person));
+            menus.add(new OptionRequest(R.id.button_ok, getString(R.string.by_name), R.drawable.pencil, false));
+            menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.by_owner), R.drawable.person, false));
             menus.show(requireActivity().getSupportFragmentManager(), "search_story_options", option -> {
                 if (item.getItemId() == R.id.button_ok) {
                     callPresenter(p -> p.searchStory(true));

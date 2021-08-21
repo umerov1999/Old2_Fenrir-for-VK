@@ -203,7 +203,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
     public void showAlbumContextMenu(@NonNull PhotoAlbum album) {
         String[] items = {getString(R.string.delete), getString(R.string.edit)};
         new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(album.getTitle())
+                .setTitle(album.getDisplayTitle(requireActivity()))
                 .setItems(items, (dialog, which) -> {
                     switch (which) {
                         case 0:
@@ -299,7 +299,7 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_photo_comments) {
-            if (!CheckDonate.isFullVersion(requireActivity())) {
+            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.ALL_PHOTO_COMMENTS)) {
                 return false;
             }
             callPresenter(PhotoAlbumsPresenter::fireAllComments);

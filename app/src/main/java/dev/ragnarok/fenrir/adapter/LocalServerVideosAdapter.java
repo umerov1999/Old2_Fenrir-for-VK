@@ -82,11 +82,11 @@ public class LocalServerVideosAdapter extends RecyclerView.Adapter<LocalServerVi
         });
         holder.card.setOnLongClickListener(v -> {
             ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-            menus.add(new OptionRequest(VideoLocalServerOption.save_item_video, context.getString(R.string.download), R.drawable.save));
-            menus.add(new OptionRequest(VideoLocalServerOption.play_item_video, context.getString(R.string.play), R.drawable.play));
-            menus.add(new OptionRequest(VideoLocalServerOption.update_time_item_video, context.getString(R.string.update_time), R.drawable.ic_recent));
-            menus.add(new OptionRequest(VideoLocalServerOption.delete_item_video, context.getString(R.string.delete), R.drawable.ic_outline_delete));
-            menus.add(new OptionRequest(VideoLocalServerOption.edit_item_video, context.getString(R.string.edit), R.drawable.about_writed));
+            menus.add(new OptionRequest(VideoLocalServerOption.save_item_video, context.getString(R.string.download), R.drawable.save, true));
+            menus.add(new OptionRequest(VideoLocalServerOption.play_item_video, context.getString(R.string.play), R.drawable.play, true));
+            menus.add(new OptionRequest(VideoLocalServerOption.update_time_item_video, context.getString(R.string.update_time), R.drawable.ic_recent, false));
+            menus.add(new OptionRequest(VideoLocalServerOption.delete_item_video, context.getString(R.string.delete), R.drawable.ic_outline_delete, true));
+            menus.add(new OptionRequest(VideoLocalServerOption.edit_item_video, context.getString(R.string.edit), R.drawable.about_writed, true));
             menus.header(firstNonEmptyString(video.getDescription(), " ") + " - " + video.getTitle(), R.drawable.video, null);
             menus.columns(2);
             menus.show(((FragmentActivity) context).getSupportFragmentManager(), "server_video_options", option -> {

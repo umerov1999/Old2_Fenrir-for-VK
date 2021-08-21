@@ -1,11 +1,13 @@
 package dev.ragnarok.fenrir.mvp.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dev.ragnarok.fenrir.model.Photo;
+import dev.ragnarok.fenrir.model.PhotoAlbum;
 import dev.ragnarok.fenrir.model.TmpSource;
 import dev.ragnarok.fenrir.model.wrappers.SelectablePhotoWrapper;
 import dev.ragnarok.fenrir.mvp.core.IMvpView;
@@ -52,4 +54,6 @@ public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorV
     void startLocalPhotosSelectionIfHasPermission();
 
     void onToggleShowDate(boolean isShow);
+
+    void displayToolbarSubtitle(@Nullable PhotoAlbum album, @NonNull String text);
 }

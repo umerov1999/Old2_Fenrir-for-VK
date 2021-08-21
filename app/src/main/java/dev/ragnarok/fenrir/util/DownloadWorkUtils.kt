@@ -252,7 +252,7 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadVideo(context: Context, video: Video, url: String, Res: String) {
-        if (!CheckDonate.isFullVersion(context)) {
+        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_VIDEO)) {
             return
         }
         val result_filename = DownloadInfo(
@@ -279,7 +279,7 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadVoice(context: Context, doc: VoiceMessage) {
-        if (!CheckDonate.isFullVersion(context)) {
+        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_VOICE)) {
             return
         }
         if (Utils.isEmpty(doc.linkMp3))
@@ -307,7 +307,7 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadSticker(context: Context, sticker: Sticker) {
-        if (!CheckDonate.isFullVersion(context)) {
+        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_STICKERS)) {
             return
         }
         val link: String? = if (sticker.isAnimated) {
@@ -411,7 +411,7 @@ object DownloadWorkUtils {
         Force: Boolean,
         isLocal: Boolean
     ): Int {
-        if (!CheckDonate.isFullVersion(context)) {
+        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_MUSIC)) {
             return 3
         }
         if (!Utils.isEmpty(audio.url) && (audio.url.contains("file://") || audio.url.contains("content://")))

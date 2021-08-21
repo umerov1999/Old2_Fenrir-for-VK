@@ -246,27 +246,27 @@
     <string name="first_pagan">First pagan</string>
     <string name="repo">Repository: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Repository: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Project Dedicated for Arnoldova Ekaterina, https://vk.com/id255645173</string>
+    <string name="project_dedicated_summary">Kate Arnoldova</string>
     <string name="project_dedicated">Project Dedicated</string>
     <string name="go_buy" translatable="false">Google Play</string>
     <string name="in_full_version">Available in full version!</string>
     <string name="features">Features:</string>
-    <string name="features_full">
-        Features:
-        \n
-        \n1. Downloading music
-        \n2. Download video
-        \n3. Downloading voice
-        \n4. Downloading Stickers
-        \n5. Sending your stickers
-        \n6. Downloading correspondence
-        \n7. Mentions
-        \n8. Hide chats (hold the pencil button to show hidden ones)
-        \n9. Products
-        \n10. All photo comments
-        \n11. Change icon (Android >= 8.1)
-        \n12. Local media server
-        \n13. Player background settings.</string>
+    <string-array name="array_features_full">
+        <item>Downloading music</item>
+        <item>Download video</item>
+        <item>Downloading voice</item>
+        <item>Downloading Stickers</item>
+        <item>Sending your stickers</item>
+        <item>Downloading messages</item>
+        <item>Mentions</item>
+        <item>Hide chats</item>
+        <item>Products</item>
+        <item>All photo comments</item>
+        <item>Change app icon</item>
+        <item>Local media server</item>
+        <item>Player background settings</item>
+        <item>Sending custom voice</item>
+    </string-array>
 
     <!-- Dialogs-->
     <string name="dialogs">Dialogs</string>
@@ -1555,8 +1555,8 @@
     <string name="user_readed_yor_message">Has read your message</string>
     <string name="user_readed_yor_message_woman">Has read your message</string>
     <string name="user_readed_yor_message_man">Has read your message</string>
-    <string name="copy_track_info">Copy track information</string>
-    <string name="search_by_artist">Search by artist</string>
+    <string name="copy_track_info">Copy info</string>
+    <string name="search_by_artist">Artist</string>
     <string name="info_reading">Notify me when my message was read</string>
     <string name="use_stop_audio">Stop instead of pause audio</string>
     <string name="use_long_click_download">Download by long press</string>

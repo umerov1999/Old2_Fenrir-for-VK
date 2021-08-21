@@ -41,6 +41,8 @@ public interface IUserWallView extends IWallView, IProgressView {
 
     void showAvatarContextMenu(boolean canUploadAvatar);
 
+    void showMention(int accountId, int ownerId);
+
     void displayCounters(int friends, int mutual, int followers, int groups, int photos, int audios, int videos, int articles, int products, int gifts);
 
     void displayUserStatus(String statusText, boolean swAudioIcon);

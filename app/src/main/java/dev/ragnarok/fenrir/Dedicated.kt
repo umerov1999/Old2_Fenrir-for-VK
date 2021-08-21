@@ -21,10 +21,12 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.ragnarok.fenrir.Dedicated.ImageDedicatedAdapter.SourceType
 import dev.ragnarok.fenrir.media.exo.ExoUtil
 import dev.ragnarok.fenrir.picasso.PicassoInstance.Companion.with
+import dev.ragnarok.fenrir.place.PlaceFactory
 import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.util.HelperSimple
 import dev.ragnarok.fenrir.util.HelperSimple.needHelp
@@ -78,6 +80,11 @@ class Dedicated : DialogFragment() {
         if (shuffle) {
             swipe.visibility = View.GONE
         }
+        (view.findViewById(R.id.dedicated_button) as MaterialButton).setOnClickListener {
+            PlaceFactory.getOwnerWallPlace(Settings.get().accounts().current, 255645173, null)
+                .tryOpenWith(requireActivity())
+            dismiss()
+        }
         pager.adapter = ImageDedicatedAdapter(
             arrayOf(
                 SourceType("dedicated1.webp"),
@@ -102,6 +109,7 @@ class Dedicated : DialogFragment() {
                 SourceType("dedicated20.webp"),
                 SourceType("dedicated21.webp"),
                 SourceType("dedicated22.webp"),
+                SourceType("dedicated23.webp"),
                 SourceType(R.raw.dedicated_video1),
                 SourceType(R.raw.dedicated_video2)
             ),

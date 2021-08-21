@@ -237,23 +237,23 @@ public class PhotoAllCommentFragment extends PlaceSupportMvpFragment<PhotoAllCom
         menus.header(comment.getFullAuthorName(), R.drawable.comment, comment.getMaxAuthorAvaUrl());
         menus.columns(2);
 
-        menus.add(new OptionRequest(CommentsPhotoOption.go_to_photo_item_comment, getString(R.string.photo), R.drawable.dir_photo));
+        menus.add(new OptionRequest(CommentsPhotoOption.go_to_photo_item_comment, getString(R.string.photo), R.drawable.dir_photo, true));
 
         if (!Utils.isEmpty(comment.getText())) {
-            menus.add(new OptionRequest(CommentsPhotoOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy));
+            menus.add(new OptionRequest(CommentsPhotoOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy, true));
         }
 
-        menus.add(new OptionRequest(CommentsPhotoOption.report_item_comment, getString(R.string.report), R.drawable.report));
+        menus.add(new OptionRequest(CommentsPhotoOption.report_item_comment, getString(R.string.report), R.drawable.report, true));
 
         if (!comment.isUserLikes()) {
-            menus.add(new OptionRequest(CommentsPhotoOption.like_item_comment, getString(R.string.like), R.drawable.heart));
+            menus.add(new OptionRequest(CommentsPhotoOption.like_item_comment, getString(R.string.like), R.drawable.heart, false));
         } else {
-            menus.add(new OptionRequest(CommentsPhotoOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart));
+            menus.add(new OptionRequest(CommentsPhotoOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart, false));
         }
 
-        menus.add(new OptionRequest(CommentsPhotoOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled));
+        menus.add(new OptionRequest(CommentsPhotoOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled, false));
 
-        menus.add(new OptionRequest(CommentsPhotoOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends));
+        menus.add(new OptionRequest(CommentsPhotoOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends, false));
         menus.show(requireActivity().getSupportFragmentManager(), "comments_photo_options", option -> {
             switch (option.getId()) {
                 case CommentsPhotoOption.go_to_photo_item_comment:

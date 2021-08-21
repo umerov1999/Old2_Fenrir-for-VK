@@ -304,12 +304,12 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         String setUnPin = getString(R.string.unpin);
 
         if (contextView.canDelete) {
-            menus.add(new OptionRequest(1, delete, R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(1, delete, R.drawable.ic_outline_delete, true));
         }
-        menus.add(new OptionRequest(2, contextView.isPinned ? setUnPin : setPin, contextView.isPinned ? R.drawable.unpin : R.drawable.pin));
+        menus.add(new OptionRequest(2, contextView.isPinned ? setUnPin : setPin, contextView.isPinned ? R.drawable.unpin : R.drawable.pin, true));
 
         if (contextView.canAddToHomescreen) {
-            menus.add(new OptionRequest(3, addToHomeScreen, R.drawable.ic_home_outline));
+            menus.add(new OptionRequest(3, addToHomeScreen, R.drawable.ic_home_outline, false));
         }
 
         if (contextView.canConfigNotifications) {
@@ -318,29 +318,29 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                         .notifications()
                         .getNotifPref(Settings.get().accounts().getCurrent(), dialog.getPeerId());
                 if (hasFlag(mask, FLAG_SHOW_NOTIF)) {
-                    menus.add(new OptionRequest(4, notificationDisable, R.drawable.notification_disable));
+                    menus.add(new OptionRequest(4, notificationDisable, R.drawable.notification_disable, false));
                 } else {
-                    menus.add(new OptionRequest(4, notificationEnable, R.drawable.feed));
+                    menus.add(new OptionRequest(4, notificationEnable, R.drawable.feed, false));
                 }
             } else {
-                menus.add(new OptionRequest(4, notificationSettings, R.drawable.feed));
+                menus.add(new OptionRequest(4, notificationSettings, R.drawable.feed, false));
             }
         }
 
         if (contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            menus.add(new OptionRequest(5, addToShortcuts, R.drawable.about_writed));
+            menus.add(new OptionRequest(5, addToShortcuts, R.drawable.about_writed, false));
         }
 
         if (!contextView.isHidden) {
-            menus.add(new OptionRequest(6, setHide, R.drawable.offline));
+            menus.add(new OptionRequest(6, setHide, R.drawable.offline, true));
         }
 
         if (contextView.isHidden && Settings.get().security().getShowHiddenDialogs()) {
-            menus.add(new OptionRequest(7, setShow, R.drawable.ic_eye_white_vector));
+            menus.add(new OptionRequest(7, setShow, R.drawable.ic_eye_white_vector, false));
         }
 
         if (contextView.canRead) {
-            menus.add(new OptionRequest(8, setRead, R.drawable.email));
+            menus.add(new OptionRequest(8, setRead, R.drawable.email, true));
         }
 
         menus.header(contextView.isHidden && !Settings.get().security().getShowHiddenDialogs() ? getString(R.string.dialogs) : dialog.getDisplayTitle(requireActivity()), R.drawable.email, dialog.getImageUrl());
@@ -384,7 +384,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                     callPresenter(p -> p.fireAddToLauncherShortcuts(dialog));
                     break;
                 case 6:
-                    if (!CheckDonate.isFullVersion(requireActivity())) {
+                    if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.HIDE_CHATS)) {
                         break;
                     }
                     if (!Settings.get().security().isUsePinForSecurity()) {

@@ -98,77 +98,88 @@ class LocalJsonToChatFragment :
             OptionRequest(
                 0,
                 getString(R.string.json_all_messages),
-                is_select(R.drawable.close, 0, last_selected)
+                is_select(R.drawable.close, 0, last_selected),
+                false
             )
         )
         menus.add(
             OptionRequest(
                 1,
                 getString(R.string.photos),
-                is_select(R.drawable.photo_album, 1, last_selected)
+                is_select(R.drawable.photo_album, 1, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 2,
                 getString(R.string.videos),
-                is_select(R.drawable.video, 2, last_selected)
+                is_select(R.drawable.video, 2, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 3,
                 getString(R.string.documents),
-                is_select(R.drawable.book, 3, last_selected)
+                is_select(R.drawable.book, 3, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 4,
                 getString(R.string.music),
-                is_select(R.drawable.song, 4, last_selected)
+                is_select(R.drawable.song, 4, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 5,
                 getString(R.string.links),
-                is_select(R.drawable.web, 5, last_selected)
+                is_select(R.drawable.web, 5, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 6,
                 getString(R.string.photo_album),
-                is_select(R.drawable.album_photo, 6, last_selected)
+                is_select(R.drawable.album_photo, 6, last_selected),
+                false
             )
         )
         menus.add(
             OptionRequest(
                 7,
                 getString(R.string.playlist),
-                is_select(R.drawable.audio_player, 7, last_selected)
+                is_select(R.drawable.audio_player, 7, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 8,
                 getString(R.string.json_attachments_forward),
-                is_select(R.drawable.ic_outline_forward, 8, last_selected)
+                is_select(R.drawable.ic_outline_forward, 8, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 9,
                 getString(R.string.posts),
-                is_select(R.drawable.about_writed, 9, last_selected)
+                is_select(R.drawable.about_writed, 9, last_selected),
+                true
             )
         )
         menus.add(
             OptionRequest(
                 10,
                 getString(R.string.json_all_attachments),
-                is_select(R.drawable.attachment, 10, last_selected)
+                is_select(R.drawable.attachment, 10, last_selected),
+                false
             )
         )
 

@@ -521,30 +521,30 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         callPresenter(p -> p.fireCommentContextViewCreated(contextView, comment));
 
         if (!Utils.isEmpty(comment.getText())) {
-            menus.add(new OptionRequest(CommentsOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy));
+            menus.add(new OptionRequest(CommentsOption.copy_item_comment, getString(R.string.copy), R.drawable.content_copy, true));
         }
-        menus.add(new OptionRequest(CommentsOption.reply_item_comment, getString(R.string.reply), R.drawable.reply));
-        menus.add(new OptionRequest(CommentsOption.report_item_comment, getString(R.string.report), R.drawable.report));
+        menus.add(new OptionRequest(CommentsOption.reply_item_comment, getString(R.string.reply), R.drawable.reply, true));
+        menus.add(new OptionRequest(CommentsOption.report_item_comment, getString(R.string.report), R.drawable.report, true));
 
         if (contextView.canDelete) {
-            menus.add(new OptionRequest(CommentsOption.delete_item_comment, getString(R.string.delete), R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(CommentsOption.delete_item_comment, getString(R.string.delete), R.drawable.ic_outline_delete, true));
         }
 
         if (contextView.canEdit) {
-            menus.add(new OptionRequest(CommentsOption.edit_item_comment, getString(R.string.edit), R.drawable.pencil));
+            menus.add(new OptionRequest(CommentsOption.edit_item_comment, getString(R.string.edit), R.drawable.pencil, true));
         }
 
         if (contextView.canBan) {
-            menus.add(new OptionRequest(CommentsOption.block_author_item_comment, getString(R.string.ban_author), R.drawable.block_outline));
+            menus.add(new OptionRequest(CommentsOption.block_author_item_comment, getString(R.string.ban_author), R.drawable.block_outline, false));
         }
 
         if (!comment.isUserLikes()) {
-            menus.add(new OptionRequest(CommentsOption.like_item_comment, getString(R.string.like), R.drawable.heart));
+            menus.add(new OptionRequest(CommentsOption.like_item_comment, getString(R.string.like), R.drawable.heart, false));
         } else {
-            menus.add(new OptionRequest(CommentsOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart));
+            menus.add(new OptionRequest(CommentsOption.dislike_item_comment, getString(R.string.dislike), R.drawable.ic_no_heart, false));
         }
-        menus.add(new OptionRequest(CommentsOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled));
-        menus.add(new OptionRequest(CommentsOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends));
+        menus.add(new OptionRequest(CommentsOption.who_like_item_comment, getString(R.string.who_likes), R.drawable.heart_filled, false));
+        menus.add(new OptionRequest(CommentsOption.send_to_friend_item_comment, getString(R.string.send_to_friend), R.drawable.friends, false));
         menus.show(requireActivity().getSupportFragmentManager(), "comments_options", option -> {
             switch (option.getId()) {
                 case CommentsOption.copy_item_comment:

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -124,7 +125,7 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
     }
 
     @Override
-    public void setToolbarSubtitle(String subtitle) {
+    public void setToolbarSubtitle(@Nullable String subtitle) {
         ActivityUtils.setToolbarSubtitle(this, subtitle);
     }
 

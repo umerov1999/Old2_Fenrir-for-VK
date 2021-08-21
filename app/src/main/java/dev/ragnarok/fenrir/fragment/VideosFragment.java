@@ -401,18 +401,18 @@ public class VideosFragment extends BaseMvpFragment<VideosListPresenter, IVideos
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
         if (!isMy) {
             if (video.isCanAdd()) {
-                menus.add(new OptionRequest(R.id.action_add_to_my_videos, getString(R.string.add_to_my_videos), R.drawable.plus));
+                menus.add(new OptionRequest(R.id.action_add_to_my_videos, getString(R.string.add_to_my_videos), R.drawable.plus, false));
             }
         } else {
-            menus.add(new OptionRequest(R.id.action_delete_from_my_videos, getString(R.string.delete), R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(R.id.action_delete_from_my_videos, getString(R.string.delete), R.drawable.ic_outline_delete, true));
         }
         if (video.isCanEdit()) {
-            menus.add(new OptionRequest(R.id.action_edit, getString(R.string.edit), R.drawable.pencil));
+            menus.add(new OptionRequest(R.id.action_edit, getString(R.string.edit), R.drawable.pencil, true));
         }
-        menus.add(new OptionRequest(R.id.action_copy_url, getString(R.string.copy_url), R.drawable.content_copy));
-        menus.add(new OptionRequest(R.id.share_button, getString(R.string.share), R.drawable.share));
-        menus.add(new OptionRequest(R.id.check_show_author, getString(R.string.author), R.drawable.person));
-        menus.add(new OptionRequest(R.id.album_container, getString(R.string.videos_albums), R.drawable.album_photo));
+        menus.add(new OptionRequest(R.id.action_copy_url, getString(R.string.copy_url), R.drawable.content_copy, false));
+        menus.add(new OptionRequest(R.id.share_button, getString(R.string.share), R.drawable.share, true));
+        menus.add(new OptionRequest(R.id.check_show_author, getString(R.string.author), R.drawable.person, true));
+        menus.add(new OptionRequest(R.id.album_container, getString(R.string.videos_albums), R.drawable.album_photo, true));
 
         menus.header(video.getTitle(), R.drawable.video, video.getImage());
         menus.columns(2);

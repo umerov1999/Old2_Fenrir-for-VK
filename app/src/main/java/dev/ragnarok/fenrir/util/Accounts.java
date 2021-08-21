@@ -1,7 +1,6 @@
 package dev.ragnarok.fenrir.util;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -41,7 +40,9 @@ public class Accounts {
             // NotFountException
             return;
         }
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Toast toast = new Toast(context);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setText(user.getFullName());
@@ -49,6 +50,7 @@ public class Accounts {
             toast.show();
             return;
         }
+         */
 
         View view = View.inflate(context, R.layout.account_change_toast, null);
 

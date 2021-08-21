@@ -9,7 +9,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@android:id/icon"
+        android:id="@+id/item_option_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
@@ -18,11 +18,13 @@
         app:tint="?colorSecondary" />
 
     <TextView
-        android:id="@android:id/text1"
+        android:id="@+id/item_option_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:ellipsize="end"
         android:gravity="center_vertical"
+        android:maxLines="3"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:textSize="16sp"
         tools:text="Share" />

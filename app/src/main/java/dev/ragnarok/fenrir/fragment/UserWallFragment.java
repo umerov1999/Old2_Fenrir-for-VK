@@ -313,6 +313,10 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     protected void onHeaderInflated(View headerRootView) {
         mHeaderHolder = new UserHeaderHolder(headerRootView);
         mHeaderHolder.ivAvatar.setOnClickListener(v -> callPresenter(UserWallPresenter::fireAvatarClick));
+        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
+            callPresenter(UserWallPresenter::fireAvatarLongClick);
+            return true;
+        });
         setupPaganContent(mHeaderHolder.Runes, mHeaderHolder.paganSymbol, mHeaderHolder.paganVideo);
     }
 
@@ -457,6 +461,14 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
     }
 
     @Override
+    public void showMention(int accountId, int ownerId) {
+        if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.MENTION)) {
+            return;
+        }
+        PlaceFactory.getMentionsPlace(accountId, ownerId).tryOpenWith(requireActivity());
+    }
+
+    @Override
     public void InvalidateOptionsMenu() {
         requireActivity().invalidateOptionsMenu();
     }
@@ -520,7 +532,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             return true;
         });
         menu.add(R.string.mentions).setOnMenuItemClickListener(item -> {
-            if (!CheckDonate.isFullVersion(requireActivity())) {
+            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.MENTION)) {
                 return true;
             }
             callPresenter(UserWallPresenter::fireMentions);
@@ -606,7 +618,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             root.findViewById(R.id.header_user_profile_audios_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderAudiosClick));
             root.findViewById(R.id.header_user_profile_articles_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderArticlesClick));
             root.findViewById(R.id.header_user_profile_products_container).setOnClickListener(v -> {
-                if (CheckDonate.isFullVersion(requireActivity())) {
+                if (CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.PRODUCTS)) {
                     callPresenter(UserWallPresenter::fireHeaderProductsClick);
                 }
             });

@@ -63,7 +63,7 @@ public class PhotoAlbumsAdapter extends RecyclerView.Adapter<PhotoAlbumsAdapter.
         }
 
         holder.count.setText(context.getString(R.string.photos_count, album.getSize()));
-        holder.name.setText(album.getTitle());
+        holder.name.setText(album.getDisplayTitle(holder.name.getContext()));
         if (Utils.isEmpty(album.getDescription()))
             holder.description.setVisibility(View.GONE);
         else {

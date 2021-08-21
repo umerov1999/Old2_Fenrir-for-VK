@@ -17,38 +17,40 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ContactsUtils {
     public static Single<String> getAllContacts(@NonNull Context context) {
-        List<String> contacts = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(
-                ContactsContract.Contacts.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+        return Single.create(o -> {
+            List<String> contacts = new ArrayList<>();
+            Cursor cursor = context.getContentResolver().query(
+                    ContactsContract.Contacts.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
 
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
-                if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Cursor pCur = context.getContentResolver().query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id},
-                            null);
-                    while (pCur.moveToNext()) {
-                        String phone = pCur.getString(
-                                pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contacts.add(phone);
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    String id = cursor.getString(cursor.getColumnIndex(BaseColumns._ID));
+                    if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor pCur = context.getContentResolver().query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id},
+                                null);
+                        while (pCur.moveToNext()) {
+                            String phone = pCur.getString(
+                                    pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            contacts.add(phone);
+                        }
+                        pCur.close();
                     }
-                    pCur.close();
                 }
+                cursor.close();
             }
-            cursor.close();
-        }
-        if (Utils.isEmpty(contacts)) {
-            return Single.error(new Throwable("Can't collect contact list!"));
-        }
-        return Single.just(join(",", contacts));
+            if (Utils.isEmpty(contacts)) {
+                o.onError(new Throwable("Can't collect contact list!"));
+            }
+            o.onSuccess(join(",", contacts));
+        });
     }
 }

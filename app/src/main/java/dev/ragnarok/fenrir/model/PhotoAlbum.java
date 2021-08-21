@@ -1,6 +1,11 @@
 package dev.ragnarok.fenrir.model;
 
+import android.content.Context;
 import android.os.Parcel;
+
+import androidx.annotation.NonNull;
+
+import dev.ragnarok.fenrir.R;
 
 public class PhotoAlbum extends AbsModel implements ISomeones {
 
@@ -93,6 +98,17 @@ public class PhotoAlbum extends AbsModel implements ISomeones {
     public PhotoAlbum setTitle(String title) {
         this.title = title;
         return this;
+    }
+
+    public String getDisplayTitle(@NonNull Context context) {
+        if (id == -9001 || id == -311) {
+            if (id == -9001) {
+                return context.getString(R.string.all_photos);
+            } else {
+                return context.getString(R.string.on_server);
+            }
+        }
+        return title;
     }
 
     public String getDescription() {

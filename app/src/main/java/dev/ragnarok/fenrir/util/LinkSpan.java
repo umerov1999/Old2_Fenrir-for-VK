@@ -37,8 +37,8 @@ public class LinkSpan extends ClickableSpan {
             return;
         }
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
-        menus.add(new OptionRequest(R.id.button_ok, context.getString(R.string.open), R.drawable.web));
-        menus.add(new OptionRequest(R.id.button_cancel, context.getString(R.string.copy_simple), R.drawable.content_copy));
+        menus.add(new OptionRequest(R.id.button_ok, context.getString(R.string.open), R.drawable.web, true));
+        menus.add(new OptionRequest(R.id.button_cancel, context.getString(R.string.copy_simple), R.drawable.content_copy, true));
         menus.show(((FragmentActivity) context).getSupportFragmentManager(), "left_options", option -> {
             if (option.getId() == R.id.button_ok) {
                 LinkHelper.openUrl((Activity) context, Settings.get().accounts().getCurrent(), link);

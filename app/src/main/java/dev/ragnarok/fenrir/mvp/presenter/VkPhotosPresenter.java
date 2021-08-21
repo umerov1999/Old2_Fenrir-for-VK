@@ -193,15 +193,15 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
     @OnGuiCreated
     private void resolveToolbarView() {
         String ownerName = nonNull(owner) ? owner.getFullName() : null;
-        String albumTitle = nonNull(album) ? album.getTitle() : "";
 
-        callView(v -> v.setToolbarSubtitle(albumTitle + " " + getString(R.string.photos_count, photos.size())));
-
-        if (nonEmpty(ownerName)) {
-            callView(v -> v.setToolbarTitle(ownerName));
-        } else {
-            callView(IVkPhotosView::displayDefaultToolbarTitle);
-        }
+        callView(v -> {
+            v.displayToolbarSubtitle(album, getString(R.string.photos_count, photos.size()));
+            if (nonEmpty(ownerName)) {
+                v.setToolbarTitle(ownerName);
+            } else {
+                v.displayDefaultToolbarTitle();
+            }
+        });
     }
 
     private void onUploadQueueAdded(List<Upload> added) {

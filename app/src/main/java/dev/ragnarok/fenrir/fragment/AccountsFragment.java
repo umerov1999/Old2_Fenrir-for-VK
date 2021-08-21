@@ -442,19 +442,19 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
 
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
         if (account.getId() > 0) {
-            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete));
-            menus.add(new OptionRequest(1, getString(R.string.add_to_home_screen), R.drawable.plus));
+            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete, true));
+            menus.add(new OptionRequest(1, getString(R.string.add_to_home_screen), R.drawable.plus, false));
             if (!Utils.isEmpty(Settings.get().accounts().getLogin(account.getId()))) {
-                menus.add(new OptionRequest(3, getString(R.string.login_password_hint), R.drawable.view));
+                menus.add(new OptionRequest(3, getString(R.string.login_password_hint), R.drawable.view, true));
             }
             if (!idCurrent) {
-                menus.add(new OptionRequest(2, getString(R.string.set_as_active), R.drawable.account_circle));
+                menus.add(new OptionRequest(2, getString(R.string.set_as_active), R.drawable.account_circle, false));
             }
         } else {
-            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete));
+            menus.add(new OptionRequest(0, getString(R.string.delete), R.drawable.ic_outline_delete, true));
         }
         if (Utils.isHiddenAccount(account.getId())) {
-            menus.add(new OptionRequest(4, getString(R.string.set_device), R.drawable.ic_smartphone));
+            menus.add(new OptionRequest(4, getString(R.string.set_device), R.drawable.ic_smartphone, false));
         }
         menus.header(account.getDisplayName(), R.drawable.account_circle, account.getOwner() != null ? account.getOwner().getMaxSquareAvatar() : null);
         menus.show(getChildFragmentManager(), "account_options", option -> {

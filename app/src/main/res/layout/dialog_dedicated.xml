@@ -46,12 +46,37 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="3dp"
-            android:autoLink="web"
+            android:ellipsize="end"
             android:gravity="center"
-            android:padding="16dp"
-            android:text="@string/project_dedicated_summary"
+            android:maxLines="1"
+            android:text="@string/project_dedicated"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textSize="18sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/dedicated_icon" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dedicated_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:stateListAnimator="@animator/clicked"
+                android:text="@string/project_dedicated_summary"
+                android:textColor="?colorOnSurface" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

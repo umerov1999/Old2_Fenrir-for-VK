@@ -145,16 +145,16 @@ public class AudioLocalRecyclerAdapter extends RecyclerView.Adapter<AudioLocalRe
     private void doMenu(int position, View view, Audio audio) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
-        menus.add(new OptionRequest(AudioLocalOption.upload_item_audio, mContext.getString(R.string.upload), R.drawable.web));
-        menus.add(new OptionRequest(AudioLocalOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play));
+        menus.add(new OptionRequest(AudioLocalOption.upload_item_audio, mContext.getString(R.string.upload), R.drawable.web, true));
+        menus.add(new OptionRequest(AudioLocalOption.play_item_audio, mContext.getString(R.string.play), R.drawable.play, true));
         if (Settings.get().other().getLocalServer().enabled) {
-            menus.add(new OptionRequest(AudioLocalOption.play_via_local_server, mContext.getString(R.string.play_remote), R.drawable.remote_cloud));
+            menus.add(new OptionRequest(AudioLocalOption.play_via_local_server, mContext.getString(R.string.play_remote), R.drawable.remote_cloud, false));
         }
         if (MusicPlaybackController.canPlayAfterCurrent(audio)) {
-            menus.add(new OptionRequest(AudioLocalOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next));
+            menus.add(new OptionRequest(AudioLocalOption.play_item_after_current_audio, mContext.getString(R.string.play_audio_after_current), R.drawable.play_next, false));
         }
-        menus.add(new OptionRequest(AudioLocalOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality));
-        menus.add(new OptionRequest(AudioLocalOption.delete_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete));
+        menus.add(new OptionRequest(AudioLocalOption.bitrate_item_audio, mContext.getString(R.string.get_bitrate), R.drawable.high_quality, false));
+        menus.add(new OptionRequest(AudioLocalOption.delete_item_audio, mContext.getString(R.string.delete), R.drawable.ic_outline_delete, true));
 
 
         menus.header(firstNonEmptyString(audio.getArtist(), " ") + " - " + audio.getTitle(), R.drawable.song, audio.getThumb_image_little());

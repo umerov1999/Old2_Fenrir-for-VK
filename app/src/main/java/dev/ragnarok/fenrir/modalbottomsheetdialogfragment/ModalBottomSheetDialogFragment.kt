@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.imageview.ShapeableImageView
 import com.squareup.picasso3.Callback
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.picasso.PicassoInstance
@@ -83,7 +84,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
 
         val options = mutableListOf<Option>()
 
-        val final_options = mutableListOf<Option>()
+        val finalOptions = mutableListOf<Option>()
 
         optionHolders.forEach {
             val resource = it.resource
@@ -98,7 +99,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
 
         options.forEach {
             if (!excludes.contains(it.id))
-                final_options.add(it)
+                finalOptions.add(it)
         }
 
         adapter = Adapter {
@@ -127,7 +128,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
             list.layoutManager = layoutManager
         }
 
-        adapter.set(final_options)
+        adapter.set(finalOptions)
     }
 
     @SuppressLint("RestrictedApi")
@@ -136,7 +137,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         menuInflater.inflate(menuRes, menu)
         for (i in 0 until menu.size()) {
             val item = menu.getItem(i)
-            val option = Option(item.itemId, item.title, item.icon)
+            val option = Option(item.itemId, item.title as String, item.icon, false)
             options.add(option)
         }
     }
@@ -187,7 +188,7 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         /**
          * Add a custom header to the modal, using the custom layout if provided
          */
-        fun header(header: String, @DrawableRes icon: Int, url: String?): Builder {
+        fun header(header: String?, @DrawableRes icon: Int, url: String?): Builder {
             this.header = header
             this.icon = icon
             this.urlicon = url
@@ -234,8 +235,6 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
         }
 
         private val options = mutableListOf<Option>()
-        private var layoutRes = R.layout.modal_bottom_sheet_dialog_fragment_item
-        private var headerLayoutRes = R.layout.modal_bottom_sheet_dialog_fragment_header
         internal var header: String? = null
 
         @DrawableRes
@@ -248,11 +247,16 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
 
                 VIEW_TYPE_HEADER -> {
                     val view =
-                        LayoutInflater.from(parent.context).inflate(headerLayoutRes, parent, false)
+                        LayoutInflater.from(parent.context).inflate(
+                            R.layout.modal_bottom_sheet_dialog_fragment_header,
+                            parent,
+                            false
+                        )
                     return HeaderViewHolder(view)
                 }
                 VIEW_TYPE_ITEM -> {
-                    val view = LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
+                    val view = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.modal_bottom_sheet_dialog_fragment_item, parent, false)
                     val holder = ItemViewHolder(view)
                     view.setOnClickListener {
                         val position = if (header != null) {
@@ -302,19 +306,24 @@ class ModalBottomSheetDialogFragment(listener: Listener) : BottomSheetDialogFrag
 
     internal class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private var text: TextView = view.findViewById(android.R.id.text1)
-        private var icon: ImageView = view.findViewById(android.R.id.icon)
+        private var text: TextView = view.findViewById(R.id.item_option_text)
+        private var icon: ImageView = view.findViewById(R.id.item_option_icon)
 
         fun bind(option: Option) {
             text.text = option.title
+            if (option.singleLine) {
+                text.maxLines = 1
+            } else {
+                text.maxLines = 3
+            }
             icon.setImageDrawable(option.icon)
         }
     }
 
     internal class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private var text: TextView = view.findViewById(android.R.id.text1)
-        private var av: ImageView = view.findViewById(R.id.item_avatar)
+        private var text: TextView = view.findViewById(R.id.item_header_text)
+        private var av: ShapeableImageView = view.findViewById(R.id.item_header_icon)
 
         fun bind(header: String?, url: String?, @DrawableRes res: Int) {
             text.text = header

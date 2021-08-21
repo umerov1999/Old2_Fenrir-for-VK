@@ -50,16 +50,7 @@ public class VkPhotoAlbumsAdapter extends RecyclerView.Adapter<VkPhotoAlbumsAdap
             PicassoInstance.with().cancelRequest(holder.imageView);
             holder.imageView.setImageResource(R.drawable.album);
         }
-
-        if (photoAlbum.getId() == -9001 || photoAlbum.getId() == -311) {
-            if (photoAlbum.getId() == -9001) {
-                holder.title.setText(holder.title.getContext().getString(R.string.all_photos));
-            } else {
-                holder.title.setText(holder.title.getContext().getString(R.string.on_server));
-            }
-        } else {
-            holder.title.setText(photoAlbum.getTitle());
-        }
+        holder.title.setText(photoAlbum.getDisplayTitle(holder.title.getContext()));
 
         holder.imageView.setOnClickListener(v -> {
             if (clickListener != null) {

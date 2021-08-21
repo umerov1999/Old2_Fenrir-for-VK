@@ -299,6 +299,15 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     }
 
     @Override
+    public void displayToolbarSubtitle(@Nullable PhotoAlbum album, @NonNull String text) {
+        if (nonNull(album)) {
+            setToolbarSubtitle(album.getDisplayTitle(requireActivity()) + " " + text);
+        } else {
+            setToolbarSubtitle(text);
+        }
+    }
+
+    @Override
     public void setDrawerPhotosSelected(boolean selected) {
         if (requireActivity() instanceof OnSectionResumeCallback) {
             if (selected) {

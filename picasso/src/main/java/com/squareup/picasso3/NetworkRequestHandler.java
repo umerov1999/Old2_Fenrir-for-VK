@@ -78,8 +78,8 @@ final class NetworkRequestHandler extends RequestHandler {
     }
 
     @Override
-    public void load(@NonNull final Picasso picasso, @NonNull final Request request,
-                     @NonNull final Callback callback) {
+    public void load(@NonNull Picasso picasso, @NonNull Request request,
+                     @NonNull Callback callback) {
         okhttp3.Request callRequest = createRequest(request);
         callFactory.newCall(callRequest).enqueue(new okhttp3.Callback() {
             @Override

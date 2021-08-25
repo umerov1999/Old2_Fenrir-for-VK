@@ -514,7 +514,7 @@
         <item name="cardElevation">1dp</item>
     </style>
 
-    <style name="QuickReply" parent="Theme.Material3.DayNight.Dialog">
+    <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
         <item name="colorSecondary">#82B1FF</item>

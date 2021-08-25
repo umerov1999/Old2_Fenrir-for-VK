@@ -33,7 +33,7 @@ class PicassoExecutorService extends ThreadPoolExecutor {
 
     PicassoExecutorService(ThreadFactory threadFactory) {
         super(DEFAULT_THREAD_COUNT, DEFAULT_THREAD_COUNT, 0, TimeUnit.MILLISECONDS,
-                new PriorityBlockingQueue<Runnable>(), threadFactory);
+                new PriorityBlockingQueue<>(), threadFactory);
     }
 
     @Override

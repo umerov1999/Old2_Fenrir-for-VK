@@ -305,16 +305,11 @@ public final class MaterialTimePicker extends DialogFragment {
   }
 
   private void updateInputMode(MaterialButton modeButton) {
-    if (modeButton == null || timePickerView == null || textInputStub == null) {
-      return;
-    }
-
     if (activePresenter != null) {
       activePresenter.hide();
     }
 
-    activePresenter =
-        initializeOrRetrieveActivePresenterForMode(inputMode, timePickerView, textInputStub);
+    activePresenter = initializeOrRetrieveActivePresenterForMode(inputMode);
     activePresenter.show();
     activePresenter.invalidate();
     Pair<Integer, Integer> buttonData = dataForMode(inputMode);
@@ -328,8 +323,7 @@ public final class MaterialTimePicker extends DialogFragment {
     }
   }
 
-  private TimePickerPresenter initializeOrRetrieveActivePresenterForMode(
-      int mode, @NonNull TimePickerView timePickerView, @NonNull ViewStub textInputStub) {
+  private TimePickerPresenter initializeOrRetrieveActivePresenterForMode(int mode) {
     if (mode == INPUT_MODE_CLOCK) {
       timePickerClockPresenter =
           timePickerClockPresenter == null

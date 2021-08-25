@@ -26,7 +26,10 @@ object Mp3InfoHelper {
                 if (Utils.isEmpty(length)) {
                     it.onError(Exception("Empty content length!"))
                 }
-                it.onSuccess(length?.toLong())
+                length?.let { o ->
+                    it.onSuccess(o.toLong())
+                }
+                length ?: it.onSuccess(0)
             }
         }
     }

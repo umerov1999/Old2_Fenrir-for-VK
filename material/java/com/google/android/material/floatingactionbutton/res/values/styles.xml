@@ -51,7 +51,7 @@
   </style>
 
   <style name="ShapeAppearanceOverlay.MaterialComponents.FloatingActionButton" parent="">
-    <item name="cornerSize">50%</item>
+    <item name="cornerSize">30%</item>
   </style>
 
   <style name="Widget.MaterialComponents.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.Button">

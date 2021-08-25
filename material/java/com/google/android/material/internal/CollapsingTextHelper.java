@@ -102,7 +102,6 @@ public final class CollapsingTextHelper {
   private float collapsedTextSize = 15;
   private ColorStateList expandedTextColor;
   private ColorStateList collapsedTextColor;
-  private int expandedLineCount;
 
   private float expandedDrawY;
   private float collapsedDrawY;
@@ -698,7 +697,6 @@ public final class CollapsingTextHelper {
 
     calculateUsingTextSize(expandedTextSize, forceRecalculate);
     float expandedTextHeight = textLayout != null ? textLayout.getHeight() : 0;
-    expandedLineCount = textLayout != null ? textLayout.getLineCount() : 0;
 
     float measuredWidth = textToDraw != null
         ? textPaint.measureText(textToDraw, 0, textToDraw.length()) : 0;
@@ -1060,22 +1058,8 @@ public final class CollapsingTextHelper {
     return maxLines;
   }
 
-  /**
-   * Returns the current text line count.
-   *
-   * @return The current text line count.
-   */
   public int getLineCount() {
     return textLayout != null ? textLayout.getLineCount() : 0;
-  }
-
-  /**
-   * Returns the expanded text line count.
-   *
-   * @return The expanded text line count.
-   */
-  public int getExpandedLineCount() {
-    return expandedLineCount;
   }
 
   @RequiresApi(VERSION_CODES.M)

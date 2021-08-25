@@ -169,9 +169,12 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 paganSymbol.setImageResource(R.drawable.ic_celtic_knot);
                 break;
             case 7:
-                paganSymbol.setImageResource(R.drawable.ic_slepnir);
+                paganSymbol.setImageResource(R.drawable.ic_celtic_flower);
                 break;
             case 8:
+                paganSymbol.setImageResource(R.drawable.ic_slepnir);
+                break;
+            case 9:
                 if (FenrirNative.isNativeLoaded()) {
                     paganSymbol.fromRes(R.raw.fenrir, Utils.dp(140), Utils.dp(140), new int[]{
                             0x333333,
@@ -184,16 +187,16 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                     paganSymbol.setImageResource(R.drawable.ic_igdr);
                 }
                 break;
-            case 9:
+            case 10:
                 paganSymbol.setImageResource(R.drawable.ic_triskel);
                 break;
-            case 10:
+            case 11:
                 paganSymbol.setImageResource(R.drawable.ic_hell);
                 break;
-            case 11:
+            case 12:
                 paganSymbol.setImageResource(R.drawable.ic_fireshow);
                 break;
-            case 12:
+            case 13:
                 if (FenrirNative.isNativeLoaded()) {
                     paganSymbol.fromRes(R.raw.fire_fan, Utils.dp(180), Utils.dp(140), new int[]{
                             0xffffff,
@@ -208,7 +211,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                     paganSymbol.setImageResource(R.drawable.ic_cat);
                 }
                 break;
-            case 13:
+            case 14:
                 paganSymbol.setImageResource(R.drawable.ic_odin);
                 break;
             default:

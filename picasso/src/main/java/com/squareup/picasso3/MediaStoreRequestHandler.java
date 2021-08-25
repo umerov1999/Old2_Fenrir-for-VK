@@ -130,7 +130,7 @@ class MediaStoreRequestHandler extends ContentStreamRequestHandler {
     }
 
     @Override
-    protected int getExifOrientation(Uri uri) {
+    protected int getExifOrientation(@NonNull Uri uri) {
         Cursor cursor = null;
         try {
             ContentResolver contentResolver = context.getContentResolver();

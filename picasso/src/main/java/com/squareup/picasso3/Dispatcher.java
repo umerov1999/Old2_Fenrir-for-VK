@@ -136,14 +136,11 @@ class Dispatcher {
         }
         dispatcherThread.quit();
         // Unregister network broadcast receiver on the main thread.
-        Picasso.HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    receiver.unregister();
-                } else {
-                    receiverPostM.unregister();
-                }
+        Picasso.HANDLER.post(() -> {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                receiver.unregister();
+            } else {
+                receiverPostM.unregister();
             }
         });
     }
@@ -399,7 +396,6 @@ class Dispatcher {
         }
         List<Action> joined = hunter.getActions();
         if (joined != null) {
-            //noinspection ForLoopReplaceableByForEach
             for (int i = 0, n = joined.size(); i < n; i++) {
                 Action join = joined.get(i);
                 markForReplay(join);
@@ -450,7 +446,7 @@ class Dispatcher {
         }
 
         @Override
-        public void handleMessage(final Message msg) {
+        public void handleMessage(Message msg) {
             switch (msg.what) {
                 case REQUEST_SUBMIT: {
                     Action action = (Action) msg.obj;
@@ -493,11 +489,8 @@ class Dispatcher {
                     break;
                 }
                 default:
-                    Picasso.HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            throw new AssertionError("Unknown handler message received: " + msg.what);
-                        }
+                    Picasso.HANDLER.post(() -> {
+                        throw new AssertionError("Unknown handler message received: " + msg.what);
                     });
             }
         }

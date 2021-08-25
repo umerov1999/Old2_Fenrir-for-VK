@@ -192,6 +192,7 @@
         <item>Mjolnir</item>
         <item>Vegvisir</item>
         <item>Celtic knot</item>
+        <item>Celtic flower</item>
         <item>Slepnir</item>
         <item>Fenrir</item>
         <item>Triskel</item>
@@ -216,6 +217,7 @@
         <item>11</item>
         <item>12</item>
         <item>13</item>
+        <item>14</item>
     </string-array>
 
     <string-array name="array_accounts_input">

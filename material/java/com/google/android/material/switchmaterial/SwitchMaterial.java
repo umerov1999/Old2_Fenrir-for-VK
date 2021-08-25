@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import androidx.appcompat.widget.SwitchCompat;
+
+import android.graphics.Color;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,7 +121,7 @@ public class SwitchMaterial extends SwitchCompat {
 
   private ColorStateList getMaterialThemeColorsThumbTintList() {
     if (materialThemeColorsThumbTintList == null) {
-      int colorSurface = MaterialColors.getColor(this, R.attr.colorSurface);
+      int colorSurface = Color.parseColor("#B9B9B9");
       int colorControlActivated = MaterialColors.getColor(this, R.attr.colorControlActivated);
       float thumbElevation = getResources().getDimension(R.dimen.mtrl_switch_thumb_elevation);
       if (elevationOverlayProvider.isThemeElevationOverlayEnabled()) {

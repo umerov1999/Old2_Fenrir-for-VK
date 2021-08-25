@@ -161,7 +161,6 @@ public class Picasso implements LifecycleObserver {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = actions.size(); i < n; i++) {
             Action action = actions.get(i);
             cancelExistingRequest(action.getTarget());
@@ -169,7 +168,6 @@ public class Picasso implements LifecycleObserver {
 
         List<DeferredRequestCreator> deferredRequestCreators =
                 new ArrayList<>(targetToDeferredRequestCreator.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = deferredRequestCreators.size(); i < n; i++) {
             DeferredRequestCreator deferredRequestCreator = deferredRequestCreators.get(i);
             deferredRequestCreator.cancel();
@@ -215,7 +213,6 @@ public class Picasso implements LifecycleObserver {
         checkNotNull(tag, "tag == null");
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = actions.size(); i < n; i++) {
             Action action = actions.get(i);
             if (tag.equals(action.getTag())) {
@@ -225,7 +222,6 @@ public class Picasso implements LifecycleObserver {
 
         List<DeferredRequestCreator> deferredRequestCreators =
                 new ArrayList<>(targetToDeferredRequestCreator.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = deferredRequestCreators.size(); i < n; i++) {
             DeferredRequestCreator deferredRequestCreator = deferredRequestCreators.get(i);
             if (tag.equals(deferredRequestCreator.getTag())) {
@@ -239,7 +235,6 @@ public class Picasso implements LifecycleObserver {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = actions.size(); i < n; i++) {
             Action action = actions.get(i);
             dispatcher.dispatchPauseTag(action.getTag());
@@ -247,7 +242,6 @@ public class Picasso implements LifecycleObserver {
 
         List<DeferredRequestCreator> deferredRequestCreators =
                 new ArrayList<>(targetToDeferredRequestCreator.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = deferredRequestCreators.size(); i < n; i++) {
             DeferredRequestCreator deferredRequestCreator = deferredRequestCreators.get(i);
             Object tag = deferredRequestCreator.getTag();
@@ -274,7 +268,6 @@ public class Picasso implements LifecycleObserver {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = actions.size(); i < n; i++) {
             Action action = actions.get(i);
             dispatcher.dispatchResumeTag(action.getTag());
@@ -282,7 +275,6 @@ public class Picasso implements LifecycleObserver {
 
         List<DeferredRequestCreator> deferredRequestCreators =
                 new ArrayList<>(targetToDeferredRequestCreator.values());
-        //noinspection ForLoopReplaceableByForEach
         for (int i = 0, n = deferredRequestCreators.size(); i < n; i++) {
             DeferredRequestCreator deferredRequestCreator = deferredRequestCreators.get(i);
             Object tag = deferredRequestCreator.getTag();
@@ -555,7 +547,6 @@ public class Picasso implements LifecycleObserver {
         }
 
         if (joined != null) {
-            //noinspection ForLoopReplaceableByForEach
             for (int i = 0, n = joined.size(); i < n; i++) {
                 Action join = joined.get(i);
                 deliverAction(result, join, exception);

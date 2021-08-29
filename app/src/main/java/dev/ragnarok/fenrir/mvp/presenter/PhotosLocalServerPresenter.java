@@ -205,7 +205,7 @@ public class PhotosLocalServerPresenter extends AccountDependencyPresenter<IPhot
             it++;
         }
         int finalIndex = Index;
-        if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel()) {
+        if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel_photo()) {
             TmpSource source = new TmpSource(getInstanceId(), 0);
             fireTempDataUsage();
             appendDisposable(Stores.getInstance()

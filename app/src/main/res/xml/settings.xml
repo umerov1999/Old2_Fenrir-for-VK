@@ -57,6 +57,96 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/appearance_settings"
+        app:iconSpaceReserved="false"
+        app:initialExpandedChildrenCount="3">
+
+        <Preference
+            android:defaultValue="ice"
+            android:icon="@drawable/select_colored"
+            android:key="app_theme"
+            android:title="@string/choose_theme_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/night_mode_names"
+            android:entryValues="@array/night_mode_values"
+            android:key="night_switch"
+            android:title="@string/night_mode_title"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="amoled_theme"
+            android:title="@string/amoled_theme"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="snow_mode"
+            android:title="@string/snow_mode"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="webview_night_mode"
+            android:summary="@string/webview_summary"
+            android:title="@string/webview_night_mode"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/array_font_size_names"
+            android:entryValues="@array/array_font_size_items"
+            android:key="font_size"
+            android:title="@string/font_size"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/array_photo_rounded_names"
+            android:entryValues="@array/array_photo_rounded_items"
+            android:key="photo_rounded_view"
+            android:title="@string/photo_rounded_view"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:key="avatar_style"
+            android:title="@string/avatar_style_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="show_wall_cover"
+            android:title="@string/show_wall_cover"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:icon="@drawable/valknut_settings"
+        android:title="@string/wall_themed"
+        app:iconSpaceReserved="false">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_pagan_symbol_names"
+            android:entryValues="@array/array_pagan_symbol_items"
+            android:key="pagan_symbol"
+            android:title="@string/pagan_symbol"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="runes_show"
+            android:title="@string/runes_show"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/behaviour_settings"
         app:iconSpaceReserved="false"
         app:initialExpandedChildrenCount="6">
@@ -175,6 +265,12 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="disable_history"
+            android:title="@string/disable_history"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -237,77 +333,6 @@
             android:title="@string/photo_swipe_triggered_pos"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/appearance_settings"
-        app:iconSpaceReserved="false"
-        app:initialExpandedChildrenCount="3">
-
-        <Preference
-            android:defaultValue="ice"
-            android:icon="@drawable/select_colored"
-            android:key="app_theme"
-            android:title="@string/choose_theme_title"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="2"
-            android:entries="@array/night_mode_names"
-            android:entryValues="@array/night_mode_values"
-            android:key="night_switch"
-            android:title="@string/night_mode_title"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="amoled_theme"
-            android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="webview_night_mode"
-            android:summary="@string/webview_summary"
-            android:title="@string/webview_night_mode"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/array_font_size_names"
-            android:entryValues="@array/array_font_size_items"
-            android:key="font_size"
-            android:title="@string/font_size"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="disable_history"
-            android:title="@string/disable_history"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/array_photo_rounded_names"
-            android:entryValues="@array/array_photo_rounded_items"
-            android:key="photo_rounded_view"
-            android:title="@string/photo_rounded_view"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
-
-        <Preference
-            android:key="avatar_style"
-            android:title="@string/avatar_style_title"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="show_wall_cover"
-            android:title="@string/show_wall_cover"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -788,30 +813,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:icon="@drawable/valknut_settings"
-        android:title="@string/wall_themed"
-        app:iconSpaceReserved="false">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="runes_show"
-            android:title="@string/runes_show"
-            app:iconSpaceReserved="false" />
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/array_pagan_symbol_names"
-            android:entryValues="@array/array_pagan_symbol_items"
-            android:key="pagan_symbol"
-            android:title="@string/pagan_symbol"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="true" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="snow_mode"
-            android:title="@string/snow_mode"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false"
         app:initialExpandedChildrenCount="3">
@@ -877,10 +878,18 @@
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="enable_native"
-            android:key="native_parcel_enable"
+            android:key="native_parcel_photo"
             android:summary="@string/native_parcel_summary"
-            android:title="@string/native_parcel_enable"
+            android:title="@string/native_parcel_photo"
             app:allowDividerAbove="true"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:dependency="enable_native"
+            android:key="native_parcel_story"
+            android:summary="@string/native_parcel_summary"
+            android:title="@string/native_parcel_story"
             app:iconSpaceReserved="false" />
 
         <EditTextPreference
@@ -964,6 +973,12 @@
             android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:dependency="developer_mode"
+            android:key="fix_dir_time"
+            android:summary="@string/do_not_use"
+            android:title="@string/fix_dir_time"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

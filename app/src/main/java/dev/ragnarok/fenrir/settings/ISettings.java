@@ -67,7 +67,9 @@ public interface ISettings {
         @NonNull
         List<Integer> getServicePlaylist();
 
-        boolean isNative_parcel();
+        boolean isNative_parcel_photo();
+
+        boolean isNative_parcel_story();
 
         boolean isExtra_debug();
 

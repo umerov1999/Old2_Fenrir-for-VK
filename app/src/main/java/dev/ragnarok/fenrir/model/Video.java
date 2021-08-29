@@ -2,8 +2,10 @@ package dev.ragnarok.fenrir.model;
 
 import android.os.Parcel;
 
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 
-public class Video extends AbsModel {
+
+public class Video extends AbsModel implements ParcelNative.ParcelableNative {
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override
@@ -16,6 +18,7 @@ public class Video extends AbsModel {
             return new Video[size];
         }
     };
+    public static final ParcelNative.Creator<Video> NativeCreator = Video::new;
     private int id;
     private int ownerId;
     private int albumId;
@@ -95,6 +98,44 @@ public class Video extends AbsModel {
         msgPeerId = in.readInt();
     }
 
+    protected Video(ParcelNative in) {
+        id = in.readInt();
+        ownerId = in.readInt();
+        albumId = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        link = in.readString();
+        date = in.readLong();
+        addingDate = in.readLong();
+        views = in.readInt();
+        player = in.readString();
+        image = in.readString();
+        accessKey = in.readString();
+        commentsCount = in.readInt();
+        canComment = in.readByte() != 0;
+        canRepost = in.readByte() != 0;
+        userLikes = in.readByte() != 0;
+        likesCount = in.readInt();
+        mp4link240 = in.readString();
+        mp4link360 = in.readString();
+        mp4link480 = in.readString();
+        mp4link720 = in.readString();
+        mp4link1080 = in.readString();
+        externalLink = in.readString();
+        hls = in.readString();
+        live = in.readString();
+        platform = in.readString();
+        repeat = in.readByte() != 0;
+        duration = in.readInt();
+        privacyView = in.readParcelable(SimplePrivacy.NativeCreator);
+        privacyComment = in.readParcelable(SimplePrivacy.NativeCreator);
+        canEdit = in.readByte() != 0;
+        canAdd = in.readByte() != 0;
+        isPrivate = in.readByte() != 0;
+        msgId = in.readInt();
+        msgPeerId = in.readInt();
+    }
+
     public SimplePrivacy getPrivacyView() {
         return privacyView;
     }
@@ -146,6 +187,45 @@ public class Video extends AbsModel {
         dest.writeInt(duration);
         dest.writeParcelable(privacyView, flags);
         dest.writeParcelable(privacyComment, flags);
+        dest.writeByte((byte) (canEdit ? 1 : 0));
+        dest.writeByte((byte) (canAdd ? 1 : 0));
+        dest.writeByte((byte) (isPrivate ? 1 : 0));
+        dest.writeInt(msgId);
+        dest.writeInt(msgPeerId);
+    }
+
+    @Override
+    public void writeToParcelNative(ParcelNative dest) {
+        dest.writeInt(id);
+        dest.writeInt(ownerId);
+        dest.writeInt(albumId);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(link);
+        dest.writeLong(date);
+        dest.writeLong(addingDate);
+        dest.writeInt(views);
+        dest.writeString(player);
+        dest.writeString(image);
+        dest.writeString(accessKey);
+        dest.writeInt(commentsCount);
+        dest.writeByte((byte) (canComment ? 1 : 0));
+        dest.writeByte((byte) (canRepost ? 1 : 0));
+        dest.writeByte((byte) (userLikes ? 1 : 0));
+        dest.writeInt(likesCount);
+        dest.writeString(mp4link240);
+        dest.writeString(mp4link360);
+        dest.writeString(mp4link480);
+        dest.writeString(mp4link720);
+        dest.writeString(mp4link1080);
+        dest.writeString(externalLink);
+        dest.writeString(hls);
+        dest.writeString(live);
+        dest.writeString(platform);
+        dest.writeByte((byte) (repeat ? 1 : 0));
+        dest.writeInt(duration);
+        dest.writeParcelable(privacyView);
+        dest.writeParcelable(privacyComment);
         dest.writeByte((byte) (canEdit ? 1 : 0));
         dest.writeByte((byte) (canAdd ? 1 : 0));
         dest.writeByte((byte) (isPrivate ? 1 : 0));

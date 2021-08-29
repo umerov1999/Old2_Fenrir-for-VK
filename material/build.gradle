@@ -99,9 +99,9 @@ dependencies {
     api 'androidx.dynamicanimation:dynamicanimation:1.1.0-alpha03'
     api 'androidx.constraintlayout:constraintlayout:2.1.0'
     api 'androidx.recyclerview:recyclerview:1.2.1'
-    api 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     api 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     api 'androidx.vectordrawable:vectordrawable:1.2.0-alpha02'
     api 'androidx.transition:transition:1.4.1'
     api 'androidx.lifecycle:lifecycle-runtime:2.3.1'
+    api project(path: ':viewpager2')
 }

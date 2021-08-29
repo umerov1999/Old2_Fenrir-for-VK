@@ -29,6 +29,8 @@ import dev.ragnarok.fenrir.link.LinkHelper
 import dev.ragnarok.fenrir.media.gif.IGifPlayer
 import dev.ragnarok.fenrir.model.PhotoSize
 import dev.ragnarok.fenrir.model.Story
+import dev.ragnarok.fenrir.module.FenrirNative
+import dev.ragnarok.fenrir.module.parcel.ParcelNative
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory
 import dev.ragnarok.fenrir.mvp.presenter.StoryPagerPresenter
 import dev.ragnarok.fenrir.mvp.view.IStoryPagerView
@@ -170,8 +172,19 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             override fun create(): StoryPagerPresenter {
                 val aid = requireArguments().getInt(Extra.ACCOUNT_ID)
                 val index = requireArguments().getInt(Extra.INDEX)
-                val stories: ArrayList<Story> =
+                val stories: ArrayList<Story> = if (FenrirNative.isNativeLoaded() && Settings.get()
+                        .other().isNative_parcel_story
+                ) ParcelNative.loadParcelableArrayList(
+                    requireArguments().getLong(
+                        Extra.STORY
+                    ), Story.NativeCreator
+                ) else
                     requireArguments().getParcelableArrayList(Extra.STORY)!!
+                if (FenrirNative.isNativeLoaded() && Settings.get()
+                        .other().isNative_parcel_story
+                ) {
+                    requireArguments().putLong(Extra.STORY, 0)
+                }
                 return StoryPagerPresenter(
                     aid,
                     stories,
@@ -527,7 +540,11 @@ class StoryPagerFragment : BaseMvpFragment<StoryPagerPresenter, IStoryPagerView>
             val args = Bundle()
             args.putInt(Extra.ACCOUNT_ID, aid)
             args.putInt(Extra.INDEX, index)
-            args.putParcelableArrayList(Extra.STORY, stories)
+            if (FenrirNative.isNativeLoaded() && Settings.get().other().isNative_parcel_story) {
+                args.putLong(Extra.STORY, ParcelNative.createParcelableList(stories))
+            } else {
+                args.putParcelableArrayList(Extra.STORY, stories)
+            }
             return args
         }
     }

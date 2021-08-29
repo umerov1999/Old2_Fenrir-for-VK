@@ -2,7 +2,9 @@ package dev.ragnarok.fenrir.model;
 
 import android.os.Parcel;
 
-public abstract class Owner extends AbsModel {
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
+
+public abstract class Owner extends AbsModel implements ParcelNative.ParcelableNative {
 
     @OwnerType
     private final int ownerType;
@@ -17,9 +19,19 @@ public abstract class Owner extends AbsModel {
         ownerType = in.readInt();
     }
 
+    public Owner(ParcelNative in) {
+        //noinspection ResourceType
+        ownerType = in.readInt();
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         super.writeToParcel(parcel, i);
+        parcel.writeInt(ownerType);
+    }
+
+    @Override
+    public void writeToParcelNative(ParcelNative parcel) {
         parcel.writeInt(ownerType);
     }
 

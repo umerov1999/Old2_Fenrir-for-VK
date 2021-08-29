@@ -509,8 +509,13 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isNative_parcel() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("native_parcel_enable", false);
+    public boolean isNative_parcel_photo() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("native_parcel_photo", false);
+    }
+
+    @Override
+    public boolean isNative_parcel_story() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("native_parcel_story", true);
     }
 
     @Override
@@ -616,15 +621,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public int getPaganSymbol() {
-        try {
-            return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("pagan_symbol", "1")));
-        } catch (Exception e) {
-            return 1;
-        }
-    }
-
-    @Override
     public @NonNull
     String getKateGMSToken() {
         String res = PreferenceManager.getDefaultSharedPreferences(app).getString("kate_gms_token", Constants.KATE_RECEIPT_GMS_TOKEN).trim();
@@ -654,5 +650,14 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isRunes_show() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("runes_show", true);
+    }
+
+    @Override
+    public int getPaganSymbol() {
+        try {
+            return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("pagan_symbol", "1")));
+        } catch (Exception e) {
+            return 1;
+        }
     }
 }

@@ -84,9 +84,10 @@
         <item>Фенрир</item>
         <item>Трискель</item>
         <item>Хель</item>
-        <item>Файер</item>
-        <item>Файер веер</item>
         <item>Один</item>
+        <item>Файер</item>
+        <item>Файер шоу 1</item>
+        <item>Файер шоу 2</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -1555,8 +1556,9 @@
     <string name="photo_with_user">Фото с пользователем</string>
     <string name="detect_qr">Распознать QR</string>
     <string name="show_photos_line">Показывать трекбар с фотками</string>
-    <string name="native_parcel_enable">Нативный Parcel</string>
-    <string name="native_parcel_summary">Если вылетает при открытии фото</string>
+    <string name="native_parcel_photo">Нативный Parcel для фото</string>
+    <string name="native_parcel_story">Нативный Parcel для историй</string>
+    <string name="native_parcel_summary">Если вылетает при открытии</string>
     <string name="disable_likes">Отключить лайки (фото, стена)</string>
     <string name="date_start">Дата от:</string>
     <string name="date_to">Дата до:</string>
@@ -1643,4 +1645,6 @@
     <string name="rendering_mode">Режим отрисовки изображений</string>
     <string name="new_loading_dialog">Новый диалог прогресса</string>
     <string name="open_branch">Открыть ветку?</string>
+    <string name="fix_dir_time">Исправить время модификации папки</string>
+    <string name="do_not_use">Не использовать! Только для автора клиента!</string>
 </resources>

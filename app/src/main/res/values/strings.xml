@@ -197,9 +197,10 @@
         <item>Fenrir</item>
         <item>Triskel</item>
         <item>Hel</item>
-        <item>Fire</item>
-        <item>Fire Fan</item>
         <item>Odin</item>
+        <item>Fire</item>
+        <item>Fire Show 1</item>
+        <item>Fire Show 2</item>
     </string-array>
 
     <string-array name="array_pagan_symbol_items" translatable="false">
@@ -218,6 +219,7 @@
         <item>12</item>
         <item>13</item>
         <item>14</item>
+        <item>15</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -1771,8 +1773,9 @@
     <string name="photo_with_user">Photo with user</string>
     <string name="detect_qr">Detect QR</string>
     <string name="show_photos_line">Show photos carousel</string>
-    <string name="native_parcel_enable">Native Parcel</string>
-    <string name="native_parcel_summary">If it crashes when opening a photo</string>
+    <string name="native_parcel_photo">Native Parcel for photo</string>
+    <string name="native_parcel_story">Native Parcel for story</string>
+    <string name="native_parcel_summary">If it crashes when opening</string>
     <string name="disable_likes">Hide likes (photos, walls)</string>
     <string name="date_start">Date from:</string>
     <string name="date_to">Date to:</string>
@@ -1861,4 +1864,6 @@
     <string name="rendering_mode">Bitmap rendering mode</string>
     <string name="new_loading_dialog">New loading dialog</string>
     <string name="open_branch">Open Branch?</string>
+    <string name="fix_dir_time">Fix dir modification time</string>
+    <string name="do_not_use">Do not use! For the author of the client only!</string>
 </resources>

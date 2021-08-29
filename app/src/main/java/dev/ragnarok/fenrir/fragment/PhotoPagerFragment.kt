@@ -116,7 +116,7 @@ class PhotoPagerFragment : BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
             args.putInt(Extra.INDEX, position)
             args.putBoolean(Extra.READONLY, readOnly)
             args.putBoolean(Extra.INVERT, invert)
-            if (FenrirNative.isNativeLoaded() && Settings.get().other().isNative_parcel) {
+            if (FenrirNative.isNativeLoaded() && Settings.get().other().isNative_parcel_photo) {
                 args.putLong(EXTRA_PHOTOS, ParcelNative.createParcelableList(photos))
             } else {
                 args.putParcelableArrayList(EXTRA_PHOTOS, photos)
@@ -380,14 +380,14 @@ class PhotoPagerFragment : BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
                         val invert = requireArguments().getBoolean(Extra.INVERT)
                         val photos_album: ArrayList<Photo> =
                             if (FenrirNative.isNativeLoaded() && Settings.get()
-                                    .other().isNative_parcel
+                                    .other().isNative_parcel_photo
                             ) ParcelNative.loadParcelableArrayList(
                                 requireArguments().getLong(
                                     EXTRA_PHOTOS
                                 ), Photo.NativeCreator
                             ) else requireArguments().getParcelableArrayList(EXTRA_PHOTOS)!!
                         if (FenrirNative.isNativeLoaded() && Settings.get()
-                                .other().isNative_parcel
+                                .other().isNative_parcel_photo
                         ) {
                             requireArguments().putLong(EXTRA_PHOTOS, 0)
                         }

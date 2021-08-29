@@ -38,7 +38,6 @@ import dev.ragnarok.fenrir.CheckDonate.DonateFutures.*
 import dev.ragnarok.fenrir.CheckDonate.isFullVersion
 import dev.ragnarok.fenrir.Constants.API_VERSION
 import dev.ragnarok.fenrir.Constants.USER_AGENT_ACCOUNT
-import dev.ragnarok.fenrir.Dedicated.Companion.showDedicated
 import dev.ragnarok.fenrir.Extra.ACCOUNT_ID
 import dev.ragnarok.fenrir.Extra.PHOTOS
 import dev.ragnarok.fenrir.Injection.provideApplicationContext
@@ -49,6 +48,7 @@ import dev.ragnarok.fenrir.activity.alias.*
 import dev.ragnarok.fenrir.api.model.LocalServerSettings
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings
 import dev.ragnarok.fenrir.db.DBHelper
+import dev.ragnarok.fenrir.dedicated.DedicatedDialog.Companion.showDedicated
 import dev.ragnarok.fenrir.filepicker.model.DialogConfigs
 import dev.ragnarok.fenrir.filepicker.model.DialogProperties
 import dev.ragnarok.fenrir.filepicker.view.FilePickerDialog
@@ -172,6 +172,34 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         intent.data = uri
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         requireActivity().startActivity(intent)
+    }
+
+    private fun doFixDirTime(dir: String, isRoot: Boolean) {
+        val root = File(dir)
+        val list: ArrayList<Long> = ArrayList()
+        if (root.exists() && root.isDirectory) {
+            val children = root.list()
+            if (children != null) {
+                for (child in children) {
+                    val rem = File(root, child)
+                    if (rem.isFile && !rem.isHidden && !isRoot) {
+                        list.add(rem.lastModified())
+                    } else if (rem.isDirectory && !rem.isHidden && rem.name != "." && rem.name != "..") {
+                        doFixDirTime(rem.absolutePath, false)
+                    }
+                }
+            }
+        } else {
+            return
+        }
+        if (isRoot) {
+            return
+        }
+
+        val res = list.maxOrNull()
+        res?.let {
+            root.setLastModified(it)
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -480,7 +508,8 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     .setView(view)
                     .setOnDismissListener {
                         showDedicated(
-                            requireActivity()
+                            requireActivity(),
+                            accountId
                         )
                     }
                     .show()
@@ -490,7 +519,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("dedicated")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                showDedicated(requireActivity())
+                showDedicated(requireActivity(), accountId)
                 true
             }
 
@@ -537,6 +566,45 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     true
                 }
         }
+
+        findPreference<Preference>("fix_dir_time")?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                if (!AppPerms.hasReadStoragePermission(requireActivity())) {
+                    requestReadPermission.launch()
+                    return@OnPreferenceClickListener true
+                }
+                val properties = DialogProperties()
+                properties.selection_mode = DialogConfigs.MULTI_MODE
+                properties.selection_type = DialogConfigs.DIR_SELECT
+                properties.root = Environment.getExternalStorageDirectory()
+                properties.error_dir = Environment.getExternalStorageDirectory()
+                properties.offset =
+                    Environment.getExternalStorageDirectory()
+                properties.extensions = null
+                properties.show_hidden_files = false
+                val dialog = FilePickerDialog(
+                    requireActivity(),
+                    properties,
+                    Settings.get().ui().mainTheme
+                )
+                dialog.setTitle(R.string.fix_dir_time)
+                dialog.setDialogSelectionListener {
+                    try {
+                        for (i in it) {
+                            doFixDirTime(i, true)
+                        }
+                        CreateCustomToast(requireActivity())
+                            .setDuration(Toast.LENGTH_LONG)
+                            .showToastSuccessBottom(R.string.success)
+                    } catch (e: Exception) {
+                        CreateCustomToast(requireActivity())
+                            .setDuration(Toast.LENGTH_LONG)
+                            .showToastError(e.localizedMessage)
+                    }
+                }
+                dialog.show()
+                true
+            }
 
         findPreference<Preference>("chat_light_background")?.let {
             it.onPreferenceClickListener =
@@ -616,9 +684,9 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                         Settings.get().ui().mainTheme
                     )
                     dialog.setTitle(R.string.music_dir)
-                    dialog.setDialogSelectionListener { files: Array<String?> ->
+                    dialog.setDialogSelectionListener {
                         PreferenceManager.getDefaultSharedPreferences(provideApplicationContext())
-                            .edit().putString("music_dir", files[0]).apply()
+                            .edit().putString("music_dir", it[0]).apply()
                         uit.refresh()
                     }
                     dialog.show()
@@ -647,9 +715,9 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                         Settings.get().ui().mainTheme
                     )
                     dialog.setTitle(R.string.photo_dir)
-                    dialog.setDialogSelectionListener { files: Array<String?> ->
+                    dialog.setDialogSelectionListener {
                         PreferenceManager.getDefaultSharedPreferences(provideApplicationContext())
-                            .edit().putString("photo_dir", files[0]).apply()
+                            .edit().putString("photo_dir", it[0]).apply()
                         uit.refresh()
                     }
                     dialog.show()
@@ -678,9 +746,9 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                         Settings.get().ui().mainTheme
                     )
                     dialog.setTitle(R.string.video_dir)
-                    dialog.setDialogSelectionListener { files: Array<String?> ->
+                    dialog.setDialogSelectionListener {
                         PreferenceManager.getDefaultSharedPreferences(provideApplicationContext())
-                            .edit().putString("video_dir", files[0]).apply()
+                            .edit().putString("video_dir", it[0]).apply()
                         uit.refresh()
                     }
                     dialog.show()
@@ -709,9 +777,9 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                         Settings.get().ui().mainTheme
                     )
                     dialog.setTitle(R.string.docs_dir)
-                    dialog.setDialogSelectionListener { files: Array<String?> ->
+                    dialog.setDialogSelectionListener {
                         PreferenceManager.getDefaultSharedPreferences(provideApplicationContext())
-                            .edit().putString("docs_dir", files[0]).apply()
+                            .edit().putString("docs_dir", it[0]).apply()
                         uit.refresh()
                     }
                     dialog.show()
@@ -740,9 +808,9 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                         Settings.get().ui().mainTheme
                     )
                     dialog.setTitle(R.string.docs_dir)
-                    dialog.setDialogSelectionListener { files: Array<String?> ->
+                    dialog.setDialogSelectionListener {
                         PreferenceManager.getDefaultSharedPreferences(provideApplicationContext())
-                            .edit().putString("sticker_dir", files[0]).apply()
+                            .edit().putString("sticker_dir", it[0]).apply()
                         uit.refresh()
                     }
                     dialog.show()

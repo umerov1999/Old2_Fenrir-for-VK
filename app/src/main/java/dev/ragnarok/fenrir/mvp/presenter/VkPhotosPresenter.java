@@ -504,7 +504,7 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
             }
         }
         int finalIndex = Index;
-        if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel()) {
+        if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel_photo()) {
             TmpSource source = new TmpSource(getInstanceId(), 0);
             fireTempDataUsage();
             appendDisposable(Stores.getInstance()

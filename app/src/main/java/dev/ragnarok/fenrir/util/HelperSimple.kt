@@ -9,7 +9,6 @@ object HelperSimple {
     const val PLAYLIST_HELPER = "playlist_helper"
     const val STORY_HELPER = "story_helper"
     const val LOLLIPOP_21 = "lollipop21"
-    const val DEDICATED_COUNTER = "dedicated_counter"
     fun needHelp(key: String, count: Int): Boolean {
         val app = Injection.provideApplicationContext()
         val ret = PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0)
@@ -22,14 +21,18 @@ object HelperSimple {
 
     fun hasHelp(key: String, count: Int): Boolean {
         val app = Injection.provideApplicationContext()
-        val ret = PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0)
-        if (ret < count) {
-            return true
-        }
-        return false
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0) < count
     }
 
-    fun needAccountHelp(key: String): Boolean {
+    fun toggleHelp(key: String, count: Int) {
+        val app = Injection.provideApplicationContext()
+        val ret = PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0)
+        if (ret < count) {
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putInt(key, ret + 1).apply()
+        }
+    }
+
+    fun hasAccountHelp(key: String): Boolean {
         val fullKey = key + "_" + Settings.get().accounts().current
         val app = Injection.provideApplicationContext()
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean(fullKey, true)

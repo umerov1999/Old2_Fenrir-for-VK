@@ -6,6 +6,7 @@ import android.os.Parcel;
 
 import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.api.model.Identificable;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class User extends Owner implements Identificable {
@@ -21,6 +22,7 @@ public class User extends Owner implements Identificable {
             return new User[size];
         }
     };
+    public static final ParcelNative.Creator<User> NativeCreator = User::new;
     private final int id;
     private String firstName;
     private String lastName;
@@ -53,6 +55,35 @@ public class User extends Owner implements Identificable {
     }
 
     protected User(Parcel in) {
+        super(in);
+        id = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        online = in.readByte() != 0;
+        onlineMobile = in.readByte() != 0;
+        onlineApp = in.readInt();
+        photo50 = in.readString();
+        photo100 = in.readString();
+        photo200 = in.readString();
+        photoMax = in.readString();
+        lastSeen = in.readLong();
+        //noinspection ResourceType
+        platform = in.readInt();
+        status = in.readString();
+        //noinspection ResourceType
+        sex = in.readInt();
+        domain = in.readString();
+        maiden_name = in.readString();
+        friend = in.readByte() != 0;
+        friendStatus = in.readInt();
+        can_write_private_message = in.readByte() != 0;
+        blacklisted_by_me = in.readByte() != 0;
+        blacklisted = in.readByte() != 0;
+        verified = in.readByte() != 0;
+        can_access_closed = in.readByte() != 0;
+    }
+
+    protected User(ParcelNative in) {
         super(in);
         id = in.readInt();
         firstName = in.readString();
@@ -294,6 +325,34 @@ public class User extends Owner implements Identificable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeByte((byte) (online ? 1 : 0));
+        dest.writeByte((byte) (onlineMobile ? 1 : 0));
+        dest.writeInt(onlineApp);
+        dest.writeString(photo50);
+        dest.writeString(photo100);
+        dest.writeString(photo200);
+        dest.writeString(photoMax);
+        dest.writeLong(lastSeen);
+        dest.writeInt(platform);
+        dest.writeString(status);
+        dest.writeInt(sex);
+        dest.writeString(domain);
+        dest.writeString(maiden_name);
+        dest.writeByte((byte) (friend ? 1 : 0));
+        dest.writeInt(friendStatus);
+        dest.writeByte((byte) (can_write_private_message ? 1 : 0));
+        dest.writeByte((byte) (blacklisted_by_me ? 1 : 0));
+        dest.writeByte((byte) (blacklisted ? 1 : 0));
+        dest.writeByte((byte) (verified ? 1 : 0));
+        dest.writeByte((byte) (can_access_closed ? 1 : 0));
+    }
+
+    @Override
+    public void writeToParcelNative(ParcelNative dest) {
+        super.writeToParcelNative(dest);
         dest.writeInt(id);
         dest.writeString(firstName);
         dest.writeString(lastName);

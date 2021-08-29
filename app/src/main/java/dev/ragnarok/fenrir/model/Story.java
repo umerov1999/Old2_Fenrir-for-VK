@@ -2,7 +2,9 @@ package dev.ragnarok.fenrir.model;
 
 import android.os.Parcel;
 
-public class Story extends AbsModel {
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
+
+public class Story extends AbsModel implements ParcelNative.ParcelableNative {
     public static final Creator<Story> CREATOR = new Creator<Story>() {
         @Override
         public Story createFromParcel(Parcel in) {
@@ -14,6 +16,7 @@ public class Story extends AbsModel {
             return new Story[size];
         }
     };
+    public static final ParcelNative.Creator<Story> NativeCreator = Story::new;
     private int id;
     private int owner_id;
     private long date;
@@ -43,6 +46,19 @@ public class Story extends AbsModel {
         author = ParcelableOwnerWrapper.readOwner(in);
     }
 
+    protected Story(ParcelNative in) {
+        id = in.readInt();
+        owner_id = in.readInt();
+        date = in.readLong();
+        expires_at = in.readLong();
+        is_expired = in.readInt() != 0;
+        access_key = in.readString();
+        target_url = in.readString();
+        video = in.readParcelable(Video.NativeCreator);
+        photo = in.readParcelable(Photo.NativeCreator);
+        author = ParcelableOwnerWrapper.readOwner(in);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -56,6 +72,20 @@ public class Story extends AbsModel {
         dest.writeParcelable(video, flags);
         dest.writeParcelable(photo, flags);
         ParcelableOwnerWrapper.writeOwner(dest, flags, author);
+    }
+
+    @Override
+    public void writeToParcelNative(ParcelNative dest) {
+        dest.writeInt(id);
+        dest.writeInt(owner_id);
+        dest.writeLong(date);
+        dest.writeLong(expires_at);
+        dest.writeInt(is_expired ? 1 : 0);
+        dest.writeString(access_key);
+        dest.writeString(target_url);
+        dest.writeParcelable(video);
+        dest.writeParcelable(photo);
+        ParcelableOwnerWrapper.writeOwner(dest, author);
     }
 
     public Photo getPhoto() {

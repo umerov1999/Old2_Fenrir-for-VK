@@ -6,8 +6,9 @@ import android.os.Parcelable;
 import java.util.List;
 
 import dev.ragnarok.fenrir.api.model.VkApiPrivacy;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 
-public class SimplePrivacy implements Parcelable {
+public class SimplePrivacy implements Parcelable, ParcelNative.ParcelableNative {
 
     public static final Creator<SimplePrivacy> CREATOR = new Creator<SimplePrivacy>() {
         @Override
@@ -20,6 +21,7 @@ public class SimplePrivacy implements Parcelable {
             return new SimplePrivacy[size];
         }
     };
+    public static final ParcelNative.Creator<SimplePrivacy> NativeCreator = SimplePrivacy::new;
     private final String type;
     private final List<Entry> entries;
 
@@ -31,6 +33,11 @@ public class SimplePrivacy implements Parcelable {
     protected SimplePrivacy(Parcel in) {
         type = in.readString();
         entries = in.createTypedArrayList(Entry.CREATOR);
+    }
+
+    protected SimplePrivacy(ParcelNative in) {
+        type = in.readString();
+        entries = in.readParcelableList(Entry.NativeCreator);
     }
 
     public String getType() {
@@ -52,7 +59,13 @@ public class SimplePrivacy implements Parcelable {
         parcel.writeTypedList(entries);
     }
 
-    public static class Entry implements Parcelable {
+    @Override
+    public void writeToParcelNative(ParcelNative parcel) {
+        parcel.writeString(type);
+        parcel.writeParcelableList(entries);
+    }
+
+    public static class Entry implements Parcelable, ParcelNative.ParcelableNative {
 
         public static final int TYPE_USER = 1;
         public static final int TYPE_FRIENDS_LIST = 2;
@@ -67,6 +80,7 @@ public class SimplePrivacy implements Parcelable {
                 return new Entry[size];
             }
         };
+        public static final ParcelNative.Creator<Entry> NativeCreator = Entry::new;
         private final int type;
         private final int id;
         private final boolean allowed;
@@ -78,6 +92,12 @@ public class SimplePrivacy implements Parcelable {
         }
 
         protected Entry(Parcel in) {
+            type = in.readInt();
+            id = in.readInt();
+            allowed = in.readByte() != 0;
+        }
+
+        protected Entry(ParcelNative in) {
             type = in.readInt();
             id = in.readInt();
             allowed = in.readByte() != 0;
@@ -105,6 +125,13 @@ public class SimplePrivacy implements Parcelable {
             dest.writeInt(type);
             dest.writeInt(id);
             dest.writeByte((byte) (allowed ? 1 : 0));
+        }
+
+        @Override
+        public void writeToParcelNative(ParcelNative parcel) {
+            parcel.writeInt(type);
+            parcel.writeInt(id);
+            parcel.writeByte((byte) (allowed ? 1 : 0));
         }
 
         @Override

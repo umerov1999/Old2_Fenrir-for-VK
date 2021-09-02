@@ -219,35 +219,24 @@ public class CheckDonate {
                     "if (cc.city.id == 36 && cc.country.id == 1) {\n" +
                     "   return 3;\n" +
                     "}\n" +
-                    "if (cc.city.id == 1 && cc.country.id == 1) {\n" +
-                    "   return 4;\n" +
-                    "}\n" +
                     "return 0;")
                     .compose(RxUtils.applySingleIOToMainSchedulers())
                     .subscribe(o -> {
                         if (o != 0) {
-                            int owner_id_res = 0;
-                            int id_res = 0;
+                            int res = 0;
                             switch (o) {
                                 case 1:
-                                    owner_id_res = 572488303;
-                                    id_res = 457247193;
+                                    res = 457247193;
                                     break;
                                 case 2:
-                                    owner_id_res = 572488303;
-                                    id_res = 457247191;
+                                    res = 457247191;
                                     break;
                                 case 3:
-                                    owner_id_res = 572488303;
-                                    id_res = 457247190;
-                                    break;
-                                case 4:
-                                    owner_id_res = 225722510;
-                                    id_res = 457239287;
+                                    res = 457247190;
                                     break;
                             }
                             //noinspection ResultOfMethodCallIgnored
-                            InteractorFactory.createPhotosInteractor().checkAndAddLike(Settings.get().accounts().getCurrent(), owner_id_res, id_res, null)
+                            InteractorFactory.createPhotosInteractor().checkAndAddLike(Settings.get().accounts().getCurrent(), 572488303, res, null)
                                     .compose(RxUtils.applySingleIOToMainSchedulers())
                                     .subscribe(s -> HelperSimple.INSTANCE.toggleAccountHelp("flood_control"), RxUtils.ignore());
                         } else {

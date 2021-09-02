@@ -99,6 +99,7 @@ class SettingsBackup {
         SettingCollector("sticker_dir", SettingTypes.TYPE_STRING),
         SettingCollector("photo_to_user_dir", SettingTypes.TYPE_BOOL),
         SettingCollector("delete_cache_images", SettingTypes.TYPE_BOOL),
+        SettingCollector("mention_fave", SettingTypes.TYPE_BOOL),
         SettingCollector("disable_encryption", SettingTypes.TYPE_BOOL),
         SettingCollector("download_photo_tap", SettingTypes.TYPE_BOOL),
         SettingCollector("audio_save_mode_button", SettingTypes.TYPE_BOOL),

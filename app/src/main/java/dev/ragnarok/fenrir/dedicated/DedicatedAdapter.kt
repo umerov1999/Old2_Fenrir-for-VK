@@ -1,12 +1,17 @@
 package dev.ragnarok.fenrir.dedicated
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso3.BitmapTarget
+import com.squareup.picasso3.Picasso
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.picasso.PicassoInstance.Companion.with
+import dev.ragnarok.fenrir.view.CHBAnimDrawable
 import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView
 
 class DedicatedAdapter(
@@ -24,9 +29,17 @@ class DedicatedAdapter(
         holder.imageView.setOnClickListener {
             clickListener?.onToggleHelper()
         }
-        with().cancelRequest(holder.imageView)
+        if (!isDark) {
+            with().cancelRequest(holder.imageView)
+        } else {
+            with().cancelRequest(holder.darkTarget)
+        }
         if (!res.isVideo) {
-            with().load(res.asset).into(holder.imageView)
+            if (!isDark) {
+                with().load(res.asset).into(holder.imageView)
+            } else {
+                with().load(res.asset).into(holder.darkTarget)
+            }
         } else {
             //holder.imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             holder.imageView.setDecoderCallback { success: Boolean ->
@@ -56,11 +69,54 @@ class DedicatedAdapter(
         notifyDataSetChanged()
     }
 
+    fun setDataOnly(data: ArrayList<DedicatedSource>) {
+        drawables = data
+    }
+
+    fun toDark(pos: Int) {
+        isDark = true
+        if (!drawables[pos].isVideo) {
+            darkCurrent = pos
+        }
+        notifyDataSetChanged()
+    }
+
+    fun notifyDark(pos: Int) {
+        if (drawables[pos].isVideo) {
+            return
+        }
+        darkCurrent = pos
+        notifyItemChanged(pos)
+    }
+
+    private var isDark: Boolean = false
+    private var darkCurrent: Int = -1
+
     interface ClickListener {
         fun onToggleHelper()
     }
 
-    class DedicatedHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DedicatedHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: AnimatedShapeableImageView = itemView.findViewById(R.id.dedicated_photo)
+        val darkTarget = object : BitmapTarget {
+            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                CHBAnimDrawable.setBitmap(
+                    imageView,
+                    imageView.context,
+                    bitmap,
+                    darkCurrent == bindingAdapterPosition,
+                    false
+                )
+            }
+
+            override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
+
+            }
+
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+            }
+
+        }
     }
 }

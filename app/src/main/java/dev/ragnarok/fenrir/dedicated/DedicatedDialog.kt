@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.Player.REPEAT_MODE_ONE
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -44,6 +45,7 @@ class DedicatedDialog :
     private var mText: MaterialTextView? = null
     private var swipe: ImageView? = null
     private var anim: RLottieImageView? = null
+    private var darkAnim: RLottieImageView? = null
     private var pager: ViewPager2? = null
     private var adapter: DedicatedAdapter? = null
 
@@ -80,6 +82,44 @@ class DedicatedDialog :
         presenter?.fireReceivePlayer(exoPlayer)
     }
 
+    override fun toggleDarkHeart() {
+        anim?.visibility = View.GONE
+        darkAnim?.visibility = View.VISIBLE
+        darkAnim?.fromRes(R.raw.unheart, Utils.dp(200f), Utils.dp(200f))
+        darkAnim?.playAnimation()
+    }
+
+    override fun playDarkAudio(exoPlayer: SimpleExoPlayer) {
+        exoPlayer.setMediaSource(
+            ProgressiveMediaSource.Factory(
+                DefaultDataSourceFactory(
+                    requireActivity(),
+                    Constants.USER_AGENT(Account_Types.BY_TYPE)
+                )
+            )
+                .createMediaSource(Utils.makeMediaItem("file:///android_asset/dedicated/unrequited_love.ogg"))
+        )
+        exoPlayer.prepare()
+        exoPlayer.repeatMode = REPEAT_MODE_ONE
+        exoPlayer.setAudioAttributes(
+            AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MUSIC)
+                .setUsage(C.USAGE_MEDIA).build(), true
+        )
+        exoPlayer.let {
+            ExoUtil.startPlayer(it)
+        }
+    }
+
+    override fun goToStartDark(pos: Int) {
+        adapter?.toDark(pos)
+    }
+
+    override fun notifyCurrentDark(pos: Int) {
+        pager?.post {
+            adapter?.notifyDark(pos)
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = BottomSheetDialog(requireActivity(), theme)
         val behavior = dialog.behavior
@@ -103,11 +143,9 @@ class DedicatedDialog :
         position: Int,
         showHeart: Boolean,
         showHelper: Boolean,
-        showSwipe: Boolean
+        showSwipe: Boolean,
+        darkHeart: Boolean
     ) {
-        adapter?.setData(sources)
-        pager?.setCurrentItem(position, false)
-        swipe?.visibility = if (showSwipe) View.VISIBLE else View.GONE
         if (showHeart) {
             anim?.visibility = View.VISIBLE
             anim?.fromRes(R.raw.heart, Utils.dp(200f), Utils.dp(200f))
@@ -115,7 +153,7 @@ class DedicatedDialog :
             pager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    if (position == 0) {
+                    if (position == 0 || anim?.visibility == View.GONE) {
                         return
                     }
 
@@ -142,7 +180,16 @@ class DedicatedDialog :
             anim?.clearAnimationDrawable()
             anim?.visibility = View.GONE
         }
+        swipe?.visibility = if (showSwipe) View.VISIBLE else View.GONE
         doToggleHelper(showHelper, showSwipe)
+        if (darkHeart) {
+            toggleDarkHeart()
+            adapter?.setDataOnly(sources)
+            adapter?.toDark(position)
+        } else {
+            adapter?.setData(sources)
+        }
+        pager?.setCurrentItem(position, false)
     }
 
     override fun onCreateView(
@@ -166,6 +213,7 @@ class DedicatedDialog :
 
         pager?.adapter = adapter
         anim = view.findViewById(R.id.dedicated_anim)
+        darkAnim = view.findViewById(R.id.dedicated_dark_anim)
         pager?.setRestorePositionListener {
             presenter?.getCurrentPosition(
                 Utils.isLandscape(

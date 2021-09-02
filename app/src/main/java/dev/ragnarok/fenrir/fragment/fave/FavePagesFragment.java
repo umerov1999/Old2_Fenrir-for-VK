@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.util.Collections;
 import java.util.List;
 
+import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
@@ -139,6 +140,11 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     }
 
     @Override
+    public void openMention(int accountId, Owner owner) {
+        PlaceFactory.getMentionsPlace(accountId, owner.getOwnerId()).tryOpenWith(requireActivity());
+    }
+
+    @Override
     public void notifyItemRemoved(int index) {
         if (nonNull(mAdapter)) {
             mAdapter.notifyItemRemoved(index);
@@ -169,5 +175,13 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     @Override
     public void onPushFirst(int index, Owner owner) {
         callPresenter(p -> p.firePushFirst(owner));
+    }
+
+    @Override
+    public void onMention(@NonNull Owner owner) {
+        if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.MENTION)) {
+            return;
+        }
+        callPresenter(p -> p.fireMention(owner));
     }
 }

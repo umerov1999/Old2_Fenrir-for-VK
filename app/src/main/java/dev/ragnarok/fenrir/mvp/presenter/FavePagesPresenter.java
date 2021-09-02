@@ -220,6 +220,11 @@ public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersVie
                 .subscribe(o -> fireRefresh(), t -> callView(v -> showError(v, getCauseIfRuntime(t)))));
     }
 
+    public void fireMention(Owner owner) {
+        int accountId = getAccountId();
+        callView(v -> v.openMention(accountId, owner));
+    }
+
     private class FindPage extends FindAtWithContent<FavePage> {
         public FindPage(CompositeDisposable disposable) {
             super(disposable, SEARCH_VIEW_COUNT, SEARCH_COUNT);

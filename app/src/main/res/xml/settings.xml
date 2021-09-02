@@ -973,6 +973,14 @@
             android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="developer_mode"
+            android:key="mention_fave"
+            android:summary="@string/do_not_use"
+            android:title="@string/mention_fave"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:dependency="developer_mode"
             android:key="fix_dir_time"

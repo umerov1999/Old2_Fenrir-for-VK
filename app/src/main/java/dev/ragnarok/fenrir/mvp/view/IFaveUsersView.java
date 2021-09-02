@@ -19,5 +19,7 @@ public interface IFaveUsersView extends IAccountDependencyView, IMvpView, IError
 
     void openOwnerWall(int accountId, Owner owner);
 
+    void openMention(int accountId, Owner owner);
+
     void notifyItemRemoved(int index);
 }

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:animateLayoutChanges="true"
         android:background="@drawable/player_semitransperent"
         android:orientation="vertical">
 
@@ -69,6 +70,15 @@
 
     <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
         android:id="@+id/dedicated_anim"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:alpha="0.75"
+        android:visibility="gone"
+        app:loopAnimation="true" />
+
+    <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
+        android:id="@+id/dedicated_dark_anim"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"

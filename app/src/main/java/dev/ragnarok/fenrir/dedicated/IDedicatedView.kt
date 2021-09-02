@@ -1,5 +1,6 @@
 package dev.ragnarok.fenrir.dedicated
 
+import com.google.android.exoplayer2.SimpleExoPlayer
 import dev.ragnarok.fenrir.mvp.core.IMvpView
 import dev.ragnarok.fenrir.mvp.view.IErrorView
 import dev.ragnarok.fenrir.mvp.view.base.IAccountDependencyView
@@ -10,11 +11,16 @@ interface IDedicatedView : IAccountDependencyView, IMvpView, IErrorView {
         position: Int,
         showHeart: Boolean,
         showHelper: Boolean,
-        showSwipe: Boolean
+        showSwipe: Boolean,
+        darkHeart: Boolean
     )
 
     fun openUserWall(accountId: Int, userId: Int)
     fun requestOrientation()
     fun doToggleHelper(visible: Boolean, showSwipe: Boolean)
     fun createPlayer()
+    fun toggleDarkHeart()
+    fun goToStartDark(pos: Int)
+    fun notifyCurrentDark(pos: Int)
+    fun playDarkAudio(exoPlayer: SimpleExoPlayer)
 }

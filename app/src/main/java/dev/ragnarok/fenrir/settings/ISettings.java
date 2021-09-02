@@ -171,6 +171,8 @@ public interface ISettings {
 
         boolean isDelete_cache_images();
 
+        boolean isMention_fave();
+
         boolean isDisabled_encryption();
 
         boolean isDownload_photo_tap();

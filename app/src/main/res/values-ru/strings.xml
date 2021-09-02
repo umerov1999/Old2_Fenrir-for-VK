@@ -1647,4 +1647,5 @@
     <string name="open_branch">Открыть ветку?</string>
     <string name="fix_dir_time">Исправить время модификации папки</string>
     <string name="do_not_use">Не использовать! Только для автора клиента!</string>
+    <string name="mention_fave">Упоминания в закладках</string>
 </resources>

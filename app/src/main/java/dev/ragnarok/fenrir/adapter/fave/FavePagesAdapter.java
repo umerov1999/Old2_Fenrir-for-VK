@@ -23,6 +23,7 @@ import dev.ragnarok.fenrir.model.FavePageType;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
 import dev.ragnarok.fenrir.view.AspectRatioImageView;
@@ -51,6 +52,16 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         FavePage favePage = data.get(position);
+
+        if (Settings.get().other().isMention_fave()) {
+            holder.itemView.setOnLongClickListener(view -> {
+                if (clickListener != null && favePage.getId() >= 0) {
+                    clickListener.onMention(favePage.getOwner());
+                }
+                return true;
+            });
+        }
+
         holder.description.setText(favePage.getDescription());
         holder.name.setText(favePage.getOwner().getFullName());
         holder.name.setTextColor(Utils.getVerifiedColor(context, favePage.getOwner().isVerified()));
@@ -117,6 +128,8 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
         void onDelete(int index, Owner owner);
 
         void onPushFirst(int index, Owner owner);
+
+        void onMention(@NonNull Owner owner);
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -131,7 +144,9 @@ public class FavePagesAdapter extends RecyclerView.Adapter<FavePagesAdapter.Hold
 
         public Holder(View itemView) {
             super(itemView);
-            itemView.setOnCreateContextMenuListener(this);
+            if (!Settings.get().other().isMention_fave()) {
+                itemView.setOnCreateContextMenuListener(this);
+            }
             ivOnline = itemView.findViewById(R.id.header_navi_menu_online);
             avatar = itemView.findViewById(R.id.avatar);
             name = itemView.findViewById(R.id.name);

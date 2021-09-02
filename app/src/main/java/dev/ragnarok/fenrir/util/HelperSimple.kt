@@ -24,6 +24,11 @@ object HelperSimple {
         return PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0) < count
     }
 
+    fun countHelp(key: String): Int {
+        val app = Injection.provideApplicationContext()
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0)
+    }
+
     fun toggleHelp(key: String, count: Int) {
         val app = Injection.provideApplicationContext()
         val ret = PreferenceManager.getDefaultSharedPreferences(app).getInt(key, 0)

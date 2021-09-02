@@ -1866,4 +1866,5 @@
     <string name="open_branch">Open Branch?</string>
     <string name="fix_dir_time">Fix dir modification time</string>
     <string name="do_not_use">Do not use! For the author of the client only!</string>
+    <string name="mention_fave">Mention in Fave</string>
 </resources>

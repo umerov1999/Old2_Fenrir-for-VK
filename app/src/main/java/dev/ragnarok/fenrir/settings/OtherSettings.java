@@ -434,6 +434,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isMention_fave() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("mention_fave", false);
+    }
+
+    @Override
     public boolean isDisabled_encryption() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_encryption", false);
     }

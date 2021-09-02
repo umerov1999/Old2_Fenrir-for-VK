@@ -18,6 +18,7 @@ import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.PersistentLogger
 import dev.ragnarok.fenrir.util.RxUtils
+import dev.ragnarok.fenrir.util.Utils
 import ealvatag.tag.TagOptionSingleton
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
@@ -36,6 +37,8 @@ class App : Application() {
             FenrirNative.loadNativeLibrary { PersistentLogger.logThrowable("NativeError", it) }
         }
         FenrirNative.updateAppContext(this)
+        FenrirNative.updateDensity { Utils.getDensity() }
+
         RLottieDrawable.setCacheResourceAnimation(Settings.get().other().isEnable_cache_ui_anim)
         TagOptionSingleton.getInstance().isAndroid = true
         MusicPlaybackController.registerBroadcast(this)

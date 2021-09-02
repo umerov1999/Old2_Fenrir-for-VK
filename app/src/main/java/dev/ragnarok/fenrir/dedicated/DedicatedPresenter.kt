@@ -2,10 +2,14 @@ package dev.ragnarok.fenrir.dedicated
 
 import android.os.Bundle
 import com.google.android.exoplayer2.SimpleExoPlayer
+import dev.ragnarok.fenrir.Extensions.Companion.fromIOToMain
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter
 import dev.ragnarok.fenrir.util.HelperSimple
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.Disposable
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
     AccountDependencyPresenter<IDedicatedView>(accountId, savedInstanceState) {
@@ -17,7 +21,9 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
     private var positionPortrait = 0
     private var showHeart = true
     private var showHelper = true
+    private var isDark = false
     private var exoPlayer: SimpleExoPlayer? = null
+    private var disposableDark = Disposable.disposed()
     override fun onGuiCreated(viewHost: IDedicatedView) {
         super.onGuiCreated(viewHost)
         viewHost.requestOrientation()
@@ -30,6 +36,7 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
 
     override fun onDestroyed() {
         super.onDestroyed()
+        disposableDark.dispose()
         exoPlayer?.stop()
         exoPlayer?.release()
     }
@@ -49,7 +56,8 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
             if (land) positionLand else positionPortrait,
             showHeart,
             showHelper,
-            !shufflePhotos
+            !shufflePhotos,
+            isDark
         )
     }
 
@@ -61,6 +69,9 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
             positionLand = position
         } else {
             positionPortrait = position
+        }
+        if (isDark) {
+            view?.notifyCurrentDark(position)
         }
     }
 
@@ -93,10 +104,29 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
             sourcesLand.shuffle()
             sourcesPortrait.shuffle()
         }
+        if (!HelperSimple.needHelp(DEDICATED_DARK_COUNTER, 3)) {
+            val delay =
+                (69 - (HelperSimple.countHelp(DEDICATED_DARK_COUNTER) - 3) * 20).coerceAtLeast(2)
+            if (delay > 2) {
+                HelperSimple.toggleHelp(DEDICATED_DARK_COUNTER, 7)
+            }
+            disposableDark = Completable.create {
+                it.onComplete()
+            }.delay(delay.toLong(), TimeUnit.SECONDS)
+                .fromIOToMain()
+                .subscribe {
+                    showHeart = false
+                    isDark = true
+                    view?.toggleDarkHeart()
+                    view?.goToStartDark(if (land) positionLand else positionPortrait)
+                    exoPlayer?.let { view?.playDarkAudio(it) }
+                }
+        }
     }
 
     companion object {
         private const val DEDICATED_COUNTER = "dedicated_counter"
+        private const val DEDICATED_DARK_COUNTER = "dedicated_dark_counter"
         fun makeSources(
             prefix: String,
             from: Int,

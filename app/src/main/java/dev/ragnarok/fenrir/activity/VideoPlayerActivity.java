@@ -42,6 +42,7 @@ import dev.ragnarok.fenrir.push.OwnerInfo;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.IProxySettings;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Logger;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -154,7 +155,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
             Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
         }
 
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);

@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.graphics.ColorUtils
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.settings.CurrentTheme
+import dev.ragnarok.fenrir.settings.theme.ThemesController
 
 
 class CustomToast private constructor(context: Context?, Timage: Bitmap?) {
@@ -67,7 +68,7 @@ class CustomToast private constructor(context: Context?, Timage: Bitmap?) {
 
     fun showToastInfo(message: String?) {
         if (mContext == null) return
-        val t = getToast(mContext, message, Utils.getThemeColor(true))
+        val t = getToast(mContext, message, ThemesController.toastColor(true))
         t.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 15)
         t.show()
     }

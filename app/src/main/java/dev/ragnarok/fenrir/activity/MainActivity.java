@@ -177,6 +177,7 @@ import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.SwipesChatMode;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.upload.impl.AudioUploadable;
 import dev.ragnarok.fenrir.util.Accounts;
 import dev.ragnarok.fenrir.util.Action;
@@ -319,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         getDelegate().applyDayNight();
         Utils.prepareDensity(this);
 

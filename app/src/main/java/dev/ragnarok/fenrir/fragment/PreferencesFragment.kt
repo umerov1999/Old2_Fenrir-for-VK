@@ -67,6 +67,7 @@ import dev.ragnarok.fenrir.settings.AvatarStyle
 import dev.ragnarok.fenrir.settings.ISettings
 import dev.ragnarok.fenrir.settings.NightMode
 import dev.ragnarok.fenrir.settings.Settings
+import dev.ragnarok.fenrir.settings.theme.ThemesController
 import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.Utils
@@ -585,7 +586,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 val dialog = FilePickerDialog(
                     requireActivity(),
                     properties,
-                    Settings.get().ui().mainTheme
+                    ThemesController.currentStyle()
                 )
                 dialog.setTitle(R.string.fix_dir_time)
                 dialog.setDialogSelectionListener {
@@ -681,7 +682,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     val dialog = FilePickerDialog(
                         requireActivity(),
                         properties,
-                        Settings.get().ui().mainTheme
+                        ThemesController.currentStyle()
                     )
                     dialog.setTitle(R.string.music_dir)
                     dialog.setDialogSelectionListener {
@@ -712,7 +713,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     val dialog = FilePickerDialog(
                         requireActivity(),
                         properties,
-                        Settings.get().ui().mainTheme
+                        ThemesController.currentStyle()
                     )
                     dialog.setTitle(R.string.photo_dir)
                     dialog.setDialogSelectionListener {
@@ -743,7 +744,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     val dialog = FilePickerDialog(
                         requireActivity(),
                         properties,
-                        Settings.get().ui().mainTheme
+                        ThemesController.currentStyle()
                     )
                     dialog.setTitle(R.string.video_dir)
                     dialog.setDialogSelectionListener {
@@ -774,7 +775,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     val dialog = FilePickerDialog(
                         requireActivity(),
                         properties,
-                        Settings.get().ui().mainTheme
+                        ThemesController.currentStyle()
                     )
                     dialog.setTitle(R.string.docs_dir)
                     dialog.setDialogSelectionListener {
@@ -805,7 +806,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     val dialog = FilePickerDialog(
                         requireActivity(),
                         properties,
-                        Settings.get().ui().mainTheme
+                        ThemesController.currentStyle()
                     )
                     dialog.setTitle(R.string.docs_dir)
                     dialog.setDialogSelectionListener {

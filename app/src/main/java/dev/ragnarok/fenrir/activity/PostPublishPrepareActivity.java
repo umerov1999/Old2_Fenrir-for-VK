@@ -28,6 +28,7 @@ import dev.ragnarok.fenrir.model.WallEditorAttrs;
 import dev.ragnarok.fenrir.model.menu.AdvancedItem;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
@@ -54,7 +55,7 @@ public class PostPublishPrepareActivity extends AppCompatActivity implements Rec
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_publish_prepare);

@@ -312,7 +312,17 @@
         <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
-    <style name="App.DayNight.FireGray" parent="App.DayNight">
+    <style name="App.DayNight.Orange" parent="App.DayNight">
+        <item name="colorPrimary">#FF5722</item>
+        <item name="colorControlNormal">#FF5722</item>
+        <item name="colorSecondary">#FF6F00</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#AAFF5722</item>
+        <item name="icon_color_inactive">#AA444444</item>
+    </style>
+
+    <style name="App.DayNight.OrangeGray" parent="App.DayNight">
         <item name="colorPrimary">#FF5722</item>
         <item name="colorControlNormal">#FF5722</item>
         <item name="colorSecondary">#777777</item>
@@ -370,9 +380,11 @@
 
     <style name="App.DayNight.GreenViolet.Amoled" parent="App.DayNight.GreenViolet" />
 
-    <style name="App.DayNight.Gray.Amoled" parent="App.DayNight.Gray" />
+    <style name="App.DayNight.Orange.Amoled" parent="App.DayNight.Orange" />
 
-    <style name="App.DayNight.FireGray.Amoled" parent="App.DayNight.FireGray" />
+    <style name="App.DayNight.OrangeGray.Amoled" parent="App.DayNight.OrangeGray" />
+
+    <style name="App.DayNight.Gray.Amoled" parent="App.DayNight.Gray" />
 
     <style name="App.DayNight.Green.Amoled" parent="App.DayNight.Green" />
 

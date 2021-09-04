@@ -5,7 +5,6 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StyleRes;
 
 import java.util.Collection;
 import java.util.List;
@@ -514,9 +513,6 @@ public interface ISettings {
     }
 
     interface IUISettings {
-        @StyleRes
-        int getMainTheme();
-
         void setMainTheme(String key);
 
         void switchNightMode(@NightMode int key);

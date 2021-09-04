@@ -17,6 +17,7 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.listener.BackPressCallback;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.zoomhelper.ZoomHelper;
@@ -29,7 +30,7 @@ public abstract class NoMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         isZoomPhoto = Settings.get().other().isDo_zoom_photo();

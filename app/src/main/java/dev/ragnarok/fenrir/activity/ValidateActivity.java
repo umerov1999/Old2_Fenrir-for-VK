@@ -27,6 +27,7 @@ import dev.ragnarok.fenrir.api.util.VKStringUtils;
 import dev.ragnarok.fenrir.model.Token;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Logger;
 
 public class ValidateActivity extends Activity {
@@ -73,7 +74,7 @@ public class ValidateActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

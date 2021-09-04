@@ -1165,53 +1165,6 @@ public class Utils {
         return bitmap;
     }
 
-    public static int getThemeColor(boolean isOfReadToast) {
-        switch (Settings.get().ui().getMainThemeKey()) {
-            case "fire":
-            case "yellow_violet":
-            case "fire_gray":
-                return Color.parseColor("#FF9800");
-            case "old_ice":
-            case "blue_red":
-            case "blue_yellow":
-            case "blue_violet":
-            case "ice":
-            case "ice_green":
-            case "contrast":
-            case "green":
-                if (isOfReadToast) {
-                    return Color.parseColor("#448AFF");
-                } else {
-                    return Color.parseColor("#4d7198");
-                }
-            case "lineage":
-                return Color.parseColor("#167C80");
-            case "red":
-            case "red_violet":
-            case "pink_gray":
-                return Color.parseColor("#F44336");
-            case "violet":
-            case "violet_red":
-            case "violet_gray":
-                return Color.parseColor("#9800FF");
-            case "violet_green":
-            case "violet_yellow":
-                return Color.parseColor("#8500FF");
-            case "fuxia_neon_yellow":
-                return Color.parseColor("#FE59C2");
-            case "fuxia_neon_violet":
-                return Color.parseColor("#FE4164");
-            case "neon_yellow_ice":
-                return Color.parseColor("#AAD300");
-            case "green_violet":
-                return Color.parseColor("#268000");
-            case "gray":
-                return Color.parseColor("#444444");
-            default:
-                return 0xff11acfa;
-        }
-    }
-
     public static @NonNull
     OkHttpDataSource.Factory getExoPlayerFactory(String userAgent, ProxyConfig proxyConfig) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()

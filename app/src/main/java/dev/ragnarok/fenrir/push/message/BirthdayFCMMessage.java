@@ -23,6 +23,7 @@ import dev.ragnarok.fenrir.longpoll.AppNotificationChannels;
 import dev.ragnarok.fenrir.longpoll.NotificationHelper;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class BirthdayFCMMessage {
@@ -93,7 +94,7 @@ public class BirthdayFCMMessage {
                 .setSmallIcon(R.drawable.cake)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setColor(Utils.getThemeColor(false))
+                .setColor(ThemesController.INSTANCE.toastColor(false))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                 .setAutoCancel(true);
 

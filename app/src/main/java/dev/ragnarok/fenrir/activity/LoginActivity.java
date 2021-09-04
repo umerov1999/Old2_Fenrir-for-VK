@@ -25,7 +25,7 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.Auth;
 import dev.ragnarok.fenrir.api.util.VKStringUtils;
 import dev.ragnarok.fenrir.model.Token;
-import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.Logger;
 import dev.ragnarok.fenrir.util.Utils;
@@ -104,7 +104,7 @@ public class LoginActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

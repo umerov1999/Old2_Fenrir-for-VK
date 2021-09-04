@@ -29,6 +29,7 @@ import dev.ragnarok.fenrir.player.MusicPlaybackController
 import dev.ragnarok.fenrir.service.QuickReplyService
 import dev.ragnarok.fenrir.settings.ISettings
 import dev.ragnarok.fenrir.settings.Settings
+import dev.ragnarok.fenrir.settings.theme.ThemesController
 import dev.ragnarok.fenrir.util.hls.M3U8
 import ealvatag.audio.AudioFileIO
 import ealvatag.tag.FieldKey
@@ -732,7 +733,7 @@ object DownloadWorkUtils {
                     R.drawable.save,
                     true
                 )
-                mBuilder.color = Utils.getThemeColor(false)
+                mBuilder.color = ThemesController.toastColor(false)
 
                 val intent_open = Intent(Intent.ACTION_VIEW)
                 intent_open.setDataAndType(
@@ -747,7 +748,7 @@ object DownloadWorkUtils {
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_CANCEL_CURRENT
                 )
                 mBuilder.setContentIntent(ReadPendingIntent)
 
@@ -762,7 +763,7 @@ object DownloadWorkUtils {
                         applicationContext,
                         id.hashCode(),
                         DeleteIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,
@@ -908,7 +909,7 @@ object DownloadWorkUtils {
                     R.drawable.save,
                     true
                 )
-                mBuilder.color = Utils.getThemeColor(false)
+                mBuilder.color = ThemesController.toastColor(false)
 
                 val intent_open = Intent(Intent.ACTION_VIEW)
                 intent_open.setDataAndType(
@@ -923,7 +924,7 @@ object DownloadWorkUtils {
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_CANCEL_CURRENT
                 )
                 mBuilder.setContentIntent(ReadPendingIntent)
 
@@ -938,7 +939,7 @@ object DownloadWorkUtils {
                         applicationContext,
                         id.hashCode(),
                         DeleteIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,

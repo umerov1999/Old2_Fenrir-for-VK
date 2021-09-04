@@ -12,7 +12,7 @@ import androidx.preference.PreferenceViewHolder;
 
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.colorpicker.builder.ColorPickerDialogBuilder;
-import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 
 public class ColorPickerPreference extends Preference {
 
@@ -116,7 +116,7 @@ public class ColorPickerPreference extends Preference {
     @Override
     protected void onClick() {
         ColorPickerDialogBuilder builder = ColorPickerDialogBuilder
-                .with(getContext(), Settings.get().ui().getMainTheme())
+                .with(getContext(), ThemesController.INSTANCE.currentStyle())
                 .setTitle(pickerTitle)
                 .initialColor(selectedColor)
                 .showBorder(border)

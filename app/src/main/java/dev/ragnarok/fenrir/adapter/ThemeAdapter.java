@@ -1,5 +1,6 @@
 package dev.ragnarok.fenrir.adapter;
 
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +15,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import dev.ragnarok.fenrir.R;
-import dev.ragnarok.fenrir.model.ThemeValue;
 import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemeValue;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> {
 
+    private final boolean isDark;
     private List<ThemeValue> data;
     private ClickListener clickListener;
+    private String currentId;
 
-    public ThemeAdapter(List<ThemeValue> data) {
+    public ThemeAdapter(List<ThemeValue> data, Context context) {
         this.data = data;
+        currentId = Settings.get().ui().getMainThemeKey();
+        isDark = Settings.get().ui().isDarkModeEnabled(context);
     }
 
     @NonNull
@@ -39,12 +44,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ThemeValue category = data.get(position);
-        boolean isDark = Settings.get().ui().isDarkModeEnabled(holder.itemView.getContext());
-        boolean isSelected = Settings.get().ui().getMainThemeKey().equals(category.id);
+        boolean isSelected = currentId.equals(category.getId());
 
-        holder.title.setText(category.name);
-        holder.primary.setBackgroundColor(isDark ? category.color_night_primary : category.color_day_primary);
-        holder.secondary.setBackgroundColor(isDark ? category.color_night_secondary : category.color_day_secondary);
+        holder.title.setText(category.getName());
+        holder.primary.setBackgroundColor(isDark ? category.getColorNightPrimary() : category.getColorDayPrimary());
+        holder.secondary.setBackgroundColor(isDark ? category.getColorNightSecondary() : category.getColorDaySecondary());
         holder.selected.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
         if (Utils.hasMarshmallow() && FenrirNative.isNativeLoaded()) {
@@ -60,9 +64,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
             }
         }
 
-        holder.clicked.setOnClickListener(v -> clickListener.onClick(position, category));
+        holder.clicked.setOnClickListener(v -> {
+            currentId = category.getId();
+            clickListener.onClick(position, category);
+        });
         holder.gradient.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-                new int[]{isDark ? category.color_night_primary : category.color_day_primary, isDark ? category.color_night_secondary : category.color_day_secondary}));
+                new int[]{isDark ? category.getColorNightPrimary() : category.getColorDayPrimary(), isDark ? category.getColorNightSecondary() : category.getColorDaySecondary()}));
     }
 
     public void setClickListener(ClickListener clickListener) {

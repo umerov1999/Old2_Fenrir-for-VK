@@ -53,6 +53,7 @@ import dev.ragnarok.fenrir.push.NotificationScheduler;
 import dev.ragnarok.fenrir.service.QuickReplyService;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
 import okhttp3.OkHttpClient;
@@ -274,7 +275,7 @@ public class NotificationHelper {
                 .setLargeIcon(avatar)
                 .setContentText(text)
                 .setStyle(msgs)
-                .setColor(Utils.getThemeColor(false))
+                .setColor(ThemesController.INSTANCE.toastColor(false))
                 .setWhen(message.getDate() * 1000)
                 .setShowWhen(true)
                 .setSortKey("" + (Long.MAX_VALUE - message.getDate() * 1000))

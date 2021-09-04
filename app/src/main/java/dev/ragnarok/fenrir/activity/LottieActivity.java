@@ -24,6 +24,7 @@ import dev.ragnarok.fenrir.module.rlottie.RLottie2Gif;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
@@ -46,7 +47,7 @@ public class LottieActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(Settings.get().ui().getMainTheme());
+        setTheme(ThemesController.INSTANCE.currentStyle());
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottie);

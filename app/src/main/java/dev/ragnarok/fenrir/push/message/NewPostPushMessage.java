@@ -27,6 +27,7 @@ import dev.ragnarok.fenrir.longpoll.NotificationHelper;
 import dev.ragnarok.fenrir.push.NotificationScheduler;
 import dev.ragnarok.fenrir.push.OwnerInfo;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Logger;
 import dev.ragnarok.fenrir.util.Utils;
 
@@ -80,7 +81,7 @@ public class NewPostPushMessage {
                 .setSmallIcon(R.drawable.client_round)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setColor(Utils.getThemeColor(false))
+                .setColor(ThemesController.INSTANCE.toastColor(false))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                 .setAutoCancel(true);
         if (bitmap != null) {

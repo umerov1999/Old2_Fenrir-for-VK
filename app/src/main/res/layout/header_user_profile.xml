@@ -91,7 +91,7 @@
                         android:padding="4dp"
                         android:src="@drawable/verified"
                         android:visibility="gone"
-                        app:tint="@color/white" />
+                        app:tint="?white_color" />
 
                     <dev.ragnarok.fenrir.view.OnlineView
                         android:id="@+id/header_navi_menu_online"

@@ -8,7 +8,6 @@ import androidx.preference.PreferenceManager;
 
 import java.util.Objects;
 
-import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.fragment.PreferencesFragment;
 import dev.ragnarok.fenrir.fragment.fave.FaveTabsFragment;
 import dev.ragnarok.fenrir.fragment.friends.FriendsTabsFragment;
@@ -42,68 +41,6 @@ class UISettings implements ISettings.IUISettings {
     public String getMainThemeKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
         return preferences.getString("app_theme", "ice");
-    }
-
-    @Override
-    public int getMainTheme() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        String theme = preferences.getString("app_theme", "ice");
-        boolean Amoled = Settings.get().main().isAmoledTheme();
-        if (theme == null)
-            return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
-        switch (theme) {
-            case "fire":
-                return Amoled ? R.style.App_DayNight_Fire_Amoled : R.style.App_DayNight_Fire;
-            case "old_ice":
-                return Amoled ? R.style.App_DayNight_OldIce_Amoled : R.style.App_DayNight_OldIce;
-            case "red":
-                return Amoled ? R.style.App_DayNight_Red_Amoled : R.style.App_DayNight_Red;
-            case "violet":
-                return Amoled ? R.style.App_DayNight_Violet_Amoled : R.style.App_DayNight_Violet;
-            case "violet_green":
-                return Amoled ? R.style.App_DayNight_VioletGreen_Amoled : R.style.App_DayNight_VioletGreen;
-            case "green_violet":
-                return Amoled ? R.style.App_DayNight_GreenViolet_Amoled : R.style.App_DayNight_GreenViolet;
-            case "red_violet":
-                return Amoled ? R.style.App_DayNight_RedViolet_Amoled : R.style.App_DayNight_RedViolet;
-            case "gray":
-                return Amoled ? R.style.App_DayNight_Gray_Amoled : R.style.App_DayNight_Gray;
-            case "fire_gray":
-                return Amoled ? R.style.App_DayNight_FireGray_Amoled : R.style.App_DayNight_FireGray;
-            case "blue_red":
-                return Amoled ? R.style.App_DayNight_BlueRed_Amoled : R.style.App_DayNight_BlueRed;
-            case "blue_yellow":
-                return Amoled ? R.style.App_DayNight_BlueYellow_Amoled : R.style.App_DayNight_BlueYellow;
-            case "blue_violet":
-                return Amoled ? R.style.App_DayNight_BlueViolet_Amoled : R.style.App_DayNight_BlueViolet;
-            case "yellow_violet":
-                return Amoled ? R.style.App_DayNight_YellowViolet_Amoled : R.style.App_DayNight_YellowViolet;
-            case "violet_yellow":
-                return Amoled ? R.style.App_DayNight_VioletYellow_Amoled : R.style.App_DayNight_VioletYellow;
-            case "fuxia_neon_yellow":
-                return Amoled ? R.style.App_DayNight_FuxiaNeonYellow_Amoled : R.style.App_DayNight_FuxiaNeonYellow;
-            case "fuxia_neon_violet":
-                return Amoled ? R.style.App_DayNight_FuxiaNeonViolet_Amoled : R.style.App_DayNight_FuxiaNeonViolet;
-            case "neon_yellow_ice":
-                return Amoled ? R.style.App_DayNight_NeonYellowIce_Amoled : R.style.App_DayNight_NeonYellowIce;
-            case "violet_red":
-                return Amoled ? R.style.App_DayNight_VioletRed_Amoled : R.style.App_DayNight_VioletRed;
-            case "contrast":
-                return Amoled ? R.style.App_DayNight_Contrast_Amoled : R.style.App_DayNight_Contrast;
-            case "ice_green":
-                return Amoled ? R.style.App_DayNight_IceGreen_Amoled : R.style.App_DayNight_IceGreen;
-            case "lineage":
-                return Amoled ? R.style.App_DayNight_Lineage_Amoled : R.style.App_DayNight_Lineage;
-            case "green":
-                return Amoled ? R.style.App_DayNight_Green_Amoled : R.style.App_DayNight_Green;
-            case "violet_gray":
-                return Amoled ? R.style.App_DayNight_VioletGray_Amoled : R.style.App_DayNight_VioletGray;
-            case "pink_gray":
-                return Amoled ? R.style.App_DayNight_PinkGray_Amoled : R.style.App_DayNight_PinkGray;
-            case "ice":
-            default:
-                return Amoled ? R.style.App_DayNight_Ice_Amoled : R.style.App_DayNight_Ice;
-        }
     }
 
     @Override

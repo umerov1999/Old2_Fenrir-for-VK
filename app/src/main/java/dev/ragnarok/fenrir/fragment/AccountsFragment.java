@@ -82,6 +82,7 @@ import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.backup.SettingsBackup;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.AppPerms;
 import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.MessagesReplyItemCallback;
@@ -286,7 +287,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         properties.offset = Environment.getExternalStorageDirectory();
         properties.extensions = null;
         properties.show_hidden_files = true;
-        FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties, Settings.get().ui().getMainTheme());
+        FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties, ThemesController.INSTANCE.currentStyle());
         dialog.setTitle(R.string.export_accounts);
         dialog.setDialogSelectionListener(files -> {
             File file = new File(files[0], "fenrir_accounts_backup.json");
@@ -543,7 +544,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         properties.offset = Environment.getExternalStorageDirectory();
         properties.extensions = new String[]{"json"};
         properties.show_hidden_files = true;
-        FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties, Settings.get().ui().getMainTheme());
+        FilePickerDialog dialog = new FilePickerDialog(requireActivity(), properties, ThemesController.INSTANCE.currentStyle());
         dialog.setTitle(R.string.import_accounts);
         dialog.setDialogSelectionListener(files -> {
             try {

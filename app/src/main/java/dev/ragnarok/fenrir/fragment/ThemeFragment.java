@@ -18,12 +18,12 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityFeatures;
 import dev.ragnarok.fenrir.activity.ActivityUtils;
 import dev.ragnarok.fenrir.adapter.ThemeAdapter;
-import dev.ragnarok.fenrir.model.ThemeValue;
 import dev.ragnarok.fenrir.mvp.compat.AbsMvpFragment;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.ThemePresenter;
 import dev.ragnarok.fenrir.mvp.view.IThemeView;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemeValue;
 import dev.ragnarok.fenrir.util.Objects;
 
 public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> implements IThemeView, ThemeAdapter.ClickListener {
@@ -49,7 +49,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), columns);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        mAdapter = new ThemeAdapter(Collections.emptyList());
+        mAdapter = new ThemeAdapter(Collections.emptyList(), requireActivity());
         mAdapter.setClickListener(this);
         recyclerView.setAdapter(mAdapter);
         return root;
@@ -86,7 +86,7 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
 
     @Override
     public void onClick(int index, ThemeValue value) {
-        Settings.get().ui().setMainTheme(value.id);
+        Settings.get().ui().setMainTheme(value.getId());
         requireActivity().recreate();
         mAdapter.notifyDataSetChanged();
     }

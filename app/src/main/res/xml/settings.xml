@@ -77,11 +77,14 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="amoled_theme"
-            android:title="@string/amoled_theme"
-            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/theme_overlay_names"
+            android:entryValues="@array/theme_overlay_values"
+            android:key="theme_overlay"
+            android:title="@string/theme_overlay"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreference
             android:defaultValue="false"

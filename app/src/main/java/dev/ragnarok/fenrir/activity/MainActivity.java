@@ -454,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
                 updateNotificationCount(mAccountId);
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
-                        && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false);
+                        && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false) && !Settings.get().security().isDelayedAllow();
                 if (needPin) {
                     startEnterPinActivity();
                 }

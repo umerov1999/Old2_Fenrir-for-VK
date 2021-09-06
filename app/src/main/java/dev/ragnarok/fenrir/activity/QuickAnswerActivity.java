@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -64,6 +65,7 @@ import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.player.MusicPlaybackService;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemeOverlay;
 import dev.ragnarok.fenrir.task.TextingNotifier;
 import dev.ragnarok.fenrir.util.AppPerms;
 import dev.ragnarok.fenrir.util.AppTextUtils;
@@ -111,7 +113,19 @@ public class QuickAnswerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
+        @StyleRes int theme;
+        switch (Settings.get().main().getThemeOverlay()) {
+            case ThemeOverlay.AMOLED:
+                theme = R.style.QuickReply_Amoled;
+                break;
+            case ThemeOverlay.MD1:
+                theme = R.style.QuickReply_MD1;
+                break;
+            case ThemeOverlay.OFF:
+            default:
+                theme = R.style.QuickReply;
+        }
+        setTheme(theme);
         super.onCreate(savedInstanceState);
 
         messagesRepository = Repository.INSTANCE.getMessages();

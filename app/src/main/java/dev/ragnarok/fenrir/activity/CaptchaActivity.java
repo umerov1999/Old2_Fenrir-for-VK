@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,6 +21,7 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.ICaptchaProvider;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemeOverlay;
 import dev.ragnarok.fenrir.util.Utils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -44,7 +46,19 @@ public class CaptchaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setTheme(Settings.get().main().isAmoledTheme() ? R.style.QuickReply_Amoled : R.style.QuickReply);
+        @StyleRes int theme;
+        switch (Settings.get().main().getThemeOverlay()) {
+            case ThemeOverlay.AMOLED:
+                theme = R.style.QuickReply_Amoled;
+                break;
+            case ThemeOverlay.MD1:
+                theme = R.style.QuickReply_MD1;
+                break;
+            case ThemeOverlay.OFF:
+            default:
+                theme = R.style.QuickReply;
+        }
+        setTheme(theme);
         super.onCreate(savedInstanceState);
         setFinishOnTouchOutside(false);
 

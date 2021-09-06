@@ -19,13 +19,17 @@ class ThemeValue {
     @StyleRes
     val themeAmoledRes: Int
 
+    @StyleRes
+    val themeMD1Res: Int
+
     constructor(
         id: String,
         colorPrimary: String,
         colorSecondary: String,
         name: String,
         @StyleRes themeRes: Int,
-        @StyleRes themeAmoledRes: Int
+        @StyleRes themeAmoledRes: Int,
+        @StyleRes themeMD1Res: Int
     ) {
         colorDayPrimary = Color.parseColor(colorPrimary)
         colorDaySecondary = Color.parseColor(colorSecondary)
@@ -37,6 +41,7 @@ class ThemeValue {
         this.name = name
         this.themeRes = themeRes
         this.themeAmoledRes = themeAmoledRes
+        this.themeMD1Res = themeMD1Res
     }
 
     constructor(
@@ -45,7 +50,10 @@ class ThemeValue {
         colorDaySecondary: String,
         colorNightPrimary: String,
         colorNightSecondary: String,
-        name: String, @StyleRes themeRes: Int, @StyleRes themeAmoledRes: Int
+        name: String,
+        @StyleRes themeRes: Int,
+        @StyleRes themeAmoledRes: Int,
+        @StyleRes themeMD1Res: Int
     ) {
         this.colorDayPrimary = Color.parseColor(colorDayPrimary)
         this.colorDaySecondary = Color.parseColor(colorDaySecondary)
@@ -57,6 +65,7 @@ class ThemeValue {
         this.name = name
         this.themeRes = themeRes
         this.themeAmoledRes = themeAmoledRes
+        this.themeMD1Res = themeMD1Res
     }
 
     fun toast(colorToast: String): ThemeValue {

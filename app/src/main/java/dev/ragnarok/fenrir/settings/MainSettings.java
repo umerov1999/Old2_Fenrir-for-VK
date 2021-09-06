@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager;
 import java.util.Objects;
 
 import dev.ragnarok.fenrir.model.PhotoSize;
+import dev.ragnarok.fenrir.settings.theme.ThemeOverlay;
 import dev.ragnarok.fenrir.upload.Upload;
 import dev.ragnarok.fenrir.util.Optional;
 import dev.ragnarok.fenrir.view.pager.Transformers_Types;
@@ -34,8 +35,13 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
-    public boolean isAmoledTheme() {
-        return getDefaultPreferences().getBoolean("amoled_theme", false);
+    public @ThemeOverlay
+    int getThemeOverlay() {
+        try {
+            return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("theme_overlay", "0")));
+        } catch (Exception e) {
+            return ThemeOverlay.OFF;
+        }
     }
 
     @Override

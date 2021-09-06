@@ -414,6 +414,18 @@
         <item>-1</item>
     </string-array>
 
+    <string-array name="theme_overlay_names">
+        <item>Off</item>
+        <item>Amoled</item>
+        <item>Material 1</item>
+    </string-array>
+
+    <string-array name="theme_overlay_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="select_image_size_summary">Medium is recommended</string>
     <string name="select_image_size_title">Select the image size</string>
     <string-array name="array_image_sizes_names">
@@ -452,7 +464,7 @@
     <string name="high_notif_priority_title">High priority notifications</string>
     <string name="high_notif_priority_summary">In-app notifications will appear higher in relation to other notifications. For Android version 5.0 and higher, this option also enables pop-up notifications.</string>
     <string name="night_mode_title">Night mode</string>
-    <string name="amoled_theme">AMOLED-theme</string>
+    <string name="theme_overlay" translatable="false">Amoled/Material 1</string>
 
     <string name="photos">Photos</string>
     <string name="from_vk_albums">From VK albums</string>
@@ -1152,6 +1164,8 @@
     <string name="counter_documents">documents</string>
     <string name="ask_for_pin_on_application_start_title">PIN-code at start</string>
     <string name="ask_for_pin_on_application_start_summary">Request a PIN-code when starting the application</string>
+    <string name="delayed_pin_for_entrance_title">Don\'t ask every time</string>
+    <string name="delayed_pin_for_entrance_summary">Request PIN-code only after 10 minutes</string>
     <string name="you_have_received_request_for_key_exchange_from">You received an encryption key exchange request from</string>
     <string name="use_pin_for_security_title">Use PIN</string>
     <string name="security">Security</string>
@@ -1867,4 +1881,5 @@
     <string name="fix_dir_time">Fix dir modification time</string>
     <string name="do_not_use">Do not use! For the author of the client only!</string>
     <string name="mention_fave">Mention in Fave</string>
+    <string name="pin_digit">pin digit</string>
 </resources>

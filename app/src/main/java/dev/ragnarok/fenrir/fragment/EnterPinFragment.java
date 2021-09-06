@@ -23,6 +23,7 @@ import dev.ragnarok.fenrir.mvp.presenter.EnterPinPresenter;
 import dev.ragnarok.fenrir.mvp.view.IEnterPinView;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.view.KeyboardView;
 
@@ -52,10 +53,10 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
         mValuesRoot = root.findViewById(R.id.value_root);
 
         mValuesCircles = new View[Constants.PIN_DIGITS_COUNT];
-        mValuesCircles[0] = root.findViewById(R.id.pincode_digit_0_root).findViewById(R.id.pincode_digit_circle);
-        mValuesCircles[1] = root.findViewById(R.id.pincode_digit_1_root).findViewById(R.id.pincode_digit_circle);
-        mValuesCircles[2] = root.findViewById(R.id.pincode_digit_2_root).findViewById(R.id.pincode_digit_circle);
-        mValuesCircles[3] = root.findViewById(R.id.pincode_digit_3_root).findViewById(R.id.pincode_digit_circle);
+        mValuesCircles[0] = root.findViewById(R.id.pincode_digit_0);
+        mValuesCircles[1] = root.findViewById(R.id.pincode_digit_1);
+        mValuesCircles[2] = root.findViewById(R.id.pincode_digit_2);
+        mValuesCircles[3] = root.findViewById(R.id.pincode_digit_3);
         return root;
     }
 
@@ -115,6 +116,7 @@ public class EnterPinFragment extends BaseMvpFragment<EnterPinPresenter, IEnterP
     @Override
     public void sendSuccessAndClose() {
         if (isAdded()) {
+            Settings.get().security().updateLastPinTime();
             requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         }

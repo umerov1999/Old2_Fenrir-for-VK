@@ -29,6 +29,8 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     private static final String KEY_PIN_HASH = "app_pin";
     private static final String KEY_PIN_ENTER_HISTORY = "pin_enter_history";
     private static final String KEY_USE_PIN_FOR_ENTRANCE = "use_pin_for_entrance";
+    private static final String DELAYED_PIN_FOR_ENTRANCE = "delayed_pin_for_entrance";
+    private static final String LAST_PIN_ENTERED = "last_pin_entered";
     private static final String KEY_ENCRYPTION_POLICY_ACCEPTED = "encryption_policy_accepted";
     private static final int PIN_HISTORY_DEPTH = 3;
     private final SharedPreferences mPrefs;
@@ -192,6 +194,24 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     public boolean isUsePinForEntrance() {
         return hasPinHash() && PreferenceManager.getDefaultSharedPreferences(mApplication)
                 .getBoolean(KEY_USE_PIN_FOR_ENTRANCE, false);
+    }
+
+    @Override
+    public boolean isDelayedAllow() {
+        if (!PreferenceManager.getDefaultSharedPreferences(mApplication).getBoolean(DELAYED_PIN_FOR_ENTRANCE, false)) {
+            return false;
+        }
+        long last = PreferenceManager.getDefaultSharedPreferences(mApplication).getLong(LAST_PIN_ENTERED, -1);
+        if (last <= 0) {
+            return false;
+        }
+        long fin = System.currentTimeMillis() - last;
+        return fin > 0 && fin <= 600000;
+    }
+
+    @Override
+    public void updateLastPinTime() {
+        PreferenceManager.getDefaultSharedPreferences(mApplication).edit().putLong(LAST_PIN_ENTERED, System.currentTimeMillis()).apply();
     }
 
     @Override

@@ -20,6 +20,7 @@ import dev.ragnarok.fenrir.model.SideSwitchableCategory;
 import dev.ragnarok.fenrir.model.SwitchableCategory;
 import dev.ragnarok.fenrir.model.drawer.RecentChat;
 import dev.ragnarok.fenrir.place.Place;
+import dev.ragnarok.fenrir.settings.theme.ThemeOverlay;
 import dev.ragnarok.fenrir.view.pager.Transformers_Types;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
@@ -308,7 +309,8 @@ public interface ISettings {
 
         boolean isExpand_voice_transcript();
 
-        boolean isAmoledTheme();
+        @ThemeOverlay
+        int getThemeOverlay();
 
         boolean isAudio_round_icon();
 
@@ -508,6 +510,10 @@ public interface ISettings {
         boolean getShowHiddenDialogs();
 
         void setShowHiddenDialogs(boolean showHiddenDialogs);
+
+        boolean isDelayedAllow();
+
+        void updateLastPinTime();
 
         boolean IsShow_hidden_accounts();
     }

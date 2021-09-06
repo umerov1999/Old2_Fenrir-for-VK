@@ -12,7 +12,8 @@ object ThemesController {
             "#1E88E5",
             "Ice",
             R.style.App_DayNight_Ice,
-            R.style.App_DayNight_Ice_Amoled
+            R.style.App_DayNight_Ice_Amoled,
+            R.style.App_DayNight_Ice_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "old_ice",
@@ -20,7 +21,8 @@ object ThemesController {
             "#82B1FF",
             "Old Ice",
             R.style.App_DayNight_OldIce,
-            R.style.App_DayNight_OldIce_Amoled
+            R.style.App_DayNight_OldIce_Amoled,
+            R.style.App_DayNight_OldIce_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "fire",
@@ -28,7 +30,8 @@ object ThemesController {
             "#FFA726",
             "Fire",
             R.style.App_DayNight_Fire,
-            R.style.App_DayNight_Fire_Amoled
+            R.style.App_DayNight_Fire_Amoled,
+            R.style.App_DayNight_Fire_MD1,
         ),
         ThemeValue(
             "red",
@@ -36,7 +39,8 @@ object ThemesController {
             "#F44336",
             "Red",
             R.style.App_DayNight_Red,
-            R.style.App_DayNight_Red_Amoled
+            R.style.App_DayNight_Red_Amoled,
+            R.style.App_DayNight_Red_MD1
         ),
         ThemeValue(
             "violet",
@@ -44,7 +48,8 @@ object ThemesController {
             "#8500FF",
             "Violet",
             R.style.App_DayNight_Violet,
-            R.style.App_DayNight_Violet_Amoled
+            R.style.App_DayNight_Violet_Amoled,
+            R.style.App_DayNight_Violet_MD1
         ),
         ThemeValue(
             "gray",
@@ -52,7 +57,8 @@ object ThemesController {
             "#777777",
             "Gray",
             R.style.App_DayNight_Gray,
-            R.style.App_DayNight_Gray_Amoled
+            R.style.App_DayNight_Gray_Amoled,
+            R.style.App_DayNight_Gray_MD1
         ),
         ThemeValue(
             "blue_violet",
@@ -60,7 +66,8 @@ object ThemesController {
             "#8500FF",
             "Ice Violet",
             R.style.App_DayNight_BlueViolet,
-            R.style.App_DayNight_BlueViolet_Amoled
+            R.style.App_DayNight_BlueViolet_Amoled,
+            R.style.App_DayNight_BlueViolet_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "blue_red",
@@ -68,7 +75,8 @@ object ThemesController {
             "#FF0000",
             "Ice Red",
             R.style.App_DayNight_BlueRed,
-            R.style.App_DayNight_BlueRed_Amoled
+            R.style.App_DayNight_BlueRed_Amoled,
+            R.style.App_DayNight_BlueRed_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "blue_yellow",
@@ -76,7 +84,8 @@ object ThemesController {
             "#FFA726",
             "Ice Fire",
             R.style.App_DayNight_BlueYellow,
-            R.style.App_DayNight_BlueYellow_Amoled
+            R.style.App_DayNight_BlueYellow_Amoled,
+            R.style.App_DayNight_BlueYellow_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "yellow_violet",
@@ -84,7 +93,8 @@ object ThemesController {
             "#8500FF",
             "Fire Violet",
             R.style.App_DayNight_YellowViolet,
-            R.style.App_DayNight_YellowViolet_Amoled
+            R.style.App_DayNight_YellowViolet_Amoled,
+            R.style.App_DayNight_YellowViolet_MD1
         ),
         ThemeValue(
             "violet_yellow",
@@ -92,7 +102,8 @@ object ThemesController {
             "#FF9800",
             "Violet Fire",
             R.style.App_DayNight_VioletYellow,
-            R.style.App_DayNight_VioletYellow_Amoled
+            R.style.App_DayNight_VioletYellow_Amoled,
+            R.style.App_DayNight_VioletYellow_MD1
         ),
         ThemeValue(
             "violet_red",
@@ -100,7 +111,8 @@ object ThemesController {
             "#F44336",
             "Violet Red",
             R.style.App_DayNight_VioletRed,
-            R.style.App_DayNight_VioletRed_Amoled
+            R.style.App_DayNight_VioletRed_Amoled,
+            R.style.App_DayNight_VioletRed_MD1
         ),
         ThemeValue(
             "red_violet",
@@ -108,7 +120,8 @@ object ThemesController {
             "#9800FF",
             "Red Violet",
             R.style.App_DayNight_RedViolet,
-            R.style.App_DayNight_RedViolet_Amoled
+            R.style.App_DayNight_RedViolet_Amoled,
+            R.style.App_DayNight_RedViolet_MD1
         ),
         ThemeValue(
             "contrast",
@@ -118,7 +131,8 @@ object ThemesController {
             "#777777",
             "Contrast",
             R.style.App_DayNight_Contrast,
-            R.style.App_DayNight_Contrast_Amoled
+            R.style.App_DayNight_Contrast_Amoled,
+            R.style.App_DayNight_Contrast_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "orange",
@@ -126,7 +140,8 @@ object ThemesController {
             "#FF6F00",
             "Orange",
             R.style.App_DayNight_Orange,
-            R.style.App_DayNight_Orange_Amoled
+            R.style.App_DayNight_Orange_Amoled,
+            R.style.App_DayNight_Orange_MD1
         ),
         ThemeValue(
             "orange_gray",
@@ -134,7 +149,8 @@ object ThemesController {
             "#777777",
             "Orange Gray",
             R.style.App_DayNight_OrangeGray,
-            R.style.App_DayNight_OrangeGray_Amoled
+            R.style.App_DayNight_OrangeGray_Amoled,
+            R.style.App_DayNight_OrangeGray_MD1
         ),
         ThemeValue(
             "violet_gray",
@@ -142,7 +158,8 @@ object ThemesController {
             "#777777",
             "Violet Gray",
             R.style.App_DayNight_VioletGray,
-            R.style.App_DayNight_VioletGray_Amoled
+            R.style.App_DayNight_VioletGray_Amoled,
+            R.style.App_DayNight_VioletGray_MD1
         ),
         ThemeValue(
             "pink_gray",
@@ -150,7 +167,8 @@ object ThemesController {
             "#777777",
             "Pink Gray",
             R.style.App_DayNight_PinkGray,
-            R.style.App_DayNight_PinkGray_Amoled
+            R.style.App_DayNight_PinkGray_Amoled,
+            R.style.App_DayNight_PinkGray_MD1
         ),
         ThemeValue(
             "violet_green",
@@ -158,7 +176,8 @@ object ThemesController {
             "#268000",
             "Violet Green",
             R.style.App_DayNight_VioletGreen,
-            R.style.App_DayNight_VioletGreen_Amoled
+            R.style.App_DayNight_VioletGreen_Amoled,
+            R.style.App_DayNight_VioletGreen_MD1
         ),
         ThemeValue(
             "green_violet",
@@ -166,7 +185,8 @@ object ThemesController {
             "#8500FF",
             "Green Violet",
             R.style.App_DayNight_GreenViolet,
-            R.style.App_DayNight_GreenViolet_Amoled
+            R.style.App_DayNight_GreenViolet_Amoled,
+            R.style.App_DayNight_GreenViolet_MD1
         ),
         ThemeValue(
             "ice_green",
@@ -174,7 +194,8 @@ object ThemesController {
             "#4CAF50",
             "Ice Green",
             R.style.App_DayNight_IceGreen,
-            R.style.App_DayNight_IceGreen_Amoled
+            R.style.App_DayNight_IceGreen_Amoled,
+            R.style.App_DayNight_IceGreen_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "green",
@@ -182,7 +203,8 @@ object ThemesController {
             "#4CAF50",
             "Green",
             R.style.App_DayNight_Green,
-            R.style.App_DayNight_Green_Amoled
+            R.style.App_DayNight_Green_Amoled,
+            R.style.App_DayNight_Green_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "lineage",
@@ -190,7 +212,8 @@ object ThemesController {
             "#63FFDE",
             "Lineage",
             R.style.App_DayNight_Lineage,
-            R.style.App_DayNight_Lineage_Amoled
+            R.style.App_DayNight_Lineage_Amoled,
+            R.style.App_DayNight_Lineage_MD1
         ),
         ThemeValue(
             "fuxia_neon_yellow",
@@ -198,7 +221,8 @@ object ThemesController {
             "#CFFF04",
             "Fuxia Neon Yellow",
             R.style.App_DayNight_FuxiaNeonYellow,
-            R.style.App_DayNight_FuxiaNeonYellow_Amoled
+            R.style.App_DayNight_FuxiaNeonYellow_Amoled,
+            R.style.App_DayNight_FuxiaNeonYellow_MD1
         ),
         ThemeValue(
             "fuxia_neon_violet",
@@ -206,7 +230,8 @@ object ThemesController {
             "#BC13FE",
             "Fuxia Neon Violet",
             R.style.App_DayNight_FuxiaNeonViolet,
-            R.style.App_DayNight_FuxiaNeonViolet_Amoled
+            R.style.App_DayNight_FuxiaNeonViolet_Amoled,
+            R.style.App_DayNight_FuxiaNeonViolet_MD1
         ),
         ThemeValue(
             "neon_yellow_ice",
@@ -214,7 +239,8 @@ object ThemesController {
             "#04D9FF",
             "Neon Yellow Ice",
             R.style.App_DayNight_NeonYellowIce,
-            R.style.App_DayNight_NeonYellowIce_Amoled
+            R.style.App_DayNight_NeonYellowIce_Amoled,
+            R.style.App_DayNight_NeonYellowIce_MD1
         ),
 
         ThemeValue(
@@ -223,7 +249,8 @@ object ThemesController {
             "#ffffff",
             "Random",
             R.style.App_DayNight_Ice,
-            R.style.App_DayNight_Ice_Amoled
+            R.style.App_DayNight_Ice_Amoled,
+            R.style.App_DayNight_Ice_MD1
         )
     )
     private val randomTheme = themes.random()
@@ -233,7 +260,8 @@ object ThemesController {
         "#1E88E5",
         "Ice",
         R.style.App_DayNight_Ice,
-        R.style.App_DayNight_Ice_Amoled
+        R.style.App_DayNight_Ice_Amoled,
+        R.style.App_DayNight_Ice_MD1
     ).toast("#4d7198", "#448AFF")
 
     private fun getCurrentTheme(): ThemeValue {
@@ -254,7 +282,17 @@ object ThemesController {
     @StyleRes
     fun currentStyle(): Int {
         val t = getCurrentTheme()
-        return if (Settings.get().main().isAmoledTheme) t.themeAmoledRes else t.themeRes
+        return when (Settings.get().main().themeOverlay) {
+            ThemeOverlay.AMOLED -> {
+                t.themeAmoledRes
+            }
+            ThemeOverlay.MD1 -> {
+                t.themeMD1Res
+            }
+            else -> {
+                t.themeRes
+            }
+        }
     }
 
     fun toastColor(isReadMessage: Boolean): Int {

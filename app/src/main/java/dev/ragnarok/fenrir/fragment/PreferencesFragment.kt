@@ -238,7 +238,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 requireActivity().recreate()
                 true
             }
-        findPreference<Preference>("amoled_theme")?.onPreferenceChangeListener =
+        findPreference<Preference>("theme_overlay")?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference?, _: Any? ->
                 requireActivity().recreate()
                 true

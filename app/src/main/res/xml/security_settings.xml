@@ -22,6 +22,14 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:dependency="use_pin_for_entrance"
+        android:key="delayed_pin_for_entrance"
+        android:summary="@string/delayed_pin_for_entrance_summary"
+        android:title="@string/delayed_pin_for_entrance_title"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreference
+        android:defaultValue="false"
         android:dependency="use_pin_for_security"
         android:key="allow_fingerprint"
         android:title="@string/allow_fingerprint_title"
@@ -48,16 +56,6 @@
         android:title="@string/delete_keys"
         app:iconSpaceReserved="false" />
 
-    <!--<Preference
-        android:key="export_encryption_keys"
-        android:title="@string/export_keys_title"
-        android:summary="@string/export_keys_summary"/>
-
-    <Preference
-        android:key="import_encryption_keys"
-        android:title="@string/import_keys_title"
-        android:summary="@string/import_keys_summary"/>-->
-
 
     <PreferenceCategory
         android:title="@string/other"
@@ -68,19 +66,6 @@
         android:summary="@string/hide_notif_message_body_summary"
         android:title="@string/hide_notif_message_body_title"
         app:iconSpaceReserved="false" />
-
-    <!--<switchpreference
-        android:key="auto_message_decrypt"
-        android:defaultvalue="true"
-        android:title="@string/automatically_decrypt_all_messages_title"
-        android:dependency="use_pin_for_security"
-        android:visibility="gone"/>
-
-    <switchpreference
-        android:key="use_pin_for_decryption"
-        android:title="@string/ask_for_pin_when_decrypting_messages_title"
-        android:dependency="use_pin_for_security"
-        android:visibility="gone"/>-->
 
     <ListPreference
         android:defaultValue="1"

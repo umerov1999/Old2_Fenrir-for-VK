@@ -39,29 +39,41 @@
             android:orientation="horizontal"
             android:padding="@dimen/content_large_margin">
 
-            <include
-                android:id="@+id/pincode_digit_0_root"
-                layout="@layout/content_pin_digit"
+            <ImageView
+                android:id="@+id/pincode_digit_0"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pin_digit"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/runic_letter_algis" />
 
-            <include
-                android:id="@+id/pincode_digit_1_root"
-                layout="@layout/content_pin_digit"
+            <ImageView
+                android:id="@+id/pincode_digit_1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pin_digit"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/runic_letter_manaz" />
 
-            <include
-                android:id="@+id/pincode_digit_2_root"
-                layout="@layout/content_pin_digit"
+            <ImageView
+                android:id="@+id/pincode_digit_2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pin_digit"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/runic_letter_naudiz" />
 
-            <include
-                android:id="@+id/pincode_digit_3_root"
-                layout="@layout/content_pin_digit"
+            <ImageView
+                android:id="@+id/pincode_digit_3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/pin_digit"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/runic_letter_raido" />
         </LinearLayout>
 
     </LinearLayout>

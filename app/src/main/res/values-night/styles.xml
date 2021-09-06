@@ -143,8 +143,6 @@
         <item name="message_bubble_color">#0B0B0B</item>
         <item name="sticker_hint_color">#DD0B0B0B</item>
         <item name="messages_background_color">#000000</item>
-        <item name="materialCardStyle">@style/CardViewMD</item>
-        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
     </style>
 
     <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed">

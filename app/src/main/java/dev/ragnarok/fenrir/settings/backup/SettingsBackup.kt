@@ -12,7 +12,7 @@ class SettingsBackup {
     private val settings: Array<SettingCollector> = arrayOf(
         //Main
         SettingCollector("send_by_enter", SettingTypes.TYPE_BOOL),
-        SettingCollector("amoled_theme", SettingTypes.TYPE_BOOL),
+        SettingCollector("theme_overlay", SettingTypes.TYPE_STRING),
         SettingCollector("audio_round_icon", SettingTypes.TYPE_BOOL),
         SettingCollector("use_long_click_download", SettingTypes.TYPE_BOOL),
         SettingCollector("revert_play_audio", SettingTypes.TYPE_BOOL),

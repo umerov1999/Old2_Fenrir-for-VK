@@ -103,8 +103,6 @@
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA448AFF</item>
         <item name="icon_color_inactive">#AAFF0000</item>
-        <item name="materialCardStyle">@style/CardViewMD</item>
-        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
     </style>
 
     <style name="App.DayNight.BlueRed" parent="App.DayNight">
@@ -394,6 +392,136 @@
 
     <style name="App.DayNight.Lineage.Amoled" parent="App.DayNight.Lineage" />
 
+    <style name="App.DayNight.Ice.MD1" parent="App.DayNight.Ice">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.IceGreen.MD1" parent="App.DayNight.IceGreen">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.OldIce.MD1" parent="App.DayNight.OldIce">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.BlueRed.MD1" parent="App.DayNight.BlueRed">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.BlueYellow.MD1" parent="App.DayNight.BlueYellow">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Fire.MD1" parent="App.DayNight.Fire">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Red.MD1" parent="App.DayNight.Red">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.VioletRed.MD1" parent="App.DayNight.VioletRed">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Contrast.MD1" parent="App.DayNight.Contrast">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.RedViolet.MD1" parent="App.DayNight.RedViolet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Violet.MD1" parent="App.DayNight.Violet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.BlueViolet.MD1" parent="App.DayNight.BlueViolet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.YellowViolet.MD1" parent="App.DayNight.YellowViolet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.VioletYellow.MD1" parent="App.DayNight.VioletYellow">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.FuxiaNeonYellow.MD1" parent="App.DayNight.FuxiaNeonYellow">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.FuxiaNeonViolet.MD1" parent="App.DayNight.FuxiaNeonViolet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.NeonYellowIce.MD1" parent="App.DayNight.NeonYellowIce">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.VioletGreen.MD1" parent="App.DayNight.VioletGreen">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.GreenViolet.MD1" parent="App.DayNight.GreenViolet">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Orange.MD1" parent="App.DayNight.Orange">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.OrangeGray.MD1" parent="App.DayNight.OrangeGray">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Gray.MD1" parent="App.DayNight.Gray">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Green.MD1" parent="App.DayNight.Green">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.VioletGray.MD1" parent="App.DayNight.VioletGray">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.PinkGray.MD1" parent="App.DayNight.PinkGray">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
+    <style name="App.DayNight.Lineage.MD1" parent="App.DayNight.Lineage">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
     <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">1dp</item>
     </style>
@@ -444,6 +572,11 @@
     </style>
 
     <style name="QuickReply.Amoled" parent="QuickReply" />
+
+    <style name="QuickReply.MD1" parent="QuickReply">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
 
     <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
         <!--        <item name="android:tint">?colorOnSurface</item>-->

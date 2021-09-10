@@ -253,7 +253,7 @@ object ThemesController {
             R.style.App_DayNight_Ice_MD1
         )
     )
-    private val randomTheme = themes.random()
+    private var randomTheme = themes.random()
     private val defaultTheme = ThemeValue(
         "ice",
         "#448AFF",
@@ -277,6 +277,10 @@ object ThemesController {
             }
         }
         return defaultTheme
+    }
+
+    fun nextRandom() {
+        randomTheme = themes.random()
     }
 
     @StyleRes

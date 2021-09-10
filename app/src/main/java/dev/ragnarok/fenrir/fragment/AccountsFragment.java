@@ -91,7 +91,6 @@ import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.ShortcutUtils;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AccountsFragment extends BaseFragment implements View.OnClickListener, AccountAdapter.Callback {
@@ -662,14 +661,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
 
         User user = (User) account.getOwner();
 
-        Context app = requireContext().getApplicationContext();
-
-        appendDisposable(Completable.create(emitter -> {
-            String avaUrl = user == null ? null : user.getMaxSquareAvatar();
-            ShortcutUtils.createAccountShortcut(app, account.getId(), account.getDisplayName(), avaUrl);
-            emitter.onComplete();
-        }).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {
-                },
+        appendDisposable(ShortcutUtils.createAccountShortcutRx(requireActivity(), account.getId(), account.getDisplayName(), user == null ? null : user.getMaxSquareAvatar()).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> Snackbar.make(requireView(), R.string.success, BaseTransientBottomBar.LENGTH_LONG).setAnchorView(mRecyclerView).show(),
                 t -> Snackbar.make(requireView(), t.getLocalizedMessage(), BaseTransientBottomBar.LENGTH_LONG).setTextColor(Color.WHITE).setBackgroundTint(Color.parseColor("#eeff0000")).setAnchorView(mRecyclerView).show()));
     }
 

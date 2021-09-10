@@ -70,7 +70,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     private final CompositeDisposable netDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheLoadingDisposable = new CompositeDisposable();
     private final ModelsBundle models;
-    private List<Integer> silentChats;
     private int dialogsOwnerId;
     private boolean endOfContent;
     private boolean netLoadingNow;
@@ -82,7 +81,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
         this.models = models;
 
         dialogs = new ArrayList<>();
-        silentChats = Settings.get().notifications().getSilentChats(accountId);
 
         if (nonNull(savedInstanceState)) {
             dialogsOwnerId = savedInstanceState.getInt(SAVE_DIALOGS_OWNER_ID);
@@ -123,7 +121,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     @Override
     public void onGuiCreated(@NonNull IDialogsView viewHost) {
         super.onGuiCreated(viewHost);
-        viewHost.displayData(dialogs, silentChats);
+        viewHost.displayData(dialogs, getAccountId());
 
         // only for user dialogs
         viewHost.setCreateGroupChatButtonVisible(dialogsOwnerId > 0);
@@ -440,7 +438,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     public void fireRefresh() {
-        cacheLoadingDisposable.dispose();
+        cacheLoadingDisposable.clear();
         cacheNowLoading = false;
 
         netDisposable.clear();
@@ -560,13 +558,12 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
             return;
         }
 
-        dialogsOwnerId = newAid;
-
         cacheLoadingDisposable.clear();
         cacheNowLoading = false;
 
         netDisposable.clear();
         netLoadingNow = false;
+        dialogsOwnerId = newAid;
 
         loadCachedThenActualData();
 
@@ -617,7 +614,7 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
     }
 
     public void fireContextViewCreated(IDialogsView.IContextView contextView, Dialog dialog) {
-        boolean isHide = Settings.get().security().ContainsValueInSet(dialog.getId(), "hidden_dialogs");
+        boolean isHide = Settings.get().security().isHiddenDialog(dialog.getId());
         contextView.setCanDelete(true);
         contextView.setCanRead(!Utils.isHiddenCurrent() && !dialog.isLastMessageOut() && dialog.getLastMessageId() != dialog.getInRead());
         contextView.setCanAddToHomescreen(dialogsOwnerId > 0 && !isHide);
@@ -629,11 +626,6 @@ public class DialogsPresenter extends AccountDependencyPresenter<IDialogsView> {
 
     public void fireOptionViewCreated(IDialogsView.IOptionView view) {
         view.setCanSearch(dialogsOwnerId > 0);
-    }
-
-    public void changedNotifications() {
-        silentChats = Settings.get().notifications().getSilentChats(getAccountId());
-        callView(v -> v.updateSilentChats(silentChats));
     }
 
     private static class DialogByIdMajorID implements Comparator<Dialog> {

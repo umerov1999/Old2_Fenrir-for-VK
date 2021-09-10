@@ -38,6 +38,7 @@ import dev.ragnarok.fenrir.CheckDonate.DonateFutures.*
 import dev.ragnarok.fenrir.CheckDonate.isFullVersion
 import dev.ragnarok.fenrir.Constants.API_VERSION
 import dev.ragnarok.fenrir.Constants.USER_AGENT_ACCOUNT
+import dev.ragnarok.fenrir.Extensions.Companion.fromIOToMain
 import dev.ragnarok.fenrir.Extra.ACCOUNT_ID
 import dev.ragnarok.fenrir.Extra.PHOTOS
 import dev.ragnarok.fenrir.Injection.provideApplicationContext
@@ -49,6 +50,7 @@ import dev.ragnarok.fenrir.api.model.LocalServerSettings
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings
 import dev.ragnarok.fenrir.db.DBHelper
 import dev.ragnarok.fenrir.dedicated.DedicatedDialog.Companion.showDedicated
+import dev.ragnarok.fenrir.domain.InteractorFactory
 import dev.ragnarok.fenrir.filepicker.model.DialogConfigs
 import dev.ragnarok.fenrir.filepicker.model.DialogProperties
 import dev.ragnarok.fenrir.filepicker.view.FilePickerDialog
@@ -72,12 +74,14 @@ import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.Utils
 import dev.ragnarok.fenrir.view.MySearchView
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
 class PreferencesFragment : PreferenceFragmentCompat() {
+    private val disposables = CompositeDisposable()
     private val requestLightBackground = registerForActivityResult(
         StartActivityForResult()
     ) { result: ActivityResult ->
@@ -530,6 +534,26 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 true
             }
 
+        findPreference<Preference>("notifications_sync")?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                disposables.add(
+                    InteractorFactory.createAccountInteractor()
+                        .getPushSettings(accountId)
+                        .fromIOToMain()
+                        .subscribe({
+                            Settings.get().notifications().resetAccount(accountId)
+                            for (i in it) {
+                                if (i.disabled_until < 0) {
+                                    Settings.get().notifications()
+                                        .forceDisable(accountId, i.peer_id)
+                                }
+                            }
+                            CreateCustomToast(requireActivity()).showToast(R.string.success)
+                        }, { Utils.showErrorInAdapter(requireActivity(), it) })
+                )
+                true
+            }
+
         findPreference<Preference>("notification_bubbles")?.isVisible =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
@@ -818,7 +842,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     true
                 }
         }
-        findPreference<Preference>("kate_gms_token")?.isVisible = Utils.isKateDeault()
 
         findPreference<Preference>("show_logs")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
@@ -1161,6 +1184,11 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             .setBarsColored(requireActivity(), true)
             .build()
             .apply(requireActivity())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 
     companion object {

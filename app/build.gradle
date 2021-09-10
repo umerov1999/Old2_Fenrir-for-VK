@@ -26,9 +26,7 @@ android {
         buildConfigField 'String', 'FAKE_ABI', getProps("fake_abi")
         buildConfigField 'String', 'FAKE_DEVICE', getProps("fake_device")
         buildConfigField 'String', 'FCM_SESSION_ID_GEN_URL', getProps("fcm_session_id_gen_url")
-        buildConfigField 'String', 'KATE_RECEIPT_GMS_TOKEN', getProps("kate_receipt_gms_token")
         buildConfigField 'boolean', 'MANAGE_SCOPED_STORAGE', fenrirTargetSDK >= 30 ? 'true' : 'false'
-        resValue "string", "kate_receipt_gms_token", getProps("kate_receipt_gms_token")
 
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'

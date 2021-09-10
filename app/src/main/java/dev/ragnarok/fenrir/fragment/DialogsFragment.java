@@ -154,7 +154,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
 
     private void ReconfigureOptionsHide(boolean isShowHidden) {
         mAdapter.updateShowHidden(isShowHidden);
-        if (Settings.get().security().getSetSize("hidden_dialogs") <= 0) {
+        if (!Settings.get().security().hasHiddenDialogs()) {
             mFab.setImageResource(R.drawable.pencil);
             Settings.get().security().setShowHiddenDialogs(false);
             return;
@@ -215,7 +215,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
         });
 
         mFab.setOnLongClickListener(v -> {
-            if (!Settings.get().security().getShowHiddenDialogs() && Settings.get().security().getSetSize("hidden_dialogs") > 0) {
+            if (!Settings.get().security().getShowHiddenDialogs() && Settings.get().security().hasHiddenDialogs()) {
                 onSecurityClick();
             }
             return true;
@@ -269,12 +269,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                 showSnackbar(R.string.dialog_send_helper, true);
             }
         }
-    }
-
-    @Override
-    public void updateSilentChats(@NonNull List<Integer> chats) {
-        mAdapter.updateSilentChats(chats);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -375,7 +369,9 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                         Settings.get()
                                 .notifications()
                                 .setNotifPref(accountId, dialog.getPeerId(), mask);
-                        callPresenter(DialogsPresenter::changedNotifications);
+                        if (nonNull(mAdapter)) {
+                            mAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         callPresenter(p -> p.fireNotificationsSettingsClick(dialog));
                     }
@@ -391,13 +387,13 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                         CustomToast.CreateCustomToast(requireActivity()).showToastError(R.string.not_supported_hide);
                         PlaceFactory.getSecuritySettingsPlace().tryOpenWith(requireActivity());
                     } else {
-                        Settings.get().security().AddValueToSet(dialog.getId(), "hidden_dialogs");
+                        Settings.get().security().addHiddenDialog(dialog.getId());
                         ReconfigureOptionsHide(Settings.get().security().getShowHiddenDialogs());
                         notifyDataSetChanged();
                     }
                     break;
                 case 7:
-                    Settings.get().security().RemoveValueFromSet(dialog.getId(), "hidden_dialogs");
+                    Settings.get().security().removeHiddenDialog(dialog.getId());
                     ReconfigureOptionsHide(Settings.get().security().getShowHiddenDialogs());
                     notifyDataSetChanged();
                     break;
@@ -467,17 +463,15 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
      */
 
     @Override
-    public void displayData(List<Dialog> data, @NonNull List<Integer> chats) {
+    public void displayData(List<Dialog> data, int accountId) {
         if (nonNull(mAdapter)) {
-            mAdapter.updateSilentChats(chats);
-            mAdapter.setData(data);
+            mAdapter.setData(data, accountId);
         }
     }
 
     @Override
     public void notifyDataSetChanged() {
         if (nonNull(mAdapter)) {
-            mAdapter.updateHidden(Settings.get().security().loadSet("hidden_dialogs"));
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -485,7 +479,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
     @Override
     public void notifyDataAdded(int position, int count) {
         if (nonNull(mAdapter)) {
-            mAdapter.updateHidden(Settings.get().security().loadSet("hidden_dialogs"));
             mAdapter.notifyItemRangeInserted(position, count);
         }
     }
@@ -549,7 +542,14 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
 
     @Override
     public void showNotificationSettings(int accountId, int peerId) {
-        DialogNotifOptionsDialog.newInstance(accountId, peerId, () -> callPresenter(DialogsPresenter::changedNotifications)).show(getParentFragmentManager(), "dialog-notif-options");
+        if (Utils.hasOreo()) {
+            return;
+        }
+        DialogNotifOptionsDialog.newInstance(accountId, peerId, () -> {
+            if (nonNull(mAdapter)) {
+                mAdapter.notifyDataSetChanged();
+            }
+        }).show(getParentFragmentManager(), "dialog-notif-options");
     }
 
     @Override

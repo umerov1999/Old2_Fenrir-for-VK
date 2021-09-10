@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dev.ragnarok.fenrir.Account_Types;
@@ -221,8 +222,6 @@ public interface ISettings {
 
         boolean isRunes_show();
 
-        @NonNull
-        String getKateGMSToken();
 
         int getMusicLifecycle();
 
@@ -247,10 +246,18 @@ public interface ISettings {
 
         void setPlayerCoverBackgroundSettings(@NonNull PlayerCoverBackgroundSettings settings);
 
-        void registerDonatesId(List<Integer> Ids);
+        @Nullable
+        String getUserNameChanges(int userId);
+
+        void setUserNameChanges(int userId, @Nullable String name);
+
+        void reloadUserNameChangesSettings(boolean onlyRoot);
 
         @NonNull
-        List<Integer> getDonates();
+        Map<String, String> getUserNameChanges();
+
+        @NonNull
+        Set<String> getUserNameChangesKeys();
     }
 
     interface IAccountsSettings {
@@ -377,6 +384,10 @@ public interface ISettings {
 
         void setDefault(int aid, int peerId);
 
+        void resetAccount(int aid);
+
+        void forceDisable(int aid, int peerId);
+
         void setNotifPref(int aid, int peerid, int flag);
 
         int getOtherNotificationMask();
@@ -417,14 +428,15 @@ public interface ISettings {
 
         boolean isMentionNotifyEnabled();
 
-        void putChatNotificationSettingsBackup(int aid, int peerId, int mask);
-
-        void removeChatNotificationSettingsBackup(int aid, int peerId);
-
-        void parseBackupNotifications();
+        boolean isSilentChat(int aid, int peerId);
 
         @NonNull
-        List<Integer> getSilentChats(int aid);
+        Map<String, Integer> getChatsNotif();
+
+        @NonNull
+        Set<String> getChatsNotifKeys();
+
+        void reloadNotifSettings(boolean onlyRoot);
     }
 
     interface IRecentChats {
@@ -495,21 +507,19 @@ public interface ISettings {
 
         boolean needHideMessagesBodyForNotif();
 
-        boolean AddValueToSet(int value, String arrayName);
+        void addHiddenDialog(int peerId);
 
-        boolean RemoveValueFromSet(int value, String arrayName);
+        void removeHiddenDialog(int peerId);
 
-        int getSetSize(String arrayName);
+        boolean hasHiddenDialogs();
 
-        Set<Integer> loadSet(String arrayName);
-
-        boolean ContainsValuesInSet(int[] values, String arrayName);
-
-        boolean ContainsValueInSet(int value, String arrayName);
+        boolean isHiddenDialog(int peerId);
 
         boolean getShowHiddenDialogs();
 
         void setShowHiddenDialogs(boolean showHiddenDialogs);
+
+        void reloadHiddenDialogSettings();
 
         boolean isDelayedAllow();
 

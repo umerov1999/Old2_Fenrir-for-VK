@@ -1,51 +1,86 @@
 package dev.ragnarok.fenrir.settings;
 
+import static dev.ragnarok.fenrir.util.Objects.nonNull;
 import static dev.ragnarok.fenrir.util.Utils.hasFlag;
+import static dev.ragnarok.fenrir.util.Utils.removeFlag;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.model.Peer;
-import dev.ragnarok.fenrir.util.Utils;
 
 public class NotificationsPrefs implements ISettings.INotificationSettings {
 
     private static final String KEY_NOTIFICATION_RINGTONE = "notification_ringtone";
-    private static final String NOTIF_PREF_NAME = "dev.ragnarok.notifpref";
     private static final String KEY_VIBRO_LENGTH = "vibration_length";
+    private static final String KEY_PEERS_UIDS = "notif_peer_uids";
 
     private final Context app;
-    private final SharedPreferences preferences;
+    private final Set<String> notification_peers;
+    private final Map<String, Integer> types;
 
     NotificationsPrefs(Context context) {
         app = context.getApplicationContext();
-        preferences = context.getSharedPreferences(NOTIF_PREF_NAME, Context.MODE_PRIVATE);
+
+        notification_peers = Collections.synchronizedSet(new HashSet<>(1));
+        types = Collections.synchronizedMap(new HashMap<>(1));
+        reloadNotifSettings(false);
     }
 
     private static String keyFor(int aid, int peerId) {
-        return "peerid" + aid + "_" + peerId;
+        return "notif_peer_" + aid + "_" + peerId;
+    }
+
+    private static String keyForAccount(int aid) {
+        return "notif_peer_" + aid;
+    }
+
+    @NonNull
+    @Override
+    public Map<String, Integer> getChatsNotif() {
+        return new HashMap<>(types);
+    }
+
+    @NonNull
+    @Override
+    public Set<String> getChatsNotifKeys() {
+        return new HashSet<>(notification_peers);
+    }
+
+    @Override
+    public void reloadNotifSettings(boolean onlyRoot) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        notification_peers.clear();
+        notification_peers.addAll(preferences.getStringSet(KEY_PEERS_UIDS, new HashSet<>(1)));
+        if (onlyRoot) {
+            return;
+        }
+        types.clear();
+        for (String i : notification_peers) {
+            types.put(i, preferences.getInt(i, getGlobalNotifPref(true)));
+        }
     }
 
     @Override
     public void setNotifPref(int aid, int peerid, int mask) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        notification_peers.add(keyFor(aid, peerid));
+        types.put(keyFor(aid, peerid), mask);
         preferences.edit()
                 .putInt(keyFor(aid, peerid), mask)
+                .putStringSet(KEY_PEERS_UIDS, notification_peers)
                 .apply();
-        putChatNotificationSettingsBackup(aid, peerid, mask);
     }
 
     private boolean isOtherNotificationsEnable() {
@@ -135,6 +170,17 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
     }
 
     @Override
+    public boolean isSilentChat(int aid, int peerId) {
+        if (types.containsKey(keyFor(aid, peerId))) {
+            Integer v = types.get(keyFor(aid, peerId));
+            if (nonNull(v)) {
+                return !hasFlag(v, FLAG_SHOW_NOTIF);
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean isLikeNotificationEnable() {
         return isOtherNotificationsEnable() && PreferenceManager.getDefaultSharedPreferences(app)
                 .getBoolean("likes_notification", true);
@@ -196,16 +242,49 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
     }
 
     @Override
+    public void forceDisable(int aid, int peerId) {
+        int mask = getGlobalNotifPref(Peer.isGroupChat(peerId));
+        if (hasFlag(mask, FLAG_SHOW_NOTIF)) {
+            mask = removeFlag(mask, FLAG_SHOW_NOTIF);
+        }
+        setNotifPref(aid, peerId, mask);
+    }
+
+    @Override
     public void setDefault(int aid, int peerId) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        notification_peers.remove(keyFor(aid, peerId));
+        types.remove(keyFor(aid, peerId));
         preferences.edit()
                 .remove(keyFor(aid, peerId))
+                .putStringSet(KEY_PEERS_UIDS, notification_peers)
                 .apply();
-        removeChatNotificationSettingsBackup(aid, peerId);
+    }
+
+    @Override
+    public void resetAccount(int aid) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        for (String i : new HashSet<>(notification_peers)) {
+            if (i.contains(keyForAccount(aid))) {
+                notification_peers.remove(i);
+                types.remove(i);
+                preferences.edit().remove(i).apply();
+            }
+        }
+        preferences.edit()
+                .putStringSet(KEY_PEERS_UIDS, notification_peers)
+                .apply();
     }
 
     @Override
     public int getNotifPref(int aid, int peerid) {
-        return preferences.getInt(keyFor(aid, peerid), getGlobalNotifPref(Peer.isGroupChat(peerid)));
+        if (types.containsKey(keyFor(aid, peerid))) {
+            Integer v = types.get(keyFor(aid, peerid));
+            if (nonNull(v)) {
+                return v;
+            }
+        }
+        return getGlobalNotifPref(Peer.isGroupChat(peerid));
     }
 
     private int getGlobalNotifPref(boolean isGroup) {
@@ -246,65 +325,5 @@ public class NotificationsPrefs implements ISettings.INotificationSettings {
             }
         }
         return value;
-    }
-
-    @Override
-    public void putChatNotificationSettingsBackup(int aid, int peerId, int mask) {
-        String tmp = PreferenceManager.getDefaultSharedPreferences(app).getString("chats_notification_backup", null);
-        NotificationChatSettings settings = Utils.isEmpty(tmp) ? new NotificationChatSettings().init() : new Gson().fromJson(tmp, NotificationChatSettings.class);
-        settings.chats_notification.put(keyFor(aid, peerId), mask);
-        PreferenceManager.getDefaultSharedPreferences(app).edit().putString("chats_notification_backup", new Gson().toJson(settings)).apply();
-    }
-
-    @Override
-    public void removeChatNotificationSettingsBackup(int aid, int peerId) {
-        String tmp = PreferenceManager.getDefaultSharedPreferences(app).getString("chats_notification_backup", null);
-        NotificationChatSettings settings = Utils.isEmpty(tmp) ? new NotificationChatSettings().init() : new Gson().fromJson(tmp, NotificationChatSettings.class);
-        settings.chats_notification.remove(keyFor(aid, peerId));
-        PreferenceManager.getDefaultSharedPreferences(app).edit().putString("chats_notification_backup", new Gson().toJson(settings)).apply();
-    }
-
-    @Override
-    public @NonNull
-    List<Integer> getSilentChats(int aid) {
-        List<Integer> ret = new ArrayList<>();
-        String tmp = PreferenceManager.getDefaultSharedPreferences(app).getString("chats_notification_backup", null);
-        NotificationChatSettings settings = Utils.isEmpty(tmp) ? new NotificationChatSettings().init() : new Gson().fromJson(tmp, NotificationChatSettings.class);
-        for (String i : settings.chats_notification.keySet()) {
-            Integer value = settings.chats_notification.get(i);
-            if (value == null) {
-                continue;
-            }
-            if (i.contains("peerid" + aid) && !hasFlag(value, FLAG_SHOW_NOTIF)) {
-                ret.add(Integer.parseInt(i.replace("peerid" + aid + "_", "")));
-            }
-        }
-        return ret;
-    }
-
-    @Override
-    public void parseBackupNotifications() {
-        String tmp = PreferenceManager.getDefaultSharedPreferences(app).getString("chats_notification_backup", null);
-        NotificationChatSettings settings = Utils.isEmpty(tmp) ? new NotificationChatSettings().init() : new Gson().fromJson(tmp, NotificationChatSettings.class);
-        for (String i : settings.chats_notification.keySet()) {
-            Integer value = settings.chats_notification.get(i);
-            if (value == null) {
-                continue;
-            }
-            preferences.edit()
-                    .putInt(i, value)
-                    .apply();
-        }
-    }
-
-    @Keep
-    private static class NotificationChatSettings {
-        @SerializedName("chats_notification")
-        public Map<String, Integer> chats_notification;
-
-        public NotificationChatSettings init() {
-            chats_notification = new HashMap<>();
-            return this;
-        }
     }
 }

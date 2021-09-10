@@ -1,11 +1,14 @@
 package dev.ragnarok.fenrir.settings;
 
+import static dev.ragnarok.fenrir.util.Objects.nonNull;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
@@ -14,8 +17,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dev.ragnarok.fenrir.BuildConfig;
@@ -23,19 +28,88 @@ import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.api.model.LocalServerSettings;
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings;
 import dev.ragnarok.fenrir.model.Lang;
-import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
 
 class OtherSettings implements ISettings.IOtherSettings {
 
     private static final String KEY_JSON_STATE = "json_list_state";
-
-    private static final String KEY_DONATE = "donates";
+    private static final String KEY_USERNAME_UIDS = "user_name_changes_uids";
 
     private final Context app;
+    private final Set<String> userNameChanges;
+    private final Map<String, String> types;
 
     OtherSettings(Context context) {
         app = context.getApplicationContext();
+
+        userNameChanges = Collections.synchronizedSet(new HashSet<>(1));
+        types = Collections.synchronizedMap(new HashMap<>(1));
+        reloadUserNameChangesSettings(false);
+    }
+
+    private static String keyForUserNameChanges(int userId) {
+        return "custom_user_name_" + userId;
+    }
+
+    @NonNull
+    @Override
+    public Map<String, String> getUserNameChanges() {
+        return new HashMap<>(types);
+    }
+
+    @NonNull
+    @Override
+    public Set<String> getUserNameChangesKeys() {
+        return new HashSet<>(userNameChanges);
+    }
+
+    @Override
+    public void reloadUserNameChangesSettings(boolean onlyRoot) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        userNameChanges.clear();
+        userNameChanges.addAll(preferences.getStringSet(KEY_USERNAME_UIDS, new HashSet<>(1)));
+        if (onlyRoot) {
+            return;
+        }
+        types.clear();
+        for (String i : userNameChanges) {
+            String rs = preferences.getString(i, null);
+            if (!Utils.isEmpty(rs)) {
+                types.put(i, rs);
+            }
+        }
+    }
+
+    @Override
+    public void setUserNameChanges(int userId, @Nullable String name) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        if (Utils.isEmpty(name)) {
+            userNameChanges.remove(keyForUserNameChanges(userId));
+            types.remove(keyForUserNameChanges(userId));
+            preferences.edit()
+                    .remove(keyForUserNameChanges(userId))
+                    .putStringSet(KEY_USERNAME_UIDS, userNameChanges)
+                    .apply();
+        } else {
+            userNameChanges.add(keyForUserNameChanges(userId));
+            types.put(keyForUserNameChanges(userId), name);
+            preferences.edit()
+                    .putString(keyForUserNameChanges(userId), name)
+                    .putStringSet(KEY_USERNAME_UIDS, userNameChanges)
+                    .apply();
+        }
+    }
+
+    @Override
+    public @Nullable
+    String getUserNameChanges(int userId) {
+        if (types.containsKey(keyForUserNameChanges(userId))) {
+            String v = types.get(keyForUserNameChanges(userId));
+            if (!Utils.isEmpty(v)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -54,7 +128,7 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public void storeFeedScrollState(int accountId, String state) {
-        if (Objects.nonNull(state)) {
+        if (nonNull(state)) {
             PreferenceManager
                     .getDefaultSharedPreferences(app)
                     .edit()
@@ -366,9 +440,9 @@ class OtherSettings implements ISettings.IOtherSettings {
 
     @Override
     public boolean appStoredVersionEqual() {
-        boolean ret = PreferenceManager.getDefaultSharedPreferences(app).getInt("app_stored_versuion", 0) == BuildConfig.VERSION_CODE;
+        boolean ret = PreferenceManager.getDefaultSharedPreferences(app).getInt("app_stored_version", 0) == BuildConfig.VERSION_CODE;
         if (!ret) {
-            PreferenceManager.getDefaultSharedPreferences(app).edit().putInt("app_stored_versuion", BuildConfig.VERSION_CODE).apply();
+            PreferenceManager.getDefaultSharedPreferences(app).edit().putInt("app_stored_version", BuildConfig.VERSION_CODE).apply();
         }
         return ret;
     }
@@ -585,31 +659,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public void registerDonatesId(List<Integer> Ids) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        Set<String> uids = new HashSet<>(Ids.size());
-        for (int i : Ids) {
-            uids.add(String.valueOf(i));
-        }
-        preferences.edit().putStringSet(KEY_DONATE, uids).apply();
-    }
-
-    @NonNull
-    @Override
-    public List<Integer> getDonates() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        Set<String> uids = preferences.getStringSet(KEY_DONATE, new HashSet<>(0));
-
-        List<Integer> ids = new ArrayList<>(uids.size());
-        for (String stringuid : uids) {
-            int uid = Integer.parseInt(stringuid);
-            ids.add(uid);
-        }
-
-        return ids;
-    }
-
-    @Override
     public @NonNull
     PlayerCoverBackgroundSettings getPlayerCoverBackgroundSettings() {
         String ret = PreferenceManager.getDefaultSharedPreferences(app).getString("player_background_json", null);
@@ -623,17 +672,6 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public void setPlayerCoverBackgroundSettings(@NonNull PlayerCoverBackgroundSettings settings) {
         PreferenceManager.getDefaultSharedPreferences(app).edit().putString("player_background_json", new Gson().toJson(settings)).apply();
-    }
-
-    @Override
-    public @NonNull
-    String getKateGMSToken() {
-        String res = PreferenceManager.getDefaultSharedPreferences(app).getString("kate_gms_token", Constants.KATE_RECEIPT_GMS_TOKEN).trim();
-        if (res.isEmpty()) {
-            res = Constants.KATE_RECEIPT_GMS_TOKEN;
-            PreferenceManager.getDefaultSharedPreferences(app).edit().putString("kate_gms_token", Constants.KATE_RECEIPT_GMS_TOKEN).apply();
-        }
-        return res.replaceAll("[\\w%\\-]+:", ":");
     }
 
     @Lang

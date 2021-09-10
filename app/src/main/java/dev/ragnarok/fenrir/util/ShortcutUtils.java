@@ -11,7 +11,6 @@ import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -23,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import dev.ragnarok.fenrir.Extra;
-import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.MainActivity;
 import dev.ragnarok.fenrir.model.Owner;
@@ -42,7 +40,7 @@ public class ShortcutUtils {
         return ContextCompat.getDrawable(context, R.mipmap.ic_launcher).getIntrinsicWidth();
     }
 
-    public static void createAccountShortcut(Context context, int accountId, String title, String url) throws IOException {
+    private static void createAccountShortcut(Context context, int accountId, String title, String url) throws IOException {
         Bitmap avatar = null;
 
         if (nonEmpty(url)) {
@@ -64,7 +62,18 @@ public class ShortcutUtils {
         sendShortcutBroadcast(context, id, intent, title, avatar);
     }
 
-    public static void createWallShortcut(Context context, int accountId, Owner owner) throws IOException {
+    public static Completable createAccountShortcutRx(Context context, int accountId, String title, String url) {
+        return Completable.create(e -> {
+            try {
+                createAccountShortcut(context, accountId, title, url);
+            } catch (Exception e1) {
+                e.onError(e1);
+            }
+            e.onComplete();
+        });
+    }
+
+    private static void createWallShortcut(Context context, int accountId, Owner owner) throws IOException {
         Bitmap avatar = null;
 
         if (nonEmpty(owner.getMaxSquareAvatar())) {
@@ -87,6 +96,17 @@ public class ShortcutUtils {
         sendShortcutBroadcast(context, id, intent, owner.getFullName(), avatar);
     }
 
+    public static Completable createWallShortcutRx(Context context, int accountId, Owner owner) {
+        return Completable.create(e -> {
+            try {
+                createWallShortcut(context, accountId, owner);
+            } catch (Exception e1) {
+                e.onError(e1);
+            }
+            e.onComplete();
+        });
+    }
+
     private static void sendShortcutBroadcast(Context context, String shortcutId, Intent shortcutIntent, String title, Bitmap bitmap) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Icon icon = Icon.createWithBitmap(bitmap);
@@ -102,18 +122,12 @@ public class ShortcutUtils {
                 manager.requestPinShortcut(shortcutInfo, null);
             }
         } else {
-            Context app = context.getApplicationContext();
-
             Intent intent = new Intent();
             intent.setAction(SHURTCUT_ACTION);
             intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
             context.sendBroadcast(intent);
-
-            Completable.complete()
-                    .observeOn(Injection.provideMainThreadScheduler())
-                    .subscribe(() -> CustomToast.CreateCustomToast(app).setDuration(Toast.LENGTH_SHORT).showToastSuccessBottom(R.string.success));
         }
     }
 
@@ -127,7 +141,7 @@ public class ShortcutUtils {
         return intent;
     }
 
-    public static void createChatShortcut(Context context, String url, int accountId, int peerId, String title) throws IOException {
+    private static void createChatShortcut(Context context, String url, int accountId, int peerId, String title) throws IOException {
         String id = "fenrir_peer_" + peerId + "_aid_" + accountId;
 
         Bitmap bm = createBitmap(context, url);
@@ -142,7 +156,6 @@ public class ShortcutUtils {
             } catch (Exception e1) {
                 e.onError(e1);
             }
-
             e.onComplete();
         });
     }

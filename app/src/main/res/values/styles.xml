@@ -112,7 +112,7 @@
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA448AFF</item>
-        <item name="icon_color_inactive">#AA5C5858</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.BlueYellow" parent="App.DayNight">
@@ -217,7 +217,7 @@
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAAAD300</item>
-        <item name="icon_color_inactive">#AA444444</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.VioletYellow" parent="App.DayNight">
@@ -237,7 +237,7 @@
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFE59C2</item>
-        <item name="icon_color_inactive">#AA444444</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.FuxiaNeonViolet" parent="App.DayNight">
@@ -247,7 +247,7 @@
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFE4164</item>
-        <item name="icon_color_inactive">#AA444444</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.VioletGreen" parent="App.DayNight">
@@ -306,7 +306,7 @@
         <item name="colorSecondary">#777777</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AA444444</item>
+        <item name="icon_color_active">#AA448AFF</item>
         <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
@@ -316,8 +316,8 @@
         <item name="colorSecondary">#FF6F00</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AAFF5722</item>
-        <item name="icon_color_inactive">#AA444444</item>
+        <item name="icon_color_active">#AAFF5622</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.OrangeGray" parent="App.DayNight">
@@ -326,8 +326,8 @@
         <item name="colorSecondary">#777777</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AAFF5722</item>
-        <item name="icon_color_inactive">#AA444444</item>
+        <item name="icon_color_active">#AAFF5622</item>
+        <item name="icon_color_inactive">#AA151515</item>
     </style>
 
     <style name="App.DayNight.Lineage" parent="App.DayNight">

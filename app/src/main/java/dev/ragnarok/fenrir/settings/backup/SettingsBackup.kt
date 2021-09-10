@@ -2,11 +2,12 @@ package dev.ragnarok.fenrir.settings.backup
 
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.ragnarok.fenrir.Injection
 import dev.ragnarok.fenrir.fragment.PreferencesFragment
 import dev.ragnarok.fenrir.settings.Settings
-import io.reactivex.rxjava3.annotations.NonNull
+import java.util.*
 
 class SettingsBackup {
     private val settings: Array<SettingCollector> = arrayOf(
@@ -123,7 +124,6 @@ class SettingsBackup {
         SettingCollector("disable_sensored_voice", SettingTypes.TYPE_BOOL),
         SettingCollector("local_media_server", SettingTypes.TYPE_STRING),
         SettingCollector("pagan_symbol", SettingTypes.TYPE_STRING),
-        SettingCollector("kate_gms_token", SettingTypes.TYPE_STRING),
         SettingCollector("language_ui", SettingTypes.TYPE_STRING),
         SettingCollector("end_list_anim", SettingTypes.TYPE_STRING),
         SettingCollector("runes_show", SettingTypes.TYPE_BOOL),
@@ -132,11 +132,13 @@ class SettingsBackup {
         SettingCollector("is_side_navigation", SettingTypes.TYPE_BOOL),
         SettingCollector("is_side_no_stroke", SettingTypes.TYPE_BOOL),
         SettingCollector("is_side_transition", SettingTypes.TYPE_BOOL),
-        SettingCollector("chats_notification_backup", SettingTypes.TYPE_STRING),
         SettingCollector("notification_force_link", SettingTypes.TYPE_BOOL),
         SettingCollector("recording_to_opus", SettingTypes.TYPE_BOOL),
         SettingCollector("service_playlists", SettingTypes.TYPE_STRING),
-        SettingCollector("rendering_mode", SettingTypes.TYPE_STRING)
+        SettingCollector("rendering_mode", SettingTypes.TYPE_STRING),
+        SettingCollector("hidden_peers", SettingTypes.TYPE_STRING_SET),
+        SettingCollector("notif_peer_uids", SettingTypes.TYPE_STRING_SET),
+        SettingCollector("user_name_changes_uids", SettingTypes.TYPE_STRING_SET)
     )
 
     fun doBackup(): JsonObject? {
@@ -151,41 +153,89 @@ class SettingsBackup {
                 ret.add(i.name, temp)
             }
         }
+        for (i in Settings.get().notifications().chatsNotif) {
+            val temp = SettingCollector(i.key, SettingTypes.TYPE_INT).requestSetting(pref)
+            if (temp != null) {
+                if (!has) has = true
+                ret.add(i.key, temp)
+            }
+        }
+        for (i in Settings.get().other().userNameChanges) {
+            val temp = SettingCollector(i.key, SettingTypes.TYPE_STRING).requestSetting(pref)
+            if (temp != null) {
+                if (!has) has = true
+                ret.add(i.key, temp)
+            }
+        }
         return if (!has) null else ret
     }
 
     fun doRestore(ret: JsonObject?) {
         val pref =
             PreferenceManager.getDefaultSharedPreferences(Injection.provideApplicationContext())
+
+        for (i in Settings.get().notifications().chatsNotifKeys) {
+            pref.edit().remove(i).apply()
+        }
+
+        for (i in Settings.get().other().userNameChangesKeys) {
+            pref.edit().remove(i).apply()
+        }
+
         for (i in settings) {
             i.restore(pref, ret)
         }
-        Settings.get().notifications().parseBackupNotifications()
+        Settings.get().security().reloadHiddenDialogSettings()
+        Settings.get().notifications().reloadNotifSettings(true)
+        for (i in Settings.get().notifications().chatsNotifKeys) {
+            SettingCollector(i, SettingTypes.TYPE_INT).restore(pref, ret)
+        }
+        Settings.get().notifications().reloadNotifSettings(false)
+
+        Settings.get().other().reloadUserNameChangesSettings(true)
+        for (i in Settings.get().other().userNameChangesKeys) {
+            SettingCollector(i, SettingTypes.TYPE_STRING).restore(pref, ret)
+        }
+        Settings.get().other().reloadUserNameChangesSettings(false)
     }
 
-    private class SettingCollector(
+    private inner class SettingCollector(
         val name: String,
-        @field:SettingTypes @param:SettingTypes private val type: Int
+        @SettingTypes val type: Int
     ) {
-        fun restore(pref: @NonNull SharedPreferences?, ret: @NonNull JsonObject?) {
+        fun restore(pref: SharedPreferences, ret: JsonObject?) {
             try {
-                if (!ret!!.has(name)) return
+                ret ?: return
+                pref.edit().remove(name).apply()
+                if (!ret.has(name)) return
                 val o = ret.getAsJsonObject(name)
                 if (o["type"].asInt != type) return
                 when (type) {
-                    SettingTypes.TYPE_BOOL -> pref!!.edit().putBoolean(name, o["value"].asBoolean)
+                    SettingTypes.TYPE_BOOL -> pref.edit().putBoolean(name, o["value"].asBoolean)
                         .apply()
-                    SettingTypes.TYPE_INT -> pref!!.edit().putInt(name, o["value"].asInt).apply()
-                    SettingTypes.TYPE_STRING -> pref!!.edit().putString(name, o["value"].asString)
+                    SettingTypes.TYPE_INT -> pref.edit().putInt(name, o["value"].asInt).apply()
+                    SettingTypes.TYPE_STRING -> pref.edit().putString(name, o["value"].asString)
                         .apply()
+                    SettingTypes.TYPE_STRING_SET -> {
+                        val arr = o["array"].asJsonArray
+                        if (!arr.isEmpty) {
+                            val rt = HashSet<String>(arr.size())
+                            for (i in arr) {
+                                rt.add(i.asString)
+                            }
+                            pref.edit()
+                                .putStringSet(name, rt)
+                                .apply()
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
 
-        fun requestSetting(pref: @NonNull SharedPreferences?): JsonObject? {
-            if (!pref!!.contains(name)) {
+        fun requestSetting(pref: SharedPreferences): JsonObject? {
+            if (!pref.contains(name)) {
                 return null
             }
             val temp = JsonObject()
@@ -194,6 +244,17 @@ class SettingsBackup {
                 SettingTypes.TYPE_BOOL -> temp.addProperty("value", pref.getBoolean(name, false))
                 SettingTypes.TYPE_INT -> temp.addProperty("value", pref.getInt(name, 0))
                 SettingTypes.TYPE_STRING -> temp.addProperty("value", pref.getString(name, ""))
+                SettingTypes.TYPE_STRING_SET -> {
+                    val u = JsonArray()
+                    val prSet = pref.getStringSet(name, HashSet(0))!!
+                    if (prSet.isEmpty()) {
+                        return null
+                    }
+                    for (i in prSet) {
+                        u.add(i)
+                    }
+                    temp.add("array", u)
+                }
             }
             return temp
         }

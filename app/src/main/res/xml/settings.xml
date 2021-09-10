@@ -54,6 +54,12 @@
             android:title="@string/notif_setting_title"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:icon="@drawable/feed_settings"
+            android:key="notifications_sync"
+            android:title="@string/notifications_sync"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -869,14 +875,6 @@
             app:icon="@drawable/web_settings"
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
-
-        <EditTextPreference
-            android:defaultValue="@string/kate_receipt_gms_token"
-            android:key="kate_gms_token"
-            android:title="@string/kate_gms_token"
-            app:icon="@drawable/kate_settings"
-            app:iconSpaceReserved="false"
-            app:useSimpleSummaryProvider="false" />
 
         <SwitchPreference
             android:defaultValue="false"

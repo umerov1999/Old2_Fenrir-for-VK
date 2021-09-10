@@ -8,6 +8,7 @@ import dev.ragnarok.fenrir.api.model.RefreshToken;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfo;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfoResponce;
 import dev.ragnarok.fenrir.api.model.response.AccountsBannedResponce;
+import dev.ragnarok.fenrir.api.model.response.PushSettingsResponse;
 import dev.ragnarok.fenrir.api.services.IAccountService;
 import io.reactivex.rxjava3.core.Single;
 
@@ -74,8 +75,15 @@ class AccountApi extends AbsApi implements IAccountApi {
         return provideService(IAccountService.class, TokenType.USER)
                 .flatMap(service -> service
                         .getProfileInfo()
-                        .map(extractResponseWithErrorHandling())
-                        .map(response -> response));
+                        .map(extractResponseWithErrorHandling()));
+    }
+
+    @Override
+    public Single<PushSettingsResponse> getPushSettings() {
+        return provideService(IAccountService.class, TokenType.USER)
+                .flatMap(service -> service
+                        .getPushSettings()
+                        .map(extractResponseWithErrorHandling()));
     }
 
     @Override
@@ -83,8 +91,7 @@ class AccountApi extends AbsApi implements IAccountApi {
         return provideService(IAccountService.class, TokenType.USER)
                 .flatMap(service -> service
                         .saveProfileInfo(first_name, last_name, maiden_name, screen_name, bdate, home_town, sex)
-                        .map(extractResponseWithErrorHandling())
-                        .map(response -> response));
+                        .map(extractResponseWithErrorHandling()));
     }
 
     @Override

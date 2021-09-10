@@ -405,8 +405,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
         boolean isDebug = Settings.get().other().isDeveloper_mode();
 
-        menu.findItem(R.id.action_open_url).setVisible(isDebug);
-        //menu.findItem(R.id.action_copy_id).setVisible(isDebug);
+        menu.findItem(R.id.action_open_url).setVisible(view.isMy);
         menu.findItem(R.id.search_stories).setVisible(isDebug);
         menu.findItem(R.id.action_edit).setVisible(view.isMy);
         menu.findItem(R.id.action_add_to_shortcut).setVisible(!view.isMy);

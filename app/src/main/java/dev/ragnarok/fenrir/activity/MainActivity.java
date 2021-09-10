@@ -221,6 +221,14 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 }
             });
     protected int mAccountId;
+    private final ActivityResultLauncher<Intent> requestEnterPinZero = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() != RESULT_OK) {
+                    finish();
+                } else {
+                    Settings.get().ui().getDefaultPage(mAccountId).tryOpenWith(this);
+                }
+            });
     private final ActivityResultLauncher<Intent> requestQRScan = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 IntentResult scanner = IntentIntegrator.parseActivityResult(result);
@@ -248,6 +256,19 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
                 if (mAccountId == ISettings.IAccountsSettings.INVALID_ID) {
                     supportFinishAfterTransition();
+                }
+
+            });
+    private final ActivityResultLauncher<Intent> requestLoginZero = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                mAccountId = Settings.get()
+                        .accounts()
+                        .getCurrent();
+
+                if (mAccountId == ISettings.IAccountsSettings.INVALID_ID) {
+                    supportFinishAfterTransition();
+                } else {
+                    Settings.get().ui().getDefaultPage(mAccountId).tryOpenWith(this);
                 }
             });
     protected int mLayoutRes = Settings.get().main().isSnow_mode() ? getSnowLayout() : getNormalLayout();
@@ -320,6 +341,9 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (isNull(savedInstanceState) && getMainActivityTransform() == MainActivityTransforms.MAIN) {
+            ThemesController.INSTANCE.nextRandom();
+        }
         setTheme(ThemesController.INSTANCE.currentStyle());
         getDelegate().applyDayNight();
         Utils.prepareDensity(this);
@@ -412,17 +436,15 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         if (isNull(savedInstanceState)) {
             boolean intentWasHandled = handleIntent(getIntent());
 
-            if (!intentWasHandled) {
-                Place place = Settings.get().ui().getDefaultPage(mAccountId);
-                place.tryOpenWith(this);
-            }
-            checkFCMRegistration();
-
             if (!isAuthValid()) {
-                startAccountsActivity();
+                if (intentWasHandled) {
+                    startAccountsActivity();
+                } else {
+                    startAccountsActivityZero();
+                }
             } else {
                 if (getMainActivityTransform() == MainActivityTransforms.MAIN) {
-
+                    checkFCMRegistration();
                     mCompositeDisposable.add(InteractorFactory.createAudioInteractor().PlaceToAudioCache(this)
                             .compose(RxUtils.applyCompletableIOToMainSchedulers())
                             .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
@@ -456,7 +478,15 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 boolean needPin = Settings.get().security().isUsePinForEntrance()
                         && !getIntent().getBooleanExtra(EXTRA_NO_REQUIRE_PIN, false) && !Settings.get().security().isDelayedAllow();
                 if (needPin) {
-                    startEnterPinActivity();
+                    if (!intentWasHandled) {
+                        startEnterPinActivityZero();
+                    } else {
+                        startEnterPinActivity();
+                    }
+                } else {
+                    if (!intentWasHandled) {
+                        Settings.get().ui().getDefaultPage(mAccountId).tryOpenWith(this);
+                    }
                 }
             }
         }
@@ -487,6 +517,11 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
     private void startEnterPinActivity() {
         Intent intent = new Intent(this, EnterPinActivity.getClass(this));
         requestEnterPin.launch(intent);
+    }
+
+    private void startEnterPinActivityZero() {
+        Intent intent = new Intent(this, EnterPinActivity.getClass(this));
+        requestEnterPinZero.launch(intent);
     }
 
     private void checkFCMRegistration() {
@@ -524,7 +559,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
             if (!isFragmentWithoutNavigation()) {
                 mToolbar.setNavigationIcon(R.drawable.client_round);
                 mToolbar.setNavigationOnClickListener(v -> {
-
                     ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
                     menus.add(new OptionRequest(R.id.button_ok, getString(R.string.set_offline), R.drawable.offline, true));
                     menus.add(new OptionRequest(R.id.button_cancel, getString(R.string.open_clipboard_url), R.drawable.web, false));
@@ -803,6 +837,11 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
     private void startAccountsActivity() {
         Intent intent = new Intent(this, AccountsActivity.class);
         requestLogin.launch(intent);
+    }
+
+    private void startAccountsActivityZero() {
+        Intent intent = new Intent(this, AccountsActivity.class);
+        requestLoginZero.launch(intent);
     }
 
     private void clearBackStack() {

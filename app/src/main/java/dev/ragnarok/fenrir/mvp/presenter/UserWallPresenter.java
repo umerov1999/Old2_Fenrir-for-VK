@@ -60,7 +60,6 @@ import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.ShortcutUtils;
 import dev.ragnarok.fenrir.util.Utils;
-import io.reactivex.rxjava3.core.Completable;
 
 public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
@@ -634,6 +633,11 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         view.setIsSubscribed(details.isSetSubscribed());
     }
 
+    public void renameLocal(@Nullable String name) {
+        Settings.get().other().setUserNameChanges(ownerId, name);
+        onUserInfoUpdated();
+    }
+
     public void fireGetRegistrationDate() {
         Utils.getRegistrationDate(context, getOwnerId());
     }
@@ -706,11 +710,8 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
 
     @Override
     public void fireAddToShortcutClick() {
-        appendDisposable(Completable.create(emitter -> {
-            ShortcutUtils.createWallShortcut(context, getAccountId(), user);
-            emitter.onComplete();
-        }).compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> {
-        }, t -> callView(v -> v.showError(t.getLocalizedMessage()))));
+        appendDisposable(ShortcutUtils.createWallShortcutRx(context, getAccountId(), user)
+                .compose(RxUtils.applyCompletableIOToMainSchedulers()).subscribe(() -> callView(v -> v.showSnackbar(R.string.success, true)), t -> callView(v -> v.showError(t.getLocalizedMessage()))));
     }
 
     @Override

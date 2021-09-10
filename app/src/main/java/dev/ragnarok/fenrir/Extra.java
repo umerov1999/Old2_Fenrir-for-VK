@@ -1,11 +1,8 @@
 package dev.ragnarok.fenrir;
 
 public class Extra {
-
-    public static final String REQUEST = "request";
     public static final String PRIVACY = "domain";
     public static final String DOMAIN = "domain";
-    public static final String UPDATES = "updates";
     public static final String URL = "url";
     public static final String ACTION = "action";
     public static final String COUNTERS = "counters";
@@ -13,7 +10,6 @@ public class Extra {
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String TWO_FA = "two_fa";
-    public static final String TIMEOUT = "timeout";
     public static final String ACCOUNT_ID = "account_id";
     public static final String CAPTCHA_URL = "captcha_url";
     public static final String CAPTCHA_SID = "captcha_sid";
@@ -28,25 +24,19 @@ public class Extra {
     public static final String FILTER = "filter";
     public static final String ID = "id";
     public static final String ATTACHMENTS = "attachments";
-    public static final String STORE_TO_DB = "store_to_db";
     public static final String ACCESS_KEY = "access_key";
     public static final String LIST = "list";
     public static final String VIDEO = "video";
     public static final String COMMENT_ID = "comment_id";
-    public static final String SUCCESS = "success";
     public static final String TYPE = "type";
     public static final String RANGE = "range";
     public static final String COUNT = "count";
     public static final String SORT = "sort";
-    public static final String END_OF_CONTENT = "end_of_content";
     public static final String POST = "post";
     public static final String MESSAGE_ID = "message_id";
-    public static final String START_MESSAGE_ID = "start_message_id";
     public static final String PEER_ID = "peer_id";
-    public static final String DBID = "dbid";
     public static final String TITLE = "title";
     public static final String USER_ID = "user_id";
-    public static final String PHOTO_ID = "photo_id";
     public static final String AUDIOS = "audios";
     public static final String POSITION = "position";
     public static final String SHUFFLE_MODE = "shuffle_mode";
@@ -75,19 +65,16 @@ public class Extra {
     public static final String CHAT_ID = "chat_id";
     public static final String CHAIR = "chair";
     public static final String SCHOOL = "school";
-    public static final String SCHOOL_ID = "school_id";
     public static final String SCHOOL_CLASS = "school_class";
     public static final String BODY = "body";
     public static final String COMMENT = "comment";
     public static final String ARTIST = "artist";
-    public static final String DESTINATION = "destination";
     public static final String STATUS = "status";
     public static final String ERROR = "error";
     public static final String COMMENTED = "commented";
     public static final String FOCUS_TO = "focus_to";
     public static final String MESSAGES = "messages";
     public static final String MESSAGE = "message";
-    public static final String SERVICES = "services";
     public static final String METHOD = "method";
     public static final String PLACE_TYPE = "place_type";
     public static final String INDEX = "index";

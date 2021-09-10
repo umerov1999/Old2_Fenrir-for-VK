@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import dev.ragnarok.fenrir.api.model.VKApiMessage;
+import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.util.Utils;
 
 public class Peer implements Parcelable {
 
@@ -93,6 +95,12 @@ public class Peer implements Parcelable {
     }
 
     public String getTitle() {
+        if (isUser(id)) {
+            String custom = Settings.get().other().getUserNameChanges(id);
+            if (!Utils.isEmpty(custom)) {
+                return custom;
+            }
+        }
         return title;
     }
 

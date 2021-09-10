@@ -6,6 +6,7 @@ import dev.ragnarok.fenrir.api.model.VkApiProfileInfo;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfoResponce;
 import dev.ragnarok.fenrir.api.model.response.AccountsBannedResponce;
 import dev.ragnarok.fenrir.api.model.response.BaseResponse;
+import dev.ragnarok.fenrir.api.model.response.PushSettingsResponse;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -76,6 +77,9 @@ public interface IAccountService {
 
     @GET("account.getProfileInfo")
     Single<BaseResponse<VkApiProfileInfo>> getProfileInfo();
+
+    @GET("account.getPushSettings")
+    Single<BaseResponse<PushSettingsResponse>> getPushSettings();
 
     @FormUrlEncoded
     @POST("account.saveProfileInfo")

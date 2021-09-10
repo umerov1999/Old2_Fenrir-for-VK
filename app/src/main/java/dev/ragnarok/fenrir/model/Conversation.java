@@ -2,6 +2,9 @@ package dev.ragnarok.fenrir.model;
 
 import static dev.ragnarok.fenrir.util.Utils.firstNonEmptyString;
 
+import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.util.Utils;
+
 public class Conversation {
 
     private final int id;
@@ -76,6 +79,12 @@ public class Conversation {
     }
 
     public String getTitle() {
+        if (Peer.isUser(id)) {
+            String custom = Settings.get().other().getUserNameChanges(id);
+            if (!Utils.isEmpty(custom)) {
+                return custom;
+            }
+        }
         return title;
     }
 

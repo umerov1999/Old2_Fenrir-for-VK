@@ -109,6 +109,29 @@ public class AnimatedShapeableImageView extends ShapeableImageView {
         playAnimation();
     }
 
+    private void setAnimationFadeByResCache(@RawRes int res) {
+        if (!FenrirNative.isNativeLoaded()) {
+            if (nonNull(decoderCallback)) {
+                decoderCallback.onLoaded(false);
+            }
+            return;
+        }
+        File ch = cache.fetch(res);
+        if (ch == null) {
+            setImageDrawable(null);
+            if (nonNull(decoderCallback)) {
+                decoderCallback.onLoaded(false);
+            }
+            return;
+        }
+        setAnimation(new CHBVideoDrawable(ch, 0, defaultWidth, defaultHeight, () -> {
+            if (nonNull(decoderCallback)) {
+                decoderCallback.onLoaded(false);
+            }
+        }));
+        playAnimation();
+    }
+
     public void fromNet(String url, OkHttpClient.Builder client) {
         if (!FenrirNative.isNativeLoaded() || url == null || url.isEmpty()) {
             if (nonNull(decoderCallback)) {
@@ -179,6 +202,41 @@ public class AnimatedShapeableImageView extends ShapeableImageView {
         }).compose(RxUtils.applySingleComputationToMainSchedulers()).subscribe(u -> {
             if (u) {
                 setAnimationByResCache(res);
+            } else {
+                if (nonNull(decoderCallback)) {
+                    decoderCallback.onLoaded(false);
+                }
+            }
+        }, RxUtils.ignore());
+    }
+
+    public void fromResFade(@RawRes int res) {
+        if (!FenrirNative.isNativeLoaded()) {
+            if (nonNull(decoderCallback)) {
+                decoderCallback.onLoaded(false);
+            }
+            return;
+        }
+        clearAnimationDrawable();
+        if (cache.isCachedRes(res)) {
+            setAnimationFadeByResCache(res);
+            return;
+        }
+        mDisposable = Single.create((SingleOnSubscribe<Boolean>) u -> {
+            try {
+                if (!copyRes(res)) {
+                    u.onSuccess(false);
+                    return;
+                }
+                cache.renameTempFile(res);
+            } catch (Exception e) {
+                u.onSuccess(false);
+                return;
+            }
+            u.onSuccess(true);
+        }).compose(RxUtils.applySingleComputationToMainSchedulers()).subscribe(u -> {
+            if (u) {
+                setAnimationFadeByResCache(res);
             } else {
                 if (nonNull(decoderCallback)) {
                     decoderCallback.onLoaded(false);

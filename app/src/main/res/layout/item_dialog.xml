@@ -88,7 +88,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/item_chat_avatar"
             app:layout_constraintEnd_toEndOf="@+id/item_chat_avatar"
-            app:tint="?icon_color_inactive" />
+            app:tint="#AAFF0000" />
 
         <androidx.constraintlayout.helper.widget.Layer
             android:id="@+id/dialog_content"

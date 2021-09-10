@@ -7,6 +7,7 @@ import dev.ragnarok.fenrir.api.model.RefreshToken;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfo;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfoResponce;
 import dev.ragnarok.fenrir.api.model.response.AccountsBannedResponce;
+import dev.ragnarok.fenrir.api.model.response.PushSettingsResponse;
 import io.reactivex.rxjava3.core.Single;
 
 
@@ -32,6 +33,9 @@ public interface IAccountApi {
 
     @CheckResult
     Single<VkApiProfileInfo> getProfileInfo();
+
+    @CheckResult
+    Single<PushSettingsResponse> getPushSettings();
 
     @CheckResult
     Single<VkApiProfileInfoResponce> saveProfileInfo(String first_name, String last_name, String maiden_name, String screen_name, String bdate, String home_town, Integer sex);

@@ -65,7 +65,7 @@
                 android:padding="4dp"
                 android:src="@drawable/audio_died"
                 android:visibility="gone"
-                app:tint="?icon_color_inactive" />
+                app:tint="#AAFF0000" />
         </FrameLayout>
 
         <LinearLayout

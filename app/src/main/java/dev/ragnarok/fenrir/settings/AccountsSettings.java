@@ -40,15 +40,18 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     private final Map<Integer, String> tokens;
     private final Map<Integer, Integer> types;
     private final Map<Integer, String> devices;
+    private final Set<String> accounts;
     private final PublishProcessor<Integer> currentPublisher = PublishProcessor.create();
 
     @SuppressLint("UseSparseArrays")
     AccountsSettings(Context context) {
         app = context.getApplicationContext();
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         tokens = Collections.synchronizedMap(new HashMap<>(1));
         types = Collections.synchronizedMap(new HashMap<>(1));
         devices = Collections.synchronizedMap(new HashMap<>(1));
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        accounts = Collections.synchronizedSet(new HashSet<>(preferences.getStringSet(KEY_ACCOUNT_UIDS, new HashSet<>(1))));
 
         Collection<Integer> aids = getRegistered();
         for (Integer aid : aids) {
@@ -100,11 +103,8 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     @NonNull
     @Override
     public List<Integer> getRegistered() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        Set<String> uids = preferences.getStringSet(KEY_ACCOUNT_UIDS, new HashSet<>(0));
-
-        List<Integer> ids = new ArrayList<>(uids.size());
-        for (String stringuid : uids) {
+        List<Integer> ids = new ArrayList<>(accounts.size());
+        for (String stringuid : accounts) {
             int uid = Integer.parseInt(stringuid);
             ids.add(uid);
         }
@@ -137,21 +137,15 @@ class AccountsSettings implements ISettings.IAccountsSettings {
         fireAccountChange();
     }
 
-    @NonNull
-    private Set<String> copyUidsSet() {
-        return new HashSet<>(preferences.getStringSet(KEY_ACCOUNT_UIDS, new HashSet<>(1)));
-    }
-
     @Override
     public void remove(int accountId) {
         int currentAccountId = getCurrent();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        Set<String> uids = copyUidsSet();
 
-        uids.remove(String.valueOf(accountId));
+        accounts.remove(String.valueOf(accountId));
         preferences.edit()
-                .putStringSet(KEY_ACCOUNT_UIDS, uids)
+                .putStringSet(KEY_ACCOUNT_UIDS, accounts)
                 .apply();
 
         if (accountId == currentAccountId) {
@@ -185,13 +179,11 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     @Override
     public void registerAccountId(int accountId, boolean setCurrent) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-
-        Set<String> uids = copyUidsSet();
-        uids.add(String.valueOf(accountId));
+        accounts.add(String.valueOf(accountId));
 
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putStringSet(KEY_ACCOUNT_UIDS, uids);
+        editor.putStringSet(KEY_ACCOUNT_UIDS, accounts);
 
         if (setCurrent) {
             editor.putInt(KEY_CURRENT, accountId);

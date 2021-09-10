@@ -20,12 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso3.Transformation;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventListener;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.link.internal.OwnerLinkSpanFactory;
@@ -63,19 +60,17 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final Transformation mTransformation;
     private final ForegroundColorSpan mForegroundColorSpan;
     private final RecyclerView.AdapterDataObserver mDataObserver;
-    private final Set<Integer> hidden;
-    private final List<Integer> silentChats;
     private final boolean headerInDialog;
     private boolean showHidden;
     private List<Dialog> mDialogs;
     private long mStartOfToday;
     private ClickListener mClickListener;
+    private int accountId;
 
     public DialogsAdapter(Context context, @NonNull List<Dialog> dialogs) {
         mContext = context;
         mDialogs = dialogs;
         headerInDialog = Settings.get().other().isHeaders_in_dialog();
-        silentChats = new ArrayList<>();
         mTransformation = CurrentTheme.createTransformationForAvatar();
         mForegroundColorSpan = new ForegroundColorSpan(CurrentTheme.getPrimaryTextColorCode(context));
         mDataObserver = new RecyclerView.AdapterDataObserver() {
@@ -84,15 +79,9 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 initStartOfTodayDate();
             }
         };
-        hidden = new HashSet<>();
 
         registerAdapterDataObserver(mDataObserver);
         initStartOfTodayDate();
-    }
-
-    public void updateSilentChats(@NonNull List<Integer> chats) {
-        silentChats.clear();
-        silentChats.addAll(chats);
     }
 
     public void updateShowHidden(boolean showHidden) {
@@ -130,13 +119,8 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         throw new UnsupportedOperationException();
     }
 
-    public void updateHidden(Set<Integer> hidden) {
-        this.hidden.clear();
-        this.hidden.addAll(hidden);
-    }
-
     protected int getDataTypeByAdapterPosition(int adapterPosition) {
-        if (hidden.contains(getByPosition(adapterPosition).getId()) && !showHidden) {
+        if (Settings.get().security().isHiddenDialog(getByPosition(adapterPosition).getId()) && !showHidden) {
             return DATA_TYPE_HIDDEN;
         } else return DATA_TYPE_NORMAL;
     }
@@ -295,7 +279,7 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.ivDialogType.setVisibility(dialog.isChat() ? View.VISIBLE : View.GONE);
         holder.ivUnreadTicks.setVisibility(dialog.isLastMessageOut() ? View.VISIBLE : View.GONE);
         holder.ivUnreadTicks.setImageResource(lastMessageRead ? R.drawable.check_all : R.drawable.check);
-        holder.silent.setVisibility(silentChats.contains(dialog.getId()) ? View.VISIBLE : View.GONE);
+        holder.silent.setVisibility(Settings.get().notifications().isSilentChat(accountId, dialog.getId()) ? View.VISIBLE : View.GONE);
 
         holder.ivOnline.setVisibility(online && !dialog.isChat() ? View.VISIBLE : View.GONE);
 
@@ -428,8 +412,9 @@ public class DialogsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return this;
     }
 
-    public void setData(List<Dialog> data) {
+    public void setData(List<Dialog> data, int accountId) {
         mDialogs = data;
+        this.accountId = accountId;
         notifyDataSetChanged();
     }
 

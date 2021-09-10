@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfo;
+import dev.ragnarok.fenrir.api.model.response.PushSettingsResponse;
 import dev.ragnarok.fenrir.model.Account;
 import dev.ragnarok.fenrir.model.BannedPart;
 import dev.ragnarok.fenrir.model.User;
@@ -22,6 +23,8 @@ public interface IAccountsInteractor {
     Single<Boolean> setOffline(int accountId);
 
     Single<VkApiProfileInfo> getProfileInfo(int accountId);
+
+    Single<List<PushSettingsResponse.ConversationsPush.ConversationPushItem>> getPushSettings(int accountId);
 
     Single<Integer> saveProfileInfo(int accountId, String first_name, String last_name, String maiden_name, String screen_name, String bdate, String home_town, Integer sex);
 

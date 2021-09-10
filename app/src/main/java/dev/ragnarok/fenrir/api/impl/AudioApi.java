@@ -89,8 +89,7 @@ class AudioApi extends AbsApi implements IAudioApi {
         return provideService(IAudioService.class)
                 .flatMap(service -> service
                         .edit(ownerId, audioId, artist, title, text)
-                        .map(extractResponseWithErrorHandling())
-                        .map(response -> response));
+                        .map(extractResponseWithErrorHandling()));
     }
 
     @Override

@@ -270,6 +270,7 @@
         <item>Local media server</item>
         <item>Player background settings</item>
         <item>Sending custom voice</item>
+        <item>Rename User</item>
     </string-array>
 
     <!-- Dialogs-->
@@ -342,6 +343,7 @@
 
 
     <string name="notif_setting_title">Notifications</string>
+    <string name="notifications_sync">Sync from VK</string>
     <string name="messages_in_dialogs_tite">Messages in dialogs</string>
     <string name="enable_dialogs_notif_title">Enable notifications</string>
     <string name="enable_dialogs_sound_title">Sound</string>
@@ -1409,6 +1411,8 @@
     <string name="user_blacklist_title">Blacklist</string>
     <string name="add_to_blacklist">Add to the blacklist</string>
     <string name="report">Report</string>
+    <string name="rename">Rename</string>
+    <string name="rename_local">Rename local</string>
     <string name="mentions">User mentions</string>
     <string name="is_to_blacklist">Unblock</string>
     <string name="button_activate">Activate</string>
@@ -1831,7 +1835,6 @@
     <string name="video_swipes">Enable video swipes</string>
     <string name="extra_debug">Extra Debug</string>
     <string name="dump_fcm">Debug firebase</string>
-    <string name="kate_gms_token">Kate GMS Token</string>
     <string name="need_restart">Restart required</string>
     <string name="enable_native">Enable native libraries</string>
     <string name="lifecycle_music_service">Audio service lifetime (sec)</string>

@@ -489,6 +489,18 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             callPresenter(UserWallPresenter::fireGetRegistrationDate);
             return true;
         });
+        menu.add(R.string.rename).setOnMenuItemClickListener(item -> {
+            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.RENAME_USER)) {
+                return true;
+            }
+            new InputTextDialog.Builder(requireActivity())
+                    .setTitleRes(R.string.rename_local)
+                    .setAllowEmpty(true)
+                    .setInputType(InputType.TYPE_CLASS_TEXT)
+                    .setCallback(newValue -> callPresenter(p -> p.renameLocal(newValue)))
+                    .show();
+            return true;
+        });
         if (!view.isMy) {
             menu.add(R.string.report).setOnMenuItemClickListener(item -> {
                 callPresenter(UserWallPresenter::fireReport);

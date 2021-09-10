@@ -30,7 +30,8 @@ import dev.ragnarok.fenrir.service.ApiErrorCodes;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.PersistentLogger;
 import dev.ragnarok.fenrir.util.Utils;
-import dev.ragnarok.fenrir.util.refresh.official.TokenMod;
+import dev.ragnarok.fenrir.util.refresh.TokenModKate;
+import dev.ragnarok.fenrir.util.refresh.TokenModOfficialVK;
 import io.reactivex.rxjava3.core.Completable;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
@@ -78,7 +79,10 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         if (Utils.isHiddenAccount(getAccountId())) {
             return false;
         }
-        String gms = Settings.get().other().getKateGMSToken();
+        String gms = TokenModKate.requestToken();
+        if (gms == null) {
+            return false;
+        }
         String oldToken = getToken();
         String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;
         Log.w("refresh", oldToken + " " + token + " " + gms);
@@ -93,7 +97,10 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         if (Utils.isHiddenAccount(getAccountId())) {
             return false;
         }
-        String gms = TokenMod.requestToken();
+        String gms = TokenModOfficialVK.requestToken();
+        if (gms == null) {
+            return false;
+        }
         String oldToken = getToken();
         String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;
         Log.w("refresh", oldToken + " " + token + " " + gms);

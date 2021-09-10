@@ -32,10 +32,12 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     private static final String DELAYED_PIN_FOR_ENTRANCE = "delayed_pin_for_entrance";
     private static final String LAST_PIN_ENTERED = "last_pin_entered";
     private static final String KEY_ENCRYPTION_POLICY_ACCEPTED = "encryption_policy_accepted";
+    private static final String KEY_HIDDEN_PEERS = "hidden_peers";
     private static final int PIN_HISTORY_DEPTH = 3;
     private final SharedPreferences mPrefs;
     private final Context mApplication;
     private final List<Long> mPinEnterHistory;
+    private final Set<String> hiddenPeers;
     private String mPinHash;
     private boolean mKeyEncryptionPolicyAccepted;
     private boolean isShowHiddenDialogs;
@@ -46,6 +48,8 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
         mPinHash = mPrefs.getString(KEY_PIN_HASH, null);
         mPinEnterHistory = extractPinEnterHistrory(mPrefs);
         mKeyEncryptionPolicyAccepted = mPrefs.getBoolean(KEY_ENCRYPTION_POLICY_ACCEPTED, false);
+        hiddenPeers = Collections.synchronizedSet(new HashSet<>(1));
+        reloadHiddenDialogSettings();
     }
 
     @NonNull
@@ -84,6 +88,12 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
     @Override
     public void setShowHiddenDialogs(boolean showHiddenDialogs) {
         isShowHiddenDialogs = showHiddenDialogs;
+    }
+
+    @Override
+    public void reloadHiddenDialogSettings() {
+        hiddenPeers.clear();
+        hiddenPeers.addAll(PreferenceManager.getDefaultSharedPreferences(mApplication).getStringSet(KEY_HIDDEN_PEERS, new HashSet<>(1)));
     }
 
     @Override
@@ -247,61 +257,30 @@ public class SecuritySettings implements ISettings.ISecuritySettings {
                 .apply();
     }
 
-    private boolean saveSet(Set<Integer> array, String arrayName) {
-        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(arrayName + "_size", array.size());
-        int s = 0;
-        for (Integer i : array) {
-            editor.putInt(arrayName + "_" + s, i);
-            s++;
-        }
-        return editor.commit();
+    @Override
+    public void addHiddenDialog(int peerId) {
+        hiddenPeers.add(String.valueOf(peerId));
+
+        PreferenceManager.getDefaultSharedPreferences(mApplication).edit()
+                .putStringSet(KEY_HIDDEN_PEERS, hiddenPeers)
+                .apply();
     }
 
     @Override
-    public boolean AddValueToSet(int value, String arrayName) {
-        Set<Integer> itr = loadSet(arrayName);
-        itr.add(value);
-        return saveSet(itr, arrayName);
+    public void removeHiddenDialog(int peerId) {
+        hiddenPeers.remove(String.valueOf(peerId));
+        PreferenceManager.getDefaultSharedPreferences(mApplication).edit()
+                .putStringSet(KEY_HIDDEN_PEERS, hiddenPeers)
+                .apply();
     }
 
     @Override
-    public boolean ContainsValueInSet(int value, String arrayName) {
-        Set<Integer> itr = loadSet(arrayName);
-        return itr.contains(value);
+    public boolean hasHiddenDialogs() {
+        return !hiddenPeers.isEmpty();
     }
 
     @Override
-    public boolean ContainsValuesInSet(int[] values, String arrayName) {
-        Set<Integer> itr = loadSet(arrayName);
-        for (Integer i : values) {
-            if (!itr.contains(i))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean RemoveValueFromSet(int value, String arrayName) {
-        Set<Integer> itr = loadSet(arrayName);
-        itr.remove(value);
-        return saveSet(itr, arrayName);
-    }
-
-    @Override
-    public int getSetSize(String arrayName) {
-        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
-        return prefs.getInt(arrayName + "_size", 0);
-    }
-
-    @Override
-    public Set<Integer> loadSet(String arrayName) {
-        SharedPreferences prefs = mApplication.getSharedPreferences("security_other", 0);
-        int size = prefs.getInt(arrayName + "_size", 0);
-        Set<Integer> array = new HashSet<>(size);
-        for (int i = 0; i < size; i++)
-            array.add(prefs.getInt(arrayName + "_" + i, 0));
-        return array;
+    public boolean isHiddenDialog(int peerId) {
+        return hiddenPeers.contains(String.valueOf(peerId));
     }
 }

@@ -259,7 +259,8 @@ public class CheckDonate {
             DonateFutures.CHANGE_APP_ICON,
             DonateFutures.LOCAL_MEDIA_SERVER,
             DonateFutures.PAYER_BACKGROUND_SETTINGS,
-            DonateFutures.SEND_CUSTOM_VOICE})
+            DonateFutures.SEND_CUSTOM_VOICE,
+            DonateFutures.RENAME_USER})
     @Retention(RetentionPolicy.SOURCE)
     public @interface DonateFutures {
         int DOWNLOAD_MUSIC = 0;
@@ -276,5 +277,6 @@ public class CheckDonate {
         int LOCAL_MEDIA_SERVER = 11;
         int PAYER_BACKGROUND_SETTINGS = 12;
         int SEND_CUSTOM_VOICE = 13;
+        int RENAME_USER = 14;
     }
 }

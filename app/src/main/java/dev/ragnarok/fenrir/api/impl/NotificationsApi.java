@@ -60,7 +60,6 @@ class NotificationsApi extends AbsApi implements INotificationsApi {
     public Single<AnswerVKOfficialList> getOfficial(Integer count, Integer startFrom, String filters, Long startTime, Long endTime) {
         return provideService(INotificationsService.class, TokenType.USER)
                 .flatMap(service -> service.getOfficial(count, startFrom, filters, startTime, endTime, "photo_200_orig,photo_200")
-                        .map(extractResponseWithErrorHandling())
-                        .map(response -> response));
+                        .map(extractResponseWithErrorHandling()));
     }
 }

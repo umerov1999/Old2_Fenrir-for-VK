@@ -49,7 +49,11 @@ class DedicatedAdapter(
                     holder.imageView.setImageResource(R.drawable.report_red)
                 }
             }
-            holder.imageView.fromRes(res.res)
+            if (!isDark) {
+                holder.imageView.fromRes(res.res)
+            } else {
+                holder.imageView.fromResFade(res.res)
+            }
         }
     }
 

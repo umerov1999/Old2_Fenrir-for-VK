@@ -127,6 +127,7 @@
         <item>Локальный медиа сервер</item>
         <item>Настройки фона плеера</item>
         <item>Отправка своих голосовых</item>
+        <item>Переименовать пользователя</item>
     </string-array>
 
     <!-- Dialogs-->
@@ -199,6 +200,7 @@
 
 
     <string name="notif_setting_title">Уведомления</string>
+    <string name="notifications_sync">Синхронизировать из ВК</string>
     <string name="messages_in_dialogs_tite">Сообщения в диалогах</string>
     <string name="enable_dialogs_notif_title">Включить оповещения</string>
     <string name="enable_dialogs_sound_title">Звук</string>
@@ -1201,6 +1203,8 @@
     <string name="user_blacklist_title">Чёрный список</string>
     <string name="add_to_blacklist">В чёрный список</string>
     <string name="report">Жалоба</string>
+    <string name="rename">Переименовать</string>
+    <string name="rename_local">Переименовать локально</string>
     <string name="mentions">Упоминания</string>
     <string name="is_to_blacklist">Разблокировать</string>
     <string name="button_activate">Aктивировать</string>
@@ -1334,7 +1338,7 @@
     <string name="chat">Чат</string>
     <string name="chat_json">Чат из Json</string>
     <string name="lottie_preview">Lottie Preview</string>
-    <string name="open_clipboard_url">Открыть ссылку из буфера</string>
+    <string name="open_clipboard_url">Открыть ссылку</string>
     <string name="set_offline">Стать Offline</string>
     <string name="scan_qr">Сканировать QR</string>
     <string name="empty_clipboard_url">Буфер обмена не содержит ссылку</string>
@@ -1605,7 +1609,6 @@
     <string name="video_swipes">Свайпы у видео</string>
     <string name="extra_debug">Расширенная отладка</string>
     <string name="dump_fcm">Отладка firebase</string>
-    <string name="kate_gms_token">Kate GMS Токен</string>
     <string name="need_restart">Требуется перезапуск</string>
     <string name="enable_native">Использовать нативные библиотеки</string>
     <string name="lifecycle_music_service">Время жизни плеера (сек.)</string>

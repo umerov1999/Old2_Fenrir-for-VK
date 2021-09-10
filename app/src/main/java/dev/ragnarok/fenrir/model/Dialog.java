@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.model.Identificable;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Objects;
+import dev.ragnarok.fenrir.util.Utils;
 
 public class Dialog implements Identificable, Parcelable {
 
@@ -78,6 +80,12 @@ public class Dialog implements Identificable, Parcelable {
     }
 
     public String getTitle() {
+        if (Peer.isUser(peerId)) {
+            String custom = Settings.get().other().getUserNameChanges(peerId);
+            if (!Utils.isEmpty(custom)) {
+                return custom;
+            }
+        }
         return title;
     }
 

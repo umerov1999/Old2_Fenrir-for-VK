@@ -7,6 +7,7 @@ import android.os.Parcel;
 import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.api.model.Identificable;
 import dev.ragnarok.fenrir.module.parcel.ParcelNative;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class User extends Owner implements Identificable {
@@ -114,6 +115,10 @@ public class User extends Owner implements Identificable {
 
     @Override
     public String getFullName() {
+        String custom = Settings.get().other().getUserNameChanges(id);
+        if (!Utils.isEmpty(custom)) {
+            return custom;
+        }
         return firstName + " " + lastName;
     }
 

@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import dev.ragnarok.fenrir.api.interfaces.INetworker;
 import dev.ragnarok.fenrir.api.model.VKApiUser;
 import dev.ragnarok.fenrir.api.model.VkApiProfileInfo;
+import dev.ragnarok.fenrir.api.model.response.PushSettingsResponse;
 import dev.ragnarok.fenrir.db.column.UserColumns;
 import dev.ragnarok.fenrir.domain.IAccountsInteractor;
 import dev.ragnarok.fenrir.domain.IBlacklistRepository;
@@ -88,16 +89,21 @@ public class AccountsInteractor implements IAccountsInteractor {
     public Single<Boolean> setOffline(int accountId) {
         return networker.vkDefault(accountId)
                 .account()
-                .setOffline()
-                .map(t -> t);
+                .setOffline();
     }
 
     @Override
     public Single<VkApiProfileInfo> getProfileInfo(int accountId) {
         return networker.vkDefault(accountId)
                 .account()
-                .getProfileInfo()
-                .map(t -> t);
+                .getProfileInfo();
+    }
+
+    @Override
+    public Single<List<PushSettingsResponse.ConversationsPush.ConversationPushItem>> getPushSettings(int accountId) {
+        return networker.vkDefault(accountId)
+                .account()
+                .getPushSettings().map(PushSettingsResponse::getPushSettings);
     }
 
     @Override

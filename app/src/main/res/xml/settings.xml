@@ -974,6 +974,12 @@
             android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:dependency="developer_mode"
+            android:key="delete_dynamic_shortcuts"
+            android:title="@string/delete_dynamic_shortcuts"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="developer_mode"

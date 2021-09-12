@@ -198,6 +198,7 @@
         <item>Triskel</item>
         <item>Hel</item>
         <item>Odin</item>
+        <item>Viking</item>
         <item>Fire</item>
         <item>Fire Show 1</item>
         <item>Fire Show 2</item>
@@ -220,6 +221,7 @@
         <item>13</item>
         <item>14</item>
         <item>15</item>
+        <item>16</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -1870,7 +1872,7 @@
     <string name="revert_play_audio">Play button - menu</string>
     <string name="foreground_downloader">Foreground Downloader</string>
     <string name="side_transition">Side animated transition</string>
-    <string name="lolipop21">This application is not designed to work on Android 5.0 sdk 21, because this firmware has a bug in the Skia module. If it crashes, disable the native library in the settings, but then you will lose stickers, animated gif, qr</string>
+    <string name="lollipop21">This application is not designed to work on Android 5.0 sdk 21, because this firmware has a bug in the Skia module. If it crashes, disable the native library in the settings, but then you will lose stickers, animated gif, qr</string>
     <string name="ad_block_story_news">Blocking ads</string>
     <string name="ad_block_story_news_summary">Stories, news</string>
     <string name="open_comment_thread">Open %1$s</string>
@@ -1885,4 +1887,5 @@
     <string name="do_not_use">Do not use! For the author of the client only!</string>
     <string name="mention_fave">Mention in Fave</string>
     <string name="pin_digit">pin digit</string>
+    <string name="delete_dynamic_shortcuts">Delete dynamic shortcuts</string>
 </resources>

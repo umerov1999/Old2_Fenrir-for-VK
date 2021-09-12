@@ -55,6 +55,7 @@ import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Objects;
+import dev.ragnarok.fenrir.util.ShortcutUtils;
 import dev.ragnarok.fenrir.util.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -511,7 +512,7 @@ public class NotificationHelper {
             ShortcutInfoCompat.Builder shortcutBuilder = new ShortcutInfoCompat.Builder(context, id)
                     .setShortLabel(person_name.trim())
                     .setLongLabel(person_name)
-                    .setIntent(new Intent(Intent.ACTION_DEFAULT))
+                    .setIntent(ShortcutUtils.chatOpenIntent(context, peer.getAvaUrl(), accountId, peer.getId(), peer.getTitle()))
                     .setLongLived(true);
 
             Bitmap avatar;

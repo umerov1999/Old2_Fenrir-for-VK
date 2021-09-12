@@ -145,7 +145,7 @@
         <item name="messages_background_color">#000000</item>
     </style>
 
-    <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed">
+    <style name="App.DayNight.Cold.Amoled" parent="App.DayNight.Cold">
         <item name="dividerColor">#151515</item>
         <item name="floatingActionButtonStyle">@style/Theme.FloatingActionButtonAmoled</item>
         <item name="fab_secondary">@style/Theme.FloatingActionButtonSecondaryAmoled</item>

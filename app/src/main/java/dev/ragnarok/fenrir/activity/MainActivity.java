@@ -259,18 +259,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 }
 
             });
-    private final ActivityResultLauncher<Intent> requestLoginZero = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                mAccountId = Settings.get()
-                        .accounts()
-                        .getCurrent();
-
-                if (mAccountId == ISettings.IAccountsSettings.INVALID_ID) {
-                    supportFinishAfterTransition();
-                } else {
-                    Settings.get().ui().getDefaultPage(mAccountId).tryOpenWith(this);
-                }
-            });
     protected int mLayoutRes = Settings.get().main().isSnow_mode() ? getSnowLayout() : getNormalLayout();
     protected long mLastBackPressedTime;
     /**
@@ -281,6 +269,28 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
     private BottomNavigationView mBottomNavigation;
     private ViewGroup mBottomNavigationContainer;
     private FragmentContainerView mViewFragment;
+    private final ActivityResultLauncher<Intent> requestLoginZero = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                mAccountId = Settings.get()
+                        .accounts()
+                        .getCurrent();
+
+                if (mAccountId == ISettings.IAccountsSettings.INVALID_ID) {
+                    supportFinishAfterTransition();
+                } else {
+                    Settings.get().ui().getDefaultPage(mAccountId).tryOpenWith(this);
+                    checkFCMRegistration(true);
+
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP && HelperSimple.INSTANCE.needHelp(HelperSimple.LOLLIPOP_21, 1)) {
+                        new MaterialAlertDialogBuilder(this)
+                                .setTitle(R.string.info)
+                                .setMessage(R.string.lollipop21)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.button_ok, null)
+                                .show();
+                    }
+                }
+            });
     private final FragmentManager.OnBackStackChangedListener mOnBackStackChangedListener = () -> {
         resolveToolbarNavigationIcon();
         keyboardHide();
@@ -444,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 }
             } else {
                 if (getMainActivityTransform() == MainActivityTransforms.MAIN) {
-                    checkFCMRegistration();
+                    checkFCMRegistration(false);
                     mCompositeDisposable.add(InteractorFactory.createAudioInteractor().PlaceToAudioCache(this)
                             .compose(RxUtils.applyCompletableIOToMainSchedulers())
                             .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
@@ -455,15 +465,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
                     Utils.checkMusicInPC(this);
                     CheckDonate.floodControl();
-
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP && HelperSimple.INSTANCE.needHelp(HelperSimple.LOLLIPOP_21, 1)) {
-                        new MaterialAlertDialogBuilder(this)
-                                .setTitle(R.string.info)
-                                .setMessage(R.string.lolipop21)
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.button_ok, null)
-                                .show();
-                    }
 
                     if (!Settings.get().other().appStoredVersionEqual()) {
                         PreferencesFragment.cleanUICache(this, false);
@@ -524,12 +525,15 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         requestEnterPinZero.launch(intent);
     }
 
-    private void checkFCMRegistration() {
+    private void checkFCMRegistration(boolean onlyCheckGMS) {
         if (!checkPlayServices(this)) {
             if (!Settings.get().other().isDisabledErrorFCM()) {
                 Utils.ThemedSnack(mViewFragment, getString(R.string.this_device_does_not_support_fcm), BaseTransientBottomBar.LENGTH_LONG)
                         .setAnchorView(mBottomNavigationContainer).setAction(R.string.button_access, v -> Settings.get().other().setDisableErrorFCM(true)).show();
             }
+            return;
+        }
+        if (onlyCheckGMS) {
             return;
         }
 

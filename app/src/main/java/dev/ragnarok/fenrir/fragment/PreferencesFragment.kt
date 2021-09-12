@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -58,6 +59,7 @@ import dev.ragnarok.fenrir.listener.OnSectionResumeCallback
 import dev.ragnarok.fenrir.media.record.AudioRecordWrapper
 import dev.ragnarok.fenrir.model.LocalPhoto
 import dev.ragnarok.fenrir.model.SwitchableCategory
+import dev.ragnarok.fenrir.module.FenrirNative
 import dev.ragnarok.fenrir.picasso.PicassoInstance.Companion.clear_cache
 import dev.ragnarok.fenrir.picasso.PicassoInstance.Companion.with
 import dev.ragnarok.fenrir.picasso.transforms.EllipseTransformation
@@ -66,6 +68,8 @@ import dev.ragnarok.fenrir.place.Place
 import dev.ragnarok.fenrir.place.PlaceFactory
 import dev.ragnarok.fenrir.service.KeepLongpollService
 import dev.ragnarok.fenrir.settings.AvatarStyle
+import dev.ragnarok.fenrir.settings.CurrentTheme.getColorPrimary
+import dev.ragnarok.fenrir.settings.CurrentTheme.getColorSecondary
 import dev.ragnarok.fenrir.settings.ISettings
 import dev.ragnarok.fenrir.settings.NightMode
 import dev.ragnarok.fenrir.settings.Settings
@@ -74,6 +78,7 @@ import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.Utils
 import dev.ragnarok.fenrir.view.MySearchView
+import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.io.File
 import java.io.FileOutputStream
@@ -264,6 +269,22 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     .setActive(provideProxySettings().activeProxy)
                 true
             }
+
+        findPreference<Preference>("delete_dynamic_shortcuts")?.let {
+            it.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                        val manager: ShortcutManager = requireActivity().getSystemService(
+                            ShortcutManager::class.java
+                        )
+                        manager.removeAllDynamicShortcuts()
+                        CreateCustomToast(context).showToast(R.string.success)
+                    }
+                    true
+                }
+            it.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+        }
+
         findPreference<Preference>("player_background")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
                 if (!isFullVersion(requireActivity(), PAYER_BACKGROUND_SETTINGS)) {
@@ -509,6 +530,23 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 Utils.getAppVersionName(requireActivity()) + ", VK API " + API_VERSION
             it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 val view = View.inflate(requireActivity(), R.layout.dialog_about_us, null)
+                val anim: RLottieImageView = view.findViewById(R.id.lottie_animation)
+                if (FenrirNative.isNativeLoaded()) {
+                    anim.fromRes(
+                        R.raw.fenrir,
+                        Utils.dp(100f),
+                        Utils.dp(100f),
+                        intArrayOf(
+                            0x333333,
+                            getColorPrimary(requireActivity()),
+                            0x777777,
+                            getColorSecondary(requireActivity())
+                        )
+                    )
+                    anim.playAnimation()
+                } else {
+                    anim.setImageResource(R.drawable.ic_cat)
+                }
                 MaterialAlertDialogBuilder(requireActivity())
                     .setView(view)
                     .setOnDismissListener {

@@ -86,12 +86,12 @@
     </style>
 
     <style name="App.DayNight.IceGreen" parent="App.DayNight">
-        <item name="colorPrimary">#448AFF</item>
-        <item name="colorControlNormal">#448AFF</item>
-        <item name="colorSecondary">#4CAF50</item>
+        <item name="colorPrimary">#757AFF</item>
+        <item name="colorControlNormal">#757AFF</item>
+        <item name="colorSecondary">#50F2C4</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_active">#AA757AFF</item>
         <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
@@ -105,14 +105,14 @@
         <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
-    <style name="App.DayNight.BlueRed" parent="App.DayNight">
-        <item name="colorPrimary">#448AFF</item>
-        <item name="colorControlNormal">#448AFF</item>
-        <item name="colorSecondary">#FF0000</item>
+    <style name="App.DayNight.Cold" parent="App.DayNight">
+        <item name="colorPrimary">#9BC4FC</item>
+        <item name="colorControlNormal">#9BC4FC</item>
+        <item name="colorSecondary">#D8C2FF</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AA448AFF</item>
-        <item name="icon_color_inactive">#AA151515</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
     <style name="App.DayNight.BlueYellow" parent="App.DayNight">
@@ -316,7 +316,7 @@
         <item name="colorSecondary">#FF6F00</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AAFF5622</item>
+        <item name="icon_color_active">#BBFF8D02</item>
         <item name="icon_color_inactive">#AA151515</item>
     </style>
 
@@ -326,7 +326,7 @@
         <item name="colorSecondary">#777777</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
-        <item name="icon_color_active">#AAFF5622</item>
+        <item name="icon_color_active">#BBFF8D02</item>
         <item name="icon_color_inactive">#AA151515</item>
     </style>
 
@@ -346,7 +346,7 @@
 
     <style name="App.DayNight.OldIce.Amoled" parent="App.DayNight.OldIce" />
 
-    <style name="App.DayNight.BlueRed.Amoled" parent="App.DayNight.BlueRed" />
+    <style name="App.DayNight.Cold.Amoled" parent="App.DayNight.Cold" />
 
     <style name="App.DayNight.BlueYellow.Amoled" parent="App.DayNight.BlueYellow" />
 
@@ -407,7 +407,7 @@
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
     </style>
 
-    <style name="App.DayNight.BlueRed.MD1" parent="App.DayNight.BlueRed">
+    <style name="App.DayNight.Cold.MD1" parent="App.DayNight.Cold">
         <item name="materialCardStyle">@style/CardViewMD</item>
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
     </style>

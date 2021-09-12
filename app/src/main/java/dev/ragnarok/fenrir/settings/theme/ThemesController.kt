@@ -7,6 +7,15 @@ import dev.ragnarok.fenrir.settings.Settings
 object ThemesController {
     val themes = arrayOf(
         ThemeValue(
+            "cold",
+            "#9BC4FC",
+            "#D8C2FF",
+            "Cold",
+            R.style.App_DayNight_Cold,
+            R.style.App_DayNight_Cold_Amoled,
+            R.style.App_DayNight_Cold_MD1
+        ).toast("#4d7198", "#448AFF"),
+        ThemeValue(
             "ice",
             "#448AFF",
             "#1E88E5",
@@ -68,15 +77,6 @@ object ThemesController {
             R.style.App_DayNight_BlueViolet,
             R.style.App_DayNight_BlueViolet_Amoled,
             R.style.App_DayNight_BlueViolet_MD1
-        ).toast("#4d7198", "#448AFF"),
-        ThemeValue(
-            "blue_red",
-            "#448AFF",
-            "#FF0000",
-            "Ice Red",
-            R.style.App_DayNight_BlueRed,
-            R.style.App_DayNight_BlueRed_Amoled,
-            R.style.App_DayNight_BlueRed_MD1
         ).toast("#4d7198", "#448AFF"),
         ThemeValue(
             "blue_yellow",
@@ -190,8 +190,8 @@ object ThemesController {
         ),
         ThemeValue(
             "ice_green",
-            "#448AFF",
-            "#4CAF50",
+            "#757AFF",
+            "#50F2C4",
             "Ice Green",
             R.style.App_DayNight_IceGreen,
             R.style.App_DayNight_IceGreen_Amoled,

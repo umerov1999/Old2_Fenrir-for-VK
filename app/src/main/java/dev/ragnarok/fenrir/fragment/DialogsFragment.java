@@ -321,7 +321,7 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
             }
         }
 
-        if (contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        if (contextView.canAddToShortcuts && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             menus.add(new OptionRequest(5, addToShortcuts, R.drawable.about_writed, false));
         }
 

@@ -120,7 +120,7 @@ public class DirectAuthDialog extends BaseMvpDialogFragment<DirectAuthPresenter,
         builder.setIcon(R.drawable.logo_vk);
 
         AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
 
         fireViewCreated();
         return dialog;

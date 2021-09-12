@@ -85,6 +85,7 @@
         <item>Трискель</item>
         <item>Хель</item>
         <item>Один</item>
+        <item>Викинг</item>
         <item>Файер</item>
         <item>Файер шоу 1</item>
         <item>Файер шоу 2</item>
@@ -1644,7 +1645,7 @@
     <string name="revert_play_audio">Кнопка плей - меню</string>
     <string name="foreground_downloader">Менеджер загрузок</string>
     <string name="side_transition">Анимированный переход</string>
-    <string name="lolipop21">Данное приложение не расчитанно для работы на Android 5.0 sdk 21, ибо у этой прошивки есть баг в модуле Skia. Если будет вылетать, отключите нативную библиотеку в настройках, но тогда лишитесь стикеров, анимированных gif, qr</string>
+    <string name="lollipop21">Данное приложение не расчитанно для работы на Android 5.0 sdk 21, ибо у этой прошивки есть баг в модуле Skia. Если будет вылетать, отключите нативную библиотеку в настройках, но тогда лишитесь стикеров, анимированных gif, qr</string>
     <string name="ad_block_story_news">Блокировка рекламы</string>
     <string name="ad_block_story_news_summary">Истории, новости</string>
     <string name="open_comment_thread">Открыть %1$s</string>
@@ -1659,4 +1660,5 @@
     <string name="do_not_use">Не использовать! Только для автора клиента!</string>
     <string name="mention_fave">Упоминания в закладках</string>
     <string name="pin_digit">Пин код</string>
+    <string name="delete_dynamic_shortcuts">Удалить динамические ярлыки</string>
 </resources>

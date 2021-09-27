@@ -18,11 +18,14 @@ import dev.ragnarok.fenrir.domain.ICommunitiesInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Community;
 import dev.ragnarok.fenrir.model.DataWrapper;
+import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
 import dev.ragnarok.fenrir.mvp.view.ICommunitiesView;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Translit;
+import dev.ragnarok.fenrir.util.Utils;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -40,6 +43,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
     private final CompositeDisposable netSeacrhDisposable = new CompositeDisposable();
     private final CompositeDisposable filterDisposable = new CompositeDisposable();
+    private final boolean isNotFriendShow;
     private boolean actualEndOfContent;
     private boolean netSearchEndOfContent;
     private boolean actualLoadingNow;
@@ -57,8 +61,12 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         filtered = new DataWrapper<>(new ArrayList<>(0), false);
         search = new DataWrapper<>(new ArrayList<>(0), false);
 
+        isNotFriendShow = Settings.get().other().isNot_friend_show() && userId != accountId;
+
         loadCachedData();
-        requestActualData(0);
+        if (!isNotFriendShow) {
+            requestActualData(0, false);
+        }
     }
 
     private static Single<List<Community>> filter(List<Community> orig, String filter) {
@@ -126,7 +134,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         return false;
     }
 
-    private void requestActualData(int offset) {
+    private void requestActualData(int offset, boolean do_scan) {
         actualLoadingNow = true;
         //this.actualLoadingOffset = offset;
 
@@ -135,7 +143,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         resolveRefreshing();
         actualDisposable.add(communitiesInteractor.getActual(accountId, userId, 1000, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(communities -> onActualDataReceived(offset, communities), this::onActualDataGetError));
+                .subscribe(communities -> onActualDataReceived(offset, communities, do_scan), this::onActualDataGetError));
     }
 
     @Override
@@ -162,13 +170,32 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         view.displayData(own, filtered, search);
     }
 
-    private void onActualDataReceived(int offset, List<Community> communities) {
+    private void onActualDataReceived(int offset, List<Community> communities, boolean do_scan) {
         //reset cache loading
         cacheDisposable.clear();
         cacheLoadingNow = false;
 
         actualLoadingNow = false;
         actualEndOfContent = communities.isEmpty();
+
+        if (do_scan && isNotFriendShow) {
+            List<Owner> not_communities = new ArrayList<>();
+            for (Community i : own.get()) {
+                if (Utils.indexOfOwner(communities, i.getOwnerId()) == -1) {
+                    not_communities.add(i);
+                }
+            }
+
+            List<Owner> add_communities = new ArrayList<>();
+            for (Community i : communities) {
+                if (Utils.indexOfOwner(own.get(), i.getOwnerId()) == -1) {
+                    add_communities.add(i);
+                }
+            }
+            if (add_communities.size() > 0 || not_communities.size() > 0) {
+                callView(view -> view.showAddCommunities(add_communities, not_communities, getAccountId()));
+            }
+        }
 
         if (offset == 0) {
             own.get().clear();
@@ -189,11 +216,19 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         int accountId = getAccountId();
         cacheDisposable.add(communitiesInteractor.getCachedData(accountId, userId)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(this::onCachedDataReceived));
+                .subscribe(this::onCachedDataReceived, this::onCacheGetError));
     }
 
     private boolean isSearchNow() {
         return trimmedNonEmpty(filter);
+    }
+
+    private void onCacheGetError(Throwable t) {
+        cacheLoadingNow = false;
+        callView(v -> showError(v, t));
+        if (isNotFriendShow) {
+            requestActualData(0, false);
+        }
     }
 
     private void onCachedDataReceived(List<Community> communities) {
@@ -202,6 +237,10 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         own.get().clear();
         own.get().addAll(communities);
         callView(ICommunitiesView::notifyDataSetChanged);
+
+        if (isNotFriendShow) {
+            requestActualData(0, communities.size() > 0);
+        }
     }
 
     public void fireSearchQueryChanged(String query) {
@@ -285,7 +324,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
             int count = communities.size();
 
             search.addAll(communities);
-            callView(view -> view.notifySeacrhDataAdded(sizeBefore, count));
+            callView(view -> view.notifySearchDataAdded(sizeBefore, count));
         }
     }
 
@@ -335,7 +374,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
             actualLoadingNow = false;
             //actualLoadingOffset = 0;
 
-            requestActualData(0);
+            requestActualData(0, false);
         }
     }
 
@@ -348,7 +387,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         } else {
             if (!actualLoadingNow && !cacheLoadingNow && !actualEndOfContent) {
                 int offset = own.size();
-                requestActualData(offset);
+                requestActualData(offset, false);
             }
         }
     }

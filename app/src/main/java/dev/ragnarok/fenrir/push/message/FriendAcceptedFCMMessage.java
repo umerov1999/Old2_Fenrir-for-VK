@@ -80,7 +80,7 @@ public class FriendAcceptedFCMMessage {
         if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getFriendRequestsChannel(context));
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.FRIEND_REQUESTS_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getFriendRequestsChannelId())
                 .setSmallIcon(R.drawable.friends)
                 .setLargeIcon(bitmap)
                 .setContentTitle(user.getFullName())

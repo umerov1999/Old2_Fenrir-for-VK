@@ -47,6 +47,7 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
     private final CompositeDisposable actualDataDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
     private final CompositeDisposable seacrhDisposable = new CompositeDisposable();
+    private final boolean isNotFriendShow;
     private String q;
     private boolean actualDataReceived;
     private boolean actualDataEndOfContent;
@@ -64,6 +65,7 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
         data.add(ALL, new UsersPart(R.string.all_friends, new ArrayList<>(), true));
         data.add(SEACRH_CACHE, new UsersPart(R.string.results_in_the_cache, new ArrayList<>(), false));
         data.add(SEARCH_WEB, new UsersPart(R.string.results_in_a_network, new ArrayList<>(), false));
+        isNotFriendShow = Settings.get().other().isNot_friend_show();
     }
 
     private static boolean allow(User user, String preparedQ) {
@@ -81,7 +83,7 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
         actualDataLoadingNow = true;
         resolveRefreshingView();
 
-        actualDataDisposable.add(relationshipInteractor.getRequests(accountId, offset, Settings.get().other().isNot_friend_show() ? 1000 : 200)
+        actualDataDisposable.add(relationshipInteractor.getRequests(accountId, offset, isNotFriendShow ? 1000 : 200)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(users -> onActualDataReceived(offset, users, do_scan), this::onActualDataGetError));
     }
@@ -112,13 +114,13 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
             doLoadTabs = true;
         }
         loadAllCachedData();
-        if (!Settings.get().other().isNot_friend_show()) {
+        if (!isNotFriendShow) {
             requestActualData(0, false);
         }
     }
 
     private void onActualDataReceived(int offset, List<User> users, boolean do_scan) {
-        if (do_scan && Settings.get().other().isNot_friend_show()) {
+        if (do_scan && isNotFriendShow) {
             List<Owner> not_friends = new ArrayList<>();
             for (User i : getAllData()) {
                 if (Utils.indexOf(users, i.getId()) == -1) {
@@ -168,6 +170,9 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
     private void onCacheGetError(Throwable t) {
         cacheLoadingNow = false;
         callView(v -> showError(v, t));
+        if (isNotFriendShow) {
+            requestActualData(0, false);
+        }
     }
 
     private void onCachedDataReceived(List<User> users) {
@@ -177,7 +182,7 @@ public class RequestsPresenter extends AccountDependencyPresenter<IRequestsView>
         getAllData().addAll(users);
 
         safelyNotifyDataSetChanged();
-        if (Settings.get().other().isNot_friend_show()) {
+        if (isNotFriendShow) {
             requestActualData(0, users.size() > 0);
         }
     }

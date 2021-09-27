@@ -77,7 +77,7 @@ public class GroupInviteFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getGroupInvitesChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.GROUP_INVITES_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getGroupInvitesChannelId())
                 .setSmallIcon(R.drawable.groups)
                 .setLargeIcon(groupBitmap)
                 .setContentTitle(community.getFullName())

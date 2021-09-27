@@ -612,7 +612,9 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         mAccountId = newAccountId;
         Accounts.showAccountSwitchedToast(this);
         updateNotificationCount(newAccountId);
-        MusicPlaybackController.stop();
+        if (!Settings.get().other().isDeveloper_mode()) {
+            MusicPlaybackController.stop();
+        }
         if (isAuthValid()) {
             CheckDonate.floodControl();
         }
@@ -638,23 +640,28 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
         if (ACTION_SWITH_ACCOUNT.equals(intent.getAction())) {
             int newAccountId = intent.getExtras().getInt(Extra.ACCOUNT_ID);
-            Settings.get()
-                    .accounts()
-                    .setCurrent(newAccountId);
+            if (Settings.get().accounts().getCurrent() != newAccountId) {
+                Settings.get()
+                        .accounts()
+                        .setCurrent(newAccountId);
 
-            mAccountId = newAccountId;
+                mAccountId = newAccountId;
+            }
             intent.setAction(ACTION_MAIN);
         }
 
         if (ACTION_SHORTCUT_WALL.equals(intent.getAction())) {
             int newAccountId = intent.getExtras().getInt(Extra.ACCOUNT_ID);
             int ownerId = intent.getExtras().getInt(Extra.OWNER_ID);
-            Settings.get()
-                    .accounts()
-                    .setCurrent(newAccountId);
+            if (Settings.get().accounts().getCurrent() != newAccountId) {
+                Settings.get()
+                        .accounts()
+                        .setCurrent(newAccountId);
 
-            mAccountId = newAccountId;
-            openPlace(PlaceFactory.getOwnerWallPlace(mAccountId, ownerId, null));
+                mAccountId = newAccountId;
+            }
+            clearBackStack();
+            openPlace(PlaceFactory.getOwnerWallPlace(newAccountId, ownerId, null));
             return true;
         }
 

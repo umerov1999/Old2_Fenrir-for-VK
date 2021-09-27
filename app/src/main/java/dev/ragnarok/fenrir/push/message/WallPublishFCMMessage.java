@@ -85,7 +85,7 @@ public class WallPublishFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.NEW_POST_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getNewPostChannelId())
                 .setSmallIcon(R.drawable.pencil)
                 .setLargeIcon(bitmap)
                 .setContentTitle(community.getFullName())

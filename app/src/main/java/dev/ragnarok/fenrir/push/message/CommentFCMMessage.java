@@ -108,7 +108,7 @@ public class CommentFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getCommentsChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.COMMENTS_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getCommentsChannelId())
                 .setSmallIcon(R.drawable.comment_thread)
                 .setLargeIcon(ownerInfo.getAvatar())
                 .setContentTitle(title)

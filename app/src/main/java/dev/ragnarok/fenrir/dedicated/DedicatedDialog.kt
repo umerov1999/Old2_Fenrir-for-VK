@@ -44,6 +44,7 @@ class DedicatedDialog :
     private var mGoto: ViewGroup? = null
     private var mText: MaterialTextView? = null
     private var swipe: ImageView? = null
+    private var dedicatedIcon: ImageView? = null
     private var anim: RLottieImageView? = null
     private var darkAnim: RLottieImageView? = null
     private var pager: ViewPager2? = null
@@ -87,6 +88,7 @@ class DedicatedDialog :
         darkAnim?.visibility = View.VISIBLE
         darkAnim?.fromRes(R.raw.unheart, Utils.dp(200f), Utils.dp(200f))
         darkAnim?.playAnimation()
+        dedicatedIcon?.setImageResource(R.drawable.dedicated_icon_dark)
     }
 
     override fun playDarkAudio(exoPlayer: SimpleExoPlayer) {
@@ -199,6 +201,7 @@ class DedicatedDialog :
     ): View? {
         val view = View.inflate(context, R.layout.dialog_dedicated, null)
         swipe = view.findViewById(R.id.dedicated_swipe)
+        dedicatedIcon = view.findViewById(R.id.dedicated_icon)
         pager = view.findViewById(R.id.dedicated_pager)
         mGoto = view.findViewById(R.id.dedicated_go_to)
         mText = view.findViewById(R.id.dedicated_text)

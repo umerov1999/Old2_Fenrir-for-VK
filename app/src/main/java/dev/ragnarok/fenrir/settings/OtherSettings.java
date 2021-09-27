@@ -305,6 +305,11 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public void setUse_hls_downloader(boolean enable) {
+        PreferenceManager.getDefaultSharedPreferences(app).edit().putBoolean("use_hls_downloader", enable).apply();
+    }
+
+    @Override
     public boolean isDisable_history() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("disable_history", false);
     }
@@ -598,13 +603,18 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
+    public boolean isDoLogs() {
+        return isDeveloper_mode() && PreferenceManager.getDefaultSharedPreferences(app).getBoolean("do_logs", false);
+    }
+
+    @Override
     public boolean isExtra_debug() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("extra_debug", false);
+        return isDoLogs() && PreferenceManager.getDefaultSharedPreferences(app).getBoolean("extra_debug", false);
     }
 
     @Override
     public boolean isDump_fcm() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("dump_fcm", false);
+        return isDoLogs() && PreferenceManager.getDefaultSharedPreferences(app).getBoolean("dump_fcm", false);
     }
 
     @Override
@@ -702,5 +712,16 @@ class OtherSettings implements ISettings.IOtherSettings {
         } catch (Exception e) {
             return 1;
         }
+    }
+
+    @Override
+    public int getCustomChannelNotif() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getInt("custom_notification_channel", 0);
+    }
+
+    @Override
+    public void nextCustomChannelNotif() {
+        int vl = getCustomChannelNotif();
+        PreferenceManager.getDefaultSharedPreferences(app).edit().putInt("custom_notification_channel", vl + 1).apply();
     }
 }

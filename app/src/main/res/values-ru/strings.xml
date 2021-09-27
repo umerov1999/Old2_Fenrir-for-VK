@@ -89,6 +89,7 @@
         <item>Файер</item>
         <item>Файер шоу 1</item>
         <item>Файер шоу 2</item>
+        <item>[Рандом]</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -397,6 +398,7 @@
     <string name="api_error_28">Ключ доступа приложения недействителен</string>
     <string name="api_error_29">Достигнут количественный лимит на вызов метода</string>
     <string name="api_error_30">Закрытый профиль</string>
+    <string name="api_error_34">Устаревшая версия api</string>
     <string name="api_error_100">Один из необходимых параметров был не передан или неверен</string>
     <string name="api_error_101">Неверный API ID приложения</string>
     <string name="api_error_103">Превышено ограничение на количество вступлений</string>
@@ -1529,6 +1531,8 @@
     <string name="not_follower">Больше не подписчики:</string>
     <string name="new_follower">Новые подписчики:</string>
     <string name="not_request">Больше не подписаны:</string>
+    <string name="new_communities">Новые сообщества:</string>
+    <string name="not_communities">Больше не состоит:</string>
     <string name="keyboard">Клавиатура</string>
     <string name="not_friend_show">Больше не друзья</string>
     <string name="not_friend_show_summary">Показывать, кто убрался из друзей</string>
@@ -1609,6 +1613,7 @@
     <string name="video_controller_to_decor">Видео кнопки в DecorView</string>
     <string name="video_swipes">Свайпы у видео</string>
     <string name="extra_debug">Расширенная отладка</string>
+    <string name="do_logs">Записывать логи</string>
     <string name="dump_fcm">Отладка firebase</string>
     <string name="need_restart">Требуется перезапуск</string>
     <string name="enable_native">Использовать нативные библиотеки</string>
@@ -1661,4 +1666,5 @@
     <string name="mention_fave">Упоминания в закладках</string>
     <string name="pin_digit">Пин код</string>
     <string name="delete_dynamic_shortcuts">Удалить динамические ярлыки</string>
+    <string name="reset_notifications_groups">Сбросить уведомления</string>
 </resources>

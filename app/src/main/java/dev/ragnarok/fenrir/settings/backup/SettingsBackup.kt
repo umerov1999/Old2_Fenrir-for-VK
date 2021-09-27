@@ -69,6 +69,7 @@ class SettingsBackup {
         SettingCollector("vk_api_domain", SettingTypes.TYPE_STRING),
         SettingCollector("vk_auth_domain", SettingTypes.TYPE_STRING),
         SettingCollector("developer_mode", SettingTypes.TYPE_BOOL),
+        SettingCollector("do_logs", SettingTypes.TYPE_BOOL),
         SettingCollector("force_cache", SettingTypes.TYPE_BOOL),
         SettingCollector("disable_history", SettingTypes.TYPE_BOOL),
         SettingCollector("show_wall_cover", SettingTypes.TYPE_BOOL),

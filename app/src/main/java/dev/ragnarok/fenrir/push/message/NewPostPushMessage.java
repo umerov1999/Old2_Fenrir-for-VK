@@ -77,7 +77,7 @@ public class NewPostPushMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.NEW_POST_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getNewPostChannelId())
                 .setSmallIcon(R.drawable.client_round)
                 .setContentTitle(title)
                 .setContentText(body)

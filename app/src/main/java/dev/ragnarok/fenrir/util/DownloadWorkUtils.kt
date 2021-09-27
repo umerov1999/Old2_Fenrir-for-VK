@@ -124,6 +124,16 @@ object DownloadWorkUtils {
         return "$result.$extension"
     }
 
+    @JvmStatic
+    fun makeLegalFilenameFromArg(filename: String?, extension: String?): String? {
+        filename ?: return null
+        var result = makeLegalFilenameFull(filename)
+        if (result.length > 90) result = result.substring(0, 90).trim { it <= ' ' }
+        if (extension == null)
+            return result
+        return "$result.$extension"
+    }
+
     private fun optString(value: String): String {
         return if (Utils.isEmpty(value)) "" else value
     }

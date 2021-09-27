@@ -56,6 +56,7 @@ import dev.ragnarok.fenrir.filepicker.model.DialogConfigs
 import dev.ragnarok.fenrir.filepicker.model.DialogProperties
 import dev.ragnarok.fenrir.filepicker.view.FilePickerDialog
 import dev.ragnarok.fenrir.listener.OnSectionResumeCallback
+import dev.ragnarok.fenrir.longpoll.AppNotificationChannels
 import dev.ragnarok.fenrir.media.record.AudioRecordWrapper
 import dev.ragnarok.fenrir.model.LocalPhoto
 import dev.ragnarok.fenrir.model.SwitchableCategory
@@ -602,6 +603,21 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 it.onPreferenceClickListener =
                     Preference.OnPreferenceClickListener {
                         lunchScopedControl()
+                        true
+                    }
+            }
+        }
+
+        findPreference<Preference>("reset_notifications_groups")?.let {
+            val hasOreo = Utils.hasOreo()
+            it.isVisible = hasOreo
+            if (hasOreo) {
+                it.onPreferenceClickListener =
+                    Preference.OnPreferenceClickListener {
+                        AppNotificationChannels.invalidateSoundChannels(requireActivity())
+                        CreateCustomToast(requireActivity())
+                            .setDuration(Toast.LENGTH_LONG)
+                            .showToastSuccessBottom(R.string.success)
                         true
                     }
             }

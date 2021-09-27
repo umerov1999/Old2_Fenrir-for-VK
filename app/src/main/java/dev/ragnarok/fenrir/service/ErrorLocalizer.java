@@ -104,6 +104,8 @@ public class ErrorLocalizer {
                     return context.getString(R.string.api_error_29);
                 case 30:
                     return context.getString(R.string.api_error_30);
+                case 34:
+                    return context.getString(R.string.api_error_34);
                 case 100:
                     return context.getString(R.string.api_error_100);
                 case 101:

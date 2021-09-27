@@ -33,6 +33,7 @@ import dev.ragnarok.fenrir.db.model.entity.OwnerEntities;
 import dev.ragnarok.fenrir.db.model.entity.PostEntity;
 import dev.ragnarok.fenrir.model.FeedSourceCriteria;
 import dev.ragnarok.fenrir.model.criteria.FeedCriteria;
+import dev.ragnarok.fenrir.util.Utils;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -299,22 +300,26 @@ class FeedStorage extends AbsStorage implements IFeedStorage {
 
         if (nonEmpty(attachmentsJson)) {
             AttachmentsEntity attachmentsEntity = GSON.fromJson(attachmentsJson, AttachmentsEntity.class);
+            if (nonNull(attachmentsEntity) && !Utils.isEmpty(attachmentsEntity.getEntities())) {
+                List<Entity> all = attachmentsEntity.getEntities();
 
-            List<Entity> all = attachmentsEntity.getEntities();
+                List<Entity> attachmentsOnly = new ArrayList<>(all.size());
+                List<PostEntity> copiesOnly = new ArrayList<>(0);
 
-            List<Entity> attachmentsOnly = new ArrayList<>(all.size());
-            List<PostEntity> copiesOnly = new ArrayList<>(0);
-
-            for (Entity a : all) {
-                if (a instanceof PostEntity) {
-                    copiesOnly.add((PostEntity) a);
-                } else {
-                    attachmentsOnly.add(a);
+                for (Entity a : all) {
+                    if (a instanceof PostEntity) {
+                        copiesOnly.add((PostEntity) a);
+                    } else {
+                        attachmentsOnly.add(a);
+                    }
                 }
-            }
 
-            dbo.setAttachments(attachmentsOnly);
-            dbo.setCopyHistory(copiesOnly);
+                dbo.setAttachments(attachmentsOnly);
+                dbo.setCopyHistory(copiesOnly);
+            } else {
+                dbo.setCopyHistory(Collections.emptyList());
+                dbo.setAttachments(Collections.emptyList());
+            }
         } else {
             dbo.setCopyHistory(Collections.emptyList());
             dbo.setAttachments(Collections.emptyList());

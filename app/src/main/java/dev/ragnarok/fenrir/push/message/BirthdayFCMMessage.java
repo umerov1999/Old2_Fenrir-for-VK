@@ -90,7 +90,7 @@ public class BirthdayFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getBirthdaysChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.BIRTHDAYS_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getBirthdaysChannelId())
                 .setSmallIcon(R.drawable.cake)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -111,7 +111,7 @@ public class BirthdayFCMMessage {
 
         configOtherPushNotification(notification);
 
-        nManager.notify(String.valueOf(user_id), NotificationHelper.NOTIFICATION_MENTION, notification);
+        nManager.notify(String.valueOf(user_id), NotificationHelper.NOTIFICATION_BIRTHDAY, notification);
     }
 
     private static final class BirthdayContext {

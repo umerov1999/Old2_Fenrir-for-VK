@@ -29,6 +29,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
     private final IAccountsInteractor accountsInteractor;
     private final CompositeDisposable actualDataDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
+    private final boolean isNotFriendShow;
     private boolean actualDataLoading;
     private boolean actualDataReceived;
     private boolean endOfContent;
@@ -40,6 +41,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
         this.userId = userId;
         relationshipInteractor = InteractorFactory.createRelationshipInteractor();
         accountsInteractor = InteractorFactory.createAccountInteractor();
+        isNotFriendShow = Settings.get().other().isNot_friend_show();
     }
 
     private void requestActualData(int offset, boolean do_scan) {
@@ -47,7 +49,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
         resolveRefreshingView();
 
         int accountId = getAccountId();
-        actualDataDisposable.add(relationshipInteractor.getFollowers(accountId, userId, Settings.get().other().isNot_friend_show() ? 1000 : 200, offset)
+        actualDataDisposable.add(relationshipInteractor.getFollowers(accountId, userId, isNotFriendShow ? 1000 : 200, offset)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(users -> onActualDataReceived(offset, users, do_scan), this::onActualDataGetError));
     }
@@ -74,7 +76,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
             doLoadTabs = true;
         }
         loadAllCacheData();
-        if (!Settings.get().other().isNot_friend_show()) {
+        if (!isNotFriendShow) {
             requestActualData(0, false);
         }
     }
@@ -91,7 +93,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
     }
 
     private void onActualDataReceived(int offset, List<User> users, boolean do_scan) {
-        if (do_scan && Settings.get().other().isNot_friend_show()) {
+        if (do_scan && isNotFriendShow) {
             List<Owner> not_friends = new ArrayList<>();
             for (Owner i : data) {
                 if (Utils.indexOf(users, i.getOwnerId()) == -1) {
@@ -161,6 +163,9 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
     private void onCacheDataGetError(Throwable t) {
         cacheLoadingNow = false;
         callView(v -> showError(v, getCauseIfRuntime(t)));
+        if (isNotFriendShow) {
+            requestActualData(0, false);
+        }
     }
 
     private void onCachedDataReceived(List<User> users) {
@@ -168,7 +173,7 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
 
         data.addAll(users);
         callView(IFollowersView::notifyDataSetChanged);
-        if (Settings.get().other().isNot_friend_show()) {
+        if (isNotFriendShow) {
             requestActualData(0, users.size() > 0);
         }
     }

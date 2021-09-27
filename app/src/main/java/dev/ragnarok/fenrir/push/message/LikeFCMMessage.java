@@ -165,7 +165,7 @@ public class LikeFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getLikesChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.LIKES_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getLikesChannelId())
                 .setSmallIcon(R.drawable.heart)
                 .setContentTitle(context.getString(R.string.like_title))
                 .setContentText(title)

@@ -1,8 +1,10 @@
 package dev.ragnarok.fenrir.settings.theme
 
 import androidx.annotation.StyleRes
+import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.settings.Settings
+import dev.ragnarok.fenrir.util.Utils
 
 object ThemesController {
     val themes = arrayOf(
@@ -253,6 +255,7 @@ object ThemesController {
             R.style.App_DayNight_Ice_MD1
         )
     )
+    private var randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
     private var randomTheme = themes.random()
     private val defaultTheme = ThemeValue(
         "ice",
@@ -281,6 +284,15 @@ object ThemesController {
 
     fun nextRandom() {
         randomTheme = themes.random()
+        randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
+    }
+
+    fun paganSymbol(): Int {
+        val res = Settings.get().other().paganSymbol
+        if (res == Constants.RANDOM_PAGAN_SYMBOL_NUMBER) {
+            return randSymbol
+        }
+        return res
     }
 
     @StyleRes

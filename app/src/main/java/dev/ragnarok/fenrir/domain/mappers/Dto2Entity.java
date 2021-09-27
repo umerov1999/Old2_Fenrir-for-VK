@@ -527,7 +527,7 @@ public class Dto2Entity {
                     .setOnlineFriendsCount(counters.online_friends)
                     .setMutualFriendsCount(counters.mutual_friends)
                     .setFollowersCount(counters.followers)
-                    .setGroupsCount(Math.max(counters.groups, counters.pages))
+                    .setGroupsCount(Math.max(counters.groups, counters.pages + counters.subscriptions))
                     .setPhotosCount(counters.photos)
                     .setAudiosCount(counters.audios)
                     .setVideosCount(counters.videos)

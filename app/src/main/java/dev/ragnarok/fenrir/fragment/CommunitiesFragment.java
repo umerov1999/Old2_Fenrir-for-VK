@@ -26,12 +26,14 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityFeatures;
 import dev.ragnarok.fenrir.activity.ActivityUtils;
 import dev.ragnarok.fenrir.adapter.CommunitiesAdapter;
+import dev.ragnarok.fenrir.adapter.OwnersAdapter;
 import dev.ragnarok.fenrir.fragment.base.BaseMvpFragment;
 import dev.ragnarok.fenrir.listener.AppStyleable;
 import dev.ragnarok.fenrir.listener.BackPressCallback;
 import dev.ragnarok.fenrir.listener.EndlessRecyclerOnScrollListener;
 import dev.ragnarok.fenrir.model.Community;
 import dev.ragnarok.fenrir.model.DataWrapper;
+import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.CommunitiesPresenter;
 import dev.ragnarok.fenrir.mvp.view.ICommunitiesView;
@@ -157,10 +159,41 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
     }
 
     @Override
-    public void notifySeacrhDataAdded(int position, int count) {
+    public void notifySearchDataAdded(int position, int count) {
         if (nonNull(mAdapter)) {
             mAdapter.notifyItemRangeInserted(2, position, count);
         }
+    }
+
+    private void showNotCommunities(List<Owner> data, int accountId) {
+        OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
+        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(requireActivity().getString(R.string.not_communities))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setPositiveButton("OK", null)
+                .setCancelable(true)
+                .show();
+    }
+
+    @Override
+    public void showAddCommunities(List<Owner> add, List<Owner> remove, int accountId) {
+        if (add.size() <= 0 && remove.size() > 0) {
+            showNotCommunities(remove, accountId);
+            return;
+        }
+        OwnersAdapter adapter = new OwnersAdapter(requireActivity(), add);
+        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(requireActivity().getString(R.string.new_communities))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setPositiveButton("OK", (dialog, which) -> {
+                    if (remove.size() > 0) {
+                        showNotCommunities(remove, accountId);
+                    }
+                })
+                .setCancelable(remove.size() <= 0)
+                .show();
     }
 
     @Override

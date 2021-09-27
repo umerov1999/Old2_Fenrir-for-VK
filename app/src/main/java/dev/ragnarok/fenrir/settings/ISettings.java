@@ -72,6 +72,8 @@ public interface ISettings {
 
         boolean isNative_parcel_story();
 
+        boolean isDoLogs();
+
         boolean isExtra_debug();
 
         boolean isDump_fcm();
@@ -89,6 +91,8 @@ public interface ISettings {
         String get_Auth_Domain();
 
         boolean isUse_hls_downloader();
+
+        void setUse_hls_downloader(boolean enable);
 
         boolean isDisable_history();
 
@@ -222,7 +226,6 @@ public interface ISettings {
 
         boolean isRunes_show();
 
-
         int getMusicLifecycle();
 
         int getFFmpegPlugin();
@@ -258,6 +261,10 @@ public interface ISettings {
 
         @NonNull
         Set<String> getUserNameChangesKeys();
+
+        int getCustomChannelNotif();
+
+        void nextCustomChannelNotif();
     }
 
     interface IAccountsSettings {

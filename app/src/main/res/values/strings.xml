@@ -202,6 +202,7 @@
         <item>Fire</item>
         <item>Fire Show 1</item>
         <item>Fire Show 2</item>
+        <item>[Random]</item>
     </string-array>
 
     <string-array name="array_pagan_symbol_items" translatable="false">
@@ -222,6 +223,7 @@
         <item>14</item>
         <item>15</item>
         <item>16</item>
+        <item>17</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -573,6 +575,7 @@
     <string name="api_error_28">Application access key is invalid</string>
     <string name="api_error_29">Method call limit reached</string>
     <string name="api_error_30">Closed profile</string>
+    <string name="api_error_34">Client version deprecated</string>
     <string name="api_error_100">One of the required parameters was not passed or was incorrect</string>
     <string name="api_error_101">Invalid API Application ID</string>
     <string name="api_error_103">Limit on number of arrivals exceeded</string>
@@ -1754,6 +1757,8 @@
     <string name="not_follower">No longer followers:</string>
     <string name="new_follower">New followers:</string>
     <string name="not_request">No longer requests:</string>
+    <string name="new_communities">New communities:</string>
+    <string name="not_communities">No longer consists:</string>
     <string name="keyboard">Keyboard</string>
     <string name="not_friend_show">No longer friends</string>
     <string name="not_friend_show_summary">Show who has removed you from the friends list</string>
@@ -1836,6 +1841,7 @@
     <string name="video_controller_to_decor">Video controller to decor view</string>
     <string name="video_swipes">Enable video swipes</string>
     <string name="extra_debug">Extra Debug</string>
+    <string name="do_logs">Record logs</string>
     <string name="dump_fcm">Debug firebase</string>
     <string name="need_restart">Restart required</string>
     <string name="enable_native">Enable native libraries</string>
@@ -1888,4 +1894,5 @@
     <string name="mention_fave">Mention in Fave</string>
     <string name="pin_digit">pin digit</string>
     <string name="delete_dynamic_shortcuts">Delete dynamic shortcuts</string>
+    <string name="reset_notifications_groups">Reset notifications</string>
 </resources>

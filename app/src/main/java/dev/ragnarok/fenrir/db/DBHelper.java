@@ -291,7 +291,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + PhotosColumns.WIDTH + "] INTEGER, " +
                 "  [" + PhotosColumns.HEIGHT + "] INTEGER, " +
                 "  [" + PhotosColumns.TEXT + "] TEXT, " +
-                "  [" + PhotosColumns.DATE + "] INTEGER, " +
+                "  [" + PhotosColumns.DATE + "] BIGINT, " +
                 "  [" + PhotosColumns.SIZES + "] TEXT, " +
                 "  [" + PhotosColumns.USER_LIKES + "] BOOLEAN, " +
                 "  [" + PhotosColumns.CAN_COMMENT + "] BOOLEAN, " +
@@ -328,7 +328,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 " [" + CommentsColumns.COMMENT_ID + "] INTEGER, " +
                 " [" + CommentsColumns.FROM_ID + "] INTEGER, " +
-                " [" + CommentsColumns.DATE + "] TEXT, " +
+                " [" + CommentsColumns.DATE + "] BIGINT, " +
                 " [" + CommentsColumns.TEXT + "] TEXT, " +
                 " [" + CommentsColumns.REPLY_TO_USER + "] INTEGER, " +
                 " [" + CommentsColumns.REPLY_TO_COMMENT + "] INTEGER, " +
@@ -554,8 +554,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + VideoColumns.DESCRIPTION + "] TEXT, " +
                 "  [" + VideoColumns.DURATION + "] INTEGER, " +
                 "  [" + VideoColumns.LINK + "] TEXT, " +
-                "  [" + VideoColumns.DATE + "] INTEGER, " +
-                "  [" + VideoColumns.ADDING_DATE + "] INTEGER, " +
+                "  [" + VideoColumns.DATE + "] BIGINT, " +
+                "  [" + VideoColumns.ADDING_DATE + "] BIGINT, " +
                 "  [" + VideoColumns.VIEWS + "] INTEGER, " +
                 "  [" + VideoColumns.PLAYER + "] TEXT, " +
                 "  [" + VideoColumns.IMAGE + "] TEXT, " +
@@ -707,13 +707,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + NewsColumns.TYPE + "] TEXT, " +
                 "  [" + NewsColumns.SOURCE_ID + "] INTEGER, " +
-                "  [" + NewsColumns.DATE + "] INTEGER, " +
+                "  [" + NewsColumns.DATE + "] BIGINT, " +
                 "  [" + NewsColumns.POST_ID + "] INTEGER, " +
                 "  [" + NewsColumns.POST_TYPE + "] TEXT, " +
                 "  [" + NewsColumns.FINAL_POST + "] BOOLEAN, " +
                 "  [" + NewsColumns.COPY_OWNER_ID + "] INTEGER, " +
                 "  [" + NewsColumns.COPY_POST_ID + "] INTEGER, " +
-                "  [" + NewsColumns.COPY_POST_DATE + "] INTEGER, " +
+                "  [" + NewsColumns.COPY_POST_DATE + "] BIGINT, " +
                 "  [" + NewsColumns.TEXT + "] TEXT, " +
                 "  [" + NewsColumns.CAN_EDIT + "] BOOLEAN, " +
                 "  [" + NewsColumns.CAN_DELETE + "] BOOLEAN, " +
@@ -738,13 +738,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + UserCareerColumns.USER_ID + "] INTEGER, " +
                 "  [" + UserCareerColumns.GROUP_ID + "] INTEGER, " +
-                "  [" + UserCareerColumns.COMPANY + "] VARCHAR(2048), " +
+                "  [" + UserCareerColumns.COMPANY + "] TEXT, " +
                 "  [" + UserCareerColumns.COUNTRY_ID + "] INTEGER, " +
                 "  [" + UserCareerColumns.CITY_ID + "] INTEGER, " +
-                "  [" + UserCareerColumns.CITY_NAME + "] VARCHAR(2048), " +
+                "  [" + UserCareerColumns.CITY_NAME + "] TEXT, " +
                 "  [" + UserCareerColumns.YEAR_FROM + "] INTEGER, " +
                 "  [" + UserCareerColumns.YEAR_UNTIL + "] INTEGER, " +
-                "  [" + UserCareerColumns.POSITION + "] VARCHAR(2048));";
+                "  [" + UserCareerColumns.POSITION + "] TEXT);";
         db.execSQL(sql);
     }
 
@@ -754,7 +754,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + PostsColumns.POST_ID + "] INTEGER, " +
                 "  [" + PostsColumns.OWNER_ID + "] INTEGER, " +
                 "  [" + PostsColumns.FROM_ID + "] INTEGER, " +
-                "  [" + PostsColumns.DATE + "] INTEGER, " +
+                "  [" + PostsColumns.DATE + "] BIGINT, " +
                 "  [" + PostsColumns.TEXT + "] TEXT, " +
                 "  [" + PostsColumns.REPLY_OWNER_ID + "] INTEGER, " +
                 "  [" + PostsColumns.REPLY_POST_ID + "] INTEGER, " +
@@ -844,11 +844,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + VideoAlbumsColumns.ALBUM_ID + "] INTEGER, " +
                 "  [" + VideoAlbumsColumns.OWNER_ID + "] INTEGER, " +
-                "  [" + VideoAlbumsColumns.TITLE + "] VARCHAR(2048), " +
+                "  [" + VideoAlbumsColumns.TITLE + "] TEXT, " +
                 "  [" + VideoAlbumsColumns.COUNT + "] INTEGER, " +
-                "  [" + VideoAlbumsColumns.IMAGE + "] VARCHAR(2048), " +
+                "  [" + VideoAlbumsColumns.IMAGE + "] TEXT, " +
                 "  [" + VideoAlbumsColumns.UPDATE_TIME + "] BIGINT, " +
-                "  [" + VideoAlbumsColumns.PRIVACY + "] VARCHAR(2048), " +
+                "  [" + VideoAlbumsColumns.PRIVACY + "] TEXT, " +
                 "  CONSTRAINT [] UNIQUE ([" + VideoAlbumsColumns.ALBUM_ID + "], [" + VideoAlbumsColumns.OWNER_ID + "]) ON CONFLICT REPLACE);";
         db.execSQL(sql);
     }
@@ -858,7 +858,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + TopicsColumns.TOPIC_ID + "] INTEGER, " +
                 "  [" + TopicsColumns.OWNER_ID + "] INTEGER, " +
-                "  [" + TopicsColumns.TITLE + "] VARCHAR(2048), " +
+                "  [" + TopicsColumns.TITLE + "] TEXT, " +
                 "  [" + TopicsColumns.CREATED + "] BIGINT, " +
                 "  [" + TopicsColumns.CREATED_BY + "] INTEGER, " +
                 "  [" + TopicsColumns.UPDATED + "] BIGINT, " +
@@ -866,8 +866,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  [" + TopicsColumns.IS_CLOSED + "] BOOLEAN, " +
                 "  [" + TopicsColumns.IS_FIXED + "] BOOLEAN, " +
                 "  [" + TopicsColumns.COMMENTS + "] INTEGER, " +
-                "  [" + TopicsColumns.FIRST_COMMENT + "] VARCHAR(2048), " +
-                "  [" + TopicsColumns.LAST_COMMENT + "] VARCHAR(2048), " +
+                "  [" + TopicsColumns.FIRST_COMMENT + "] TEXT, " +
+                "  [" + TopicsColumns.LAST_COMMENT + "] TEXT, " +
                 "  [" + TopicsColumns.ATTACHED_POLL + "] TEXT, " +
                 "  CONSTRAINT [] UNIQUE ([" + TopicsColumns.TOPIC_ID + "], [" + TopicsColumns.OWNER_ID + "]) ON CONFLICT REPLACE);";
         db.execSQL(sql);
@@ -877,7 +877,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String sql = "CREATE TABLE [" + NotificationColumns.TABLENAME + "] (\n" +
                 "  [" + BaseColumns._ID + "] INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "  [" + NotificationColumns.TYPE + "] TEXT, " +
-                "  [" + NotificationColumns.DATE + "] INTEGER, " +
+                "  [" + NotificationColumns.DATE + "] BIGINT, " +
                 "  [" + NotificationColumns.DATA + "] TEXT);";
         db.execSQL(sql);
     }

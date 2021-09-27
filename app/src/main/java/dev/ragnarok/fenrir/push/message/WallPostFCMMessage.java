@@ -116,7 +116,7 @@ public class WallPostFCMMessage {
                         manager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(app));
                     }
 
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(app, AppNotificationChannels.NEW_POST_CHANNEL_ID)
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(app, AppNotificationChannels.getNewPostChannelId())
                             .setSmallIcon(R.drawable.client_round)
                             .setContentTitle(title)
                             .setContentText(body)
@@ -148,7 +148,7 @@ public class WallPostFCMMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getNewPostChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.NEW_POST_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getNewPostChannelId())
                 .setSmallIcon(R.drawable.pencil)
                 .setLargeIcon(avatar)
                 .setContentTitle(owner.getFullName())

@@ -140,13 +140,15 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
         boolean HasVersion = false;
         boolean HasDeviceId = false;
+        String vv = null;
         if (body instanceof FormBody) {
             FormBody formBody = (FormBody) body;
             for (int i = 0; i < formBody.size(); i++) {
                 String name = formBody.name(i);
-                if (name.equals("v"))
+                if (name.equals("v")) {
                     HasVersion = true;
-                else if (name.equals("device_id"))
+                    vv = formBody.value(i);
+                } else if (name.equals("device_id"))
                     HasDeviceId = true;
                 String value = formBody.value(i);
                 formBuilder.add(name, value);
@@ -187,6 +189,11 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
             if (nonNull(error)) {
                 switch (error.errorCode) {
+                    case ApiErrorCodes.CLIENT_VERSION_DEPRECATED:
+                        if (!isEmpty(vv) && "5.90".equals(vv)) {
+                            Settings.get().other().setUse_hls_downloader(true);
+                        }
+                        break;
                     case ApiErrorCodes.TOO_MANY_REQUESTS_PER_SECOND:
                         break;
                     case ApiErrorCodes.CAPTCHA_NEED:

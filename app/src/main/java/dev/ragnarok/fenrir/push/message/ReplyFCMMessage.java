@@ -99,7 +99,7 @@ public class ReplyFCMMessage {
         if (Utils.hasOreo()) {
             nManager.createNotificationChannel(AppNotificationChannels.getCommentsChannel(context));
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.COMMENTS_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getCommentsChannelId())
                 .setSmallIcon(R.drawable.channel)
                 .setLargeIcon(bitmap)
                 .setContentTitle(owner.getFullName())

@@ -2,6 +2,7 @@ package dev.ragnarok.fenrir.db.impl;
 
 import static dev.ragnarok.fenrir.db.impl.AttachmentsStorage.appendAttachOperationWithBackReference;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
+import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 import static dev.ragnarok.fenrir.util.Utils.safeCountOf;
 
 import android.content.ContentProviderOperation;
@@ -13,10 +14,6 @@ import android.provider.BaseColumns;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +24,7 @@ import dev.ragnarok.fenrir.db.column.CommentsColumns;
 import dev.ragnarok.fenrir.db.interfaces.Cancelable;
 import dev.ragnarok.fenrir.db.interfaces.ICommentsStorage;
 import dev.ragnarok.fenrir.db.model.entity.CommentEntity;
+import dev.ragnarok.fenrir.db.model.entity.CommentsEntity;
 import dev.ragnarok.fenrir.db.model.entity.Entity;
 import dev.ragnarok.fenrir.db.model.entity.OwnerEntities;
 import dev.ragnarok.fenrir.exception.DatabaseException;
@@ -37,6 +35,7 @@ import dev.ragnarok.fenrir.model.criteria.CommentsCriteria;
 import dev.ragnarok.fenrir.util.Exestime;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Unixtime;
+import dev.ragnarok.fenrir.util.Utils;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
@@ -44,9 +43,6 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
 class CommentsStorage extends AbsStorage implements ICommentsStorage {
-
-    private static final Type THREADS_TYPE = new TypeToken<List<CommentEntity>>() {
-    }.getType();
     private final PublishSubject<CommentUpdate> minorUpdatesPublisher;
     private final Object mStoreLock = new Object();
 
@@ -64,7 +60,12 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
         cv.put(CommentsColumns.REPLY_TO_USER, dbo.getReplyToUserId());
         cv.put(CommentsColumns.REPLY_TO_COMMENT, dbo.getReplyToComment());
         cv.put(CommentsColumns.THREADS_COUNT, dbo.getThreadsCount());
-        cv.put(CommentsColumns.THREADS, new Gson().toJson(dbo.getThreads()));
+        if (nonEmpty(dbo.getThreads())) {
+            CommentsEntity commentsEntity = new CommentsEntity(dbo.getThreads());
+            cv.put(CommentsColumns.THREADS, GSON.toJson(commentsEntity));
+        } else {
+            cv.putNull(CommentsColumns.THREADS);
+        }
         cv.put(CommentsColumns.LIKES, dbo.getLikesCount());
         cv.put(CommentsColumns.USER_LIKES, dbo.isUserLikes());
         cv.put(CommentsColumns.CAN_LIKE, dbo.isCanLike());
@@ -238,7 +239,7 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
             contentValues.put(CommentsColumns.REPLY_TO_USER, replyToUser);
             contentValues.put(CommentsColumns.REPLY_TO_COMMENT, replyToComment);
             contentValues.put(CommentsColumns.THREADS_COUNT, 0);
-            contentValues.put(CommentsColumns.THREADS, "null");
+            contentValues.putNull(CommentsColumns.THREADS);
             contentValues.put(CommentsColumns.LIKES, 0);
             contentValues.put(CommentsColumns.USER_LIKES, 0);
 
@@ -339,6 +340,8 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
         String sourceAccessKey = cursor.getString(cursor.getColumnIndex(CommentsColumns.SOURCE_ACCESS_KEY));
         int id = cursor.getInt(cursor.getColumnIndex(CommentsColumns.COMMENT_ID));
 
+        String threadsJson = cursor.getString(cursor.getColumnIndex(CommentsColumns.THREADS));
+
         CommentEntity dbo = new CommentEntity(sourceId, sourceOwnerId, sourceType, sourceAccessKey, id)
                 .setFromId(cursor.getInt(cursor.getColumnIndex(CommentsColumns.FROM_ID)))
                 .setDate(cursor.getLong(cursor.getColumnIndex(CommentsColumns.DATE)))
@@ -347,11 +350,16 @@ class CommentsStorage extends AbsStorage implements ICommentsStorage {
                 .setThreadsCount(cursor.getInt(cursor.getColumnIndex(CommentsColumns.THREADS_COUNT)))
                 .setReplyToComment(cursor.getInt(cursor.getColumnIndex(CommentsColumns.REPLY_TO_COMMENT)))
                 .setLikesCount(cursor.getInt(cursor.getColumnIndex(CommentsColumns.LIKES)))
-                .setThreads(new Gson().fromJson(cursor.getString(cursor.getColumnIndex(CommentsColumns.THREADS)), THREADS_TYPE))
                 .setUserLikes(cursor.getInt(cursor.getColumnIndex(CommentsColumns.USER_LIKES)) == 1)
                 .setCanLike(cursor.getInt(cursor.getColumnIndex(CommentsColumns.CAN_LIKE)) == 1)
                 .setCanEdit(cursor.getInt(cursor.getColumnIndex(CommentsColumns.CAN_EDIT)) == 1)
                 .setDeleted(cursor.getInt(cursor.getColumnIndex(CommentsColumns.DELETED)) == 1);
+        if (nonNull(threadsJson)) {
+            CommentsEntity commentsEntity = GSON.fromJson(threadsJson, CommentsEntity.class);
+            if (nonNull(commentsEntity) && !Utils.isEmpty(commentsEntity.getEntities())) {
+                dbo.setThreads(commentsEntity.getEntities());
+            }
+        }
 
         if (includeAttachments && (attachmentsCount > 0 || forceAttachments)) {
             dbo.setAttachments(getStores()

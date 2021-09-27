@@ -56,7 +56,7 @@ public class MentionMessage {
             nManager.createNotificationChannel(AppNotificationChannels.getMentionChannel(context));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.MENTION_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getMentionChannelId())
                 .setSmallIcon(R.drawable.ic_mention)
                 .setContentTitle(title)
                 .setContentText(body)

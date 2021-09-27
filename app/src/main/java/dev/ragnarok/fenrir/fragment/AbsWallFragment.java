@@ -67,6 +67,7 @@ import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.place.PlaceUtil;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.FindAttachmentType;
 import dev.ragnarok.fenrir.util.Utils;
@@ -147,12 +148,12 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
 
     protected void setupPaganContent(@NonNull View Runes, @NonNull RLottieImageView paganSymbol, @NonNull AnimatedShapeableImageView paganVideo) {
         Runes.setVisibility(Settings.get().other().isRunes_show() ? View.VISIBLE : View.GONE);
-        int symbol = Settings.get().other().getPaganSymbol();
+        int symbol = ThemesController.INSTANCE.paganSymbol();
         paganSymbol.setVisibility(symbol != 0 ? View.VISIBLE : View.GONE);
         if (symbol == 0) {
             return;
         }
-        switch (Settings.get().other().getPaganSymbol()) {
+        switch (symbol) {
             case 2:
                 paganSymbol.setImageResource(R.drawable.ic_igdr);
                 break;

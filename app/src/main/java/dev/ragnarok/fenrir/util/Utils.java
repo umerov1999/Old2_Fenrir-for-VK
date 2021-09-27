@@ -740,7 +740,7 @@ public class Utils {
         return -1;
     }
 
-    public static int indexOfOwner(List<Owner> data, Owner in) {
+    public static int indexOfOwner(List<? extends Owner> data, Owner in) {
         if (data == null || in == null) {
             return -1;
         }
@@ -754,7 +754,7 @@ public class Utils {
         return -1;
     }
 
-    public static int indexOfOwner(List<Owner> data, int id) {
+    public static int indexOfOwner(List<? extends Owner> data, int id) {
         if (data == null) {
             return -1;
         }
@@ -1729,6 +1729,11 @@ public class Utils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int rnd(int min, int max) {
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
     }
 
     public static String BytesToSize(long Bytes) {

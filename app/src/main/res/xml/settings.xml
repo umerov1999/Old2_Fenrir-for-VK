@@ -60,6 +60,12 @@
             android:title="@string/notifications_sync"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:icon="@drawable/feed_settings"
+            android:key="reset_notifications_groups"
+            android:title="@string/reset_notifications_groups"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -822,6 +828,38 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/settings_show_logs_title"
+        app:icon="@drawable/developer_mode"
+        app:iconSpaceReserved="false"
+        app:initialExpandedChildrenCount="1">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="developer_mode"
+            android:key="do_logs"
+            android:title="@string/do_logs"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:dependency="do_logs"
+            android:key="show_logs"
+            android:title="@string/settings_show_logs_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="do_logs"
+            android:key="extra_debug"
+            android:title="@string/extra_debug"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="do_logs"
+            android:key="dump_fcm"
+            android:title="@string/dump_fcm"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/dev_settings"
         app:iconSpaceReserved="false"
         app:initialExpandedChildrenCount="3">
@@ -835,29 +873,6 @@
             android:dependency="developer_mode"
             android:key="request_executor"
             android:title="@string/request_executor_title"
-            app:icon="@drawable/developer_mode"
-            app:iconSpaceReserved="true" />
-        <Preference
-            android:dependency="developer_mode"
-            android:key="show_logs"
-            android:title="@string/settings_show_logs_title"
-            app:icon="@drawable/developer_mode"
-            app:iconSpaceReserved="true" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:dependency="developer_mode"
-            android:key="extra_debug"
-            android:title="@string/extra_debug"
-            app:icon="@drawable/developer_mode"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:dependency="developer_mode"
-            android:key="dump_fcm"
-            android:title="@string/dump_fcm"
-            app:icon="@drawable/developer_mode"
             app:iconSpaceReserved="false" />
 
         <EditTextPreference

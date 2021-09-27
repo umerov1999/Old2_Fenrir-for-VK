@@ -17,7 +17,7 @@ public class PersistentLogger {
 
     @SuppressLint("CheckResult")
     public static void logThrowable(String tag, Throwable throwable) {
-        if (!Settings.get().other().isDeveloper_mode())
+        if (!Settings.get().other().isDoLogs())
             return;
         ILogsStorage store = Injection.provideLogsStore();
         Throwable cause = Utils.getCauseIfRuntime(throwable);

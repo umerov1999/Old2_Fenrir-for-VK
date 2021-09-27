@@ -236,8 +236,8 @@ public class NotificationHelper {
             nManager.createNotificationChannel(AppNotificationChannels.getGroupChatMessageChannel(context));
         }
 
-        String channelId = Peer.isGroupChat(message.getPeerId()) ? AppNotificationChannels.GROUP_CHAT_MESSAGE_CHANNEL_ID :
-                AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID;
+        String channelId = Peer.isGroupChat(message.getPeerId()) ? AppNotificationChannels.getGroupChatMessageChannelId() :
+                AppNotificationChannels.getChatMessageChannelId();
 
 
         NotificationCompat.MessagingStyle msgs = new NotificationCompat.MessagingStyle(new Person.Builder()
@@ -399,7 +399,7 @@ public class NotificationHelper {
             title += ", Type: " + type;
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.CHAT_MESSAGE_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, AppNotificationChannels.getChatMessageChannelId())
                 .setSmallIcon(R.drawable.client_round)
                 .setContentText(text)
                 .setContentTitle(title)

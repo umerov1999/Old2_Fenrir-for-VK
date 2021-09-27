@@ -25,7 +25,7 @@ import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
 import dev.ragnarok.fenrir.util.DownloadWorkUtils.doDownloadPhoto
-import dev.ragnarok.fenrir.util.DownloadWorkUtils.makeLegalFilename
+import dev.ragnarok.fenrir.util.DownloadWorkUtils.makeLegalFilenameFromArg
 import dev.ragnarok.fenrir.util.Utils
 import dev.ragnarok.fenrir.util.Utils.nonEmpty
 import dev.ragnarok.fenrir.view.CircleCounterButton
@@ -42,7 +42,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
     private val mGoBackAnimationAdapter = WeakGoBackAnimationAdapter(this)
     private var url: String? = null
@@ -51,8 +50,8 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         url = requireArguments().getString(Extra.URL)
-        prefix = makeLegalFilename(requireArguments().getString(Extra.STATUS)!!, null)
-        photo_prefix = makeLegalFilename(requireArguments().getString(Extra.KEY)!!, null)
+        prefix = makeLegalFilenameFromArg(requireArguments().getString(Extra.STATUS), null)
+        photo_prefix = makeLegalFilenameFromArg(requireArguments().getString(Extra.KEY), null)
     }
 
     private val requestWritePermission = AppPerms.requestPermissions(
@@ -73,10 +72,15 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_single_url_photo, container, false)
         val mDownload: CircleCounterButton = root.findViewById(R.id.button_download)
-        mDownload.visibility =
-            if (url!!.contains("content://") || url!!.contains("file://")) View.GONE else View.VISIBLE
+        url?.let {
+            mDownload.visibility =
+                if (it.contains("content://") || it.contains("file://")) View.GONE else View.VISIBLE
+        }
+        url ?: run {
+            mDownload.visibility = View.GONE
+        }
         val ret = PhotoViewHolder(root)
-        ret.bindTo(url!!)
+        ret.bindTo(url)
         val ui = from(ret.photo)
         ui.settle = SettleOnTopAction()
         ui.sideEffect =
@@ -153,7 +157,10 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
                 requireActivity(),
                 it,
                 dir.absolutePath,
-                prefix + "." + photo_prefix + ".profile." + DOWNLOAD_DATE_FORMAT.format(Date())
+                Utils.firstNonEmptyString(prefix, "null") + "." + Utils.firstNonEmptyString(
+                    photo_prefix,
+                    "null"
+                ) + ".profile." + DOWNLOAD_DATE_FORMAT.format(Date())
             )
         }
     }
@@ -199,7 +206,7 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
         val photo: TouchImageView
         val progress: RLottieImageView
         private var mLoadingNow = false
-        fun bindTo(@NonNull url: String?) {
+        fun bindTo(url: String?) {
             reload.setOnClickListener {
                 reload.visibility = View.INVISIBLE
                 if (nonEmpty(url)) {

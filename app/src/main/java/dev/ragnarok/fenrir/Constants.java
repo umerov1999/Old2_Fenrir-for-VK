@@ -15,8 +15,10 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class Constants {
+    public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 17;
+
     public static final String API_VERSION = "5.131";
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     public static final @Account_Types
     int DEFAULT_ACCOUNT_TYPE = BuildConfig.DEFAULT_ACCOUNT_TYPE;
@@ -25,10 +27,10 @@ public class Constants {
     public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == Account_Types.KATE ? API_VERSION : "5.122";
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".file_provider";
 
-    public static final String VK_ANDROID_APP_VERSION_NAME = "6.52";
-    public static final String VK_ANDROID_APP_VERSION_CODE = "9185";
-    public static final String KATE_APP_VERSION_NAME = "78.1 lite";
-    public static final String KATE_APP_VERSION_CODE = "500";
+    public static final String VK_ANDROID_APP_VERSION_NAME = "6.55";
+    public static final String VK_ANDROID_APP_VERSION_CODE = "9414";
+    public static final String KATE_APP_VERSION_NAME = "79 lite";
+    public static final String KATE_APP_VERSION_CODE = "501";
     public static final int API_ID = BuildConfig.VK_API_APP_ID;
     public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;
     public static final String MAIN_OWNER_FIELDS = UserColumns.API_FIELDS + "," + GroupColumns.API_FIELDS;

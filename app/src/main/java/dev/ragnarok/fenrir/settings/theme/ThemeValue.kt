@@ -12,6 +12,7 @@ class ThemeValue {
     val colorNightSecondary: Int
     var colorToast: Int
     var colorReadToast: Int
+    var disabled: Boolean
 
     @StyleRes
     val themeRes: Int
@@ -37,6 +38,7 @@ class ThemeValue {
         colorNightSecondary = colorDaySecondary
         colorToast = Color.parseColor(colorPrimary)
         colorReadToast = Color.parseColor(colorPrimary)
+        disabled = false
         this.id = id
         this.name = name
         this.themeRes = themeRes
@@ -61,6 +63,7 @@ class ThemeValue {
         this.colorNightSecondary = Color.parseColor(colorNightSecondary)
         colorToast = Color.parseColor(colorDayPrimary)
         colorReadToast = Color.parseColor(colorDayPrimary)
+        disabled = false
         this.id = id
         this.name = name
         this.themeRes = themeRes
@@ -89,6 +92,11 @@ class ThemeValue {
     fun toast(colorToast: Int, colorReadToast: Int): ThemeValue {
         this.colorToast = colorToast
         this.colorReadToast = colorReadToast
+        return this
+    }
+
+    fun enable(bEnable: Boolean): ThemeValue {
+        disabled = !bEnable
         return this
     }
 }

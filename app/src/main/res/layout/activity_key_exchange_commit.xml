@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     app:cardBackgroundColor="?message_bubble_color"
-    app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:contentPadding="0dp">
 
@@ -55,7 +54,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/decline_button"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/button_decline"
@@ -63,7 +61,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/accept_button"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/button_accept"

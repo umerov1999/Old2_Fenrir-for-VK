@@ -78,7 +78,6 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/item_article_read"
-                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFFF"

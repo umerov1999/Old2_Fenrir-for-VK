@@ -92,6 +92,8 @@ import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.ProxyUtil;
 import dev.ragnarok.fenrir.api.model.Identificable;
+import dev.ragnarok.fenrir.link.internal.LinkActionAdapter;
+import dev.ragnarok.fenrir.link.internal.OwnerLinkSpanFactory;
 import dev.ragnarok.fenrir.media.exo.OkHttpDataSource;
 import dev.ragnarok.fenrir.model.ISelectable;
 import dev.ragnarok.fenrir.model.ISomeones;
@@ -100,6 +102,7 @@ import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.ProxyConfig;
 import dev.ragnarok.fenrir.model.Sticker;
 import dev.ragnarok.fenrir.module.rlottie.RLottieDrawable;
+import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.player.MusicPlaybackController;
 import dev.ragnarok.fenrir.service.ErrorLocalizer;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
@@ -1498,7 +1501,7 @@ public class Utils {
         return new MediaItem.Builder().setUri(url).build();
     }
 
-    public static <T extends RecyclerView.ViewHolder> View createAlertRecycleFrame(@NonNull Context context, @NonNull RecyclerView.Adapter<T> adapter, @Nullable String message) {
+    public static <T extends RecyclerView.ViewHolder> View createAlertRecycleFrame(@NonNull Context context, @NonNull RecyclerView.Adapter<T> adapter, @Nullable String message, int accountId) {
         View root = View.inflate(context, R.layout.alert_recycle_frame, null);
         RecyclerView recyclerView = root.findViewById(R.id.alert_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
@@ -1509,7 +1512,12 @@ public class Utils {
             mMessage.setVisibility(View.GONE);
         } else {
             mMessage.setVisibility(View.VISIBLE);
-            mMessage.setText(message);
+            mMessage.setText(OwnerLinkSpanFactory.withSpans(message, true, false, new LinkActionAdapter() {
+                @Override
+                public void onOwnerClick(int ownerId) {
+                    PlaceFactory.getOwnerWallPlace(accountId, ownerId, null).tryOpenWith(context);
+                }
+            }));
         }
         return root;
     }

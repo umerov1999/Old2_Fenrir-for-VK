@@ -27,5 +27,5 @@ dependencies {
     implementation fenrirMinSDK >= 26 ? 'com.google.zxing:core:3.4.1' : 'com.google.zxing:core:3.3.3'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation project(path: ':material')
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
 }

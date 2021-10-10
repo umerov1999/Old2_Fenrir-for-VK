@@ -81,6 +81,7 @@ import dev.ragnarok.fenrir.db.model.entity.StickerEntity;
 import dev.ragnarok.fenrir.domain.IMessagesDecryptor;
 import dev.ragnarok.fenrir.domain.IMessagesRepository;
 import dev.ragnarok.fenrir.domain.IOwnersRepository;
+import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.domain.Mode;
 import dev.ragnarok.fenrir.domain.mappers.Dto2Entity;
 import dev.ragnarok.fenrir.domain.mappers.Dto2Model;
@@ -267,6 +268,13 @@ public class MessagesRepository implements IMessagesRepository {
         nowSending = false;
 
         if (cause instanceof NotFoundException) {
+            int accountId = Settings.get().accounts().getCurrent();
+            if (!Settings.get().other().isBe_online() || Utils.isHiddenAccount(accountId)) {
+                compositeDisposable.add(InteractorFactory.createAccountInteractor().setOffline(accountId)
+                        .subscribeOn(senderScheduler)
+                        .observeOn(Injection.provideMainThreadScheduler())
+                        .subscribe(ignore(), ignore()));
+            }
             // no unsent messages
             return;
         }

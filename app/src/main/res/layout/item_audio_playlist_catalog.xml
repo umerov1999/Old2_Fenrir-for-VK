@@ -10,7 +10,6 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="4dp"
     android:layout_marginBottom="0dp"
-    app:cardCornerRadius="10dp"
     app:contentPadding="8dp">
 
     <LinearLayout

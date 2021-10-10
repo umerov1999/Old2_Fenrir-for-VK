@@ -384,11 +384,11 @@ public class KeyExchangeService extends Service {
                 .setAutoCancel(true);
 
         Intent intent = KeyExchangeCommitActivity.createIntent(this, accountId, peerId, ownerInfo.getUser(), messageId, message);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, messageId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, messageId, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
         builder.setContentIntent(contentIntent);
 
         Intent apply = createIntentForApply(this, message, accountId, peerId, messageId);
-        PendingIntent quickPendingIntent = PendingIntent.getService(this, messageId, apply, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent quickPendingIntent = PendingIntent.getService(this, messageId, apply, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         NotificationCompat.Action applyAction = new NotificationCompat.Action(R.drawable.check, getString(R.string.apply), quickPendingIntent);
 
         builder.addAction(applyAction);

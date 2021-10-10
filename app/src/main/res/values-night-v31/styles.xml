@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="App.DayNight.Dynamic" parent="App.DayNight">
+        <item name="colorPrimary">@android:color/system_accent1_200</item>
+        <item name="colorControlNormal">@android:color/system_accent1_200</item>
+        <item name="colorSecondary">@android:color/system_accent2_200</item>
+        <item name="colorOnPrimary">@android:color/system_accent1_800</item>
+        <item name="colorOnSecondary">@android:color/system_accent2_800</item>
+        <item name="icon_color_active">@android:color/system_accent1_400</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
+    </style>
+</resources>

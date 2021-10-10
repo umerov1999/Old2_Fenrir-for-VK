@@ -1895,4 +1895,5 @@
     <string name="pin_digit">pin digit</string>
     <string name="delete_dynamic_shortcuts">Delete dynamic shortcuts</string>
     <string name="reset_notifications_groups">Reset notifications</string>
+    <string name="not_available">NOT AVAILABLE</string>
 </resources>

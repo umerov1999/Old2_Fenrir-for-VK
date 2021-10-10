@@ -1711,8 +1711,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         if (mBottomNavigation != null) {
             if (count > 0) {
                 BadgeDrawable badgeDrawable = mBottomNavigation.getOrCreateBadge(R.id.menu_messages);
-                badgeDrawable.setBackgroundColor(CurrentTheme.getColorPrimary(this));
-                badgeDrawable.setBadgeTextColor(CurrentTheme.getColorOnPrimary(this));
+                badgeDrawable.setDynamicColor(true);
                 badgeDrawable.setNumber(count);
             } else {
                 mBottomNavigation.removeBadge(R.id.menu_messages);
@@ -1726,16 +1725,14 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         if (mBottomNavigation != null) {
             if (counters.getNotifications() > 0) {
                 BadgeDrawable badgeDrawable = mBottomNavigation.getOrCreateBadge(R.id.menu_feedback);
-                badgeDrawable.setBackgroundColor(CurrentTheme.getColorPrimary(this));
-                badgeDrawable.setBadgeTextColor(CurrentTheme.getColorOnPrimary(this));
+                badgeDrawable.setDynamicColor(true);
                 badgeDrawable.setNumber(counters.getNotifications());
             } else {
                 mBottomNavigation.removeBadge(R.id.menu_feedback);
             }
             if (counters.getMessages() > 0) {
                 BadgeDrawable badgeDrawable = mBottomNavigation.getOrCreateBadge(R.id.menu_messages);
-                badgeDrawable.setBackgroundColor(CurrentTheme.getColorPrimary(this));
-                badgeDrawable.setBadgeTextColor(CurrentTheme.getColorOnPrimary(this));
+                badgeDrawable.setDynamicColor(true);
                 badgeDrawable.setNumber(counters.getMessages());
             } else {
                 mBottomNavigation.removeBadge(R.id.menu_messages);

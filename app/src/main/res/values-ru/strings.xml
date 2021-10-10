@@ -1667,4 +1667,5 @@
     <string name="pin_digit">Пин код</string>
     <string name="delete_dynamic_shortcuts">Удалить динамические ярлыки</string>
     <string name="reset_notifications_groups">Сбросить уведомления</string>
+    <string name="not_available">НЕДОСТУПНО</string>
 </resources>

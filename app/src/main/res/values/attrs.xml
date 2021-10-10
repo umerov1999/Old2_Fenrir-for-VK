@@ -26,11 +26,6 @@
         <attr name="arcLoadingStartAngle" format="float" />
     </declare-styleable>
 
-    <declare-styleable name="CircleImageButton">
-        <attr name="backgroundColor" format="color" />
-        <attr name="iconColor" format="color" />
-    </declare-styleable>
-
     <declare-styleable name="Emojicon">
         <attr name="displayHashTags" format="boolean" />
         <attr name="emojiconSize" format="dimension" />

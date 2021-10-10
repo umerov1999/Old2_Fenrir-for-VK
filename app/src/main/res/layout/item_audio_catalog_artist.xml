@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardCornerRadius="10dp"
     app:contentPadding="15dp">
 
     <LinearLayout
@@ -32,7 +31,6 @@
             android:layout_marginTop="14dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
-            app:cardCornerRadius="10dp"
             app:cardElevation="1dp">
 
             <dev.ragnarok.fenrir.view.AspectRatioImageView

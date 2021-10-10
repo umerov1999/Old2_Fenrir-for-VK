@@ -158,7 +158,7 @@ public class AllFriendsFragment extends BaseMvpFragment<AllFriendsPresenter, IAl
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_friend))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", null)
                 .setCancelable(true)
                 .show();
@@ -174,7 +174,7 @@ public class AllFriendsFragment extends BaseMvpFragment<AllFriendsPresenter, IAl
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_friend))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", (dialog, which) -> {
                     if (remove.size() > 0) {
                         showNotFriends(remove, accountId);

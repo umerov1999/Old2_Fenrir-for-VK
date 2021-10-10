@@ -170,7 +170,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_communities))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", null)
                 .setCancelable(true)
                 .show();
@@ -186,7 +186,7 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_communities))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", (dialog, which) -> {
                     if (remove.size() > 0) {
                         showNotCommunities(remove, accountId);

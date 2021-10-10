@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
     AccountDependencyPresenter<IDedicatedView>(accountId, savedInstanceState) {
-    private val sourcesPortrait: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 47, false)
+    private val sourcesPortrait: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 49, false)
     private val sourcesLand: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 23, true)
     private val shufflePhotos = !HelperSimple.needHelp(DEDICATED_COUNTER, 2)
     private var land = false

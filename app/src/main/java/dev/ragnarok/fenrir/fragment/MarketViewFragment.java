@@ -23,6 +23,8 @@ import dev.ragnarok.fenrir.activity.ActivityFeatures;
 import dev.ragnarok.fenrir.activity.ActivityUtils;
 import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
 import dev.ragnarok.fenrir.fragment.base.BaseMvpFragment;
+import dev.ragnarok.fenrir.link.internal.LinkActionAdapter;
+import dev.ragnarok.fenrir.link.internal.OwnerLinkSpanFactory;
 import dev.ragnarok.fenrir.model.Market;
 import dev.ragnarok.fenrir.model.Peer;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
@@ -89,7 +91,7 @@ public class MarketViewFragment extends BaseMvpFragment<MarketViewPresenter, IMa
     }
 
     @Override
-    public void displayMarket(Market market) {
+    public void displayMarket(Market market, int accountId) {
         if (nonNull(market.getThumb_photo())) {
             photo.setVisibility(View.VISIBLE);
             ViewUtils.displayAvatar(photo, null, market.getThumb_photo(), Constants.PICASSO_TAG);
@@ -130,7 +132,12 @@ public class MarketViewFragment extends BaseMvpFragment<MarketViewPresenter, IMa
             description.setVisibility(View.GONE);
         else {
             description.setVisibility(View.VISIBLE);
-            description.setText(requireActivity().getString(R.string.markets_description, market.getDescription()));
+            description.setText(OwnerLinkSpanFactory.withSpans(requireActivity().getString(R.string.markets_description, market.getDescription()), true, false, new LinkActionAdapter() {
+                @Override
+                public void onOwnerClick(int ownerId) {
+                    PlaceFactory.getOwnerWallPlace(accountId, ownerId, null).tryOpenWith(requireActivity());
+                }
+            }));
         }
         if (market.getDate() == 0)
             time.setVisibility(View.GONE);

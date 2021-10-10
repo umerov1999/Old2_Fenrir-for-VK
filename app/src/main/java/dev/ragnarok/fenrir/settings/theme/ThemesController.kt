@@ -1,5 +1,6 @@
 package dev.ragnarok.fenrir.settings.theme
 
+import android.os.Build
 import androidx.annotation.StyleRes
 import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.R
@@ -244,7 +245,6 @@ object ThemesController {
             R.style.App_DayNight_NeonYellowIce_Amoled,
             R.style.App_DayNight_NeonYellowIce_MD1
         ),
-
         ThemeValue(
             "random",
             "#ffffff",
@@ -253,7 +253,16 @@ object ThemesController {
             R.style.App_DayNight_Ice,
             R.style.App_DayNight_Ice_Amoled,
             R.style.App_DayNight_Ice_MD1
-        )
+        ),
+        ThemeValue(
+            "dynamic",
+            "#ffffff",
+            "#ffffff",
+            "Dynamic",
+            R.style.App_DayNight_Dynamic,
+            R.style.App_DayNight_Dynamic_Amoled,
+            R.style.App_DayNight_Dynamic_MD1
+        ).toast("#4d7198", "#448AFF").enable(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S),
     )
     private var randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
     private var randomTheme = themes.random()

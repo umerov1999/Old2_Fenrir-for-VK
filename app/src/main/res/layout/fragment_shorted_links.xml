@@ -31,7 +31,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/do_short"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -41,7 +40,6 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/do_validate"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"

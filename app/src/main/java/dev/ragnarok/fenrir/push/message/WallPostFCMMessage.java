@@ -132,7 +132,7 @@ public class WallPostFCMMessage {
                     intent.setAction(MainActivity.ACTION_OPEN_PLACE);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    PendingIntent contentIntent = PendingIntent.getActivity(app, owner_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent contentIntent = PendingIntent.getActivity(app, owner_id, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
                     builder.setContentIntent(contentIntent);
                     Notification notification = builder.build();
 
@@ -167,7 +167,7 @@ public class WallPostFCMMessage {
         intent.setAction(MainActivity.ACTION_OPEN_PLACE);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, post_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, post_id, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
         builder.setContentIntent(contentIntent);
         Notification notification = builder.build();
 

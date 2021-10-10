@@ -44,9 +44,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ThemeValue category = data.get(position);
+        holder.itemView.setAlpha(category.getDisabled() ? 0.55f : 1.0f);
         boolean isSelected = currentId.equals(category.getId());
 
-        holder.title.setText(category.getName());
+        holder.title.setText(category.getDisabled() ? holder.itemView.getContext().getString(R.string.not_available) : category.getName());
         holder.primary.setBackgroundColor(isDark ? category.getColorNightPrimary() : category.getColorDayPrimary());
         holder.secondary.setBackgroundColor(isDark ? category.getColorNightSecondary() : category.getColorDaySecondary());
         holder.selected.setVisibility(isSelected ? View.VISIBLE : View.GONE);

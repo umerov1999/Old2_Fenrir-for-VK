@@ -202,6 +202,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
 
     @ColorInt private int backgroundColor;
     @ColorInt private int badgeTextColor;
+    private boolean dynamicColor;
     private int alpha = 255;
     private int number = BADGE_NUMBER_NONE;
     private int maxCharacterCount;
@@ -241,6 +242,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
       contentDescriptionExceedsMaxBadgeNumberRes =
           R.string.mtrl_exceed_max_badge_number_content_description;
       isVisible = true;
+      dynamicColor = false;
     }
 
     protected SavedState(@NonNull Parcel in) {
@@ -259,6 +261,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
       additionalHorizontalOffset = in.readInt();
       additionalVerticalOffset = in.readInt();
       isVisible = in.readInt() != 0;
+      dynamicColor = in.readInt() != 0;
     }
 
     public static final Creator<SavedState> CREATOR =
@@ -298,6 +301,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
       dest.writeInt(additionalHorizontalOffset);
       dest.writeInt(additionalVerticalOffset);
       dest.writeInt(isVisible ? 1 : 0);
+      dest.writeInt(dynamicColor ? 1 : 0);
     }
   }
 
@@ -311,7 +315,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
   static BadgeDrawable createFromSavedState(
       @NonNull Context context, @NonNull SavedState savedState) {
     BadgeDrawable badge = new BadgeDrawable(context);
-    badge.restoreFromSavedState(savedState);
+    badge.restoreFromSavedState(context, savedState);
     return badge;
   }
 
@@ -355,6 +359,10 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
     return badge;
   }
 
+  public void setDynamicColor(boolean dynamic) {
+    savedState.dynamicColor = dynamic;
+  }
+
   /**
    * Convenience wrapper method for {@link Drawable#setVisible(boolean, boolean)} with the {@code
    * restart} parameter hardcoded to false.
@@ -369,7 +377,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
     }
   }
 
-  private void restoreFromSavedState(@NonNull SavedState savedState) {
+  private void restoreFromSavedState(@NonNull Context context, @NonNull SavedState savedState) {
     setMaxCharacterCount(savedState.maxCharacterCount);
 
     // Only set the badge number if it exists in the style.
@@ -379,11 +387,17 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
       setNumber(savedState.number);
     }
 
-    setBackgroundColor(savedState.backgroundColor);
+    TypedArray a =
+            ThemeEnforcement.obtainStyledAttributes(
+                    context, null, R.styleable.Badge, DEFAULT_THEME_ATTR, DEFAULT_STYLE);
+
+    setBackgroundColor(savedState.dynamicColor ? readColorFromAttributes(context, a, R.styleable.Badge_badgeBackgroundColor) : savedState.backgroundColor);
 
     // Only set the badge text color if this attribute has explicitly been set, otherwise use the
     // text color specified in the TextAppearance.
-    setBadgeTextColor(savedState.badgeTextColor);
+    setBadgeTextColor(savedState.dynamicColor && a.hasValue(R.styleable.Badge_badgeTextColor) ? readColorFromAttributes(context, a, R.styleable.Badge_badgeTextColor) : savedState.badgeTextColor);
+
+    a.recycle();
 
     setBadgeGravity(savedState.badgeGravity);
 
@@ -397,6 +411,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
     setAdditionalVerticalOffset(savedState.additionalVerticalOffset);
 
     setVisible(savedState.isVisible);
+    setDynamicColor(savedState.dynamicColor);
   }
 
   private void loadDefaultStateFromAttributes(
@@ -415,7 +430,7 @@ public class BadgeDrawable extends Drawable implements TextDrawableDelegate {
       setNumber(a.getInt(R.styleable.Badge_number, 0));
     }
 
-    setBackgroundColor(readColorFromAttributes(context, a, R.styleable.Badge_backgroundColor));
+    setBackgroundColor(readColorFromAttributes(context, a, R.styleable.Badge_badgeBackgroundColor));
 
     // Only set the badge text color if this attribute has explicitly been set, otherwise use the
     // text color specified in the TextAppearance.

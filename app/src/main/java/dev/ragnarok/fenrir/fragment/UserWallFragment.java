@@ -166,11 +166,11 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             mHeaderHolder.bDonate.setAutoRepeat(true);
             if (donate_anim == 2) {
                 String cur = Settings.get().ui().getMainThemeKey();
-                if ("fire".equals(cur) || "orange".equals(cur) || "orange_gray".equals(cur) || "yellow_violet".equals(cur)) {
+                if ("fire".equals(cur) || "yellow_violet".equals(cur)) {
                     mHeaderHolder.tvName.setTextColor(Color.parseColor("#df9d00"));
                     mHeaderHolder.tvScreenName.setTextColor(Color.parseColor("#df9d00"));
                     Utils.setBackgroundTint(mHeaderHolder.ivVerified, Color.parseColor("#df9d00"));
-                    mHeaderHolder.bDonate.fromRes(R.raw.donater_fire, Utils.dp(100), Utils.dp(100), null);
+                    mHeaderHolder.bDonate.fromRes(R.raw.donater_fire, Utils.dp(100), Utils.dp(100));
                 } else {
                     mHeaderHolder.tvName.setTextColor(CurrentTheme.getColorPrimary(requireActivity()));
                     mHeaderHolder.tvScreenName.setTextColor(CurrentTheme.getColorPrimary(requireActivity()));

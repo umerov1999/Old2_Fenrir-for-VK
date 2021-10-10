@@ -168,7 +168,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
             android:id="@+id/audio_save"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -251,7 +250,6 @@
 
         <dev.ragnarok.fenrir.player.ui.ShuffleButton
             android:id="@+id/action_button_shuffle"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_end_button_width"
             android:layout_height="@dimen/audio_player_controls_end_button_height"
             android:layout_gravity="center"
@@ -266,7 +264,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
             android:id="@+id/action_button_previous"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_main_button_width"
             android:layout_height="@dimen/audio_player_controls_main_button_height"
             android:layout_gravity="center"
@@ -297,7 +294,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
             android:id="@+id/action_button_next"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_main_button_width"
             android:layout_height="@dimen/audio_player_controls_main_button_height"
             android:layout_gravity="center"
@@ -312,7 +308,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatButton
             android:id="@+id/action_button_repeat"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_end_button_width"
             android:layout_height="@dimen/audio_player_controls_end_button_height"
             android:layout_gravity="center"

@@ -9,7 +9,7 @@ import dev.ragnarok.fenrir.mvp.view.base.IAccountDependencyView;
 public interface IMarketViewView extends IAccountDependencyView, IMvpView, IErrorView {
     void displayLoading(boolean loading);
 
-    void displayMarket(Market market);
+    void displayMarket(Market market, int accountId);
 
     void sendMarket(int accountId, Market market);
 

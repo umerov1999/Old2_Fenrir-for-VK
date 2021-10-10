@@ -9,11 +9,12 @@
         <item name="android:scrollbarSize">2dp</item>
     </style>
 
-    <style name="Base.App.DayNight.LightSpecific" parent="Base.App.DayNight">
+    <style name="Base.App.DayNight.Specific" parent="Base.App.DayNight">
         <item name="android:statusBarColor">#BBBBBB</item>
+        <item name="android:navigationBarColor">#BBBBBB</item>
     </style>
 
-    <style name="App.DayNight" parent="Base.App.DayNight.LightSpecific">
+    <style name="App.DayNight" parent="Base.App.DayNight.Specific">
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent
         </item>
         <item name="shapeAppearanceMediumComponent">
@@ -23,6 +24,7 @@
         </item>
 
         <item name="materialCardViewStyle">@style/Theme.MaterialCardView</item>
+        <item name="badgeStyle">@style/Theme.BadgeStyle</item>
         <item name="floatingActionButtonStyle">@style/Theme.FloatingActionButton</item>
         <item name="fab_secondary">@style/Theme.FloatingActionButtonSecondary</item>
         <item name="fab_player">@style/Theme.FloatingActionButtonSecondary</item>
@@ -76,6 +78,16 @@
     </style>
 
     <style name="App.DayNight.Ice" parent="App.DayNight">
+        <item name="colorPrimary">#448AFF</item>
+        <item name="colorControlNormal">#448AFF</item>
+        <item name="colorSecondary">#1E88E5</item>
+        <item name="colorOnPrimary">#FFF</item>
+        <item name="colorOnSecondary">#FFF</item>
+        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
+    </style>
+
+    <style name="App.DayNight.Dynamic" parent="App.DayNight">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
         <item name="colorSecondary">#1E88E5</item>
@@ -231,9 +243,9 @@
     </style>
 
     <style name="App.DayNight.FuxiaNeonYellow" parent="App.DayNight">
-        <item name="colorPrimary">#FE59c2</item>
-        <item name="colorControlNormal">#FE59c2</item>
-        <item name="colorSecondary">#CFFf04</item>
+        <item name="colorPrimary">#FE59C2</item>
+        <item name="colorControlNormal">#FE59C2</item>
+        <item name="colorSecondary">#CFFF04</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFE59C2</item>
@@ -243,7 +255,7 @@
     <style name="App.DayNight.FuxiaNeonViolet" parent="App.DayNight">
         <item name="colorPrimary">#FE4164</item>
         <item name="colorControlNormal">#FE4164</item>
-        <item name="colorSecondary">#BC13fe</item>
+        <item name="colorSecondary">#BC13FE</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="icon_color_active">#AAFE4164</item>
@@ -522,8 +534,18 @@
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
     </style>
 
+    <style name="App.DayNight.Dynamic.MD1" parent="App.DayNight.Dynamic">
+        <item name="materialCardStyle">@style/CardViewMD</item>
+        <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
+    </style>
+
     <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">1dp</item>
+    </style>
+
+    <style name="Theme.BadgeStyle" parent="Widget.MaterialComponents.Badge">
+        <item name="badgeBackgroundColor">?colorPrimary</item>
+        <item name="badgeTextColor">?colorOnPrimary</item>
     </style>
 
     <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
@@ -540,6 +562,7 @@
         <item name="quick_reply_icon_color">#151515</item>
         <item name="dividerColor">#E1E3E7</item>
         <item name="white_color">#FFFFFF</item>
+        <item name="badgeStyle">@style/Theme.BadgeStyle</item>
         <item name="materialCardStyle">@style/CardViewMD2</item>
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_stroke_filled</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent
@@ -576,14 +599,6 @@
     <style name="QuickReply.MD1" parent="QuickReply">
         <item name="materialCardStyle">@style/CardViewMD</item>
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_filled</item>
-    </style>
-
-    <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
-        <!--        <item name="android:tint">?colorOnSurface</item>-->
-        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
-        <item name="actionMenuTextColor">?colorOnSurface</item>
-        <item name="android:textColorPrimary">?colorOnSurface</item>
-        <item name="android:textColorSecondary">?colorOnSurface</item>
     </style>
 
     <style name="Theme.Toolbar.Surface" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">

@@ -126,7 +126,8 @@ class MusicPlaybackService : Service() {
         val shutdownIntent = Intent(this, MusicPlaybackService::class.java)
         shutdownIntent.action = SHUTDOWN
         mAlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        mShutdownIntent = PendingIntent.getService(this, 0, shutdownIntent, 0)
+        mShutdownIntent =
+            PendingIntent.getService(this, 0, shutdownIntent, PendingIntent.FLAG_MUTABLE)
 
         // Listen for the idle state
         scheduleDelayedShutdown()

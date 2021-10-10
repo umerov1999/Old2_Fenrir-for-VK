@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:theme="@style/Theme.Toolbar"
+            android:theme="@style/Theme.Toolbar.Surface"
             android:visibility="gone"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"

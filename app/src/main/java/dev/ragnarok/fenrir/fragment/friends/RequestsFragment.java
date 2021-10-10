@@ -158,7 +158,7 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IReques
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_request))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", null)
                 .setCancelable(true)
                 .show();

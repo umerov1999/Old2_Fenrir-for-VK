@@ -24,6 +24,11 @@
     <item name="android:textColor">@color/material_on_surface_emphasis_medium</item>
   </style>
 
+  <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Material3" parent="">
+    <item name="cornerFamily">rounded</item>
+    <item name="cornerSize">28dp</item>
+  </style>
+
   <style name="MaterialAlertDialog.MaterialComponents" parent="AlertDialog.AppCompat">
     <item name="android:layout">@layout/mtrl_alert_dialog</item>
     <item name="listItemLayout">@layout/mtrl_alert_select_dialog_item</item>
@@ -34,7 +39,7 @@
     <item name="backgroundInsetTop">@dimen/mtrl_alert_dialog_background_inset_top</item>
     <item name="backgroundInsetEnd">@dimen/mtrl_alert_dialog_background_inset_end</item>
     <item name="backgroundInsetBottom">@dimen/mtrl_alert_dialog_background_inset_bottom</item>
-    <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+    <item name="shapeAppearance">@style/ShapeAppearanceOverlay.MaterialAlertDialog.Material3</item>
   </style>
 
   <style name="Base.MaterialAlertDialog.MaterialComponents.Title.Panel" parent="android:Widget">

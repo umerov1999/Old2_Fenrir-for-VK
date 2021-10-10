@@ -45,7 +45,7 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_follower))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", null)
                 .setCancelable(true)
                 .show();
@@ -72,7 +72,7 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
         adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_follower))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
                 .setPositiveButton("OK", (dialog, which) -> {
                     if (remove.size() > 0) {
                         showNotFollowers(remove, accountId);

@@ -78,7 +78,7 @@ public class MarketViewPresenter extends AccountDependencyPresenter<IMarketViewV
 
     @OnGuiCreated
     private void resolveMarketView() {
-        callView(v -> v.displayMarket(mMarket));
+        callView(v -> v.displayMarket(mMarket, getAccountId()));
     }
 
     public void fireSendMarket(Market market) {

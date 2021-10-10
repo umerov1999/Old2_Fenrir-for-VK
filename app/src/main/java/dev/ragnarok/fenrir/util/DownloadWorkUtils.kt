@@ -758,7 +758,7 @@ object DownloadWorkUtils {
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_CANCEL_CURRENT
+                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
                 )
                 mBuilder.setContentIntent(ReadPendingIntent)
 
@@ -773,7 +773,7 @@ object DownloadWorkUtils {
                         applicationContext,
                         id.hashCode(),
                         DeleteIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,
@@ -934,7 +934,7 @@ object DownloadWorkUtils {
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_CANCEL_CURRENT
+                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
                 )
                 mBuilder.setContentIntent(ReadPendingIntent)
 
@@ -949,7 +949,7 @@ object DownloadWorkUtils {
                         applicationContext,
                         id.hashCode(),
                         DeleteIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,

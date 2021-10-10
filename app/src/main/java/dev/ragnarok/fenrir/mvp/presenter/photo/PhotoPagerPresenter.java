@@ -258,7 +258,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
 
         new MaterialAlertDialogBuilder(context)
                 .setTitle(context.getString(R.string.uploaded) + " " + AppTextUtils.getDateFromUnixTime(photo.getDate()))
-                .setView(Utils.createAlertRecycleFrame(context, adapter, Utils.isEmpty(photo.getText()) ? null : context.getString(R.string.description_hint) + ": " + photo.getText()))
+                .setView(Utils.createAlertRecycleFrame(context, adapter, Utils.isEmpty(photo.getText()) ? null : context.getString(R.string.description_hint) + ": " + photo.getText(), getAccountId()))
                 .setPositiveButton("OK", null)
                 .setCancelable(true)
                 .show();
@@ -543,7 +543,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                                     .setTitle(R.string.has_tags)
                                     .setPositiveButton("OK", null)
                                     .setCancelable(true)
-                                    .setView(Utils.createAlertRecycleFrame(context, adapter, null))
+                                    .setView(Utils.createAlertRecycleFrame(context, adapter, null, getAccountId()))
                                     .show();
                         }, throwable -> callView(v -> showError(v, throwable))));
     }

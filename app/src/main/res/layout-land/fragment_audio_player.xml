@@ -238,7 +238,6 @@
 
                 <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
                     android:id="@+id/audio_save"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="0dp"
@@ -275,7 +274,6 @@
 
         <dev.ragnarok.fenrir.player.ui.ShuffleButton
             android:id="@+id/action_button_shuffle"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_end_button_width"
             android:layout_height="@dimen/audio_player_controls_end_button_height"
             android:background="?selectableItemBackgroundBorderless"
@@ -285,7 +283,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
             android:id="@+id/action_button_previous"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_main_button_width"
             android:layout_height="@dimen/audio_player_controls_main_button_height"
             android:background="?selectableItemBackgroundBorderless"
@@ -304,7 +301,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatingImageButton
             android:id="@+id/action_button_next"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_main_button_width"
             android:layout_height="@dimen/audio_player_controls_main_button_height"
             android:background="?selectableItemBackgroundBorderless"
@@ -314,7 +310,6 @@
 
         <dev.ragnarok.fenrir.player.ui.RepeatButton
             android:id="@+id/action_button_repeat"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="@dimen/audio_player_controls_end_button_width"
             android:layout_height="@dimen/audio_player_controls_end_button_height"
             android:background="?selectableItemBackgroundBorderless"

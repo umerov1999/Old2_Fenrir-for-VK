@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <style name="Base.App.DayNight.DarkSpecific" parent="Base.App.DayNight">
+    <style name="Base.App.DayNight.Specific" parent="Base.App.DayNight">
         <item name="android:statusBarColor">?android:colorBackground</item>
-        <item name="android:navigationBarColor" tools:targetApi="o_mr1">?android:colorBackground
-        </item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
     </style>
 
-    <style name="App.DayNight" parent="Base.App.DayNight.DarkSpecific">
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="o_mr1">false</item>
+    <style name="App.DayNight" parent="Base.App.DayNight.Specific">
         <item name="colorPrimary">#448AFF</item>
         <item name="colorControlNormal">#448AFF</item>
         <item name="colorSecondary">#1E88E5</item>
         <item name="colorOnPrimary">#FFF</item>
         <item name="colorOnSecondary">#FFF</item>
         <item name="android:colorBackground">@color/night</item>
+        <item name="badgeStyle">@style/Theme.BadgeStyle</item>
+        <item name="materialCardViewStyle">@style/Theme.MaterialCardView</item>
         <item name="materialCardStyle">@style/CardViewMD2</item>
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_stroke_filled</item>
 
@@ -82,6 +81,16 @@
         <item name="icon_color_inactive">#AAFF0000</item>
         <item name="my_messages_bubble_color">#86DB59FF</item>
         <item name="my_messages_secondary_bubble_color">#886C42DF</item>
+    </style>
+
+    <style name="App.DayNight.Cold" parent="App.DayNight">
+        <item name="colorPrimary">#9BC4FC</item>
+        <item name="colorControlNormal">#9BC4FC</item>
+        <item name="colorSecondary">#D8C2FF</item>
+        <item name="colorOnPrimary">#0D1B2D</item>
+        <item name="colorOnSecondary">#141316</item>
+        <item name="icon_color_active">#AA448AFF</item>
+        <item name="icon_color_inactive">#AAFF0000</item>
     </style>
 
     <style name="App.DayNight.Contrast" parent="App.DayNight">
@@ -513,19 +522,25 @@
         <item name="messages_background_color">#000000</item>
     </style>
 
+    <style name="App.DayNight.Dynamic.Amoled" parent="App.DayNight.Dynamic">
+        <item name="dividerColor">#151515</item>
+        <item name="floatingActionButtonStyle">@style/Theme.FloatingActionButtonAmoled</item>
+        <item name="fab_secondary">@style/Theme.FloatingActionButtonSecondaryAmoled</item>
+        <item name="fab_player">@style/Theme.FloatingActionButtonSecondaryAmoled</item>
+        <item name="chat_background_cookies">@drawable/cookies_black</item>
+        <item name="chat_background_lines">@drawable/lines_black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="colorBackgroundFloating">@android:color/black</item>
+        <item name="colorOnBackground">#000000</item>
+        <item name="colorSurface">#F20B0B0B</item>
+        <item name="message_bubble_color">#0B0B0B</item>
+        <item name="sticker_hint_color">#DD0B0B0B</item>
+        <item name="messages_background_color">#000000</item>
+    </style>
+
     <style name="QuickReply.Amoled" parent="QuickReply">
         <item name="message_bubble_color">#0B0B0B</item>
         <item name="sticker_hint_color">#DD0B0B0B</item>
-    </style>
-
-    <style name="CardViewMD2" parent="Widget.MaterialComponents.CardView">
-        <item name="cardElevation">0dp</item>
-        <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">?dividerColor</item>
-    </style>
-
-    <style name="CardViewMD" parent="Widget.MaterialComponents.CardView">
-        <item name="cardElevation">1dp</item>
     </style>
 
     <style name="QuickReply" parent="Theme.MaterialComponents.DayNight.Dialog">
@@ -542,6 +557,7 @@
         <item name="quick_reply_icon_color">#FFF</item>
         <item name="dividerColor">#313131</item>
         <item name="white_color">#FFFFFF</item>
+        <item name="badgeStyle">@style/Theme.BadgeStyle</item>
         <item name="materialCardStyle">@style/CardViewMD2</item>
         <item name="materialCardBackgroundStyle">@drawable/background_rectangle_stroke_filled</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent
@@ -574,10 +590,6 @@
         <item name="colorOnBackground">#1E1E1E</item>
         <item name="colorSurface">#F01E1E1E</item>
         <item name="toolbar_left_icon_color">?attr/colorPrimary</item>
-    </style>
-
-    <style name="Theme.MaterialCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardElevation">1dp</item>
     </style>
 
     <style name="Theme.FloatingActionButtonAmoled" parent="Widget.MaterialComponents.FloatingActionButton">

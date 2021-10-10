@@ -86,6 +86,9 @@ public class ThemeFragment extends AbsMvpFragment<ThemePresenter, IThemeView> im
 
     @Override
     public void onClick(int index, ThemeValue value) {
+        if (value.getDisabled()) {
+            return;
+        }
         Settings.get().ui().setMainTheme(value.getId());
         requireActivity().recreate();
         mAdapter.notifyDataSetChanged();

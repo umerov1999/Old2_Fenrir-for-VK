@@ -28,6 +28,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityEventCompat;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -74,8 +75,12 @@ public final class MaterialTimePicker extends DialogFragment {
   @DrawableRes private int keyboardIcon;
   @DrawableRes private int clockIcon;
 
-  private int titleResId = 0;
-  private String titleText;
+  @StringRes private int titleResId = 0;
+  private CharSequence titleText;
+  @StringRes private int positiveButtonTextResId = 0;
+  private CharSequence positiveButtonText;
+  @StringRes private int negativeButtonTextResId = 0;
+  private CharSequence negativeButtonText;
 
   /** Values supported for the input type of the dialog. */
   @IntDef({INPUT_MODE_CLOCK, INPUT_MODE_KEYBOARD})
@@ -89,6 +94,10 @@ public final class MaterialTimePicker extends DialogFragment {
   static final String INPUT_MODE_EXTRA = "TIME_PICKER_INPUT_MODE";
   static final String TITLE_RES_EXTRA = "TIME_PICKER_TITLE_RES";
   static final String TITLE_TEXT_EXTRA = "TIME_PICKER_TITLE_TEXT";
+  static final String POSITIVE_BUTTON_TEXT_RES_EXTRA = "TIME_PICKER_POSITIVE_BUTTON_TEXT_RES";
+  static final String POSITIVE_BUTTON_TEXT_EXTRA = "TIME_PICKER_POSITIVE_BUTTON_TEXT";
+  static final String NEGATIVE_BUTTON_TEXT_RES_EXTRA = "TIME_PICKER_NEGATIVE_BUTTON_TEXT_RES";
+  static final String NEGATIVE_BUTTON_TEXT_EXTRA = "TIME_PICKER_NEGATIVE_BUTTON_TEXT";
   static final String OVERRIDE_THEME_RES_ID = "TIME_PICKER_OVERRIDE_THEME_RES_ID";
 
   private MaterialButton modeButton;
@@ -107,10 +116,18 @@ public final class MaterialTimePicker extends DialogFragment {
     args.putParcelable(TIME_MODEL_EXTRA, options.time);
     args.putInt(INPUT_MODE_EXTRA, options.inputMode);
     args.putInt(TITLE_RES_EXTRA, options.titleTextResId);
-    args.putInt(OVERRIDE_THEME_RES_ID, options.overrideThemeResId);
     if (options.titleText != null) {
-      args.putString(TITLE_TEXT_EXTRA, options.titleText.toString());
+      args.putCharSequence(TITLE_TEXT_EXTRA, options.titleText);
     }
+    args.putInt(POSITIVE_BUTTON_TEXT_RES_EXTRA, options.positiveButtonTextResId);
+    if (options.positiveButtonText != null) {
+      args.putCharSequence(POSITIVE_BUTTON_TEXT_EXTRA, options.positiveButtonText);
+    }
+    args.putInt(NEGATIVE_BUTTON_TEXT_RES_EXTRA, options.negativeButtonTextResId);
+    if (options.negativeButtonText != null) {
+      args.putCharSequence(NEGATIVE_BUTTON_TEXT_EXTRA, options.negativeButtonText);
+    }
+    args.putInt(OVERRIDE_THEME_RES_ID, options.overrideThemeResId);
 
     fragment.setArguments(args);
     return fragment;
@@ -185,7 +202,11 @@ public final class MaterialTimePicker extends DialogFragment {
     bundle.putParcelable(TIME_MODEL_EXTRA, time);
     bundle.putInt(INPUT_MODE_EXTRA, inputMode);
     bundle.putInt(TITLE_RES_EXTRA, titleResId);
-    bundle.putString(TITLE_TEXT_EXTRA, titleText);
+    bundle.putCharSequence(TITLE_TEXT_EXTRA, titleText);
+    bundle.putInt(POSITIVE_BUTTON_TEXT_RES_EXTRA, positiveButtonTextResId);
+    bundle.putCharSequence(POSITIVE_BUTTON_TEXT_EXTRA, positiveButtonText);
+    bundle.putInt(NEGATIVE_BUTTON_TEXT_RES_EXTRA, negativeButtonTextResId);
+    bundle.putCharSequence(NEGATIVE_BUTTON_TEXT_EXTRA, negativeButtonText);
     bundle.putInt(OVERRIDE_THEME_RES_ID, overrideThemeResId);
   }
 
@@ -200,7 +221,11 @@ public final class MaterialTimePicker extends DialogFragment {
     }
     inputMode = bundle.getInt(INPUT_MODE_EXTRA, INPUT_MODE_CLOCK);
     titleResId = bundle.getInt(TITLE_RES_EXTRA, 0);
-    titleText = bundle.getString(TITLE_TEXT_EXTRA);
+    titleText = bundle.getCharSequence(TITLE_TEXT_EXTRA);
+    positiveButtonTextResId = bundle.getInt(POSITIVE_BUTTON_TEXT_RES_EXTRA, 0);
+    positiveButtonText = bundle.getCharSequence(POSITIVE_BUTTON_TEXT_EXTRA);
+    negativeButtonTextResId = bundle.getInt(NEGATIVE_BUTTON_TEXT_RES_EXTRA, 0);
+    negativeButtonText = bundle.getCharSequence(NEGATIVE_BUTTON_TEXT_EXTRA);
     overrideThemeResId = bundle.getInt(OVERRIDE_THEME_RES_ID, 0);
   }
 
@@ -226,12 +251,10 @@ public final class MaterialTimePicker extends DialogFragment {
     modeButton = root.findViewById(R.id.material_timepicker_mode_button);
     TextView headerTitle = root.findViewById(R.id.header_title);
 
-    if (!TextUtils.isEmpty(titleText)) {
-      headerTitle.setText(titleText);
-    }
-
     if (titleResId != 0) {
       headerTitle.setText(titleResId);
+    } else if (!TextUtils.isEmpty(titleText)) {
+      headerTitle.setText(titleText);
     }
 
     updateInputMode(modeButton);
@@ -246,6 +269,11 @@ public final class MaterialTimePicker extends DialogFragment {
             dismiss();
           }
         });
+    if (positiveButtonTextResId != 0) {
+      okButton.setText(positiveButtonTextResId);
+    } else if (!TextUtils.isEmpty(positiveButtonText)) {
+      okButton.setText(positiveButtonText);
+    }
 
     cancelButton = root.findViewById(R.id.material_timepicker_cancel_button);
     cancelButton.setOnClickListener(
@@ -258,6 +286,12 @@ public final class MaterialTimePicker extends DialogFragment {
             dismiss();
           }
         });
+    if (negativeButtonTextResId != 0) {
+      cancelButton.setText(negativeButtonTextResId);
+    } else if (!TextUtils.isEmpty(negativeButtonText)) {
+      cancelButton.setText(negativeButtonText);
+    }
+
     updateCancelButtonVisibility();
 
     modeButton.setOnClickListener(
@@ -305,16 +339,23 @@ public final class MaterialTimePicker extends DialogFragment {
   }
 
   private void updateInputMode(MaterialButton modeButton) {
+    if (modeButton == null || timePickerView == null || textInputStub == null) {
+      return;
+    }
+
     if (activePresenter != null) {
       activePresenter.hide();
     }
 
-    activePresenter = initializeOrRetrieveActivePresenterForMode(inputMode);
+    activePresenter =
+        initializeOrRetrieveActivePresenterForMode(inputMode, timePickerView, textInputStub);
     activePresenter.show();
     activePresenter.invalidate();
     Pair<Integer, Integer> buttonData = dataForMode(inputMode);
     modeButton.setIconResource(buttonData.first);
     modeButton.setContentDescription(getResources().getString(buttonData.second));
+    modeButton.sendAccessibilityEvent(
+        AccessibilityEventCompat.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION);
   }
 
   private void updateCancelButtonVisibility() {
@@ -323,7 +364,8 @@ public final class MaterialTimePicker extends DialogFragment {
     }
   }
 
-  private TimePickerPresenter initializeOrRetrieveActivePresenterForMode(int mode) {
+  private TimePickerPresenter initializeOrRetrieveActivePresenterForMode(
+      int mode, @NonNull TimePickerView timePickerView, @NonNull ViewStub textInputStub) {
     if (mode == INPUT_MODE_CLOCK) {
       timePickerClockPresenter =
           timePickerClockPresenter == null
@@ -467,8 +509,15 @@ public final class MaterialTimePicker extends DialogFragment {
     private TimeModel time = new TimeModel();
 
     private int inputMode;
+    @StringRes
     private int titleTextResId = 0;
     private CharSequence titleText;
+    @StringRes
+    private int positiveButtonTextResId = 0;
+    private CharSequence positiveButtonText;
+    @StringRes
+    private int negativeButtonTextResId = 0;
+    private CharSequence negativeButtonText;
     private int overrideThemeResId = 0;
 
     /** Sets the input mode with which to start the time picker. */
@@ -528,6 +577,42 @@ public final class MaterialTimePicker extends DialogFragment {
     @NonNull
     public Builder setTitleText(@Nullable CharSequence charSequence) {
       this.titleText = charSequence;
+      return this;
+    }
+
+    /**
+     * Sets the text used in the positive action button.
+     */
+    @NonNull
+    public Builder setPositiveButtonText(@StringRes int positiveButtonTextResId) {
+      this.positiveButtonTextResId = positiveButtonTextResId;
+      return this;
+    }
+
+    /**
+     * Sets the text used in the positive action button.
+     */
+    @NonNull
+    public Builder setPositiveButtonText(@Nullable CharSequence positiveButtonText) {
+      this.positiveButtonText = positiveButtonText;
+      return this;
+    }
+
+    /**
+     * Sets the text used in the negative action button.
+     */
+    @NonNull
+    public Builder setNegativeButtonText(@StringRes int negativeButtonTextResId) {
+      this.negativeButtonTextResId = negativeButtonTextResId;
+      return this;
+    }
+
+    /**
+     * Sets the text used in the negative action button.
+     */
+    @NonNull
+    public Builder setNegativeButtonText(@Nullable CharSequence negativeButtonText) {
+      this.negativeButtonText = negativeButtonText;
       return this;
     }
 

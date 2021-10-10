@@ -33,7 +33,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         android:textSize="@dimen/mpm_popup_menu_item_label_text_size"
         tools:text="Preview" />
 

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textColor="?attr/icon_color_active"
         android:textSize="11sp"
         android:textStyle="bold"
@@ -44,8 +44,9 @@
             android:gravity="center"
             android:stateListAnimator="@animator/clicked"
             android:text="@string/voice_click"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="?colorPrimary" />
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/item_voice_speed"
@@ -78,7 +79,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/background_rectangle_stroke"
         android:padding="9dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:visibility="gone"
         tools:text="Message" />
 

@@ -11,7 +11,7 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         android:textColor="?colorPrimary"
         android:visibility="visible" />
 

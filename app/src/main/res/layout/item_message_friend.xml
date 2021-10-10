@@ -10,7 +10,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_message_restore"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -69,7 +69,7 @@
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:textColor="?attr/colorSecondary"
                 android:textSize="12sp"
                 app:displayHashTags="true"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:autoLink="all"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 app:displayHashTags="true"
                 app:emojiconSize="20sp"
                 app:fixWrapText="true"
@@ -122,7 +122,7 @@
                     android:id="@+id/item_message_status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="time" />
 
             </LinearLayout>

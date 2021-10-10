@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textSize="12sp"
             tools:text="Name" />
 
@@ -43,7 +43,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textSize="12sp"
             tools:text="Expires" />
     </LinearLayout>

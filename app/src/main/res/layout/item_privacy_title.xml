@@ -15,7 +15,7 @@
         android:autoLink="web"
         android:linksClickable="true"
         android:padding="@dimen/content_medium_margin"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         tools:text="Title" />
 
     <ImageButton

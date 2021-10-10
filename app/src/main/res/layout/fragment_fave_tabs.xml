@@ -19,8 +19,7 @@
             style="@style/Theme.Tablayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            app:tabTextAppearance="@style/MineCustomTabText" />
+            android:background="@android:color/transparent" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textSize="24sp"
             tools:text="Title" />
 

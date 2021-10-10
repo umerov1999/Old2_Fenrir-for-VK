@@ -21,7 +21,7 @@
             android:layout_marginEnd="8dp"
             android:clipToPadding="true"
             android:theme="@style/Theme.Toolbar.Surface"
-            app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
             app:titleTextAppearance="@style/TextAppearance.Toolbar.Title">
 
             <FrameLayout
@@ -45,7 +45,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:text="@string/voice_click"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:textSize="16sp"
                     tools:text="Name" />
 
@@ -115,7 +115,7 @@
                 android:layout_toEndOf="@+id/pinned_avatar"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 tools:text="User Name" />
 
             <TextView
@@ -128,7 +128,7 @@
                 android:layout_toEndOf="@+id/pinned_avatar"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 tools:text="Hi! How are you?" />
 
             <ImageView
@@ -201,7 +201,7 @@
             android:layout_toEndOf="@+id/writingava"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
             tools:text="@string/user_type_message" />
 
         <ImageView
@@ -253,7 +253,7 @@
                 android:layout_toStartOf="@+id/buttonCancelEditing"
                 android:layout_toEndOf="@+id/iconEdit"
                 android:text="@string/edit_message"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
             <TextView
                 android:id="@+id/editMessageText"
@@ -265,7 +265,7 @@
                 android:layout_toStartOf="@+id/buttonCancelEditing"
                 android:layout_toEndOf="@+id/iconEdit"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 tools:text="Hi! How are you?" />
 
             <ImageView
@@ -307,6 +307,6 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/chat_empty_text"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
 </RelativeLayout>

@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 tools:text="Name" />
 
             <dev.ragnarok.fenrir.view.emoji.EmojiconTextView
@@ -45,7 +45,7 @@
                 android:autoLink="web"
                 android:fontFamily="sans-serif"
                 android:gravity="start"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 app:displayHashTags="true"
                 app:emojiconSize="18sp"
                 app:hashTagColor="?attr/colorAccent"
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="time" />
 
             </LinearLayout>

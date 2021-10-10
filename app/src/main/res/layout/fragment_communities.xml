@@ -21,7 +21,7 @@
             android:clipToPadding="true"
             android:theme="@style/Theme.Toolbar.Surface"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
             app:titleTextAppearance="@style/TextAppearance.Toolbar.Title" />
 
         <dev.ragnarok.fenrir.view.MySearchView

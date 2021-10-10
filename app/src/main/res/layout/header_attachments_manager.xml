@@ -35,7 +35,7 @@
                     android:layout_toStartOf="@+id/button_disable_postpone"
                     android:padding="8dp"
                     android:text="@string/will_be_posted_at"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
                 <ImageView
                     android:id="@+id/button_disable_postpone"
@@ -52,7 +52,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_postpone"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
@@ -75,7 +75,7 @@
             android:inputType="textCapSentences|textMultiLine|textLongMessage"
             android:minHeight="140dp"
             android:padding="16dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColorHint="?android:textColorSecondary"
             app:emojiconSize="20sp" />
 

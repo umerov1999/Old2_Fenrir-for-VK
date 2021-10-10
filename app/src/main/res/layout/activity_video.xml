@@ -27,7 +27,7 @@
         android:background="@drawable/toolbar_semitransparent"
         android:clipToPadding="true"
         android:theme="@style/Theme.Toolbar.Video"
-        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
         app:subtitleTextColor="?colorSecondary"
         app:titleTextAppearance="@style/TextAppearance.Toolbar.Title">
 

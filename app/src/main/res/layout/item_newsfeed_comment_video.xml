@@ -41,7 +41,7 @@
                     android:id="@+id/video_views_counter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="1533" />
 
                 <ImageView
@@ -74,14 +74,14 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     tools:text="Owner name" />
 
                 <TextView
                     android:id="@+id/video_datetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="Today 19:26" />
 
             </LinearLayout>
@@ -111,7 +111,7 @@
                 android:background="#90000000"
                 android:gravity="center"
                 android:padding="4dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@android:color/white"
                 tools:text="3:28" />
 
@@ -135,7 +135,7 @@
             android:maxLines="1"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             tools:text="Video title" />
 
         <include layout="@layout/line_divider" />

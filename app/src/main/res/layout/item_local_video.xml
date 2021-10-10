@@ -42,8 +42,9 @@
                     android:id="@+id/item_video_index"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textColor="#ffffff"
+                    android:textStyle="bold"
                     tools:text="1" />
 
             </LinearLayout>
@@ -57,7 +58,7 @@
                 android:background="#90000000"
                 android:gravity="center"
                 android:padding="4dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 tools:text="3 videos" />
@@ -70,7 +71,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|start"
             android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textStyle="bold"
             tools:text="Take Me To Church - Hozier Cover Sofia Karlberg" />
 

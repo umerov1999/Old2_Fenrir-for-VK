@@ -38,7 +38,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginStart="-8dp"
                 android:layout_marginBottom="4dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 tools:text="4" />
 
             <com.google.android.material.card.MaterialCardView
@@ -81,7 +81,7 @@
                         android:paddingEnd="8dp"
                         android:paddingBottom="2dp"
                         android:saveEnabled="false"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                         android:textColorHint="?android:textColorHint"
                         app:emojiconSize="20sp" />
 

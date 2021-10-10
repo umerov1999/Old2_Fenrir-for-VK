@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textSize="13sp"
             tools:text="Name" />
 
@@ -42,7 +42,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textSize="11sp"
             tools:ignore="SmallSp"
             tools:text="Expires" />

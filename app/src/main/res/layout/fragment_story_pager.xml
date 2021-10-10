@@ -19,7 +19,7 @@
         android:background="@drawable/toolbar_semitransparent"
         android:clipToPadding="true"
         android:theme="@style/Theme.Toolbar.Video"
-        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
         app:subtitleTextColor="?colorSecondary">
 
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 tools:text="Expires" />

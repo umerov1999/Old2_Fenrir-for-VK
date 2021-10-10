@@ -39,7 +39,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="2"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:textColor="?colorPrimary"
                 android:textSize="14sp"
                 tools:text="Name" />
@@ -51,7 +51,7 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textSize="12sp"
                 tools:text="Artist" />
 
@@ -62,7 +62,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 tools:text="year" />
 
         </LinearLayout>

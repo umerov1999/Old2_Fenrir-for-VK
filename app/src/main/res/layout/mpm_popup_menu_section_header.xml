@@ -24,7 +24,7 @@
         android:layout_marginBottom="@dimen/mpm_popup_menu_item_section_label_margin_bottom"
         android:ellipsize="end"
         android:lines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textSize="@dimen/mpm_popup_menu_item_section_label_text_size"
         tools:text="Header"
         tools:visibility="visible" />

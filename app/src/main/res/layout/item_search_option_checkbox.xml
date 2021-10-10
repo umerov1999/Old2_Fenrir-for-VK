@@ -14,7 +14,7 @@
         android:paddingTop="3dp"
         android:paddingEnd="12dp"
         android:paddingBottom="3dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         tools:text="Search option" />
 
     <View

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ImageEditTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="ImageEditTheme" parent="Theme.Material3.Light.NoActionBar">
 
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
@@ -11,7 +11,7 @@
 
     </style>
 
-    <style name="ImageTextDialog" parent="Theme.MaterialComponents.Light.Dialog">
+    <style name="ImageTextDialog" parent="Theme.Material3.Light.Dialog">
 
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>

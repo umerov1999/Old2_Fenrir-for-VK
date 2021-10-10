@@ -81,9 +81,9 @@ public class CenteredToolbar extends MaterialToolbar {
         tvSubtitle.setSingleLine();
         tvSubtitle.setEllipsize(TextUtils.TruncateAt.END);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            tvSubtitle.setTextAppearance(R.style.TextAppearance_MaterialComponents_Caption);
+            tvSubtitle.setTextAppearance(R.style.TextAppearance_Material3_BodySmall);
         } else {
-            tvSubtitle.setTextAppearance(getContext(), R.style.TextAppearance_MaterialComponents_Caption);
+            tvSubtitle.setTextAppearance(getContext(), R.style.TextAppearance_Material3_BodySmall);
         }
 
         LinearLayout linear = new LinearLayout(getContext());

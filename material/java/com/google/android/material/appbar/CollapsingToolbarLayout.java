@@ -553,7 +553,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
       updateTitleFromToolbarIfNeeded();
       updateTextBounds(0, 0, getMeasuredWidth(), getMeasuredHeight(), /* forceRecalculate= */ true);
 
-      int lineCount = collapsingTextHelper.getLineCount();
+      int lineCount = collapsingTextHelper.getExpandedLineCount();
       if (lineCount > 1) {
         // Add extra height based on the amount of height beyond the first line of title text.
         int expandedTextHeight = Math.round(collapsingTextHelper.getExpandedTextFullHeight());
@@ -836,7 +836,6 @@ public class CollapsingToolbarLayout extends FrameLayout {
     ensureToolbar();
     if (scrimAnimator == null) {
       scrimAnimator = new ValueAnimator();
-      scrimAnimator.setDuration(scrimAnimationDuration);
       scrimAnimator.setInterpolator(
           targetAlpha > scrimAlpha
               ? AnimationUtils.FAST_OUT_LINEAR_IN_INTERPOLATOR
@@ -852,6 +851,7 @@ public class CollapsingToolbarLayout extends FrameLayout {
       scrimAnimator.cancel();
     }
 
+    scrimAnimator.setDuration(scrimAnimationDuration);
     scrimAnimator.setIntValues(scrimAlpha, targetAlpha);
     scrimAnimator.start();
   }

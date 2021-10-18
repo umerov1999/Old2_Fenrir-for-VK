@@ -17,12 +17,10 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_menu"
+            style="@style/BottomNavigation.Main"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
             android:layout_marginTop="2dp"
             app:elevation="0dp"
-            app:itemIconTint="@color/selector_bottom_navigation"
-            app:labelVisibilityMode="unlabeled"
             app:menu="@menu/menu_main" />
 
     </LinearLayout>

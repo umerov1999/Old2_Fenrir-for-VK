@@ -47,7 +47,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="2dp"
                 android:layout_toEndOf="@+id/vk_photo_item_like"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@android:color/white"
                 tools:text="4000" />
 
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@android:color/white"
                 tools:text="1.5K" />
 

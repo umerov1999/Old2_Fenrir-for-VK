@@ -242,7 +242,6 @@ public class TextInputLayout extends LinearLayout {
   @NonNull private ShapeAppearanceModel shapeAppearanceModel;
 
   private final int boxLabelCutoutPaddingPx;
-  private int boxLabelCutoutHeight;
   @BoxBackgroundMode private int boxBackgroundMode;
   private int boxCollapsedPaddingTopPx;
   private int boxStrokeWidthPx;
@@ -1015,6 +1014,29 @@ public class TextInputLayout extends LinearLayout {
           getResources()
               .getDimensionPixelSize(R.dimen.material_filled_edittext_font_1_3_padding_bottom));
     }
+  }
+
+  /**
+   * Set the value to use for the EditText's collapsed top padding in box mode.
+   *
+   * <p> Customized boxCollapsedPaddingTop will be disabled if the font scale is larger than 1.3.
+   *
+   * @param boxCollapsedPaddingTop the value to use for the EditText's collapsed top padding
+   * @attr ref com.google.android.material.R.styleable#TextInputLayout_boxCollapsedPaddingTop
+   * @see #getBoxCollapsedPaddingTop()
+   */
+  public void setBoxCollapsedPaddingTop(int boxCollapsedPaddingTop) {
+    boxCollapsedPaddingTopPx = boxCollapsedPaddingTop;
+  }
+
+  /**
+   * Returns the EditText's collapsed top padding
+   *
+   * @return the value used for the box's padding top when collapsed
+   * @see #setBoxCollapsedPaddingTop(int)
+   */
+  public int getBoxCollapsedPaddingTop() {
+    return boxCollapsedPaddingTopPx;
   }
 
   /**
@@ -2106,8 +2128,8 @@ public class TextInputLayout extends LinearLayout {
   /**
    * Returns the text color used for the character counter, or null if one has not been set.
    *
-   * @attr ref com.google.android.material.R.styleable#TextInputLayout_counterOverflowTextColor
-   * @see #setCounterTextAppearance(int)
+   * @attr ref com.google.android.material.R.styleable#TextInputLayout_counterTextColor
+   * @see #setCounterTextColor(ColorStateList)
    * @return the text color used for the character counter
    */
   @Nullable
@@ -4104,21 +4126,11 @@ public class TextInputLayout extends LinearLayout {
     collapsingTextHelper.getCollapsedTextActualBounds(
         cutoutBounds, editText.getWidth(), editText.getGravity());
     applyCutoutPadding(cutoutBounds);
-    boxLabelCutoutHeight = boxStrokeWidthPx;
-    cutoutBounds.top = 0;
-    cutoutBounds.bottom = boxLabelCutoutHeight;
+
     // Offset the cutout bounds by the TextInputLayout's left padding to ensure that the cutout is
     // inset relative to the TextInputLayout's bounds.
     cutoutBounds.offset(-getPaddingLeft(), 0);
     ((CutoutDrawable) boxBackground).setCutout(cutoutBounds);
-  }
-
-  /** If stroke changed width, cutout bounds need to be recalculated. **/
-  private void updateCutout() {
-    if (cutoutEnabled() && !hintExpanded && boxLabelCutoutHeight != boxStrokeWidthPx) {
-      closeCutout();
-      openCutout();
-    }
   }
 
   private void closeCutout() {
@@ -4221,10 +4233,6 @@ public class TextInputLayout extends LinearLayout {
       boxStrokeWidthPx = boxStrokeWidthFocusedPx;
     } else {
       boxStrokeWidthPx = boxStrokeWidthDefaultPx;
-    }
-
-    if (boxBackgroundMode == BOX_BACKGROUND_OUTLINE) {
-      updateCutout();
     }
 
     // Update the text box's background color based on the current state.

@@ -50,7 +50,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:scrollbars="none"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             tools:text="Fenrir for VK" />
 
         <TextView
@@ -60,7 +60,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:scrollbars="none"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
             android:textSize="@dimen/font_size_subtitle"
             tools:text="Сообщество" />
 
@@ -71,7 +71,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:scrollbars="none"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textSize="@dimen/font_size_subtitle"
             tools:text="31 подписок" />
 

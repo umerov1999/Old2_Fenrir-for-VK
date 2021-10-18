@@ -30,7 +30,7 @@
             android:id="@+id/item_feedback_link_text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             tools:text="Small Text" />
 
         <dev.ragnarok.fenrir.view.emoji.EmojiconTextView
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             app:emojiconSize="16sp"
             tools:text="Medium Text" />
 

@@ -10,6 +10,7 @@ import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.model.ProxyConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import dev.ragnarok.fenrir.util.BrotliInterceptor;
 
 public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
 
@@ -35,9 +36,9 @@ public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
                 .readTimeout(40, TimeUnit.SECONDS)
                 .connectTimeout(40, TimeUnit.SECONDS)
                 .writeTimeout(40, TimeUnit.SECONDS).addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(interceptor.getType())).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(interceptor.getType())).build();
                     return chain.proceed(request);
-                });
+                }).addInterceptor(BrotliInterceptor.INSTANCE);
 
         ProxyUtil.applyProxyConfig(builder, config);
         return builder.build();

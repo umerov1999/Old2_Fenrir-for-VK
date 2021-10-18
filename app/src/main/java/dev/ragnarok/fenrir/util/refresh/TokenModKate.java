@@ -40,6 +40,7 @@ public class TokenModKate {
     }
 
     public static String requestToken() {
+        rid = 0;
         String str;
         String str2;
         try {
@@ -69,7 +70,7 @@ public class TokenModKate {
                 return null;
             }
             System.out.println("Token register OK");
-            return sb3.split("\\|ID\\|1\\|:")[1];
+            return sb3.split("\\|ID\\|" + rid + "\\|:")[1];
         } catch (Exception unused) {
             return null;
         }
@@ -81,6 +82,7 @@ public class TokenModKate {
         list.add("X-subtype=54740537194");
         list.add("X-X-subscription=54740537194");
         list.add("X-X-subtype=54740537194");
+        list.add("X-gmp_app_id=1:54740537194:android:fa11238ac5d9b469");
         list.add("X-app_ver=" + KATE_APP_VERSION_CODE);
         list.add("X-kid=|ID|" + rid + "|");
         list.add("X-osv=23");
@@ -89,9 +91,7 @@ public class TokenModKate {
         list.add("X-gmsv=200313005");
         list.add("X-pub2=" + str2);
         list.add("X-X-kid=|ID|" + rid + "|");
-        String sb = "X-appid=" +
-                str3;
-        list.add(sb);
+        list.add("X-appid=" + str3);
         list.add("X-subscription=54740537194");
         list.add("X-app_ver_name=" + KATE_APP_VERSION_NAME);
         list.add("app=com.perm.kate_new_6");
@@ -128,6 +128,7 @@ public class TokenModKate {
                 .addInterceptor(chain -> chain.proceed(chain.request().newBuilder()
                         .addHeader("User-Agent", agent)
                         .addHeader("Authorization", str3)
+                        .addHeader("Gcm-cert", "966882ba564c2619d55d0a9afd4327a38c327456")
                         .build()));
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
         FormBody.Builder formBody = new FormBody.Builder();

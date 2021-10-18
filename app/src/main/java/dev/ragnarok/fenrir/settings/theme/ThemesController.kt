@@ -267,13 +267,13 @@ object ThemesController {
     private var randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
     private var randomTheme = themes.random()
     private val defaultTheme = ThemeValue(
-        "ice",
-        "#448AFF",
-        "#1E88E5",
-        "Ice",
-        R.style.App_DayNight_Ice,
-        R.style.App_DayNight_Ice_Amoled,
-        R.style.App_DayNight_Ice_MD1
+        "cold",
+        "#9BC4FC",
+        "#D8C2FF",
+        "Cold",
+        R.style.App_DayNight_Cold,
+        R.style.App_DayNight_Cold_Amoled,
+        R.style.App_DayNight_Cold_MD1
     ).toast("#4d7198", "#448AFF")
 
     private fun getCurrentTheme(): ThemeValue {

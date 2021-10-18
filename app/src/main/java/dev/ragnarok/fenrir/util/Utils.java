@@ -1422,7 +1422,7 @@ public class Utils {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(timeouts, TimeUnit.SECONDS)
                 .readTimeout(timeouts, TimeUnit.SECONDS)
-                .addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build()));
+                .addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build())).addInterceptor(BrotliInterceptor.INSTANCE);
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
         return builder;
     }
@@ -1628,7 +1628,7 @@ public class Utils {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
                     return chain.proceed(request);
                 });
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());

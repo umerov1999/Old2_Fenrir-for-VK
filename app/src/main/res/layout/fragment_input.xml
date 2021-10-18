@@ -53,7 +53,7 @@
                 android:layout_marginStart="-8dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 tools:text="4" />
 
             <LinearLayout
@@ -93,7 +93,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="4dp"
                     android:saveEnabled="false"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                     android:textColorHint="?android:textColorHint"
                     app:emojiconSize="20sp" />
 

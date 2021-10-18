@@ -44,5 +44,5 @@ public interface IAccountApi {
     Single<CountersDto> getCounters(String filter);
 
     @CheckResult
-    Single<RefreshToken> refreshToken(String receipt);
+    Single<RefreshToken> refreshToken(String receipt, String receipt2, String nonce, Long timestamp);
 }

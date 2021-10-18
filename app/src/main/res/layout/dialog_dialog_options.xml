@@ -12,7 +12,7 @@
         android:checked="false"
         android:padding="8dp"
         android:text="@string/enable_groupchat_notif_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/font_size_title" />
 
@@ -23,7 +23,7 @@
         android:checked="false"
         android:padding="8dp"
         android:text="@string/high_notif_priority_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/font_size_title" />
 
@@ -35,7 +35,7 @@
         android:checked="false"
         android:padding="8dp"
         android:text="@string/enable_dialogs_sound_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/font_size_title" />
 
@@ -46,7 +46,7 @@
         android:checked="false"
         android:padding="8dp"
         android:text="@string/enable_dialogs_vibro_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/font_size_title" />
 
@@ -57,7 +57,7 @@
         android:checked="false"
         android:padding="8dp"
         android:text="@string/enable_dialogs_led_title"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/font_size_title" />
 

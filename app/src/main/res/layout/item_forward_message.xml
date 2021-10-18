@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="?attr/colorSecondary"
             android:textSize="12sp"
             tools:text="Name" />
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:autoLink="all"
             android:gravity="start"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             app:emojiconSize="20sp"
             tools:text="Message" />
 
@@ -51,12 +51,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/item_forward_message_fwds"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
             android:text="@string/forward_messages_view"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
             android:textColor="?colorOnSurface"
             app:icon="@drawable/ic_fluent_channel_follow_24_regular"
             app:iconTint="?colorOnSurface" />
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             tools:text="time" />
     </LinearLayout>
 

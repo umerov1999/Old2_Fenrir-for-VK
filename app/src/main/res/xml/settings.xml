@@ -74,7 +74,7 @@
         app:initialExpandedChildrenCount="3">
 
         <Preference
-            android:defaultValue="ice"
+            android:defaultValue="cold"
             android:icon="@drawable/select_colored"
             android:key="app_theme"
             android:title="@string/choose_theme_title"

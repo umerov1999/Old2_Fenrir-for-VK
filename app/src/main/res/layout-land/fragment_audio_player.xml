@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:gravity="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textSize="11sp"
                 tools:ignore="SmallSp" />
 
@@ -146,7 +146,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="14dp"
                 android:gravity="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textSize="11sp"
                 tools:ignore="RelativeOverlap,SmallSp" />
 
@@ -203,7 +203,8 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                     android:textSize="12sp"
                     tools:text="Album" />
 
@@ -218,7 +219,7 @@
                     android:padding="4dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     tools:text="Jara" />
 
                 <TextView
@@ -232,7 +233,7 @@
                     android:paddingBottom="4dp"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                     android:textSize="12sp"
                     tools:text="Warduna" />
 

@@ -20,7 +20,7 @@
             android:gravity="center_horizontal"
             android:padding="@dimen/title_padding"
             android:text="@string/loading"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textSize="18sp" />
 
         <FrameLayout

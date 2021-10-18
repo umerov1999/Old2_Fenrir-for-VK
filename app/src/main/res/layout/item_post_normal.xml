@@ -31,7 +31,7 @@
             android:paddingBottom="6dp"
             android:text="@string/post_is_pinned"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <include layout="@layout/content_post_header" />
 

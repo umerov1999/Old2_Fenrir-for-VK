@@ -625,7 +625,10 @@ object DownloadWorkUtils {
                     val data = ByteArray(80 * 1024)
                     var bufferLength: Int
                     var downloadedSize = 0L
-                    val cntlength = response.header("Content-Length")
+                    var cntlength = response.header("Content-Length")
+                    if (Utils.isEmpty(cntlength)) {
+                        cntlength = response.header("Compressed-Content-Length")
+                    }
                     var totalSize = 1L
                     if (!Utils.isEmpty(cntlength)) totalSize = cntlength!!.toLong()
                     while (input.read(data).also { bufferLength = it } != -1) {

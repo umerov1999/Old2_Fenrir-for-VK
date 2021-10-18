@@ -84,7 +84,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
             return false;
         }
         String oldToken = getToken();
-        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;
+        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms, null, null, null).blockingGet().token;
         Log.w("refresh", oldToken + " " + token + " " + gms);
         if (oldToken.equals(token) || isEmpty(token)) {
             return false;
@@ -102,7 +102,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
             return false;
         }
         String oldToken = getToken();
-        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms).blockingGet().token;
+        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms, null, null, null).blockingGet().token;
         Log.w("refresh", oldToken + " " + token + " " + gms);
         if (oldToken.equals(token) || isEmpty(token)) {
             return false;
@@ -140,14 +140,12 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
         boolean HasVersion = false;
         boolean HasDeviceId = false;
-        String vv = null;
         if (body instanceof FormBody) {
             FormBody formBody = (FormBody) body;
             for (int i = 0; i < formBody.size(); i++) {
                 String name = formBody.name(i);
                 if (name.equals("v")) {
                     HasVersion = true;
-                    vv = formBody.value(i);
                 } else if (name.equals("device_id"))
                     HasDeviceId = true;
                 String value = formBody.value(i);
@@ -189,11 +187,6 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
             if (nonNull(error)) {
                 switch (error.errorCode) {
-                    case ApiErrorCodes.CLIENT_VERSION_DEPRECATED:
-                        if (!isEmpty(vv) && "5.90".equals(vv)) {
-                            Settings.get().other().setUse_hls_downloader(true);
-                        }
-                        break;
                     case ApiErrorCodes.TOO_MANY_REQUESTS_PER_SECOND:
                         break;
                     case ApiErrorCodes.CAPTCHA_NEED:
@@ -231,7 +224,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
                 }
 
                 if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
-                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN) {
+                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN || error.errorCode == ApiErrorCodes.CLIENT_VERSION_DEPRECATED) {
                         if (upgradeTokenKate()) {
                             token = getToken();
                             formBuilder.add("access_token", token);
@@ -243,7 +236,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
                         }
                     }
                 } else if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID) {
-                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN) {
+                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN || error.errorCode == ApiErrorCodes.CLIENT_VERSION_DEPRECATED) {
                         if (upgradeTokenOfficial()) {
                             token = getToken();
                             formBuilder.add("access_token", token);

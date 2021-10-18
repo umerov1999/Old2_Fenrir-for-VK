@@ -191,6 +191,7 @@
         <item>Valknut</item>
         <item>Mjolnir</item>
         <item>Vegvisir</item>
+        <item>Vegvisir 2</item>
         <item>Celtic knot</item>
         <item>Celtic flower</item>
         <item>Slepnir</item>
@@ -224,6 +225,7 @@
         <item>15</item>
         <item>16</item>
         <item>17</item>
+        <item>18</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -498,7 +500,7 @@
     <string name="wall_post_view">(WALL POST)</string>
 
     <string name="repost_title">Sending the post</string>
-    <string name="repost_send_message">Send in a private message</string>
+    <string name="repost_send_message">Send in a message</string>
     <string name="repost_to_wall">On my wall</string>
     <string name="pin">Pin</string>
     <string name="unpin">Unpin</string>
@@ -571,11 +573,12 @@
     <string name="api_error_21">This action is allowed only for Standalone and Open API applications</string>
     <string name="api_error_23">The method has been turned off</string>
     <string name="api_error_24">User confirmation required</string>
+    <string name="api_error_25">Attempt to bypass music blocking failed</string>
     <string name="api_error_27">Community access token is invalid</string>
     <string name="api_error_28">Application access key is invalid</string>
     <string name="api_error_29">Method call limit reached</string>
     <string name="api_error_30">Closed profile</string>
-    <string name="api_error_34">Client version deprecated</string>
+    <string name="api_error_34">VK blocked this request</string>
     <string name="api_error_100">One of the required parameters was not passed or was incorrect</string>
     <string name="api_error_101">Invalid API Application ID</string>
     <string name="api_error_103">Limit on number of arrivals exceeded</string>

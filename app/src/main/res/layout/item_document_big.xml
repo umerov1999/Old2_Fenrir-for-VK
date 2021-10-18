@@ -21,7 +21,7 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         android:textColor="@android:color/white"
         android:textSize="13sp"
         tools:text="EXT" />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textSize="15sp"
             tools:text="Title" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textSize="12sp"
             tools:text="Size" />
     </LinearLayout>

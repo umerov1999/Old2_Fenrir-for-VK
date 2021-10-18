@@ -103,10 +103,10 @@ class AccountApi extends AbsApi implements IAccountApi {
     }
 
     @Override
-    public Single<RefreshToken> refreshToken(String receipt) {
+    public Single<RefreshToken> refreshToken(String receipt, String receipt2, String nonce, Long timestamp) {
         return provideService(IAccountService.class, TokenType.USER)
                 .flatMap(service -> service
-                        .refreshToken(receipt)
+                        .refreshToken(receipt, receipt2, nonce, timestamp)
                         .map(extractResponseWithErrorHandling()));
     }
 }

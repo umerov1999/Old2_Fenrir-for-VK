@@ -106,3 +106,6 @@
 
 -keep class org.springframework.**
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+-keepnames class dev.ragnarok.fenrir.util.brotli.Dictionary
+-keep class dev.ragnarok.fenrir.util.brotli.DictionaryData

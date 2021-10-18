@@ -102,6 +102,7 @@ public final class CollapsingTextHelper {
   private float collapsedTextSize = 15;
   private ColorStateList expandedTextColor;
   private ColorStateList collapsedTextColor;
+  private int expandedLineCount;
 
   private float expandedDrawY;
   private float collapsedDrawY;
@@ -151,6 +152,7 @@ public final class CollapsingTextHelper {
   private float expandedLetterSpacing;
 
   private StaticLayout textLayout;
+  private float collapsedTextWidth;
   private float collapsedTextBlend;
   private float expandedTextBlend;
   private float expandedFirstLineDrawX;
@@ -181,6 +183,11 @@ public final class CollapsingTextHelper {
   public void setPositionInterpolator(TimeInterpolator interpolator) {
     positionInterpolator = interpolator;
     recalculate();
+  }
+
+  @Nullable
+  public TimeInterpolator getPositionInterpolator() {
+    return positionInterpolator;
   }
 
   public void setExpandedTextSize(float textSize) {
@@ -246,33 +253,25 @@ public final class CollapsingTextHelper {
   private float getCollapsedTextLeftBound(int width, int gravity) {
     if (gravity == Gravity.CENTER
         || (gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.CENTER_HORIZONTAL) {
-      return width / 2f - calculateCollapsedTextWidth() / 2;
+      return width / 2f - collapsedTextWidth / 2;
     } else if ((gravity & Gravity.END) == Gravity.END
         || (gravity & Gravity.RIGHT) == Gravity.RIGHT) {
-      return isRtl ? collapsedBounds.left : (collapsedBounds.right - calculateCollapsedTextWidth());
+      return isRtl ? collapsedBounds.left : (collapsedBounds.right - collapsedTextWidth);
     } else {
-      return isRtl ? (collapsedBounds.right - calculateCollapsedTextWidth()) : collapsedBounds.left;
+      return isRtl ? (collapsedBounds.right - collapsedTextWidth) : collapsedBounds.left;
     }
   }
 
   private float getCollapsedTextRightBound(@NonNull RectF bounds, int width, int gravity) {
     if (gravity == Gravity.CENTER
         || (gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.CENTER_HORIZONTAL) {
-      return width / 2f + calculateCollapsedTextWidth() / 2;
+      return width / 2f + collapsedTextWidth / 2;
     } else if ((gravity & Gravity.END) == Gravity.END
         || (gravity & Gravity.RIGHT) == Gravity.RIGHT) {
-      return isRtl ? (bounds.left + calculateCollapsedTextWidth()) : collapsedBounds.right;
+      return isRtl ? (bounds.left + collapsedTextWidth) : collapsedBounds.right;
     } else {
-      return isRtl ? collapsedBounds.right : (bounds.left + calculateCollapsedTextWidth());
+      return isRtl ? collapsedBounds.right : (bounds.left + collapsedTextWidth);
     }
-  }
-
-  public float calculateCollapsedTextWidth() {
-    if (text == null) {
-      return 0;
-    }
-    getTextPaintCollapsed(tmpPaint);
-    return tmpPaint.measureText(text, 0, text.length());
   }
 
   public float getExpandedTextHeight() {
@@ -603,7 +602,11 @@ public final class CollapsingTextHelper {
             getCurrentColor(expandedShadowColor), getCurrentColor(collapsedShadowColor), fraction));
 
     if (fadeModeEnabled) {
-      int textAlpha = (int) (calculateFadeModeTextAlpha(fraction) * 255);
+      int originalAlpha = textPaint.getAlpha();
+
+      // Calculates new alpha as a ratio of original alpha based on position.
+      int textAlpha = (int) (calculateFadeModeTextAlpha(fraction) * originalAlpha);
+
       textPaint.setAlpha(textAlpha);
     }
 
@@ -659,10 +662,16 @@ public final class CollapsingTextHelper {
       textToDrawCollapsed =
           TextUtils.ellipsize(textToDraw, textPaint, textLayout.getWidth(), TruncateAt.END);
     }
-    float width =
-        textToDrawCollapsed != null
-            ? textPaint.measureText(textToDrawCollapsed, 0, textToDrawCollapsed.length())
-            : 0;
+    if (textToDrawCollapsed != null) {
+      TextPaint collapsedTextPaint = new TextPaint(textPaint);
+      if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+        collapsedTextPaint.setLetterSpacing(collapsedLetterSpacing);
+      }
+      collapsedTextWidth =
+          collapsedTextPaint.measureText(textToDrawCollapsed, 0, textToDrawCollapsed.length());
+    } else {
+      collapsedTextWidth = 0;
+    }
     final int collapsedAbsGravity =
         GravityCompat.getAbsoluteGravity(
             collapsedTextGravity,
@@ -684,10 +693,10 @@ public final class CollapsingTextHelper {
 
     switch (collapsedAbsGravity & GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK) {
       case Gravity.CENTER_HORIZONTAL:
-        collapsedDrawX = collapsedBounds.centerX() - (width / 2);
+        collapsedDrawX = collapsedBounds.centerX() - (collapsedTextWidth / 2);
         break;
       case Gravity.RIGHT:
-        collapsedDrawX = collapsedBounds.right - width;
+        collapsedDrawX = collapsedBounds.right - collapsedTextWidth;
         break;
       case Gravity.LEFT:
       default:
@@ -697,12 +706,11 @@ public final class CollapsingTextHelper {
 
     calculateUsingTextSize(expandedTextSize, forceRecalculate);
     float expandedTextHeight = textLayout != null ? textLayout.getHeight() : 0;
+    expandedLineCount = textLayout != null ? textLayout.getLineCount() : 0;
 
     float measuredWidth = textToDraw != null
         ? textPaint.measureText(textToDraw, 0, textToDraw.length()) : 0;
-    width = textLayout != null && maxLines > 1
-        ? textLayout.getWidth()
-        : measuredWidth;
+    float width = textLayout != null && maxLines > 1 ? textLayout.getWidth() : measuredWidth;
     expandedFirstLineDrawX =
         textLayout != null
             ? maxLines > 1 ? textLayout.getLineStart(0) : textLayout.getLineLeft(0)
@@ -1058,8 +1066,22 @@ public final class CollapsingTextHelper {
     return maxLines;
   }
 
+  /**
+   * Returns the current text line count.
+   *
+   * @return The current text line count.
+   */
   public int getLineCount() {
     return textLayout != null ? textLayout.getLineCount() : 0;
+  }
+
+  /**
+   * Returns the expanded text line count.
+   *
+   * @return The expanded text line count.
+   */
+  public int getExpandedLineCount() {
+    return expandedLineCount;
   }
 
   @RequiresApi(VERSION_CODES.M)

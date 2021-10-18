@@ -94,7 +94,10 @@ public interface IAccountService {
 
     @FormUrlEncoded
     @POST("auth.refreshToken")
-    Single<BaseResponse<RefreshToken>> refreshToken(@Field("receipt") String receipt);
+    Single<BaseResponse<RefreshToken>> refreshToken(@Field("receipt") String receipt,
+                                                    @Field("receipt2") String receipt2,
+                                                    @Field("nonce") String nonce,
+                                                    @Field("timestamp") Long timestamp);
 
 
 }

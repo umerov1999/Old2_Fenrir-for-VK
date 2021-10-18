@@ -54,7 +54,7 @@
         android:layout_toEndOf="@id/avatar_root"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         tools:text="Name" />
 
     <TextView
@@ -68,7 +68,7 @@
         android:layout_toEndOf="@id/avatar_root"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         tools:text="Time" />
 
     <ImageView

@@ -124,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                         tools:text="\@domain" />
 
                     <TextView
@@ -178,14 +178,15 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/subscribe_btn"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    style="@style/MyOutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:insetTop="3dp"
                     android:insetBottom="3dp"
-                    app:backgroundTint="@color/button_profile_tint" />
+                    app:backgroundTint="@color/button_profile_tint"
+                    tools:text="Subscribe" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/header_user_profile_fab_message"

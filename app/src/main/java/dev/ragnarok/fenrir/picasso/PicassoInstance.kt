@@ -20,6 +20,7 @@ import dev.ragnarok.fenrir.util.Objects
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import dev.ragnarok.fenrir.util.BrotliInterceptor
 import java.io.File
 import java.io.IOException
 
@@ -70,9 +71,10 @@ class PicassoInstance @SuppressLint("CheckResult") private constructor(
             .cache(cache_data) //.addNetworkInterceptor(chain -> chain.proceed(chain.request()).newBuilder().header("Cache-Control", "max-age=31536000,public").build())
             .addInterceptor(Interceptor { chain: Interceptor.Chain ->
                 val request = chain.request().newBuilder()
+                    .addHeader("X-VK-Android-Client", "new")
                     .addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build()
                 chain.proceed(request)
-            })
+            }).addInterceptor(BrotliInterceptor)
         ProxyUtil.applyProxyConfig(builder, proxySettings.activeProxy)
         BitmapSafeResize.setMaxResolution(Settings.get().other().maxBitmapResolution)
         BitmapSafeResize.setHardwareRendering(Settings.get().other().rendering_mode)

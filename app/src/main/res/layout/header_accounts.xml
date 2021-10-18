@@ -6,4 +6,5 @@
     android:layout_marginBottom="8dp"
     android:padding="16dp"
     android:text="@string/account_manager"
-    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+    android:textStyle="bold" />

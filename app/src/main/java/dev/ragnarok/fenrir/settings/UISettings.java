@@ -40,7 +40,7 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public String getMainThemeKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(app);
-        return preferences.getString("app_theme", "ice");
+        return preferences.getString("app_theme", "cold");
     }
 
     @Override

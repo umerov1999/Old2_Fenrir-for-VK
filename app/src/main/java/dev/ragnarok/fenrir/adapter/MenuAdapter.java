@@ -27,9 +27,11 @@ import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.ColorFilterImageView;
 
 public class MenuAdapter extends ArrayAdapter<Item> {
+    private final boolean big;
 
-    public MenuAdapter(@NonNull Context context, @NonNull List<Item> items) {
+    public MenuAdapter(@NonNull Context context, @NonNull List<Item> items, boolean big) {
         super(context, R.layout.item_custom_menu, items);
+        this.big = big;
     }
 
     @NonNull
@@ -40,7 +42,7 @@ public class MenuAdapter extends ArrayAdapter<Item> {
         if (nonNull(convertView)) {
             view = convertView;
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_menu, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(big ? R.layout.item_custom_menu_big : R.layout.item_custom_menu, parent, false);
             view.setTag(new Holder(view));
         }
 

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@IntDef({NightMode.DISABLE, NightMode.ENABLE, NightMode.AUTO})
+@IntDef({NightMode.FOLLOW_SYSTEM, NightMode.DISABLE, NightMode.ENABLE, NightMode.AUTO})
 @Retention(RetentionPolicy.SOURCE)
 public @interface NightMode {
     int DISABLE = AppCompatDelegate.MODE_NIGHT_NO;

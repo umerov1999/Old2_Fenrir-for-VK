@@ -8,5 +8,5 @@
     android:background="?android:colorBackground"
     android:clipToPadding="true"
     android:theme="@style/Theme.Toolbar.Surface"
-    app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+    app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
     app:titleTextAppearance="@style/TextAppearance.Toolbar.Title" />

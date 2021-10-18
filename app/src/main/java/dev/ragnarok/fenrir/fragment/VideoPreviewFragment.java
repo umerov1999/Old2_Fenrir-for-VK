@@ -527,7 +527,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
                     .setSection(SECTION_OTHER));
         }
 
-        MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
+        MenuAdapter adapter = new MenuAdapter(requireActivity(), items, false);
 
         new MaterialAlertDialogBuilder(requireActivity())
                 .setAdapter(adapter, (dialog, which) -> onPlayMenuItemClick(video, items.get(which)))
@@ -679,7 +679,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
     private void showPlayExternalPlayerMenu(Video video) {
         Section section = new Section(new Text(R.string.title_select_resolution));
         List<Item> items = createDirectVkPlayItems(video, section, false);
-        MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
+        MenuAdapter adapter = new MenuAdapter(requireActivity(), items, false);
 
         new MaterialAlertDialogBuilder(requireActivity())
                 .setAdapter(adapter, (dialog, which) -> {
@@ -715,7 +715,7 @@ public class VideoPreviewFragment extends BaseMvpFragment<VideoPreviewPresenter,
     private void showDownloadPlayerMenu(Video video) {
         Section section = new Section(new Text(R.string.download));
         List<Item> items = createDirectVkPlayItems(video, section, true);
-        MenuAdapter adapter = new MenuAdapter(requireActivity(), items);
+        MenuAdapter adapter = new MenuAdapter(requireActivity(), items, false);
 
         new MaterialAlertDialogBuilder(requireActivity())
                 .setAdapter(adapter, (dialog, which) -> {

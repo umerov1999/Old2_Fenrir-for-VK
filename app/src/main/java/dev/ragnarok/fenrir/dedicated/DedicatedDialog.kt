@@ -21,7 +21,6 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 import dev.ragnarok.fenrir.Account_Types
 import dev.ragnarok.fenrir.Constants
@@ -203,12 +202,12 @@ class DedicatedDialog :
         swipe = view.findViewById(R.id.dedicated_swipe)
         dedicatedIcon = view.findViewById(R.id.dedicated_icon)
         pager = view.findViewById(R.id.dedicated_pager)
-        mGoto = view.findViewById(R.id.dedicated_go_to)
+        mGoto = view.findViewById(R.id.dedicated_button)
         mText = view.findViewById(R.id.dedicated_text)
         pager?.offscreenPageLimit = 1
         pager?.setPageTransformer(DepthTransformer())
 
-        (view.findViewById(R.id.dedicated_button) as MaterialButton).setOnClickListener {
+        mGoto?.setOnClickListener {
             presenter?.fireUserClick()
         }
         adapter = DedicatedAdapter(ArrayList(Collections.emptyList()))

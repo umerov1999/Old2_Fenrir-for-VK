@@ -41,7 +41,7 @@
                         android:layout_marginBottom="8dp"
                         android:autoLink="web"
                         android:paddingTop="8dp"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                         custom:displayHashTags="true"
                         custom:emojiconSize="20sp"
                         custom:hashTagColor="?attr/colorAccent"
@@ -80,7 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                             tools:text="Emin Guliev" />
 
                     </LinearLayout>

@@ -68,7 +68,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="8dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="?colorPrimary"
                 android:textIsSelectable="false"
                 tools:text="Fenrir" />

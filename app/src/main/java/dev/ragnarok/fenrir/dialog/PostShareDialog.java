@@ -109,7 +109,7 @@ public class PostShareDialog extends DialogFragment {
             items.add(new Item(Methods.REPOST_YOURSELF, new Text(R.string.repost_to_wall)).setIcon(R.drawable.ic_outline_share));
         }
 
-        mAdapter = new MenuAdapter(requireActivity(), items);
+        mAdapter = new MenuAdapter(requireActivity(), items, true);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.repost_title)

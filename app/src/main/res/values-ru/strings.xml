@@ -78,6 +78,7 @@
         <item>Валькнут</item>
         <item>Мьёльнир</item>
         <item>Вегвизир</item>
+        <item>Вегвизир 2</item>
         <item>Кельтский узел</item>
         <item>Кельтский цветок</item>
         <item>Слейпнир</item>
@@ -321,7 +322,7 @@
     <string name="wall_post_view">(ЗАПИСЬ НА СТЕНЕ)</string>
 
     <string name="repost_title">Отправка записи</string>
-    <string name="repost_send_message">Отправить личным сообщением</string>
+    <string name="repost_send_message">Отправить сообщением</string>
     <string name="repost_to_wall">На стену</string>
     <string name="pin">Закрепить</string>
     <string name="unpin">Открепить</string>
@@ -394,11 +395,12 @@
     <string name="api_error_21">Данное действие разрешено только для Standalone и Open API приложений</string>
     <string name="api_error_23">Метод был выключен</string>
     <string name="api_error_24">Требуется подтверждение со стороны пользователя</string>
+    <string name="api_error_25">Попытка обхода блокировки музыки провалена</string>
     <string name="api_error_27">Ключ доступа сообщества недействителен</string>
     <string name="api_error_28">Ключ доступа приложения недействителен</string>
     <string name="api_error_29">Достигнут количественный лимит на вызов метода</string>
     <string name="api_error_30">Закрытый профиль</string>
-    <string name="api_error_34">Устаревшая версия api</string>
+    <string name="api_error_34">ВК заблокировал данный запрос (может будет мной исправлено)</string>
     <string name="api_error_100">Один из необходимых параметров был не передан или неверен</string>
     <string name="api_error_101">Неверный API ID приложения</string>
     <string name="api_error_103">Превышено ограничение на количество вступлений</string>

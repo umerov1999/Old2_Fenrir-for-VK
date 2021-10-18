@@ -12,7 +12,7 @@
         android:layout_marginEnd="10dp"
         android:theme="@style/Theme.Toolbar.Surface"
         app:contentInsetStartWithNavigation="0dp"
-        app:subtitleTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:subtitleTextAppearance="@style/TextAppearance.Material3.BodySmall"
         app:titleTextAppearance="@style/TextAppearance.Toolbar.Title" />
 
     <ImageView

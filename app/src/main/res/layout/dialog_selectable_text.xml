@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:autoLink="all"
         android:minHeight="48dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
         android:textIsSelectable="true"
         android:textSize="16sp"
         tools:text="Sample Text\nSampled" />

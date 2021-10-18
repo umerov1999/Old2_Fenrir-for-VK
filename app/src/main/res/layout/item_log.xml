@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:textStyle="bold"
                     tools:text="Log" />
 
@@ -54,7 +54,7 @@
                     android:id="@+id/log_datetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="Today 19:26" />
 
             </LinearLayout>
@@ -105,7 +105,7 @@
                 android:id="@+id/log_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 tools:text="Message" />
 
             <TextView
@@ -117,7 +117,7 @@
                 android:paddingTop="12dp"
                 android:text="@string/show_more"
                 android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="?attr/colorAccent" />
 
         </LinearLayout>

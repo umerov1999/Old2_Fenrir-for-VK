@@ -117,6 +117,9 @@ public class Recorder {
         resetCurrentRecordTime();
 
         try {
+            if(mStatus == Status.PAUSED) {
+                mRecorder.resume();
+            }
             mRecorder.stop();
             mRecorder.release();
         } catch (RuntimeException e) {

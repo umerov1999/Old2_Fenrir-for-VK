@@ -20,7 +20,7 @@
         android:layout_toStartOf="@+id/icon"
         android:background="?android:colorBackground"
         android:padding="16dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
     <ImageView
         android:id="@+id/icon"

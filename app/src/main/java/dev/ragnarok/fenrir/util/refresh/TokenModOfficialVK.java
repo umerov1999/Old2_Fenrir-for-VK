@@ -6,6 +6,7 @@ import static dev.ragnarok.fenrir.Constants.VK_ANDROID_APP_VERSION_NAME;
 import android.util.Base64;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +40,22 @@ public class TokenModOfficialVK {
         genNewKey();
     }
 
+    public static String getNonce(long timestamp) {
+        String valueOf = String.valueOf(timestamp);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] bArr = new byte[24];
+        new Random().nextBytes(bArr);
+        try {
+            byteArrayOutputStream.write(bArr);
+            byteArrayOutputStream.write(valueOf.getBytes());
+            return Base64.encodeToString(byteArrayOutputStream.toByteArray(), 2);
+        } catch (IOException unused) {
+            return null;
+        }
+    }
+
     public static String requestToken() {
+        rid = 0;
         String str;
         String str2;
         try {
@@ -62,62 +78,45 @@ public class TokenModOfficialVK {
                 str2 = str;
             }
             ArrayList<String> arrayList = new ArrayList<>();
-            fillParams(arrayList, sig, genNewKey, str2, str3.split(" ")[1].split(":")[0], false);
+            fillParams(arrayList, sig, genNewKey, str2, str3.split(" ")[1].split(":")[0]);
             String sb3 = doRequest("https://android.clients.google.com/c2dm/register3", arrayList, str3);
             if (sb3.contains("REGISTRATION_ERROR")) {
                 System.out.println("Token register fail");
                 return null;
             }
-            rid = 0;
-            String genNewKey2 = genNewKey();
-            String sig2 = getSig(genNewKey2);
-            arrayList.clear();
-            fillParams(arrayList, sig2, genNewKey2, str2, str3.split(" ")[1].split(":")[0], true);
-            doRequest("https://android.clients.google.com/c2dm/register3", arrayList, str3);
             System.out.println("Token register OK");
-            return sb3.split("\\|ID\\|1\\|:")[1];
+            return sb3.split("\\|ID\\|" + rid + "\\|:")[1];
         } catch (Exception unused) {
             return null;
         }
     }
 
-    private static void fillParams(List<String> list, String str, String str2, String str3, String device, boolean z) {
+    private static void fillParams(List<String> list, String str, String str2, String str3, String device) {
         rid++;
+        list.add("X-scope=GCM");
         list.add("X-subtype=841415684880");
-        if (z) {
-            list.add("X-delete=1");
-            list.add("X-X-delete=1");
-        } else {
-            list.add("X-X-subscription=841415684880");
-        }
+        list.add("X-X-subscription=841415684880");
         list.add("X-X-subtype=841415684880");
+        list.add("X-gmp_app_id=1:841415684880:android:632f429381141121");
         list.add("X-app_ver=" + VK_ANDROID_APP_VERSION_CODE);
         list.add("X-kid=|ID|" + rid + "|");
         list.add("X-osv=23");
         list.add("X-sig=" + str);
         list.add("X-cliv=fiid-9877000");
-        list.add("X-gmsv=11949480");
+        list.add("X-gmsv=200313005");
         list.add("X-pub2=" + str2);
         list.add("X-X-kid=|ID|" + rid + "|");
-        String sb = "X-appid=" +
-                str3;
-        list.add(sb);
-        if (z) {
-            list.add("X-scope=GCM");
-        } else {
-            list.add("X-scope=*");
-        }
+        list.add("X-appid=" + str3);
         list.add("X-subscription=841415684880");
-        if (!z) {
-            list.add("X-gmp_app_id=1:841415684880:android:632f429381141121");
-        }
         list.add("X-app_ver_name=" + VK_ANDROID_APP_VERSION_NAME);
         list.add("app=com.vkontakte.android");
         list.add("sender=841415684880");
         list.add("device=" + device);
         list.add("cert=48761eef50ee53afc4cc9c5f10e6bde7f8f5b82f");
         list.add("app_ver=" + VK_ANDROID_APP_VERSION_CODE);
-        list.add("gcm_ver=11949470");
+        list.add("gcm_ver=200313005");
+        list.add("plat=0");
+        list.add("target_ver=28");
     }
 
     private static String join(String str, Iterable<String> iterable) {
@@ -143,8 +142,6 @@ public class TokenModOfficialVK {
                 .addInterceptor(chain -> chain.proceed(chain.request().newBuilder()
                         .addHeader("User-Agent", agent)
                         .addHeader("Authorization", str3)
-                        .addHeader("app", "com.vkontakte.android")
-                        .addHeader("Gcm-ver", "11947470")
                         .addHeader("Gcm-cert", "48761eef50ee53afc4cc9c5f10e6bde7f8f5b82f")
                         .build()));
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());

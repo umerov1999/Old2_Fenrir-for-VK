@@ -24,7 +24,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:text="@string/title"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
             android:textStyle="bold"
             app:textAllCaps="true" />
 
@@ -99,7 +99,7 @@
                     android:maxLines="1"
                     android:paddingStart="0dp"
                     android:paddingEnd="8dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     tools:text="Name" />
 
                 <dev.ragnarok.fenrir.view.emoji.EmojiconTextView
@@ -110,7 +110,7 @@
                     android:gravity="start"
                     android:paddingStart="0dp"
                     android:paddingEnd="8dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                     app:emojiconSize="18sp"
                     tools:text="Message" />
 
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="time" />
 
             </LinearLayout>
@@ -187,7 +187,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:textIsSelectable="false"
                     tools:text="Name" />
 
@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:autoLink="web"
                     android:gravity="start"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                     emojicon:emojiconSize="20sp"
                     tools:text="Message" />
 
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     tools:text="time" />
 
             </LinearLayout>

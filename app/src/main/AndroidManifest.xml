@@ -172,7 +172,6 @@
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden"
             android:exported="true"
-            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="adjustResize|stateHidden">
@@ -321,14 +320,12 @@
         <activity
             android:name=".activity.SelectProfilesActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
             android:name=".activity.SwipebleActivity"
             android:configChanges="keyboardHidden|orientation"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/App.DayNight.Swipes"
             android:windowSoftInputMode="adjustResize|stateHidden">
 

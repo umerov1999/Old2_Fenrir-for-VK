@@ -18,13 +18,13 @@
             android:checked="false"
             android:padding="8dp"
             android:text="@string/rotating_player_cover"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_rotation_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <SeekBar
             android:id="@+id/edit_rotation_speed"
@@ -37,7 +37,7 @@
             android:id="@+id/text_zoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <SeekBar
             android:id="@+id/edit_zoom"
@@ -53,7 +53,7 @@
             android:checked="false"
             android:padding="8dp"
             android:text="@string/invert_rotating"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <include layout="@layout/line_divider" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/text_blur"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <SeekBar
             android:id="@+id/edit_blur"

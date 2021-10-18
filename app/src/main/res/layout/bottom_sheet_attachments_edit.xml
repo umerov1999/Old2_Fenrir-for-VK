@@ -33,7 +33,7 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:text="@string/message_attachment_empty_text"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             app:drawableTint="?attr/colorOnSurface"
             app:drawableTopCompat="@drawable/ic_sad_vector" />
 

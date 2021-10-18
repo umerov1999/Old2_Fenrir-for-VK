@@ -25,6 +25,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import dev.ragnarok.fenrir.util.BrotliInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -67,9 +68,10 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Constants.DEFAULT_ACCOUNT_TYPE)).build();
+                        Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Constants.DEFAULT_ACCOUNT_TYPE)).build();
                         return chain.proceed(request);
-                    });
+                    })
+                    .addInterceptor(BrotliInterceptor.INSTANCE);
 
             ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
             Gson gson = new GsonBuilder().create();
@@ -92,9 +94,10 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                        Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                        Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
                         return chain.proceed(request);
-                    });
+                    })
+                    .addInterceptor(BrotliInterceptor.INSTANCE);
 
             ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
             Gson gson = new GsonBuilder().create();
@@ -115,7 +118,7 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
                     return chain.proceed(request);
                 }).addInterceptor(chain -> {
                     Request original = chain.request();
@@ -134,7 +137,7 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
                             .method("POST", formBuilder.build())
                             .build();
                     return chain.proceed(request);
-                });
+                }).addInterceptor(BrotliInterceptor.INSTANCE);
         String url = Utils.firstNonEmptyString(local_settings.url, "https://debug.dev");
         assert url != null;
         return new Retrofit.Builder()
@@ -149,9 +152,10 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
                     return chain.proceed(request);
-                });
+                })
+                .addInterceptor(BrotliInterceptor.INSTANCE);
 
         ProxyUtil.applyProxyConfig(builder, proxySettings.getActiveProxy());
 

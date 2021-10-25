@@ -1670,4 +1670,5 @@
     <string name="delete_dynamic_shortcuts">Удалить динамические ярлыки</string>
     <string name="reset_notifications_groups">Сбросить уведомления</string>
     <string name="not_available">НЕДОСТУПНО</string>
+    <string name="refresh_audio_token">Обновить аудио токен</string>
 </resources>

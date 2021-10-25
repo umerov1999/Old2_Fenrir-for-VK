@@ -81,6 +81,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1742,6 +1743,26 @@ public class Utils {
     public static int rnd(int min, int max) {
         max -= min;
         return (int) (Math.random() * ++max) + min;
+    }
+
+    static public <T> T getRandomFromList(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(new Random().nextInt(list.size()));
+        }
+    }
+
+    public static int nextIntInRangeButExclude(int start, int end, Integer[] excludes) {
+        List<Integer> ints = new ArrayList<>(end - start + 1);
+        for (int i = start; i <= end; i++) {
+            ints.add(i);
+        }
+        if (excludes != null && excludes.length > 0) {
+            ints.removeAll(Arrays.asList(excludes));
+        }
+
+        return getRandomFromList(ints);
     }
 
     public static String BytesToSize(long Bytes) {

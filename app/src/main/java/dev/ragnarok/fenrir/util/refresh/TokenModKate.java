@@ -3,6 +3,7 @@ package dev.ragnarok.fenrir.util.refresh;
 import static dev.ragnarok.fenrir.Constants.KATE_APP_VERSION_CODE;
 import static dev.ragnarok.fenrir.Constants.KATE_APP_VERSION_NAME;
 
+import android.os.Build;
 import android.util.Base64;
 
 import java.io.BufferedReader;
@@ -30,41 +31,49 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class TokenModKate {
-    private static final String agent = String.format("Android-GCM/1.5 (%s %s)", "Nexus 5", "Nexus 5");
-    public static ArrayList<String> langs = new ArrayList<>();
+    private static final int rid = 1;
     private static KeyPair pair;
-    private static int rid;
 
     static {
         genNewKey();
     }
 
-    public static String requestToken() {
-        rid = 0;
+    public static String userAgent() {
+        return "Android-GCM/1.5 (" + Build.DEVICE +
+                ' ' +
+                Build.ID +
+                ')';
+    }
+
+    private static String receipt(String auth) throws IOException {
         String str;
         String str2;
+        String genNewKey = genNewKey();
+        String sig = getSig(genNewKey);
+        byte[] encoded = pair.getPublic().getEncoded();
+        try {
+            encoded = MessageDigest.getInstance("SHA1").digest(encoded);
+            str = null;
+        } catch (NoSuchAlgorithmException unused) {
+            str = "";
+        }
+        if (str == null) {
+            encoded[0] = (byte) (((encoded[0] & 15) + 112) & 255);
+            str2 = Base64.encodeToString(encoded, Base64.NO_WRAP).substring(0, 11);
+        } else {
+            str2 = str;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        fillParams(arrayList, sig, genNewKey, str2, auth.split(" ")[1].split(":")[0]);
+        return doRequest("https://android.clients.google.com/c2dm/register3", arrayList, auth);
+    }
+
+    public static String requestToken() {
         try {
             System.out.println("Token register start");
             String[] strArr = {"4537286713832810256:3813922857350986999", "4607161437294568617:4436643741345745345", "4031819488942003867:1675892049294949499", "3665846370517392830:3012248377502379040"};
             String str3 = "AidLogin " + strArr[new Random().nextInt(strArr.length - 1)];
-            String genNewKey = genNewKey();
-            String sig = getSig(genNewKey);
-            byte[] encoded = pair.getPublic().getEncoded();
-            try {
-                encoded = MessageDigest.getInstance("SHA1").digest(encoded);
-                str = null;
-            } catch (NoSuchAlgorithmException unused) {
-                str = "";
-            }
-            if (str == null) {
-                encoded[0] = (byte) (((encoded[0] & 15) + 112) & 255);
-                str2 = Base64.encodeToString(encoded, 2).substring(0, 11);
-            } else {
-                str2 = str;
-            }
-            ArrayList<String> arrayList = new ArrayList<>();
-            fillParams(arrayList, sig, genNewKey, str2, str3.split(" ")[1].split(":")[0]);
-            String sb3 = doRequest("https://android.clients.google.com/c2dm/register3", arrayList, str3);
+            String sb3 = receipt(str3);
             if (sb3.contains("REGISTRATION_ERROR")) {
                 System.out.println("Token register fail");
                 return null;
@@ -77,20 +86,20 @@ public class TokenModKate {
     }
 
     private static void fillParams(List<String> list, String str, String str2, String str3, String device) {
-        rid++;
         list.add("X-scope=GCM");
-        list.add("X-subtype=54740537194");
         list.add("X-X-subscription=54740537194");
-        list.add("X-X-subtype=54740537194");
         list.add("X-gmp_app_id=1:54740537194:android:fa11238ac5d9b469");
+
+        list.add("X-subtype=54740537194");
+        list.add("X-X-subtype=54740537194");
         list.add("X-app_ver=" + KATE_APP_VERSION_CODE);
         list.add("X-kid=|ID|" + rid + "|");
-        list.add("X-osv=23");
+        list.add("X-X-kid=|ID|" + rid + "|");
+        list.add("X-osv=" + Build.VERSION.SDK_INT);
         list.add("X-sig=" + str);
         list.add("X-cliv=iid-12211000");
         list.add("X-gmsv=200313005");
         list.add("X-pub2=" + str2);
-        list.add("X-X-kid=|ID|" + rid + "|");
         list.add("X-appid=" + str3);
         list.add("X-subscription=54740537194");
         list.add("X-app_ver_name=" + KATE_APP_VERSION_NAME);
@@ -101,8 +110,6 @@ public class TokenModKate {
         list.add("app_ver=" + KATE_APP_VERSION_CODE);
         list.add("info=U_ojcf1ahbQaUO6eTSP7b7WomakK_hY");
         list.add("gcm_ver=200313005");
-        list.add("plat=0");
-        list.add("target_ver=28");
     }
 
     private static String join(String str, Iterable<String> iterable) {
@@ -126,8 +133,10 @@ public class TokenModKate {
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
                 .addInterceptor(chain -> chain.proceed(chain.request().newBuilder()
-                        .addHeader("User-Agent", agent)
+                        .addHeader("User-Agent", userAgent())
                         .addHeader("Authorization", str3)
+                        .addHeader("app", "com.perm.kate_new_6")
+                        .addHeader("Gcm-ver", "200313005")
                         .addHeader("Gcm-cert", "966882ba564c2619d55d0a9afd4327a38c327456")
                         .build()));
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
@@ -152,7 +161,7 @@ public class TokenModKate {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return Base64.encodeToString(pair.getPublic().getEncoded(), 0);
+        return Base64.encodeToString(pair.getPublic().getEncoded(), Base64.URL_SAFE | Base64.NO_WRAP);
     }
 
     private static String getSig(String str) {
@@ -161,7 +170,7 @@ public class TokenModKate {
             Signature instance = Signature.getInstance(privateKey instanceof RSAPrivateKey ? "SHA256withRSA" : "SHA256withECDSA");
             instance.initSign(privateKey);
             instance.update(join("\n", new String[]{"com.perm.kate_new_6", str}).getBytes(StandardCharsets.UTF_8));
-            return Base64.encodeToString(instance.sign(), 0);
+            return Base64.encodeToString(instance.sign(), Base64.URL_SAFE | Base64.NO_WRAP);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

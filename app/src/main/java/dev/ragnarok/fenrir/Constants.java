@@ -16,6 +16,7 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class Constants {
     public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 18;
+    public static final Integer[] RANDOM_EXCLUDE_PAGAN_SYMBOLS = new Integer[]{16, 17};
 
     public static final String API_VERSION = "5.131";
     public static final int DATABASE_VERSION = 11;
@@ -27,8 +28,8 @@ public class Constants {
     public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == Account_Types.KATE ? API_VERSION : "5.122";
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".file_provider";
 
-    public static final String VK_ANDROID_APP_VERSION_NAME = "6.58";
-    public static final String VK_ANDROID_APP_VERSION_CODE = "9740";
+    public static final String VK_ANDROID_APP_VERSION_NAME = "6.59";
+    public static final String VK_ANDROID_APP_VERSION_CODE = "9802";
     public static final String KATE_APP_VERSION_NAME = "80 lite";
     public static final String KATE_APP_VERSION_CODE = "502";
     public static final int API_ID = BuildConfig.VK_API_APP_ID;

@@ -77,7 +77,9 @@ import dev.ragnarok.fenrir.settings.Settings
 import dev.ragnarok.fenrir.settings.theme.ThemesController
 import dev.ragnarok.fenrir.util.AppPerms
 import dev.ragnarok.fenrir.util.CustomToast.Companion.CreateCustomToast
+import dev.ragnarok.fenrir.util.RxUtils
 import dev.ragnarok.fenrir.util.Utils
+import dev.ragnarok.fenrir.util.refresh.RefreshToken
 import dev.ragnarok.fenrir.view.MySearchView
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -523,6 +525,20 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         findPreference<Preference>(KEY_APP_THEME)?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
                 PlaceFactory.getSettingsThemePlace().tryOpenWith(requireActivity())
+                true
+            }
+
+        findPreference<Preference>("refresh_audio_token")?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                disposables.add(RefreshToken.upgradeTokenRx(
+                    accountId,
+                    Settings.get().accounts().getAccessToken(accountId)
+                )
+                    .fromIOToMain()
+                    .subscribe({
+                        CreateCustomToast(requireActivity()).showToast(if (it) R.string.success else (R.string.error))
+                    }, RxUtils.ignore())
+                )
                 true
             }
 

@@ -15,12 +15,12 @@ import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.api.ProxyUtil
 import dev.ragnarok.fenrir.settings.IProxySettings
 import dev.ragnarok.fenrir.settings.Settings
+import dev.ragnarok.fenrir.util.BrotliInterceptor
 import dev.ragnarok.fenrir.util.Logger
 import dev.ragnarok.fenrir.util.Objects
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import dev.ragnarok.fenrir.util.BrotliInterceptor
 import java.io.File
 import java.io.IOException
 

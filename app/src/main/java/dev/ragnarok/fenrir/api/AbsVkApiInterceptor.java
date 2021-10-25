@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -30,8 +29,7 @@ import dev.ragnarok.fenrir.service.ApiErrorCodes;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.PersistentLogger;
 import dev.ragnarok.fenrir.util.Utils;
-import dev.ragnarok.fenrir.util.refresh.TokenModKate;
-import dev.ragnarok.fenrir.util.refresh.TokenModOfficialVK;
+import dev.ragnarok.fenrir.util.refresh.RefreshToken;
 import io.reactivex.rxjava3.core.Completable;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
@@ -74,42 +72,6 @@ abstract class AbsVkApiInterceptor implements Interceptor {
         }
     }
      */
-
-    private boolean upgradeTokenKate() {
-        if (Utils.isHiddenAccount(getAccountId())) {
-            return false;
-        }
-        String gms = TokenModKate.requestToken();
-        if (gms == null) {
-            return false;
-        }
-        String oldToken = getToken();
-        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms, null, null, null).blockingGet().token;
-        Log.w("refresh", oldToken + " " + token + " " + gms);
-        if (oldToken.equals(token) || isEmpty(token)) {
-            return false;
-        }
-        Settings.get().accounts().storeAccessToken(getAccountId(), token);
-        return true;
-    }
-
-    private boolean upgradeTokenOfficial() {
-        if (Utils.isHiddenAccount(getAccountId())) {
-            return false;
-        }
-        String gms = TokenModOfficialVK.requestToken();
-        if (gms == null) {
-            return false;
-        }
-        String oldToken = getToken();
-        String token = Injection.provideNetworkInterfaces().vkDefault(getAccountId()).account().refreshToken(gms, null, null, null).blockingGet().token;
-        Log.w("refresh", oldToken + " " + token + " " + gms);
-        if (oldToken.equals(token) || isEmpty(token)) {
-            return false;
-        }
-        Settings.get().accounts().storeAccessToken(getAccountId(), token);
-        return true;
-    }
 
     @SuppressLint("CheckResult")
     private void startValidateActivity(Context context, String url) {
@@ -223,29 +185,15 @@ abstract class AbsVkApiInterceptor implements Interceptor {
                     continue;
                 }
 
-                if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
-                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN || error.errorCode == ApiErrorCodes.CLIENT_VERSION_DEPRECATED) {
-                        if (upgradeTokenKate()) {
-                            token = getToken();
-                            formBuilder.add("access_token", token);
+                if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN || error.errorCode == ApiErrorCodes.CLIENT_VERSION_DEPRECATED) {
+                    if (RefreshToken.upgradeToken(getAccountId(), getToken())) {
+                        token = getToken();
+                        formBuilder.add("access_token", token);
 
-                            request = original.newBuilder()
-                                    .method("POST", formBuilder.build())
-                                    .build();
-                            continue;
-                        }
-                    }
-                } else if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID) {
-                    if (error.errorCode == ApiErrorCodes.REFRESH_TOKEN || error.errorCode == ApiErrorCodes.CLIENT_VERSION_DEPRECATED) {
-                        if (upgradeTokenOfficial()) {
-                            token = getToken();
-                            formBuilder.add("access_token", token);
-
-                            request = original.newBuilder()
-                                    .method("POST", formBuilder.build())
-                                    .build();
-                            continue;
-                        }
+                        request = original.newBuilder()
+                                .method("POST", formBuilder.build())
+                                .build();
+                        continue;
                     }
                 }
 

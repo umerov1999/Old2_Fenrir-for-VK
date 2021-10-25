@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit
 
 class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
     AccountDependencyPresenter<IDedicatedView>(accountId, savedInstanceState) {
-    private val sourcesPortrait: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 49, false)
+    private val sourcesPortrait: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 47, false)
     private val sourcesLand: ArrayList<DedicatedSource> = makeSources("dedicated", 1, 23, true)
-    private val shufflePhotos = !HelperSimple.needHelp(DEDICATED_COUNTER, 2)
+    private val shufflePhotos = !HelperSimple.needHelp(DEDICATED_COUNTER, 1)
     private var land = false
     private var positionLand = 0
     private var positionPortrait = 0
@@ -105,29 +105,21 @@ class DedicatedPresenter(accountId: Int, savedInstanceState: Bundle?) :
             sourcesLand.shuffle()
             sourcesPortrait.shuffle()
         }
-        if (!HelperSimple.needHelp(DEDICATED_DARK_COUNTER, 3)) {
-            val delay =
-                (69 - (HelperSimple.countHelp(DEDICATED_DARK_COUNTER) - 3) * 20).coerceAtLeast(2)
-            if (delay > 2) {
-                HelperSimple.toggleHelp(DEDICATED_DARK_COUNTER, 7)
+        disposableDark = Completable.create {
+            it.onComplete()
+        }.delay(6, TimeUnit.SECONDS)
+            .fromIOToMain()
+            .subscribe {
+                showHeart = false
+                isDark = true
+                view?.toggleDarkHeart()
+                view?.goToStartDark(if (land) positionLand else positionPortrait)
+                exoPlayer?.let { view?.playDarkAudio(it) }
             }
-            disposableDark = Completable.create {
-                it.onComplete()
-            }.delay(delay.toLong(), TimeUnit.SECONDS)
-                .fromIOToMain()
-                .subscribe {
-                    showHeart = false
-                    isDark = true
-                    view?.toggleDarkHeart()
-                    view?.goToStartDark(if (land) positionLand else positionPortrait)
-                    exoPlayer?.let { view?.playDarkAudio(it) }
-                }
-        }
     }
 
     companion object {
         private const val DEDICATED_COUNTER = "dedicated_counter"
-        private const val DEDICATED_DARK_COUNTER = "dedicated_dark_counter"
         fun makeSources(
             prefix: String,
             from: Int,

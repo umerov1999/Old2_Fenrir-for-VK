@@ -8,9 +8,9 @@ import dev.ragnarok.fenrir.Account_Types;
 import dev.ragnarok.fenrir.BuildConfig;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.model.ProxyConfig;
+import dev.ragnarok.fenrir.util.BrotliInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import dev.ragnarok.fenrir.util.BrotliInterceptor;
 
 public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
 

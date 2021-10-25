@@ -66,6 +66,12 @@
             android:title="@string/reset_notifications_groups"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            android:key="refresh_audio_token"
+            android:title="@string/refresh_audio_token"
+            app:icon="@drawable/dir_song"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

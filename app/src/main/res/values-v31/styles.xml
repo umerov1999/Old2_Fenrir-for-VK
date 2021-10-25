@@ -36,13 +36,14 @@
 
         <item name="dialogs_unread_color">#20b0b0b0</item>
         <item name="navi_menu_selector">@drawable/list_selector_white</item>
-        <item name="message_unread_color">#90234b81</item>
-        <item name="icon_color_active">@color/m3_ref_palette_dynamic_secondary60</item>
+        <item name="message_unread_color">@color/m3_ref_palette_dynamic_primary50</item>
+        <item name="icon_color_active">@color/m3_ref_palette_dynamic_primary60</item>
         <item name="icon_color_inactive">#AAFF0000</item>
 
         <item name="messages_background_color">#ECECEC</item>
-        <item name="my_messages_bubble_color">#D490BDFF</item>
-        <item name="my_messages_secondary_bubble_color">#D490BDFF</item>
+        <item name="my_messages_bubble_color">@color/m3_ref_palette_dynamic_primary80</item>
+        <item name="my_messages_secondary_bubble_color">@color/m3_ref_palette_dynamic_primary70
+        </item>
 
         <item name="message_bubble_color">#D4FFFFFF</item>
         <item name="sticker_hint_color">#DDFFFFFF</item>

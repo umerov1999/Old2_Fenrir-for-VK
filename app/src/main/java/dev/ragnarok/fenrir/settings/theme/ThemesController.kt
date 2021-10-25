@@ -17,7 +17,7 @@ object ThemesController {
             R.style.App_DayNight_Cold,
             R.style.App_DayNight_Cold_Amoled,
             R.style.App_DayNight_Cold_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "ice",
             "#448AFF",
@@ -26,7 +26,7 @@ object ThemesController {
             R.style.App_DayNight_Ice,
             R.style.App_DayNight_Ice_Amoled,
             R.style.App_DayNight_Ice_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "old_ice",
             "#448AFF",
@@ -35,7 +35,7 @@ object ThemesController {
             R.style.App_DayNight_OldIce,
             R.style.App_DayNight_OldIce_Amoled,
             R.style.App_DayNight_OldIce_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "fire",
             "#FF9800",
@@ -80,7 +80,7 @@ object ThemesController {
             R.style.App_DayNight_BlueViolet,
             R.style.App_DayNight_BlueViolet_Amoled,
             R.style.App_DayNight_BlueViolet_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "blue_yellow",
             "#448AFF",
@@ -89,7 +89,7 @@ object ThemesController {
             R.style.App_DayNight_BlueYellow,
             R.style.App_DayNight_BlueYellow_Amoled,
             R.style.App_DayNight_BlueYellow_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "yellow_violet",
             "#FF9800",
@@ -136,7 +136,7 @@ object ThemesController {
             R.style.App_DayNight_Contrast,
             R.style.App_DayNight_Contrast_Amoled,
             R.style.App_DayNight_Contrast_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "orange",
             "#FF5722",
@@ -192,14 +192,32 @@ object ThemesController {
             R.style.App_DayNight_GreenViolet_MD1
         ),
         ThemeValue(
-            "ice_green",
+            "violet_ice",
             "#757AFF",
             "#50F2C4",
+            "Violet Ice",
+            R.style.App_DayNight_VioletIce,
+            R.style.App_DayNight_VioletIce_Amoled,
+            R.style.App_DayNight_VioletIce_MD1
+        ).toast("#4D7198", "#448AFF"),
+        ThemeValue(
+            "ice_green",
+            "#448AFF",
+            "#4CAF50",
             "Ice Green",
             R.style.App_DayNight_IceGreen,
             R.style.App_DayNight_IceGreen_Amoled,
             R.style.App_DayNight_IceGreen_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
+        ThemeValue(
+            "blue_red",
+            "#448AFF",
+            "#FF0000",
+            "Blue Red",
+            R.style.App_DayNight_BlueRed,
+            R.style.App_DayNight_BlueRed_Amoled,
+            R.style.App_DayNight_BlueRed_MD1
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "green",
             "#268000",
@@ -208,7 +226,7 @@ object ThemesController {
             R.style.App_DayNight_Green,
             R.style.App_DayNight_Green_Amoled,
             R.style.App_DayNight_Green_MD1
-        ).toast("#4d7198", "#448AFF"),
+        ).toast("#4D7198", "#448AFF"),
         ThemeValue(
             "lineage",
             "#167C80",
@@ -262,9 +280,14 @@ object ThemesController {
             R.style.App_DayNight_Dynamic,
             R.style.App_DayNight_Dynamic_Amoled,
             R.style.App_DayNight_Dynamic_MD1
-        ).toast("#4d7198", "#448AFF").enable(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S),
+        ).toast("#4D7198", "#448AFF").enable(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S),
     )
-    private var randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
+    private var randSymbol =
+        Utils.nextIntInRangeButExclude(
+            1,
+            Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1,
+            Constants.RANDOM_EXCLUDE_PAGAN_SYMBOLS
+        )
     private var randomTheme = themes.random()
     private val defaultTheme = ThemeValue(
         "cold",
@@ -274,7 +297,7 @@ object ThemesController {
         R.style.App_DayNight_Cold,
         R.style.App_DayNight_Cold_Amoled,
         R.style.App_DayNight_Cold_MD1
-    ).toast("#4d7198", "#448AFF")
+    ).toast("#4D7198", "#448AFF")
 
     private fun getCurrentTheme(): ThemeValue {
         val key: String? = Settings.get().ui().mainThemeKey
@@ -293,7 +316,11 @@ object ThemesController {
 
     fun nextRandom() {
         randomTheme = themes.random()
-        randSymbol = Utils.rnd(1, Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1)
+        Utils.nextIntInRangeButExclude(
+            1,
+            Constants.RANDOM_PAGAN_SYMBOL_NUMBER - 1,
+            Constants.RANDOM_EXCLUDE_PAGAN_SYMBOLS
+        )
     }
 
     fun paganSymbol(): Int {

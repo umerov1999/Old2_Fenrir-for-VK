@@ -55,9 +55,10 @@
         <item name="toast_background">#FFFFFF</item>
 
         <item name="messages_background_color">#151515</item>
-        <item name="my_messages_bubble_color">#D42C3C53</item>
-        <item name="my_messages_secondary_bubble_color">#D42C3C53</item>
-        <item name="message_unread_color">#f564b5f6</item>
+        <item name="my_messages_bubble_color">@color/m3_ref_palette_dynamic_primary20</item>
+        <item name="my_messages_secondary_bubble_color">@color/m3_ref_palette_dynamic_primary10
+        </item>
+        <item name="message_unread_color">@color/m3_ref_palette_dynamic_primary80</item>
 
         <item name="message_bubble_color">#313131</item>
         <item name="sticker_hint_color">#DD313131</item>

@@ -11,11 +11,11 @@ package dev.ragnarok.fenrir.util.brotli;
  */
 class BrotliRuntimeException extends RuntimeException {
 
-  BrotliRuntimeException(String message) {
-    super(message);
-  }
+    BrotliRuntimeException(String message) {
+        super(message);
+    }
 
-  BrotliRuntimeException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    BrotliRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

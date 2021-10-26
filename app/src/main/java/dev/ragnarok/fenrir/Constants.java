@@ -15,8 +15,8 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class Constants {
-    public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 18;
-    public static final Integer[] RANDOM_EXCLUDE_PAGAN_SYMBOLS = new Integer[]{16, 17};
+    public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 15;
+    public static final Integer[] RANDOM_EXCLUDE_PAGAN_SYMBOLS = null;
 
     public static final String API_VERSION = "5.131";
     public static final int DATABASE_VERSION = 11;

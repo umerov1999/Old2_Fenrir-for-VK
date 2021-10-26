@@ -200,9 +200,6 @@
         <item>Hel</item>
         <item>Odin</item>
         <item>Viking</item>
-        <item>Fire</item>
-        <item>Fire Show 1</item>
-        <item>Fire Show 2</item>
         <item>[Random]</item>
     </string-array>
 
@@ -223,9 +220,6 @@
         <item>13</item>
         <item>14</item>
         <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -256,8 +250,6 @@
     <string name="first_pagan">First pagan</string>
     <string name="repo">Repository: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Repository: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Kate Arnoldova</string>
-    <string name="project_dedicated">Project Dedicated</string>
     <string name="go_buy" translatable="false">Google Play</string>
     <string name="in_full_version">Available in full version!</string>
     <string name="features">Features:</string>

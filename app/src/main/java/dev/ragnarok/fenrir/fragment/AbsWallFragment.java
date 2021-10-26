@@ -203,29 +203,6 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
             case 14:
                 paganSymbol.setImageResource(R.drawable.ic_viking);
                 break;
-            case 15:
-                paganSymbol.setImageResource(R.drawable.ic_fireshow);
-                break;
-            case 16:
-                if (FenrirNative.isNativeLoaded()) {
-                    paganSymbol.setVisibility(View.GONE);
-                    paganVideo.setVisibility(View.VISIBLE);
-                    paganVideo.fromRes(R.raw.dedicated_video1);
-                    paganVideo.playAnimation();
-                } else {
-                    paganSymbol.setImageResource(R.drawable.ic_cat);
-                }
-                break;
-            case 17:
-                if (FenrirNative.isNativeLoaded()) {
-                    paganSymbol.setVisibility(View.GONE);
-                    paganVideo.setVisibility(View.VISIBLE);
-                    paganVideo.fromRes(R.raw.dedicated_video2);
-                    paganVideo.playAnimation();
-                } else {
-                    paganSymbol.setImageResource(R.drawable.ic_cat);
-                }
-                break;
             default:
                 paganSymbol.setImageResource(R.drawable.ic_cat);
                 break;

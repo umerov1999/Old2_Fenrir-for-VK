@@ -50,7 +50,6 @@ import dev.ragnarok.fenrir.activity.alias.*
 import dev.ragnarok.fenrir.api.model.LocalServerSettings
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings
 import dev.ragnarok.fenrir.db.DBHelper
-import dev.ragnarok.fenrir.dedicated.DedicatedDialog.Companion.showDedicated
 import dev.ragnarok.fenrir.domain.InteractorFactory
 import dev.ragnarok.fenrir.filepicker.model.DialogConfigs
 import dev.ragnarok.fenrir.filepicker.model.DialogProperties
@@ -566,22 +565,10 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 }
                 MaterialAlertDialogBuilder(requireActivity())
                     .setView(view)
-                    .setOnDismissListener {
-                        showDedicated(
-                            requireActivity(),
-                            accountId
-                        )
-                    }
                     .show()
                 true
             }
         }
-
-        findPreference<Preference>("dedicated")?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                showDedicated(requireActivity(), accountId)
-                true
-            }
 
         findPreference<Preference>("additional_debug")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {

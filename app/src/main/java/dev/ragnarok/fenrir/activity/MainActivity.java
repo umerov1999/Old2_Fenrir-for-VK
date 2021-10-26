@@ -56,7 +56,6 @@ import java.util.Collections;
 import java.util.List;
 
 import dev.ragnarok.fenrir.Account_Types;
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
@@ -464,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                             .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
 
                     Utils.checkMusicInPC(this);
-                    CheckDonate.floodControl();
 
                     if (!Settings.get().other().appStoredVersionEqual()) {
                         PreferencesFragment.cleanUICache(this, false);
@@ -614,9 +612,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         updateNotificationCount(newAccountId);
         if (!Settings.get().other().isDeveloper_mode()) {
             MusicPlaybackController.stop();
-        }
-        if (isAuthValid()) {
-            CheckDonate.floodControl();
         }
     }
 

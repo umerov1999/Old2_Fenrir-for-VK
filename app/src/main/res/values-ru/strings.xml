@@ -87,9 +87,6 @@
         <item>Хель</item>
         <item>Один</item>
         <item>Викинг</item>
-        <item>Файер</item>
-        <item>Файер шоу 1</item>
-        <item>Файер шоу 2</item>
         <item>[Рандом]</item>
     </string-array>
 
@@ -111,8 +108,6 @@
     <string name="first_pagan">Первый языческий</string>
     <string name="repo">Репозиторий: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Репозиторий: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Кате Арнольдовой</string>
-    <string name="project_dedicated">Проект посвящён</string>
     <string name="in_full_version">Доступно в полной версии!</string>
     <string name="features">Функции:</string>
     <string-array name="array_features_full">

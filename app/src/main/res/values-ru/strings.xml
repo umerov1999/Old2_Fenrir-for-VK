@@ -109,8 +109,6 @@
     <string name="first_pagan">Первый языческий</string>
     <string name="repo">Репозиторий: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Репозиторий: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Кате Арнольдовой</string>
-    <string name="project_dedicated">Проект посвящён</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Диалоги</string>

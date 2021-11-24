@@ -31,8 +31,7 @@ android {
         buildConfigField 'boolean', 'MANAGE_SCOPED_STORAGE', 'true'
 
         ndk {
-            //abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
-            abiFilters 'arm64-v8a', 'x86_64'
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
         }
     }
 
@@ -123,6 +122,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
+    implementation "androidx.viewpager2:viewpager2:$viewpager2Version"
     implementation "androidx.vectordrawable:vectordrawable:$vectordrawableVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation 'androidx.customview:customview:1.1.0'
@@ -148,7 +148,6 @@ dependencies {
     implementation project(path: ':image')
     implementation project(path: ':material')
     implementation project(path: ':zxing-android-embedded')
-    implementation project(path: ':viewpager2')
     implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitLibraryVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofitLibraryVersion"

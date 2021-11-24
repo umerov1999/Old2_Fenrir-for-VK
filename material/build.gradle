@@ -100,5 +100,5 @@ dependencies {
     api 'androidx.transition:transition:1.4.1'
     api "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     api "androidx.drawerlayout:drawerlayout:$drawerlayoutVersion"
-    implementation project(path: ':viewpager2')
+    api "androidx.viewpager2:viewpager2:$viewpager2Version"
 }

@@ -252,8 +252,6 @@
     <string name="first_pagan">First pagan</string>
     <string name="repo">Repository: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Repository: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="project_dedicated_summary">Kate Arnoldova</string>
-    <string name="project_dedicated">Project Dedicated</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Dialogs</string>

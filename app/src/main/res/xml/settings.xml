@@ -1059,11 +1059,6 @@
             app:iconSpaceReserved="false" />
 
         <Preference
-            android:key="dedicated"
-            android:title="@string/project_dedicated"
-            app:iconSpaceReserved="false" />
-
-        <Preference
             android:key="version"
             android:title="@string/app_name"
             app:iconSpaceReserved="false" />

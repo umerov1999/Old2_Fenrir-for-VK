@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.api.Auth;
@@ -73,7 +73,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         setLoginNow(true);
         appendDisposable(networker.vkDirectAuth()
                 .directLogin("password", Constants.API_ID, Constants.SECRET,
-                        trimmedUsername, trimmedPass, Constants.AUTH_VERSION, Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID,
+                        trimmedUsername, trimmedPass, Constants.AUTH_VERSION, Constants.DEFAULT_ACCOUNT_TYPE == AccountType.VK_ANDROID,
                         Auth.getScope(), code, captchaSid, captchaCode, forceSms)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(this::onLoginResponse, t -> onLoginError(getCauseIfRuntime(t))));
@@ -91,7 +91,7 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
             String img = ((CaptchaNeedException) t).getImg();
             requiredCaptcha = new Captcha(sid, img);
         } else if (t instanceof NeedValidationException) {
-            if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
+            if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.KATE) {
                 RedirectUrl = ((NeedValidationException) t).getValidationURL();
                 if (!isEmpty(RedirectUrl)) {
                     onValidate();

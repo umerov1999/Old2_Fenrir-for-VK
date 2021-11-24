@@ -9,19 +9,19 @@ import androidx.annotation.NonNull;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.media.exo.ExoUtil;
 import dev.ragnarok.fenrir.model.InternalVideoSize;
@@ -31,7 +31,7 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class ExoVideoPlayer implements IVideoPlayer {
 
-    private final SimpleExoPlayer player;
+    private final ExoPlayer player;
     private final OnVideoSizeChangedListener onVideoSizeChangedListener = new OnVideoSizeChangedListener(this);
     private final List<IVideoSizeChangeListener> videoSizeChangeListeners = new ArrayList<>(1);
     private MediaSource source;
@@ -56,10 +56,10 @@ public class ExoVideoPlayer implements IVideoPlayer {
     }
 
     private static MediaSource createMediaSource(Context context, String url, ProxyConfig proxyConfig, boolean isHLS) {
-        String userAgent = Constants.USER_AGENT(Account_Types.BY_TYPE);
+        String userAgent = Constants.USER_AGENT(AccountType.BY_TYPE);
         if (!isHLS) {
             if (url.contains("file://") || url.contains("content://")) {
-                return new ProgressiveMediaSource.Factory(new DefaultDataSourceFactory(context, userAgent)).createMediaSource(Utils.makeMediaItem(url));
+                return new ProgressiveMediaSource.Factory(new DefaultDataSource.Factory(context)).createMediaSource(Utils.makeMediaItem(url));
             }
             return new ProgressiveMediaSource.Factory(Utils.getExoPlayerFactory(userAgent, proxyConfig)).createMediaSource(Utils.makeMediaItem(url));
         } else {
@@ -76,8 +76,8 @@ public class ExoVideoPlayer implements IVideoPlayer {
         ExoUtil.startPlayer(player);
     }
 
-    private SimpleExoPlayer createPlayer(Context context) {
-        SimpleExoPlayer ret = new SimpleExoPlayer.Builder(context, new DefaultRenderersFactory(context)).build();
+    private ExoPlayer createPlayer(Context context) {
+        ExoPlayer ret = new ExoPlayer.Builder(context, new DefaultRenderersFactory(context)).build();
         ret.setAudioAttributes(new AudioAttributes.Builder().setContentType(C.CONTENT_TYPE_MOVIE).setUsage(C.USAGE_MEDIA).build(), true);
         return ret;
     }

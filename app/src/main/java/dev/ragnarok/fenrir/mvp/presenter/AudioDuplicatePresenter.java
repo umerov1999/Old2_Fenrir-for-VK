@@ -23,8 +23,10 @@ import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
 import dev.ragnarok.fenrir.mvp.view.IAudioDuplicateView;
 import dev.ragnarok.fenrir.player.MusicPlaybackController;
 import dev.ragnarok.fenrir.util.Mp3InfoHelper;
+import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
+import dev.ragnarok.fenrir.util.hls.M3U8;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -53,23 +55,32 @@ public class AudioDuplicatePresenter extends RxSupportPresenter<IAudioDuplicateV
     }
 
     private void getMp3AndBitrate() {
-        if (Utils.isEmpty(new_audio.getUrl()) || new_audio.isHLS()) {
-            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(new_audio)).compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(t -> getBitrate(t.get(0).getUrl(), t.get(0).getDuration()), e -> getBitrate(new_audio.getUrl(), new_audio.getDuration()));
+        Pair<Boolean, Boolean> mode = new_audio.needRefresh();
+        if (mode.getFirst()) {
+            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(new_audio), mode.getSecond()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(t -> getBitrate(t.get(0)), e -> getBitrate(new_audio));
         } else {
-            getBitrate(new_audio.getUrl(), new_audio.getDuration());
+            getBitrate(new_audio);
         }
     }
 
-    private void getBitrate(String url, int duration) {
-        if (Utils.isEmpty(url)) {
+    private void getBitrate(@NonNull Audio audio) {
+        if (Utils.isEmpty(audio.getUrl())) {
             return;
         }
-        audioListDisposable = Mp3InfoHelper.getLength(url).compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(r -> {
-                    newBitrate = Mp3InfoHelper.getBitrate(duration, r);
-                    callView(o -> o.setNewBitrate(newBitrate));
-                }, this::onDataGetError);
+        if (audio.isHLS()) {
+            audioListDisposable = new M3U8(audio.getUrl()).getLength().compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> {
+                        newBitrate = Mp3InfoHelper.getBitrate(audio.getDuration(), r);
+                        callView(o -> o.setNewBitrate(newBitrate));
+                    }, this::onDataGetError);
+        } else {
+            audioListDisposable = Mp3InfoHelper.getLength(audio.getUrl()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> {
+                        newBitrate = Mp3InfoHelper.getBitrate(audio.getDuration(), r);
+                        callView(o -> o.setNewBitrate(newBitrate));
+                    }, this::onDataGetError);
+        }
     }
 
     private Single<Integer> doLocalBitrate(Context context, String url) {

@@ -55,7 +55,6 @@ import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.WeakViewAnimatorAdapter;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioLocalServerRecyclerAdapter.AudioHolder> {
@@ -134,6 +133,17 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
         }
     }
 
+    private void updateDownloadState(@NonNull AudioHolder holder, @NonNull Audio audio) {
+        if (audio.getDownloadIndicator() == 2) {
+            holder.saved.setImageResource(R.drawable.remote_cloud);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(mContext));
+        } else {
+            holder.saved.setImageResource(R.drawable.save);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+        }
+        holder.saved.setVisibility(audio.getDownloadIndicator() != 0 ? View.VISIBLE : View.GONE);
+    }
+
     private void doMenu(AudioHolder holder, int position, View view, Audio audio) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
@@ -158,9 +168,8 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
                         }
                         break;
                     }
-                    holder.saved.setVisibility(View.VISIBLE);
-                    holder.saved.setImageResource(R.drawable.save);
-                    Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+                    audio.setDownloadIndicator(1);
+                    updateDownloadState(holder, audio);
                     int ret = DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), false, true);
                     if (ret == 0)
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.saved_audio);
@@ -168,7 +177,8 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
                         Utils.ThemedSnack(view, ret == 1 ? R.string.audio_force_download : R.string.audio_force_download_pc, BaseTransientBottomBar.LENGTH_LONG).setAction(R.string.button_yes,
                                 v1 -> DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), true, true)).show();
                     } else {
-                        holder.saved.setVisibility(View.GONE);
+                        audio.setDownloadIndicator(0);
+                        updateDownloadState(holder, audio);
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.error_audio);
                     }
                     break;
@@ -272,19 +282,7 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
             holder.time.setText(Utils.BytesToSize(audio.getDuration()));
         }
 
-        audioListDisposable = Single.create((SingleOnSubscribe<Integer>) emitter -> emitter.onSuccess(DownloadWorkUtils.TrackIsDownloaded(audio)))
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(v -> {
-                    if (v == 2) {
-                        holder.saved.setImageResource(R.drawable.remote_cloud);
-                        Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(mContext));
-                    } else {
-                        holder.saved.setImageResource(R.drawable.save);
-                        Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
-                    }
-                    holder.saved.setVisibility(v != 0 ? View.VISIBLE : View.GONE);
-                }, RxUtils.ignore());
-
+        updateDownloadState(holder, audio);
         updateAudioStatus(holder, audio);
 
         if (!Utils.isEmpty(audio.getThumb_image_little())) {
@@ -323,9 +321,8 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
                 }
                 return false;
             }
-            holder.saved.setVisibility(View.VISIBLE);
-            holder.saved.setImageResource(R.drawable.save);
-            Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+            audio.setDownloadIndicator(1);
+            updateDownloadState(holder, audio);
             int ret = DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), false, true);
             if (ret == 0)
                 CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.saved_audio);
@@ -333,7 +330,8 @@ public class AudioLocalServerRecyclerAdapter extends RecyclerView.Adapter<AudioL
                 Utils.ThemedSnack(v, ret == 1 ? R.string.audio_force_download : R.string.audio_force_download_pc, BaseTransientBottomBar.LENGTH_LONG).setAction(R.string.button_yes,
                         v1 -> DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), true, true)).show();
             } else {
-                holder.saved.setVisibility(View.GONE);
+                audio.setDownloadIndicator(0);
+                updateDownloadState(holder, audio);
                 CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.error_audio);
             }
             return true;

@@ -13,15 +13,6 @@
         app:loopAnimation="true"
         tools:src="@drawable/ic_cat" />
 
-    <dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView
-        android:id="@+id/pagan_video"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.MediumRoundedPictures" />
-
     <include
         android:id="@+id/runes_container"
         layout="@layout/runes_container"

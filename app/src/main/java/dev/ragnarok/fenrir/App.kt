@@ -31,6 +31,8 @@ class App : Application() {
     @SuppressLint("UnsafeExperimentalUsageWarning")
     override fun onCreate() {
         sInstanse = this
+
+        sApplicationHandler = Handler(mainLooper)
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(Settings.get().ui().nightMode)
         if (Settings.get().other().isEnable_native) {
@@ -39,6 +41,7 @@ class App : Application() {
         FenrirNative.updateAppContext(this)
         FenrirNative.updateDensity { Utils.getDensity() }
 
+        Utils.setCompressTraffic(Settings.get().other().isCompress_traffic)
         RLottieDrawable.setCacheResourceAnimation(Settings.get().other().isEnable_cache_ui_anim)
         TagOptionSingleton.getInstance().isAndroid = true
         MusicPlaybackController.registerBroadcast(this)
@@ -99,6 +102,15 @@ class App : Application() {
     companion object {
         @Volatile
         private var sInstanse: App? = null
+
+        @Volatile
+        private var sApplicationHandler: Handler? = null
+
+        @JvmStatic
+        val applicationHandler: Handler?
+            get() {
+                return sApplicationHandler
+            }
 
         @JvmStatic
         val instance: App

@@ -32,7 +32,7 @@ public interface VKApiAttachment {
     String TYPE_PRODUCT = "product";
     String TYPE_MARKET_ALBUM = "market_album";
     String TYPE_ARTIST = "artist";
-    String[] IGNORE_ATTACHMENTS = {"mini_app", "photos_list", "podcast"};
+    String[] IGNORE_ATTACHMENTS = {"mini_app", "photos_list", "podcast", "pretty_cards"};
 
     /**
      * @return type of this attachment

@@ -1,73 +1,22 @@
 package ealvatag.audio;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ealvatag.audio.dsf.Dsf;
-import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.real.RealTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
-import ealvatag.tag.aiff.AiffTag;
-import ealvatag.tag.asf.AsfTag;
-import ealvatag.tag.flac.FlacTag;
-import ealvatag.tag.mp4.Mp4Tag;
-import ealvatag.tag.vorbiscomment.VorbisCommentTag;
-import ealvatag.tag.wav.WavTag;
 
 /**
  * Files formats currently supported by Library.
  * Each enum value is associated with a file suffix (extension).
  */
 public enum SupportedFileFormat {
-    OGG("ogg") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return VorbisCommentTag.createNewTag();
-        }
-    },
     MP3("mp3") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
             return TagOptionSingleton.createDefaultID3Tag();
-        }
-    },
-    FLAC("flac") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>(), false);
-        }
-    },
-    MP4("mp4") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return Mp4Tag.makeEmpty();
-        }
-    },
-    M4A("m4a") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return Mp4Tag.makeEmpty();
-        }
-    },
-    M4P("m4p") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return Mp4Tag.makeEmpty();
-        }
-    },
-    WMA("wma") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new AsfTag();
-        }
-    },
-    WAV("wav") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         }
     },
     RA("ra") {
@@ -80,36 +29,6 @@ public enum SupportedFileFormat {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
             return new RealTag();
-        }
-    },
-    M4B("m4b") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return Mp4Tag.makeEmpty();
-        }
-    },
-    AIF("aif") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new AiffTag();
-        }
-    },
-    AIFF("aiff") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new AiffTag();
-        }
-    },
-    AIFC("aifc") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new AiffTag();
-        }
-    },
-    DSF("dsf") {
-        @Override
-        public Tag makeDefaultTag() throws UnsupportedFileType {
-            return Dsf.createDefaultTag();
         }
     },
     /**
@@ -127,8 +46,7 @@ public enum SupportedFileFormat {
     static {
         SupportedFileFormat[] values = values();
         extensionMap = new HashMap<>(values.length);
-        for (int i = 0; i < values.length; i++) {
-            SupportedFileFormat format = values[i];
+        for (SupportedFileFormat format : values) {
             extensionMap.put(format.fileSuffix, format);
         }
     }

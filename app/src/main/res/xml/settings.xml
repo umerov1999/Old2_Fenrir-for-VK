@@ -36,10 +36,10 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:dependency="enable_native"
-            android:key="use_hls_downloader"
-            android:summary="@string/use_hls_downloader_summary"
-            android:title="@string/use_hls_downloader"
+            android:defaultValue="true"
+            android:key="use_api_5_90_for_audio"
+            android:summary="@string/use_api_5_90_for_audio_summary"
+            android:title="@string/use_api_5_90_for_audio"
             app:iconSpaceReserved="false" />
 
         <Preference
@@ -779,6 +779,12 @@
             android:title="@string/side_drawer_categories_title"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="do_not_clear_back_stack"
+            android:title="@string/do_not_clear_back_stack"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -995,6 +1001,12 @@
             android:title="@string/delete_cache_images"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="compress_traffic"
+            android:title="@string/compress_traffic"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:dependency="developer_mode"
             android:key="delete_dynamic_shortcuts"
@@ -1044,6 +1056,11 @@
         <Preference
             android:key="select_custom_icon"
             android:title="@string/select_custom_icon"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="dedicated"
+            android:title="@string/project_dedicated"
             app:iconSpaceReserved="false" />
 
         <Preference

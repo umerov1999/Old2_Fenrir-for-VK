@@ -7,11 +7,12 @@ import android.os.Parcel;
 import androidx.annotation.DrawableRes;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.model.VKApiAudio;
+import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.util.DownloadWorkUtils;
+import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class Audio extends AbsModel {
@@ -50,6 +51,7 @@ public class Audio extends AbsModel {
     private boolean isHq;
     private boolean is_local;
     private boolean is_localServer;
+    private int downloadIndicator;
 
     public Audio() {
 
@@ -69,19 +71,21 @@ public class Audio extends AbsModel {
         album_access_key = in.readString();
         genre = in.readInt();
         accessKey = in.readString();
-        deleted = in.readInt() != 0;
+        deleted = in.readByte() != 0;
         thumb_image_big = in.readString();
         thumb_image_very_big = in.readString();
         thumb_image_little = in.readString();
         album_title = in.readString();
-        animationNow = in.readInt() != 0;
-        isSelected = in.readInt() != 0;
-        isHq = in.readInt() != 0;
+        animationNow = in.readByte() != 0;
+        isSelected = in.readByte() != 0;
+        isHq = in.readByte() != 0;
         main_artists = Utils.readStringMap(in);
-        is_local = in.readInt() != 0;
-        is_localServer = in.readInt() != 0;
+        is_local = in.readByte() != 0;
+        is_localServer = in.readByte() != 0;
+        downloadIndicator = in.readInt();
     }
 
+    /*
     public static String getMp3FromM3u8(String url) {
         if (Utils.isEmpty(url) || !url.contains("index.m3u8"))
             return url;
@@ -102,6 +106,13 @@ public class Audio extends AbsModel {
             return matcher.replaceFirst(subst);
         }
     }
+     */
+
+    public Pair<Boolean, Boolean> needRefresh() {
+        boolean empty_url = Utils.isEmpty(url);
+        boolean refresh_old = Settings.get().other().isUse_api_5_90_for_audio();
+        return new Pair<>(empty_url || refresh_old && isHLS(), refresh_old);
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -118,17 +129,31 @@ public class Audio extends AbsModel {
         dest.writeString(album_access_key);
         dest.writeInt(genre);
         dest.writeString(accessKey);
-        dest.writeInt(deleted ? 1 : 0);
+        dest.writeByte((byte) (deleted ? 1 : 0));
         dest.writeString(thumb_image_big);
         dest.writeString(thumb_image_very_big);
         dest.writeString(thumb_image_little);
         dest.writeString(album_title);
-        dest.writeInt(animationNow ? 1 : 0);
-        dest.writeInt(isSelected ? 1 : 0);
-        dest.writeInt(isHq ? 1 : 0);
+        dest.writeByte((byte) (animationNow ? 1 : 0));
+        dest.writeByte((byte) (isSelected ? 1 : 0));
+        dest.writeByte((byte) (isHq ? 1 : 0));
         Utils.writeStringMap(dest, main_artists);
-        dest.writeInt(is_local ? 1 : 0);
-        dest.writeInt(is_localServer ? 1 : 0);
+        dest.writeByte((byte) (is_local ? 1 : 0));
+        dest.writeByte((byte) (is_localServer ? 1 : 0));
+        dest.writeInt(downloadIndicator);
+    }
+
+    public int getDownloadIndicator() {
+        return downloadIndicator;
+    }
+
+    public void setDownloadIndicator(int state) {
+        downloadIndicator = state;
+    }
+
+    public Audio updateDownloadIndicator() {
+        downloadIndicator = DownloadWorkUtils.TrackIsDownloaded(this);
+        return this;
     }
 
     public boolean isAnimationNow() {
@@ -216,7 +241,6 @@ public class Audio extends AbsModel {
     }
 
     public Audio setUrl(String url) {
-        //this.url = getMp3FromM3u8(url);
         this.url = url;
         return this;
     }
@@ -380,8 +404,8 @@ public class Audio extends AbsModel {
         return is_local;
     }
 
-    public Audio setIsLocal(boolean is_local) {
-        this.is_local = is_local;
+    public Audio setIsLocal() {
+        is_local = true;
         return this;
     }
 
@@ -389,8 +413,8 @@ public class Audio extends AbsModel {
         return is_localServer;
     }
 
-    public Audio setIsLocalServer(boolean is_localServer) {
-        this.is_localServer = is_localServer;
+    public Audio setIsLocalServer() {
+        is_localServer = true;
         return this;
     }
 

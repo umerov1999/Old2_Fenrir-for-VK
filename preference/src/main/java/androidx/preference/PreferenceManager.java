@@ -101,7 +101,7 @@ public class PreferenceManager {
      * @hide
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
-    public PreferenceManager(Context context) {
+    public PreferenceManager(@NonNull Context context) {
         mContext = context;
 
         setSharedPreferencesName(getDefaultSharedPreferencesName(context));
@@ -115,7 +115,7 @@ public class PreferenceManager {
      * @return A {@link SharedPreferences} instance that can be used to retrieve and listen to
      * values of the preferences
      */
-    public static SharedPreferences getDefaultSharedPreferences(Context context) {
+    public static SharedPreferences getDefaultSharedPreferences(@NonNull Context context) {
         return context.getSharedPreferences(getDefaultSharedPreferencesName(context),
                 getDefaultSharedPreferencesMode());
     }
@@ -145,7 +145,7 @@ public class PreferenceManager {
      *                  {@link PreferenceManager#getDefaultSharedPreferences(Context)} and clear
      *                  it followed by a call to this method with this parameter set to true.
      */
-    public static void setDefaultValues(Context context, int resId, boolean readAgain) {
+    public static void setDefaultValues(@NonNull Context context, int resId, boolean readAgain) {
         // Use the default shared preferences name and mode
         setDefaultValues(context, getDefaultSharedPreferencesName(context),
                 getDefaultSharedPreferencesMode(), resId, readAgain);
@@ -176,7 +176,7 @@ public class PreferenceManager {
      * @see #setSharedPreferencesName(String)
      * @see #setSharedPreferencesMode(int)
      */
-    public static void setDefaultValues(Context context, String sharedPreferencesName,
+    public static void setDefaultValues(@NonNull Context context, String sharedPreferencesName,
                                         int sharedPreferencesMode, int resId, boolean readAgain) {
         SharedPreferences defaultValueSp = context.getSharedPreferences(
                 KEY_HAS_SET_DEFAULT_VALUES, Context.MODE_PRIVATE);
@@ -207,8 +207,9 @@ public class PreferenceManager {
      * @hide
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
-    public PreferenceScreen inflateFromResource(Context context, int resId,
-                                                PreferenceScreen rootPreferences) {
+    @NonNull
+    public PreferenceScreen inflateFromResource(@NonNull Context context, int resId,
+                                                @Nullable PreferenceScreen rootPreferences) {
         // Block commits
         setNoCommit(true);
 
@@ -222,7 +223,8 @@ public class PreferenceManager {
         return rootPreferences;
     }
 
-    public PreferenceScreen createPreferenceScreen(Context context) {
+    @NonNull
+    public PreferenceScreen createPreferenceScreen(@NonNull Context context) {
         PreferenceScreen preferenceScreen = new PreferenceScreen(context, null);
         preferenceScreen.onAttachedToHierarchy(this);
         return preferenceScreen;
@@ -376,7 +378,7 @@ public class PreferenceManager {
      * @param dataStore The {@link PreferenceDataStore} to be used by this manager
      * @see Preference#setPreferenceDataStore(PreferenceDataStore)
      */
-    public void setPreferenceDataStore(PreferenceDataStore dataStore) {
+    public void setPreferenceDataStore(@Nullable PreferenceDataStore dataStore) {
         mPreferenceDataStore = dataStore;
     }
 
@@ -517,25 +519,28 @@ public class PreferenceManager {
      *
      * @return The {@link Context}
      */
+    @NonNull
     public Context getContext() {
         return mContext;
     }
 
+    @Nullable
     public PreferenceComparisonCallback getPreferenceComparisonCallback() {
         return mPreferenceComparisonCallback;
     }
 
     public void setPreferenceComparisonCallback(
-            PreferenceComparisonCallback preferenceComparisonCallback) {
+            @Nullable PreferenceComparisonCallback preferenceComparisonCallback) {
         mPreferenceComparisonCallback = preferenceComparisonCallback;
     }
 
+    @Nullable
     public OnDisplayPreferenceDialogListener getOnDisplayPreferenceDialogListener() {
         return mOnDisplayPreferenceDialogListener;
     }
 
     public void setOnDisplayPreferenceDialogListener(
-            OnDisplayPreferenceDialogListener onDisplayPreferenceDialogListener) {
+            @Nullable OnDisplayPreferenceDialogListener onDisplayPreferenceDialogListener) {
         mOnDisplayPreferenceDialogListener = onDisplayPreferenceDialogListener;
     }
 
@@ -544,12 +549,13 @@ public class PreferenceManager {
      *
      * @param preference The preference requesting the dialog
      */
-    public void showDialog(Preference preference) {
+    public void showDialog(@NonNull Preference preference) {
         if (mOnDisplayPreferenceDialogListener != null) {
             mOnDisplayPreferenceDialogListener.onDisplayPreferenceDialog(preference);
         }
     }
 
+    @Nullable
     public OnPreferenceTreeClickListener getOnPreferenceTreeClickListener() {
         return mOnPreferenceTreeClickListener;
     }
@@ -560,13 +566,15 @@ public class PreferenceManager {
      *
      * @param listener The callback to be invoked
      */
-    public void setOnPreferenceTreeClickListener(OnPreferenceTreeClickListener listener) {
+    public void setOnPreferenceTreeClickListener(
+            @Nullable OnPreferenceTreeClickListener listener) {
         mOnPreferenceTreeClickListener = listener;
     }
 
     /**
      * Returns the {@link PreferenceManager.OnNavigateToScreenListener}, if one has been set.
      */
+    @Nullable
     public OnNavigateToScreenListener getOnNavigateToScreenListener() {
         return mOnNavigateToScreenListener;
     }
@@ -577,7 +585,7 @@ public class PreferenceManager {
      *
      * @param listener The callback to be invoked
      */
-    public void setOnNavigateToScreenListener(OnNavigateToScreenListener listener) {
+    public void setOnNavigateToScreenListener(@Nullable OnNavigateToScreenListener listener) {
         mOnNavigateToScreenListener = listener;
     }
 
@@ -593,7 +601,7 @@ public class PreferenceManager {
          * @param preference The preference that was clicked
          * @return Whether the click was handled
          */
-        boolean onPreferenceTreeClick(Preference preference);
+        boolean onPreferenceTreeClick(@NonNull Preference preference);
     }
 
     /**
@@ -607,7 +615,7 @@ public class PreferenceManager {
          *
          * @param preference The Preference object requesting the dialog
          */
-        void onDisplayPreferenceDialog(Preference preference);
+        void onDisplayPreferenceDialog(@NonNull Preference preference);
     }
 
     /**
@@ -621,7 +629,7 @@ public class PreferenceManager {
          *
          * @param preferenceScreen The PreferenceScreen requesting navigation
          */
-        void onNavigateToScreen(PreferenceScreen preferenceScreen);
+        void onNavigateToScreen(@NonNull PreferenceScreen preferenceScreen);
     }
 
     /**
@@ -638,7 +646,8 @@ public class PreferenceManager {
          * @param p2 {@link Preference} object to compare
          * @return {@code true} if the objects represent the same item
          */
-        public abstract boolean arePreferenceItemsTheSame(Preference p1, Preference p2);
+        public abstract boolean arePreferenceItemsTheSame(@NonNull Preference p1,
+                                                          @NonNull Preference p2);
 
         /**
          * Called to determine if two {@link Preference} objects will display the same data
@@ -647,7 +656,8 @@ public class PreferenceManager {
          * @param p2 {@link Preference} object to compare
          * @return {@code true} if the objects are visually identical
          */
-        public abstract boolean arePreferenceContentsTheSame(Preference p1, Preference p2);
+        public abstract boolean arePreferenceContentsTheSame(@NonNull Preference p1,
+                                                             @NonNull Preference p2);
     }
 
     /**
@@ -666,7 +676,7 @@ public class PreferenceManager {
          * @see Preference#setKey(String)
          */
         @Override
-        public boolean arePreferenceItemsTheSame(Preference p1, Preference p2) {
+        public boolean arePreferenceItemsTheSame(@NonNull Preference p1, @NonNull Preference p2) {
             return p1.getId() == p2.getId();
         }
 
@@ -680,7 +690,8 @@ public class PreferenceManager {
          * not modified after being removed from its containing {@link PreferenceGroup}.
          */
         @Override
-        public boolean arePreferenceContentsTheSame(Preference p1, Preference p2) {
+        public boolean arePreferenceContentsTheSame(@NonNull Preference p1,
+                                                    @NonNull Preference p2) {
             if (p1.getClass() != p2.getClass()) {
                 return false;
             }

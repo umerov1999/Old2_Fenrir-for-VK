@@ -40,7 +40,7 @@ public interface IAudioInteractor {
 
     Single<List<Audio>> getById(int accountId, @NonNull List<Audio> audios);
 
-    Single<List<Audio>> getByIdOld(int accountId, @NonNull List<Audio> audios);
+    Single<List<Audio>> getByIdOld(int accountId, @NonNull List<Audio> audios, boolean old);
 
     Single<String> getLyrics(int accountId, int lyrics_id);
 

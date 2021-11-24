@@ -10,7 +10,7 @@ import android.os.StatFs
 import android.provider.MediaStore
 import com.squareup.picasso3.BitmapSafeResize
 import com.squareup.picasso3.Picasso
-import dev.ragnarok.fenrir.Account_Types
+import dev.ragnarok.fenrir.AccountType
 import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.api.ProxyUtil
 import dev.ragnarok.fenrir.settings.IProxySettings
@@ -72,7 +72,7 @@ class PicassoInstance @SuppressLint("CheckResult") private constructor(
             .addInterceptor(Interceptor { chain: Interceptor.Chain ->
                 val request = chain.request().newBuilder()
                     .addHeader("X-VK-Android-Client", "new")
-                    .addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build()
+                    .addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build()
                 chain.proceed(request)
             }).addInterceptor(BrotliInterceptor)
         ProxyUtil.applyProxyConfig(builder, proxySettings.activeProxy)

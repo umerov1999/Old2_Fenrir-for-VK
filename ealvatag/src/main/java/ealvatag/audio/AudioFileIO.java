@@ -25,26 +25,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import ealvatag.audio.aiff.AiffFileReader;
-import ealvatag.audio.aiff.AiffFileWriter;
-import ealvatag.audio.asf.AsfFileReader;
-import ealvatag.audio.asf.AsfFileWriter;
-import ealvatag.audio.dsf.DsfFileReader;
-import ealvatag.audio.dsf.DsfFileWriter;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
-import ealvatag.audio.flac.FlacFileReader;
-import ealvatag.audio.flac.FlacFileWriter;
 import ealvatag.audio.mp3.MP3FileReader;
 import ealvatag.audio.mp3.MP3FileWriter;
-import ealvatag.audio.mp4.Mp4AudioFileReader;
-import ealvatag.audio.mp4.Mp4FileWriter;
-import ealvatag.audio.ogg.OggFileReader;
-import ealvatag.audio.ogg.OggFileWriter;
 import ealvatag.audio.real.RealFileReader;
-import ealvatag.audio.wav.WavFileReader;
-import ealvatag.audio.wav.WavFileWriter;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagException;
 
@@ -78,18 +64,6 @@ public class AudioFileIO {
         // TODO: 1/19/17 This warning "do not forget" = ensure tests check this
 
         // Tag Readers
-        AudioFileReaderFactory mp4ReaderFactory = new CachingAudioFileReaderFactory() {
-            @Override
-            protected AudioFileReader doMake() {
-                return new Mp4AudioFileReader();
-            }
-        };
-        AudioFileReaderFactory aiffReaderFactory = new CachingAudioFileReaderFactory() {
-            @Override
-            protected AudioFileReader doMake() {
-                return new AiffFileReader();
-            }
-        };
         AudioFileReaderFactory realReaderFactory = new AudioFileReaderFactory() {
             @Override
             public AudioFileReader make() {
@@ -98,107 +72,21 @@ public class AudioFileIO {
         };
 
         readerFactories = ImmutableMap.<String, AudioFileReaderFactory>builder()
-                .put(SupportedFileFormat.OGG.getFileSuffix(), new CachingAudioFileReaderFactory() {
-                    @Override
-                    protected AudioFileReader doMake() {
-                        return new OggFileReader();
-                    }
-                })
-                .put(SupportedFileFormat.FLAC.getFileSuffix(), new CachingAudioFileReaderFactory() {
-                    @Override
-                    protected AudioFileReader doMake() {
-                        return new FlacFileReader();
-                    }
-                })
                 .put(SupportedFileFormat.MP3.getFileSuffix(), new CachingAudioFileReaderFactory() {
                     @Override
                     protected AudioFileReader doMake() {
                         return new MP3FileReader();
                     }
                 })
-                .put(SupportedFileFormat.MP4.getFileSuffix(), mp4ReaderFactory)
-                .put(SupportedFileFormat.M4A.getFileSuffix(), mp4ReaderFactory)
-                .put(SupportedFileFormat.M4P.getFileSuffix(), mp4ReaderFactory)
-                .put(SupportedFileFormat.M4B.getFileSuffix(), mp4ReaderFactory)
-                .put(SupportedFileFormat.WAV.getFileSuffix(), new CachingAudioFileReaderFactory() {
-                    @Override
-                    protected AudioFileReader doMake() {
-                        return new WavFileReader();
-                    }
-                })
-                .put(SupportedFileFormat.WMA.getFileSuffix(), new CachingAudioFileReaderFactory() {
-                    @Override
-                    protected AudioFileReader doMake() {
-                        return new AsfFileReader();
-                    }
-                })
-                .put(SupportedFileFormat.AIF.getFileSuffix(), aiffReaderFactory)
-                .put(SupportedFileFormat.AIFC.getFileSuffix(), aiffReaderFactory)
-                .put(SupportedFileFormat.AIFF.getFileSuffix(), aiffReaderFactory)
-                .put(SupportedFileFormat.DSF.getFileSuffix(), new CachingAudioFileReaderFactory() {
-                    @Override
-                    protected AudioFileReader doMake() {
-                        return new DsfFileReader();
-                    }
-                })
                 .put(SupportedFileFormat.RA.getFileSuffix(), realReaderFactory)
                 .put(SupportedFileFormat.RM.getFileSuffix(), realReaderFactory)
                 .build();
 
-        AudioFileWriterFactory mp4WriterFactory = new AudioFileWriterFactory() {
-            @Override
-            public AudioFileWriter make() {
-                return new Mp4FileWriter();
-            }
-        };
-        AudioFileWriterFactory aiffWriterFactory = new AudioFileWriterFactory() {
-            @Override
-            public AudioFileWriter make() {
-                return new AiffFileWriter();
-            }
-        };
         writerFactories = ImmutableMap.<String, AudioFileWriterFactory>builder()
-                .put(SupportedFileFormat.OGG.getFileSuffix(), new AudioFileWriterFactory() {
-                    @Override
-                    public AudioFileWriter make() {
-                        return new OggFileWriter();
-                    }
-                })
-                .put(SupportedFileFormat.FLAC.getFileSuffix(), new AudioFileWriterFactory() {
-                    @Override
-                    public AudioFileWriter make() {
-                        return new FlacFileWriter();
-                    }
-                })
                 .put(SupportedFileFormat.MP3.getFileSuffix(), new AudioFileWriterFactory() {
                     @Override
                     public AudioFileWriter make() {
                         return new MP3FileWriter();
-                    }
-                })
-                .put(SupportedFileFormat.MP4.getFileSuffix(), mp4WriterFactory)
-                .put(SupportedFileFormat.M4A.getFileSuffix(), mp4WriterFactory)
-                .put(SupportedFileFormat.M4P.getFileSuffix(), mp4WriterFactory)
-                .put(SupportedFileFormat.M4B.getFileSuffix(), mp4WriterFactory)
-                .put(SupportedFileFormat.WAV.getFileSuffix(), new AudioFileWriterFactory() {
-                    @Override
-                    public AudioFileWriter make() {
-                        return new WavFileWriter();
-                    }
-                })
-                .put(SupportedFileFormat.WMA.getFileSuffix(), new AudioFileWriterFactory() {
-                    @Override
-                    public AudioFileWriter make() {
-                        return new AsfFileWriter();
-                    }
-                })
-                .put(SupportedFileFormat.AIF.getFileSuffix(), aiffWriterFactory)
-                .put(SupportedFileFormat.AIFC.getFileSuffix(), aiffWriterFactory)
-                .put(SupportedFileFormat.AIFF.getFileSuffix(), aiffWriterFactory)
-                .put(SupportedFileFormat.DSF.getFileSuffix(), new AudioFileWriterFactory() {
-                    @Override
-                    public AudioFileWriter make() {
-                        return new DsfFileWriter();
                     }
                 })
                 .build();

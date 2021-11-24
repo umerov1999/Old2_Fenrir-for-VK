@@ -104,7 +104,7 @@ public class WallPublishFCMMessage {
         intent.setAction(MainActivity.ACTION_OPEN_PLACE);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, wallPostLink.postId, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, wallPostLink.postId, intent, Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT));
         builder.setContentIntent(contentIntent);
         Notification notification = builder.build();
 

@@ -23,6 +23,7 @@ object Mp3InfoHelper {
                 )
             } else {
                 val length = response.header("Content-Length")
+                response.body?.close()
                 if (Utils.isEmpty(length)) {
                     it.onError(Exception("Empty content length!"))
                 }

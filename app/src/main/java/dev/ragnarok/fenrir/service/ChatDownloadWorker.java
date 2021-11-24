@@ -412,7 +412,7 @@ public class ChatDownloadWorker extends Worker {
             intent_open.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), Constants.FILE_PROVIDER_AUTHORITY, html), MimeTypeMap.getSingleton()
                     .getMimeTypeFromExtension(getFileExtension(html))).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            PendingIntent ReadPendingIntent = PendingIntent.getActivity(getApplicationContext(), peer_title.hashCode(), intent_open, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
+            PendingIntent ReadPendingIntent = PendingIntent.getActivity(getApplicationContext(), peer_title.hashCode(), intent_open, Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT));
             mBuilder.setContentIntent(ReadPendingIntent);
 
             mBuilder.setContentText(getApplicationContext().getString(R.string.success) + " " + getApplicationContext().getString(R.string.chat) + " " + peer_title)
@@ -506,7 +506,7 @@ public class ChatDownloadWorker extends Worker {
             intent_open.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), Constants.FILE_PROVIDER_AUTHORITY, html), MimeTypeMap.getSingleton()
                     .getMimeTypeFromExtension(getFileExtension(html))).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            PendingIntent ReadPendingIntent = PendingIntent.getActivity(getApplicationContext(), peer_title.hashCode(), intent_open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+            PendingIntent ReadPendingIntent = PendingIntent.getActivity(getApplicationContext(), peer_title.hashCode(), intent_open, Utils.makeMutablePendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
             mBuilder.setContentIntent(ReadPendingIntent);
 
             mBuilder.setContentText(getApplicationContext().getString(R.string.success) + " " + getApplicationContext().getString(R.string.chat) + " " + peer_title)

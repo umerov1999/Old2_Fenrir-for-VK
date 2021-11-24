@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import java.io.File;
 import java.io.IOException;
 
-import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
-
 public class StandardArtwork extends AbstractArtwork {
 
     StandardArtwork() {
@@ -22,12 +20,6 @@ public class StandardArtwork extends AbstractArtwork {
     static StandardArtwork createLinkedArtworkFromURL(String url) {
         StandardArtwork artwork = new StandardArtwork();
         artwork.setImageUrl(url);
-        return artwork;
-    }
-
-    static StandardArtwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt) {
-        StandardArtwork artwork = new StandardArtwork();
-        artwork.setFromMetadataBlockDataPicture(coverArt);
         return artwork;
     }
 

@@ -79,7 +79,7 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
     @Nullable
     private final RequestProperties defaultRequestProperties;
     @Nullable
-    private Predicate<String> contentTypePredicate;
+    private final Predicate<String> contentTypePredicate;
     @Nullable
     private DataSpec dataSpec;
     @Nullable
@@ -89,41 +89,6 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
     private boolean opened;
     private long bytesToRead;
     private long bytesRead;
-
-    /**
-     * @deprecated Use {@link OkHttpDataSource.Factory} instead.
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public OkHttpDataSource(Call.Factory callFactory) {
-        this(callFactory, /* userAgent= */ null);
-    }
-
-    /**
-     * @deprecated Use {@link OkHttpDataSource.Factory} instead.
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public OkHttpDataSource(Call.Factory callFactory, @Nullable String userAgent) {
-        this(callFactory, userAgent, /* cacheControl= */ null, /* defaultRequestProperties= */ null);
-    }
-
-    /**
-     * @deprecated Use {@link OkHttpDataSource.Factory} instead.
-     */
-    @Deprecated
-    public OkHttpDataSource(
-            Call.Factory callFactory,
-            @Nullable String userAgent,
-            @Nullable CacheControl cacheControl,
-            @Nullable RequestProperties defaultRequestProperties) {
-        this(
-                callFactory,
-                userAgent,
-                cacheControl,
-                defaultRequestProperties,
-                /* contentTypePredicate= */ null);
-    }
 
     private OkHttpDataSource(
             Call.Factory callFactory,
@@ -140,16 +105,8 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
         requestProperties = new RequestProperties();
     }
 
-    /**
-     * @deprecated Use {@link OkHttpDataSource.Factory#setContentTypePredicate(Predicate)} instead.
-     */
-    @Deprecated
-    public void setContentTypePredicate(@Nullable Predicate<String> contentTypePredicate) {
-        this.contentTypePredicate = contentTypePredicate;
-    }
-
+    @NonNull
     @Override
-    @Nullable
     public Uri getUri() {
         return response == null ? null : Uri.parse(response.request().url().toString());
     }
@@ -457,16 +414,6 @@ public class OkHttpDataSource extends BaseDataSource implements HttpDataSource {
         public Factory(Call.Factory callFactory) {
             this.callFactory = callFactory;
             defaultRequestProperties = new RequestProperties();
-        }
-
-        /**
-         * @deprecated Use {@link #setDefaultRequestProperties(Map)} instead.
-         */
-        @NonNull
-        @Deprecated
-        @Override
-        public final RequestProperties getDefaultRequestProperties() {
-            return defaultRequestProperties;
         }
 
         @NonNull

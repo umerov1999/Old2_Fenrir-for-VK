@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityFeatures;
@@ -152,7 +152,7 @@ public class AudiosTabsFragment extends BaseFragment {
                 if (Settings.get().other().getLocalServer().enabled) {
                     adapter.addFragment(LOCAL_SERVER);
                 }
-                if (Settings.get().accounts().getType(Settings.get().accounts().getCurrent()) == Account_Types.VK_ANDROID || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()) == Account_Types.VK_ANDROID_HIDDEN) {
+                if (Settings.get().accounts().getType(Settings.get().accounts().getCurrent()) == AccountType.VK_ANDROID || Settings.get().accounts().getType(Settings.get().accounts().getCurrent()) == AccountType.VK_ANDROID_HIDDEN) {
                     adapter.addFragment(CATALOG);
                 }
             }

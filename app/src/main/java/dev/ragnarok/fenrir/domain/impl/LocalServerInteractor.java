@@ -50,7 +50,7 @@ public class LocalServerInteractor implements ILocalServerInteractor {
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer(true));
+                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer());
                     return ret;
                 });
     }
@@ -63,7 +63,7 @@ public class LocalServerInteractor implements ILocalServerInteractor {
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer(true));
+                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer());
                     return ret;
                 });
     }
@@ -107,7 +107,7 @@ public class LocalServerInteractor implements ILocalServerInteractor {
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer(true));
+                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer());
                     return ret;
                 });
     }
@@ -120,7 +120,7 @@ public class LocalServerInteractor implements ILocalServerInteractor {
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
                     for (int i = 0; i < out.size(); i++)
-                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer(true));
+                        ret.add(Dto2Model.transform(out.get(i)).setIsLocalServer());
                     return ret;
                 });
     }

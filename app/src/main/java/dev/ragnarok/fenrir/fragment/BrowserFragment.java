@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
@@ -89,7 +89,7 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
         if (Settings.get().main().isWebview_night_mode() && WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK) && Settings.get().ui().isDarkModeEnabled(requireActivity())) {
             WebSettingsCompat.setForceDark(mWebView.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
         }
-        mWebView.getSettings().setUserAgentString(Constants.USER_AGENT(Account_Types.BY_TYPE));
+        mWebView.getSettings().setUserAgentString(Constants.USER_AGENT(AccountType.BY_TYPE));
 
         mWebView.getSettings().setJavaScriptEnabled(true); // из-за этого не срабатывал метод
         // shouldOverrideUrlLoading в WebClient

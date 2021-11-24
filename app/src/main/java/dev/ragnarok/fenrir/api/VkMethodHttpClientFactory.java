@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.BuildConfig;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.model.ProxyConfig;
@@ -21,7 +21,7 @@ public class VkMethodHttpClientFactory implements IVkMethodHttpClientFactory {
 
     @Override
     public OkHttpClient createCustomVkHttpClient(int accountId, String token, Gson gson, ProxyConfig config) {
-        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(token, Constants.API_VERSION, gson, Account_Types.BY_TYPE, accountId), config);
+        return createDefaultVkApiOkHttpClient(new CustomTokenVkApiInterceptor(token, Constants.API_VERSION, gson, AccountType.BY_TYPE, accountId), config);
     }
 
     @Override

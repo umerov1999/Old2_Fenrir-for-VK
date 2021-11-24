@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
@@ -30,16 +31,16 @@ public class ColorPickerPreference extends Preference {
     private String pickerButtonCancel;
     private String pickerButtonOk;
 
-    public ColorPickerPreference(Context context) {
+    public ColorPickerPreference(@NonNull Context context) {
         super(context);
     }
 
-    public ColorPickerPreference(Context context, AttributeSet attrs) {
+    public ColorPickerPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initWith(context, attrs);
     }
 
-    public ColorPickerPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ColorPickerPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initWith(context, attrs);
     }
@@ -56,7 +57,7 @@ public class ColorPickerPreference extends Preference {
                 Math.max((int) (b * factor), 0));
     }
 
-    private void initWith(Context context, AttributeSet attrs) {
+    private void initWith(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorPickerView);
 
         try {

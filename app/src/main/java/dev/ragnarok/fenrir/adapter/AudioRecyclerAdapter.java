@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
@@ -55,12 +55,12 @@ import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.DownloadWorkUtils;
 import dev.ragnarok.fenrir.util.Mp3InfoHelper;
+import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
+import dev.ragnarok.fenrir.util.hls.M3U8;
 import dev.ragnarok.fenrir.view.WeakViewAnimatorAdapter;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRecyclerAdapter.AudioHolder> {
@@ -116,21 +116,28 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
     }
 
     private void getMp3AndBitrate(int accountId, Audio audio) {
-        if (Utils.isEmpty(audio.getUrl()) || audio.isHLS()) {
-            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(audio)).compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(t -> getBitrate(t.get(0).getUrl(), t.get(0).getDuration()), e -> getBitrate(audio.getUrl(), audio.getDuration()));
+        Pair<Boolean, Boolean> mode = audio.needRefresh();
+        if (mode.getFirst()) {
+            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(audio), mode.getSecond()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(t -> getBitrate(t.get(0)), e -> getBitrate(audio));
         } else {
-            getBitrate(audio.getUrl(), audio.getDuration());
+            getBitrate(audio);
         }
     }
 
-    private void getBitrate(String url, int duration) {
-        if (Utils.isEmpty(url)) {
+    private void getBitrate(@NonNull Audio audio) {
+        if (Utils.isEmpty(audio.getUrl())) {
             return;
         }
-        audioListDisposable = Mp3InfoHelper.getLength(Audio.getMp3FromM3u8(url)).compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(r -> CustomToast.CreateCustomToast(mContext).showToast(Mp3InfoHelper.getBitrate(mContext, duration, r)),
-                        e -> Utils.showErrorInAdapter((Activity) mContext, e));
+        if (audio.isHLS()) {
+            audioListDisposable = new M3U8(audio.getUrl()).getLength().compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> CustomToast.CreateCustomToast(mContext).showToast(Mp3InfoHelper.getBitrate(mContext, audio.getDuration(), r)),
+                            e -> Utils.showErrorInAdapter((Activity) mContext, e));
+        } else {
+            audioListDisposable = Mp3InfoHelper.getLength(audio.getUrl()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> CustomToast.CreateCustomToast(mContext).showToast(Mp3InfoHelper.getBitrate(mContext, audio.getDuration(), r)),
+                            e -> Utils.showErrorInAdapter((Activity) mContext, e));
+        }
     }
 
     public void toggleSelectMode(boolean iSSelectMode) {
@@ -256,6 +263,17 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         }
     }
 
+    private void updateDownloadState(@NonNull AudioHolder holder, @NonNull Audio audio) {
+        if (audio.getDownloadIndicator() == 2) {
+            holder.saved.setImageResource(R.drawable.remote_cloud);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(mContext));
+        } else {
+            holder.saved.setImageResource(R.drawable.save);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+        }
+        holder.saved.setVisibility(audio.getDownloadIndicator() != 0 ? View.VISIBLE : View.GONE);
+    }
+
     private void doMenu(AudioHolder holder, int position, View view, Audio audio) {
         ModalBottomSheetDialogFragment.Builder menus = new ModalBottomSheetDialogFragment.Builder();
 
@@ -348,9 +366,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                         }
                         break;
                     }
-                    holder.saved.setVisibility(View.VISIBLE);
-                    holder.saved.setImageResource(R.drawable.save);
-                    Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+                    audio.setDownloadIndicator(1);
+                    updateDownloadState(holder, audio);
                     int ret = DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), false, false);
                     if (ret == 0)
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.saved_audio);
@@ -358,7 +375,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                         Utils.ThemedSnack(view, ret == 1 ? R.string.audio_force_download : R.string.audio_force_download_pc, BaseTransientBottomBar.LENGTH_LONG).setAction(R.string.button_yes,
                                 v1 -> DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), true, false)).show();
                     } else {
-                        holder.saved.setVisibility(View.GONE);
+                        audio.setDownloadIndicator(0);
+                        updateDownloadState(holder, audio);
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.error_audio);
                     }
                     break;
@@ -403,7 +421,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
         }
 
         holder.artist.setText(audio.getArtist());
-        if (!audio.isLocal() && !audio.isLocalServer() && Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID && !audio.isHLS()) {
+        if (!audio.isLocal() && !audio.isLocalServer() && Constants.DEFAULT_ACCOUNT_TYPE == AccountType.VK_ANDROID && !audio.isHLS()) {
             holder.quality.setVisibility(View.VISIBLE);
             if (audio.getIsHq()) {
                 holder.quality.setImageResource(R.drawable.high_quality);
@@ -441,19 +459,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
 
         holder.saved.setVisibility(View.GONE);
 
-        audioListDisposable = Single.create((SingleOnSubscribe<Integer>) emitter -> emitter.onSuccess(DownloadWorkUtils.TrackIsDownloaded(audio)))
-                .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(v -> {
-                    if (v == 2) {
-                        holder.saved.setImageResource(R.drawable.remote_cloud);
-                        Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(mContext));
-                    } else {
-                        holder.saved.setImageResource(R.drawable.save);
-                        Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
-                    }
-                    holder.saved.setVisibility(v != 0 ? View.VISIBLE : View.GONE);
-                }, RxUtils.ignore());
-
+        updateDownloadState(holder, audio);
         updateAudioStatus(holder, audio);
 
         if (!Utils.isEmpty(audio.getThumb_image_little())) {
@@ -494,9 +500,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                         }
                         return false;
                     }
-                    holder.saved.setVisibility(View.VISIBLE);
-                    holder.saved.setImageResource(R.drawable.save);
-                    Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(mContext));
+                    audio.setDownloadIndicator(1);
+                    updateDownloadState(holder, audio);
                     int ret = DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), false, false);
                     if (ret == 0)
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.saved_audio);
@@ -504,7 +509,8 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                         Utils.ThemedSnack(v, ret == 1 ? R.string.audio_force_download : R.string.audio_force_download_pc, BaseTransientBottomBar.LENGTH_LONG).setAction(R.string.button_yes,
                                 v1 -> DownloadWorkUtils.doDownloadAudio(mContext, audio, Settings.get().accounts().getCurrent(), true, false)).show();
                     } else {
-                        holder.saved.setVisibility(View.GONE);
+                        audio.setDownloadIndicator(0);
+                        updateDownloadState(holder, audio);
                         CustomToast.CreateCustomToast(mContext).showToastBottom(R.string.error_audio);
                     }
                     return true;

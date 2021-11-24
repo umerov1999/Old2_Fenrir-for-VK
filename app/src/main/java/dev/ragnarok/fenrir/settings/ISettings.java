@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.api.model.LocalServerSettings;
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings;
 import dev.ragnarok.fenrir.crypt.KeyLocationPolicy;
@@ -90,9 +90,7 @@ public interface ISettings {
 
         String get_Auth_Domain();
 
-        boolean isUse_hls_downloader();
-
-        void setUse_hls_downloader(boolean enable);
+        boolean isUse_api_5_90_for_audio();
 
         boolean isDisable_history();
 
@@ -175,6 +173,10 @@ public interface ISettings {
         boolean isPhoto_to_user_dir();
 
         boolean isDelete_cache_images();
+
+        boolean isCompress_traffic();
+
+        boolean isDo_not_clear_back_stack();
 
         boolean isMention_fave();
 
@@ -297,11 +299,11 @@ public interface ISettings {
 
         String getLogin(int accountId);
 
-        void storeTokenType(int accountId, @Account_Types int type);
+        void storeTokenType(int accountId, @AccountType int type);
 
         String getAccessToken(int accountId);
 
-        @Account_Types
+        @AccountType
         int getType(int accountId);
 
         void removeAccessToken(int accountId);

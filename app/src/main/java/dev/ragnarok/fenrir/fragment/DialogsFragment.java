@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityFeatures;
@@ -380,9 +379,6 @@ public class DialogsFragment extends BaseMvpFragment<DialogsPresenter, IDialogsV
                     callPresenter(p -> p.fireAddToLauncherShortcuts(dialog));
                     break;
                 case 6:
-                    if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.HIDE_CHATS)) {
-                        break;
-                    }
                     if (!Settings.get().security().isUsePinForSecurity()) {
                         CustomToast.CreateCustomToast(requireActivity()).showToastError(R.string.not_supported_hide);
                         PlaceFactory.getSecuritySettingsPlace().tryOpenWith(requireActivity());

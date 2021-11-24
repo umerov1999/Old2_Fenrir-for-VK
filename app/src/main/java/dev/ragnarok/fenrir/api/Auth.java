@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.api.util.VKStringUtils;
@@ -32,7 +32,7 @@ public class Auth {
     public static String getScope() {
         //http://vk.com/dev/permission
         //return "notify,friends,photos,audio,video,stories,pages,status,notes,messages,wall,offline,docs,groups,notifications,stats,email,market";
-        if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
+        if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.KATE) {
             return "notify,friends,photos,audio,video,docs,status,notes,pages,wall,groups,messages,offline,notifications,stories";
         } else {
             return "all";

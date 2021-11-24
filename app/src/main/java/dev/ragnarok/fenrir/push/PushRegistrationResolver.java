@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.FCMToken;
 import dev.ragnarok.fenrir.api.ApiException;
@@ -160,7 +160,7 @@ public class PushRegistrationResolver implements IPushRegistrationResolver {
         String deviceModel = Utils.getDeviceName();
         //String osVersion = Utils.getAndroidVersion();
 
-        if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
+        if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.KATE) {
             return networker.vkManual(registration.getUserId(), registration.getVkToken())
                     .account()
                     .registerDevice(registration.getGmcToken(), null, null, "fcm",

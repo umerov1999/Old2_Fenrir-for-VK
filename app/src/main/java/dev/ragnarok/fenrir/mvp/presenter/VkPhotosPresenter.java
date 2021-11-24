@@ -34,6 +34,7 @@ import dev.ragnarok.fenrir.model.PhotoAlbum;
 import dev.ragnarok.fenrir.model.TmpSource;
 import dev.ragnarok.fenrir.model.wrappers.SelectablePhotoWrapper;
 import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
 import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IVkPhotosView;
@@ -494,17 +495,17 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
     public void firePhotoClick(SelectablePhotoWrapper wrapper) {
         int Index = 0;
         boolean trig = false;
-        ArrayList<Photo> photos_ret = new ArrayList<>(photos.size());
-        for (int i = 0; i < photos.size(); i++) {
-            SelectablePhotoWrapper photo = photos.get(i);
-            photos_ret.add(photo.getPhoto());
-            if (!trig && photo.getPhoto().getId() == wrapper.getPhoto().getId() && photo.getPhoto().getOwnerId() == wrapper.getPhoto().getOwnerId()) {
-                Index = i;
-                trig = true;
-            }
-        }
-        int finalIndex = Index;
         if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel_photo()) {
+            ArrayList<Photo> photos_ret = new ArrayList<>(photos.size());
+            for (int i = 0; i < photos.size(); i++) {
+                SelectablePhotoWrapper photo = photos.get(i);
+                photos_ret.add(photo.getPhoto());
+                if (!trig && photo.getPhoto().getId() == wrapper.getPhoto().getId() && photo.getPhoto().getOwnerId() == wrapper.getPhoto().getOwnerId()) {
+                    Index = i;
+                    trig = true;
+                }
+            }
+            int finalIndex = Index;
             TmpSource source = new TmpSource(getInstanceId(), 0);
             fireTempDataUsage();
             appendDisposable(Stores.getInstance()
@@ -513,7 +514,18 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
                     .compose(RxUtils.applyCompletableIOToMainSchedulers())
                     .subscribe(() -> callView(view -> view.displayGallery(getAccountId(), albumId, ownerId, source, finalIndex)), Analytics::logUnexpectedError));
         } else {
-            callView(view -> view.displayGalleryUnSafe(getAccountId(), albumId, ownerId, photos_ret, finalIndex));
+            ParcelNative mem = ParcelNative.create();
+            mem.writeInt(photos.size());
+            for (int i = 0; i < photos.size(); i++) {
+                SelectablePhotoWrapper photo = photos.get(i);
+                mem.writeParcelable(photo.getPhoto());
+                if (!trig && photo.getPhoto().getId() == wrapper.getPhoto().getId() && photo.getPhoto().getOwnerId() == wrapper.getPhoto().getOwnerId()) {
+                    Index = i;
+                    trig = true;
+                }
+            }
+            int finalIndex = Index;
+            callView(view -> view.displayGalleryUnSafe(getAccountId(), albumId, ownerId, mem.getNativePointer(), finalIndex));
         }
     }
 

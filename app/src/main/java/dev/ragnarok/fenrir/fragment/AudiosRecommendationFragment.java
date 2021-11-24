@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
@@ -105,9 +104,6 @@ public class AudiosRecommendationFragment extends BaseMvpFragment<AudiosRecommen
         FloatingActionButton Goto = root.findViewById(R.id.goto_button);
         save_mode.setVisibility(Settings.get().other().isAudio_save_mode_button() ? View.VISIBLE : View.GONE);
         save_mode.setOnClickListener(v -> {
-            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.DOWNLOAD_MUSIC)) {
-                return;
-            }
             isSaveMode = !isSaveMode;
             Goto.setImageResource(isSaveMode ? R.drawable.check : R.drawable.audio_player);
             save_mode.setImageResource(isSaveMode ? R.drawable.ic_dismiss : R.drawable.save);

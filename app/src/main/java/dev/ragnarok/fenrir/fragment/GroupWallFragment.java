@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
@@ -67,7 +66,6 @@ import dev.ragnarok.fenrir.util.AppPerms;
 import dev.ragnarok.fenrir.util.AssertUtils;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView;
 
 public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWallPresenter> implements IGroupWallView {
 
@@ -170,6 +168,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
             }
             PlaceFactory.getSingleURLPhotoPlace(cmt.getOriginalAvatar(), cmt.getFullName(), "club" + Math.abs(cmt.getId())).tryOpenWith(requireActivity());
         });
+        mHeaderHolder.ivAvatar.setOnLongClickListener(v -> {
+            callPresenter(GroupWallPresenter::fireMentions);
+            return true;
+        });
     }
 
     private void displayCommunityCover(String resource) {
@@ -210,7 +212,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
     @Override
     protected void onHeaderInflated(View headerRootView) {
         mHeaderHolder = new GroupHeaderHolder(headerRootView);
-        setupPaganContent(mHeaderHolder.Runes, mHeaderHolder.paganSymbol, mHeaderHolder.paganVideo);
+        setupPaganContent(mHeaderHolder.Runes, mHeaderHolder.paganSymbol);
     }
 
     @Override
@@ -301,6 +303,10 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
                 return true;
             });
         }
+        menu.add(R.string.mentions).setOnMenuItemClickListener(item -> {
+            callPresenter(GroupWallPresenter::fireMentions);
+            return true;
+        });
     }
 
     @Override
@@ -477,7 +483,6 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
         final HorizontalOptionsAdapter<PostFilter> mFiltersAdapter;
 
         final RLottieImageView paganSymbol;
-        final AnimatedShapeableImageView paganVideo;
         final View Runes;
 
         GroupHeaderHolder(@NonNull View root) {
@@ -502,7 +507,6 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
             fabMessage = root.findViewById(R.id.header_group_fab_message);
 
             paganSymbol = root.findViewById(R.id.pagan_symbol);
-            paganVideo = root.findViewById(R.id.pagan_video);
             Runes = root.findViewById(R.id.runes_container);
             ivVerified = root.findViewById(R.id.item_verified);
             bDonate = root.findViewById(R.id.donated_anim);
@@ -536,11 +540,7 @@ public class GroupWallFragment extends AbsWallFragment<IGroupWallView, GroupWall
             root.findViewById(R.id.header_group_articles_container)
                     .setOnClickListener(v -> callPresenter(GroupWallPresenter::fireHeaderArticlesClick));
             root.findViewById(R.id.header_group_products_container)
-                    .setOnClickListener(v -> {
-                        if (CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.PRODUCTS)) {
-                            callPresenter(GroupWallPresenter::fireHeaderProductsClick);
-                        }
-                    });
+                    .setOnClickListener(v -> callPresenter(GroupWallPresenter::fireHeaderProductsClick));
             root.findViewById(R.id.header_group_contacts_container)
                     .setOnClickListener(v -> callPresenter(GroupWallPresenter::fireShowCommunityInfoClick));
             root.findViewById(R.id.header_group_links_container)

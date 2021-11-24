@@ -205,6 +205,11 @@ public class PlaceFactory {
                 .withStringExtra(Extra.BODY, body);
     }
 
+    public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, long parcelNativePointer, int position, boolean readOnly, boolean invert) {
+        return new Place(Place.VK_PHOTO_ALBUM_GALLERY_NATIVE)
+                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, parcelNativePointer, position, readOnly, invert));
+    }
+
     public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, @NonNull ArrayList<Photo> photos, int position, boolean readOnly, boolean invert) {
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY)
                 .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, photos, position, readOnly, invert));

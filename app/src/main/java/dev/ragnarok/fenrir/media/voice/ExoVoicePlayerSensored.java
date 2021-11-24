@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -26,7 +27,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.media.exo.ExoUtil;
 import dev.ragnarok.fenrir.model.ProxyConfig;
@@ -45,7 +46,7 @@ public class ExoVoicePlayerSensored implements IVoicePlayer, SensorEventListener
     private final Sensor proxym;
     private final PowerManager.WakeLock proximityWakelock;
     private final MusicIntentReceiver headset;
-    private SimpleExoPlayer exoPlayer;
+    private ExoPlayer exoPlayer;
     private int status;
     private AudioEntry playingEntry;
     private boolean supposedToBePlaying;
@@ -172,7 +173,7 @@ public class ExoVoicePlayerSensored implements IVoicePlayer, SensorEventListener
         // DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "exoplayer2example"), bandwidthMeterA);
         // DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(App.getInstance(), Util.getUserAgent(App.getInstance(), "exoplayer2example"), bandwidthMeterA);
 
-        String userAgent = Constants.USER_AGENT(Account_Types.BY_TYPE);
+        String userAgent = Constants.USER_AGENT(AccountType.BY_TYPE);
 
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:

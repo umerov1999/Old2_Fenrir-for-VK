@@ -1,14 +1,14 @@
 package dev.ragnarok.fenrir.media.exo;
 
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ExoPlayer;
 
 public class ExoUtil {
-    public static void pausePlayer(SimpleExoPlayer player) {
+    public static void pausePlayer(ExoPlayer player) {
         player.setPlayWhenReady(false);
         player.getPlaybackState();
     }
 
-    public static void startPlayer(SimpleExoPlayer player) {
+    public static void startPlayer(ExoPlayer player) {
         player.setPlayWhenReady(true);
         player.getPlaybackState();
     }

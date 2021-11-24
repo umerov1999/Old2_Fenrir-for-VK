@@ -6,6 +6,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
@@ -86,7 +88,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
+import dev.ragnarok.fenrir.App;
 import dev.ragnarok.fenrir.BuildConfig;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
@@ -132,13 +135,55 @@ public class Utils {
     private static final List<Integer> reload_dialogs = new ArrayList<>();
     private static final List<Integer> reload_stickers = new ArrayList<>();
     private static final List<Sticker.LocalSticker> CachedMyStickers = new ArrayList<>();
+    private static final Point displaySize = new Point();
     private static String device_id;
     private static float density = 1;
+    private static int screenRefreshRate = 60;
     private static DisplayMetrics metrics;
+    private static boolean compressTraffic;
 
     public static List<Sticker.LocalSticker> getCachedMyStickers() {
         return CachedMyStickers;
     }
+
+    public static boolean isCompressTraffic() {
+        return compressTraffic;
+    }
+
+    public static void setCompressTraffic(boolean enable) {
+        compressTraffic = enable;
+    }
+
+    public static int getScreenRefreshRate() {
+        return screenRefreshRate;
+    }
+
+    public static Point getDisplaySize() {
+        return displaySize;
+    }
+
+    public static void runOnUIThread(Runnable runnable) {
+        runOnUIThread(runnable, 0);
+    }
+
+    public static void runOnUIThread(Runnable runnable, long delay) {
+        if (App.getApplicationHandler() == null) {
+            return;
+        }
+        if (delay == 0) {
+            App.getApplicationHandler().post(runnable);
+        } else {
+            App.getApplicationHandler().postDelayed(runnable, delay);
+        }
+    }
+
+    public static void cancelRunOnUIThread(Runnable runnable) {
+        if (App.getApplicationHandler() == null) {
+            return;
+        }
+        App.getApplicationHandler().removeCallbacks(runnable);
+    }
+
 
     public static boolean needReloadNews(int account_id) {
         if (!reload_news.contains(account_id)) {
@@ -932,12 +977,12 @@ public class Utils {
         }
     }
 
-    public static boolean isHiddenType(@Account_Types int type) {
-        return type == Account_Types.VK_ANDROID_HIDDEN || type == Account_Types.KATE_HIDDEN;
+    public static boolean isHiddenType(@AccountType int type) {
+        return type == AccountType.VK_ANDROID_HIDDEN || type == AccountType.KATE_HIDDEN;
     }
 
-    public static boolean isKateType(@Account_Types int type) {
-        return type == Account_Types.KATE || type == Account_Types.KATE_HIDDEN;
+    public static boolean isKateType(@AccountType int type) {
+        return type == AccountType.KATE || type == AccountType.KATE_HIDDEN;
     }
 
     public static boolean isHiddenCurrent() {
@@ -1350,6 +1395,21 @@ public class Utils {
         }
         if (display != null) {
             RLottieDrawable.updateScreenRefreshRate((int) display.getRefreshRate());
+            screenRefreshRate = (int) display.getRefreshRate();
+
+            Configuration configuration = context.getResources().getConfiguration();
+            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
+                if (Math.abs(displaySize.x - newSize) > 3) {
+                    displaySize.x = newSize;
+                }
+            }
+            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
+                if (Math.abs(displaySize.y - newSize) > 3) {
+                    displaySize.y = newSize;
+                }
+            }
         }
     }
 
@@ -1423,20 +1483,20 @@ public class Utils {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(timeouts, TimeUnit.SECONDS)
                 .readTimeout(timeouts, TimeUnit.SECONDS)
-                .addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build())).addInterceptor(BrotliInterceptor.INSTANCE);
+                .addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build())).addInterceptor(BrotliInterceptor.INSTANCE);
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
         return builder;
     }
 
     public static <T> T BY_DEFAULT_ACCOUNT_TYPE(T vk_official, T kate) {
-        if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID) {
+        if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.VK_ANDROID) {
             return vk_official;
         }
         return kate;
     }
 
     public static boolean isKateDeault() {
-        return Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE;
+        return Constants.DEFAULT_ACCOUNT_TYPE == AccountType.KATE;
     }
 
     public static String getErrorString(Activity context, Throwable throwable) {
@@ -1629,7 +1689,7 @@ public class Utils {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build();
                     return chain.proceed(request);
                 });
         ProxyUtil.applyProxyConfig(builder, Injection.provideProxySettings().getActiveProxy());
@@ -1740,6 +1800,17 @@ public class Utils {
         return null;
     }
 
+    public static int makeMutablePendingIntent(int flags) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (flags == 0) {
+                return PendingIntent.FLAG_MUTABLE;
+            } else {
+                return flags | PendingIntent.FLAG_MUTABLE;
+            }
+        }
+        return flags;
+    }
+
     public static int rnd(int min, int max) {
         max -= min;
         return (int) (Math.random() * ++max) + min;
@@ -1750,6 +1821,14 @@ public class Utils {
             return null;
         } else {
             return list.get(new Random().nextInt(list.size()));
+        }
+    }
+
+    static public <T> T getRandomFromArray(T[] list) {
+        if (list == null || list.length <= 0) {
+            return null;
+        } else {
+            return list[new Random().nextInt(list.length)];
         }
     }
 

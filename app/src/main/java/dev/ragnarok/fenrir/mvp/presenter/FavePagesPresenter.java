@@ -29,9 +29,9 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 
 public class FavePagesPresenter extends AccountDependencyPresenter<IFaveUsersView> {
-    private static final int SEARCH_COUNT = 20;
+    private static final int SEARCH_COUNT = 250;
     private static final int SEARCH_VIEW_COUNT = 20;
-    private static final int GET_COUNT = 50;
+    private static final int GET_COUNT = 500;
     private static final int WEB_SEARCH_DELAY = 1000;
     private final List<FavePage> pages;
     private final IFaveInteractor faveInteractor;

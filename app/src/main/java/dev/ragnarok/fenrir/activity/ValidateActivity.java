@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.slidr.Slidr;
@@ -81,7 +81,7 @@ public class ValidateActivity extends Activity {
         WebView webview = findViewById(R.id.vkontakteview);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.clearCache(true);
-        webview.getSettings().setUserAgentString(Constants.USER_AGENT(Account_Types.KATE));
+        webview.getSettings().setUserAgentString(Constants.USER_AGENT(AccountType.KATE));
 
         //Чтобы получать уведомления об окончании загрузки страницы
         webview.setWebViewClient(new VkontakteWebViewClient());

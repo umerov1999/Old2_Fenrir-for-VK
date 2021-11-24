@@ -87,6 +87,7 @@
         <item>Хель</item>
         <item>Один</item>
         <item>Викинг</item>
+        <item>Файер</item>
         <item>[Рандом]</item>
     </string-array>
 
@@ -108,25 +109,8 @@
     <string name="first_pagan">Первый языческий</string>
     <string name="repo">Репозиторий: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Репозиторий: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="in_full_version">Доступно в полной версии!</string>
-    <string name="features">Функции:</string>
-    <string-array name="array_features_full">
-        <item>Скачивание музыки</item>
-        <item>Скачивание видео</item>
-        <item>Скачивание голосовых</item>
-        <item>Скачивание стикеров</item>
-        <item>Отправка своих стикеров</item>
-        <item>Скачивание переписок</item>
-        <item>Упоминания</item>
-        <item>Скрытие чатов</item>
-        <item>Товары</item>
-        <item>Все коментарии фоток</item>
-        <item>Смена иконки приложения</item>
-        <item>Локальный медиа сервер</item>
-        <item>Настройки фона плеера</item>
-        <item>Отправка своих голосовых</item>
-        <item>Переименовать пользователя</item>
-    </string-array>
+    <string name="project_dedicated_summary">Кате Арнольдовой</string>
+    <string name="project_dedicated">Проект посвящён</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Диалоги</string>
@@ -1378,8 +1362,8 @@
     <string name="audio_force_download">Уже скачен. Всё равно скачать?</string>
     <string name="audio_force_download_pc">На компьютере. Всё равно скачать?</string>
     <string name="null_image_link">Отсутствует ссылка на скачивание</string>
-    <string name="use_hls_downloader">HLS Аудио Demuxer</string>
-    <string name="use_hls_downloader_summary">Если VK Api 5.90 сдох</string>
+    <string name="use_api_5_90_for_audio">VK Api 5.90 для аудио</string>
+    <string name="use_api_5_90_for_audio_summary">Если скачивание аудио не работает, отключите</string>
     <string name="expires">%1$s %2$s</string>
     <string name="disable_history">Не показывать Истории</string>
     <string name="audio_round_icon">Круглые обложки аудио</string>
@@ -1666,4 +1650,6 @@
     <string name="reset_notifications_groups">Сбросить уведомления</string>
     <string name="not_available">НЕДОСТУПНО</string>
     <string name="refresh_audio_token">Обновить аудио токен</string>
+    <string name="compress_traffic">Сжимать траффик</string>
+    <string name="do_not_clear_back_stack">Не очищать бэкстэк при музыке</string>
 </resources>

@@ -17,7 +17,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.util.Random;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.activity.ValidateActivity;
@@ -52,7 +52,7 @@ abstract class AbsVkApiInterceptor implements Interceptor {
 
     protected abstract String getToken();
 
-    protected abstract @Account_Types
+    protected abstract @AccountType
     int getType();
 
     protected abstract int getAccountId();

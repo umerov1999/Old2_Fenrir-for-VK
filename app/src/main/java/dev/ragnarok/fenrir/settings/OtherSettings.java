@@ -300,13 +300,8 @@ class OtherSettings implements ISettings.IOtherSettings {
     }
 
     @Override
-    public boolean isUse_hls_downloader() {
-        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_hls_downloader", false);
-    }
-
-    @Override
-    public void setUse_hls_downloader(boolean enable) {
-        PreferenceManager.getDefaultSharedPreferences(app).edit().putBoolean("use_hls_downloader", enable).apply();
+    public boolean isUse_api_5_90_for_audio() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("use_api_5_90_for_audio", true);
     }
 
     @Override
@@ -510,6 +505,16 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public boolean isDelete_cache_images() {
         return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("delete_cache_images", false);
+    }
+
+    @Override
+    public boolean isCompress_traffic() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("compress_traffic", false);
+    }
+
+    @Override
+    public boolean isDo_not_clear_back_stack() {
+        return PreferenceManager.getDefaultSharedPreferences(app).getBoolean("do_not_clear_back_stack", false);
     }
 
     @Override

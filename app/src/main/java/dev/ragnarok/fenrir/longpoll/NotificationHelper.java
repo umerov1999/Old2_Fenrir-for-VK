@@ -285,7 +285,7 @@ public class NotificationHelper {
 
         //Our quickreply
         Intent intentQuick = QuickAnswerActivity.forStart(context, accountId, message, text != null ? text.toString() : context.getString(R.string.error), peer.getAvaUrl(), peer.getTitle());
-        PendingIntent quickPendingIntent = PendingIntent.getActivity(context, message.getId(), intentQuick, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent quickPendingIntent = PendingIntent.getActivity(context, message.getId(), intentQuick, Utils.makeMutablePendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
         NotificationCompat.Action actionCustomReply = new NotificationCompat.Action(R.drawable.reply, context.getString(R.string.quick_answer_title), quickPendingIntent);
 
         //System reply. Works only on Wear (20 Api) and N+
@@ -296,8 +296,8 @@ public class NotificationHelper {
         Intent ReadIntent = QuickReplyService.intentForReadMessage(context, accountId, message.getPeerId(), message.getId());
 
         Intent directIntent = QuickReplyService.intentForAddMessage(context, accountId, message.getPeerId(), message);
-        PendingIntent ReadPendingIntent = PendingIntent.getService(context, message.getId(), ReadIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
-        PendingIntent directPendingIntent = PendingIntent.getService(context, message.getId(), directIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent ReadPendingIntent = PendingIntent.getService(context, message.getId(), ReadIntent, Utils.makeMutablePendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent directPendingIntent = PendingIntent.getService(context, message.getId(), directIntent, Utils.makeMutablePendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
 
         NotificationCompat.Action actionDirectReply = new NotificationCompat.Action.Builder
                 (/*may be missing in some cases*/ R.drawable.reply,
@@ -316,7 +316,7 @@ public class NotificationHelper {
         Place chatPlace = PlaceFactory.getChatPlace(accountId, accountId, peer);
         intent.putExtra(Extra.PLACE, chatPlace);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(context, message.getId(), intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, message.getId(), intent, Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT));
         builder.setContentIntent(contentIntent);
 
         if (!Utils.hasNougat()) {
@@ -414,7 +414,7 @@ public class NotificationHelper {
             intent.putExtra(Extra.PLACE, PlaceFactory.getExternalLinkPlace(aid, url));
             intent.setAction(MainActivity.ACTION_OPEN_PLACE);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent contentIntent = PendingIntent.getActivity(context, url.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, url.hashCode(), intent, Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT));
             builder.setContentIntent(contentIntent);
         }
         Notification notification = builder.build();
@@ -529,7 +529,7 @@ public class NotificationHelper {
             builder.setShortcutId(id);
 
             Intent intentQuick = ChatActivityBubbles.forStart(context, accountId, peer);
-            PendingIntent bubbleIntent = PendingIntent.getActivity(context, 0, intentQuick, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+            PendingIntent bubbleIntent = PendingIntent.getActivity(context, 0, intentQuick, Utils.makeMutablePendingIntent(PendingIntent.FLAG_UPDATE_CURRENT));
             assert avatar != null;
             NotificationCompat.BubbleMetadata.Builder bubbleBuilder = new NotificationCompat.BubbleMetadata.Builder(bubbleIntent, IconCompat.createWithAdaptiveBitmap(avatar));
 

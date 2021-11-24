@@ -39,7 +39,7 @@ public class CustomTextPreference extends Preference {
     @Nullable
     private OnBindEditTextListener mOnBindEditTextListener;
 
-    public CustomTextPreference(Context context, AttributeSet attrs, int defStyleAttr,
+    public CustomTextPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr,
                                 int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -54,16 +54,16 @@ public class CustomTextPreference extends Preference {
         a.recycle();
     }
 
-    public CustomTextPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomTextPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public CustomTextPreference(Context context, AttributeSet attrs) {
+    public CustomTextPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, TypedArrayUtils.getAttr(context, R.attr.editTextPreferenceStyle,
                 android.R.attr.editTextPreferenceStyle));
     }
 
-    public CustomTextPreference(Context context) {
+    public CustomTextPreference(@NonNull Context context) {
         this(context, null);
     }
 
@@ -72,6 +72,7 @@ public class CustomTextPreference extends Preference {
      *
      * @return The current preference value
      */
+    @Nullable
     public String getText() {
         return mText;
     }
@@ -81,7 +82,7 @@ public class CustomTextPreference extends Preference {
      *
      * @param text The text to save
      */
-    public void setText(String text) {
+    public void setText(@Nullable String text) {
         boolean wasBlocking = shouldDisableDependents();
 
         mText = text;
@@ -110,7 +111,7 @@ public class CustomTextPreference extends Preference {
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
+    protected Object onGetDefaultValue(@NonNull TypedArray a, int index) {
         return a.getString(index);
     }
 
@@ -124,6 +125,7 @@ public class CustomTextPreference extends Preference {
         return TextUtils.isEmpty(mText) || super.shouldDisableDependents();
     }
 
+    @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
@@ -138,7 +140,7 @@ public class CustomTextPreference extends Preference {
     }
 
     @Override
-    protected void onRestoreInstanceState(Parcelable state) {
+    protected void onRestoreInstanceState(@Nullable Parcelable state) {
         if (state == null || !state.getClass().equals(SavedState.class)) {
             // Didn't save state for us in onSaveInstanceState
             super.onRestoreInstanceState(state);
@@ -242,6 +244,7 @@ public class CustomTextPreference extends Preference {
          * @return a singleton instance of this simple
          * {@link androidx.preference.Preference.SummaryProvider} implementation
          */
+        @NonNull
         public static SimpleSummaryProvider getInstance() {
             if (sSimpleSummaryProvider == null) {
                 sSimpleSummaryProvider = new SimpleSummaryProvider();
@@ -249,8 +252,9 @@ public class CustomTextPreference extends Preference {
             return sSimpleSummaryProvider;
         }
 
+        @Nullable
         @Override
-        public CharSequence provideSummary(CustomTextPreference preference) {
+        public CharSequence provideSummary(@NonNull CustomTextPreference preference) {
             if (TextUtils.isEmpty(preference.getText())) {
                 return (preference.getContext().getString(R.string.not_set));
             } else {

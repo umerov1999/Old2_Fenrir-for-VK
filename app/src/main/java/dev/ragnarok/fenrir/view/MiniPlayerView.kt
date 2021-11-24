@@ -73,6 +73,10 @@ class MiniPlayerView : FrameLayout, TimeBar.OnScrubListener {
             MusicPlaybackController.closeMiniPlayer()
             root.visibility = GONE
         }
+        mPClosePlay.setOnLongClickListener {
+            MusicPlaybackController.stop()
+            true
+        }
         play.setOnClickListener {
             MusicPlaybackController.playOrPause()
             if (MusicPlaybackController.isPlaying()) {

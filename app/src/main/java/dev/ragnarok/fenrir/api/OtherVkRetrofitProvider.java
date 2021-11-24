@@ -9,7 +9,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.api.adapters.LongpollUpdateAdapter;
 import dev.ragnarok.fenrir.api.adapters.LongpollUpdatesAdapter;
@@ -94,7 +94,7 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
             OkHttpClient.Builder builder = new OkHttpClient.Builder()
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                        Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                        Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build();
                         return chain.proceed(request);
                     })
                     .addInterceptor(BrotliInterceptor.INSTANCE);
@@ -118,7 +118,7 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build();
                     return chain.proceed(request);
                 }).addInterceptor(chain -> {
                     Request original = chain.request();
@@ -152,7 +152,7 @@ public class OtherVkRetrofitProvider implements IOtherVkRetrofitProvider {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(HttpLogger.DEFAULT_LOGGING_INTERCEPTOR).addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(Account_Types.BY_TYPE)).build();
+                    Request request = chain.request().newBuilder().addHeader("X-VK-Android-Client", "new").addHeader("User-Agent", Constants.USER_AGENT(AccountType.BY_TYPE)).build();
                     return chain.proceed(request);
                 })
                 .addInterceptor(BrotliInterceptor.INSTANCE);

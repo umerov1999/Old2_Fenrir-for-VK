@@ -22,6 +22,7 @@ import dev.ragnarok.fenrir.longpoll.LongpollInstance;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.RxUtils;
+import dev.ragnarok.fenrir.util.Utils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class KeepLongpollService extends Service {
@@ -108,7 +109,7 @@ public class KeepLongpollService extends Service {
         notificationIntent.setAction(ACTION_STOP);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, notificationIntent, Utils.makeMutablePendingIntent(0));
 
         NotificationCompat.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

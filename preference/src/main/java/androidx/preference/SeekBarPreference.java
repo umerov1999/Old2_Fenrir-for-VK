@@ -28,6 +28,9 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * Preference based on android.preference.SeekBarPreference but uses support preference as a base
  * . It contains a title and a {@link SeekBar} and an optional SeekBar value {@link TextView}.
@@ -128,7 +131,8 @@ public class SeekBarPreference extends Preference {
     private boolean mShowSeekBarValue;
 
     public SeekBarPreference(
-            Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            @NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr,
+            int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         TypedArray a = context.obtainStyledAttributes(
@@ -147,20 +151,21 @@ public class SeekBarPreference extends Preference {
         a.recycle();
     }
 
-    public SeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SeekBarPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                             int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public SeekBarPreference(Context context, AttributeSet attrs) {
+    public SeekBarPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.seekBarPreferenceStyle);
     }
 
-    public SeekBarPreference(Context context) {
+    public SeekBarPreference(@NonNull Context context) {
         this(context, null);
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         holder.itemView.setOnKeyListener(mSeekBarKeyListener);
         mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
@@ -202,7 +207,8 @@ public class SeekBarPreference extends Preference {
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
+    protected @Nullable
+    Object onGetDefaultValue(@NonNull TypedArray a, int index) {
         return a.getInt(index, 0);
     }
 
@@ -384,7 +390,7 @@ public class SeekBarPreference extends Preference {
      * set the {@link SeekBar}'s value to the stored value.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    void syncValueInternal(SeekBar seekBar) {
+    void syncValueInternal(@NonNull SeekBar seekBar) {
         int seekBarValue = mMin + seekBar.getProgress();
         if (seekBarValue != mSeekBarValue) {
             if (callChangeListener(seekBarValue)) {
@@ -408,6 +414,7 @@ public class SeekBarPreference extends Preference {
         }
     }
 
+    @Nullable
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
@@ -425,8 +432,8 @@ public class SeekBarPreference extends Preference {
     }
 
     @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        if (!state.getClass().equals(SavedState.class)) {
+    protected void onRestoreInstanceState(@Nullable Parcelable state) {
+        if (state == null || !state.getClass().equals(SavedState.class)) {
             // Didn't save state for us in onSaveInstanceState
             super.onRestoreInstanceState(state);
             return;

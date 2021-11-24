@@ -10,7 +10,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.fragment.app.Fragment
 import dev.ragnarok.fenrir.R
 import kotlin.math.abs
 import kotlin.math.max
@@ -18,7 +17,7 @@ import kotlin.math.min
 
 /**
  * @author AmirHossein Aghajari
- * @version 1.0.2
+ * @version 1.1.0
  */
 class ZoomHelper {
 
@@ -144,8 +143,9 @@ class ZoomHelper {
      * handle touch event for a Fragment
      * call this method in [Activity.dispatchTouchEvent]
      */
-    fun dispatchTouchEvent(ev: MotionEvent, fragment: Fragment): Boolean {
-        if (fragment.view == null) return false
+    fun dispatchTouchEvent(ev: MotionEvent, fragment: androidx.fragment.app.Fragment): Boolean {
+        if (fragment.view == null)
+            return false
         return load(ev, fragment.requireView())
     }
 
@@ -522,7 +522,11 @@ class ZoomHelper {
     }
 
     interface OnZoomLayoutCreatorListener {
-        fun onZoomLayoutCreated(zoomHelper: ZoomHelper, zoomableView: View, zoomLayout: FrameLayout)
+        fun onZoomLayoutCreated(
+            zoomHelper: ZoomHelper,
+            zoomableView: View,
+            zoomLayout: FrameLayout
+        )
     }
 
     /**
@@ -544,6 +548,7 @@ class ZoomHelper {
     }
 
     companion object {
+
         /**
          * @return true if view is zoomable
          */

@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * A {@link ListPreference} that presents the options in a drop down menu rather than a dialog.
@@ -52,20 +53,21 @@ public class DropDownPreference extends ListPreference {
     };
     private Spinner mSpinner;
 
-    public DropDownPreference(Context context) {
+    public DropDownPreference(@NonNull Context context) {
         this(context, null);
     }
 
-    public DropDownPreference(Context context, AttributeSet attrs) {
+    public DropDownPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.dropdownPreferenceStyle);
     }
 
-    public DropDownPreference(Context context, AttributeSet attrs, int defStyle) {
+    public DropDownPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                              int defStyle) {
         this(context, attrs, defStyle, 0);
     }
 
-    public DropDownPreference(Context context, AttributeSet attrs, int defStyleAttr,
-                              int defStyleRes) {
+    public DropDownPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                              int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mContext = context;
         mAdapter = createAdapter();
@@ -93,6 +95,7 @@ public class DropDownPreference extends ListPreference {
      *
      * @return The custom {@link ArrayAdapter} that needs to be used with this class
      */
+    @NonNull
     protected ArrayAdapter createAdapter() {
         return new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_dropdown_item);
     }
@@ -123,7 +126,7 @@ public class DropDownPreference extends ListPreference {
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         mSpinner = holder.itemView.findViewById(R.id.spinner);
         mSpinner.setAdapter(mAdapter);
         mSpinner.setOnItemSelectedListener(mItemSelectedListener);

@@ -108,12 +108,10 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
             ) {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                        ui.canSwipe = false
                         container?.requestDisallowInterceptTouchEvent(true)
                         return@setOnTouchListener false
                     }
                     MotionEvent.ACTION_UP -> {
-                        ui.canSwipe = true
                         container?.requestDisallowInterceptTouchEvent(false)
                         return@setOnTouchListener true
                     }

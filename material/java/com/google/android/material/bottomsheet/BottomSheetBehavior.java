@@ -1383,7 +1383,7 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
   }
 
   @Nullable
-  private View getCurrentViewFromViewPager2(ViewPager2 viewPager) {
+  private View getCurrentViewFromViewPager2(@NonNull ViewPager2 viewPager) {
     int currentItem = viewPager.getCurrentItem();
     View child = viewPager.getChildAt(0);
     if (child instanceof RecyclerView) {
@@ -1539,7 +1539,7 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
     return velocityTracker.getYVelocity(activePointerId);
   }
 
-  void settleToState(@NonNull View child, int state) {
+  void settleToState(@NonNull View child, @State int state) {
     int top;
     if (state == STATE_COLLAPSED) {
       top = collapsedOffset;
@@ -1555,12 +1555,19 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
     } else if (hideable && state == STATE_HIDDEN) {
       top = parentHeight;
     } else {
-      throw new IllegalArgumentException("Illegal state argument: " + state);
+      // TODO(b/204062131): Possible illegal state when hideable is modified while the state is
+      // being updated.
+      Log.w(
+          TAG,
+          "The bottom sheet may be in an invalid state. Ensure `hideable` is true when using"
+              + " `STATE_HIDDEN`.");
+      return;
     }
     startSettlingAnimation(child, state, top, false);
   }
 
-  void startSettlingAnimation(View child, int state, int top, boolean settleFromViewDragHelper) {
+  void startSettlingAnimation(
+      View child, @State int state, int top, boolean settleFromViewDragHelper) {
     boolean startedSettling =
         viewDragHelper != null
             && (settleFromViewDragHelper
@@ -1619,7 +1626,7 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
         }
 
         @Override
-        public void onViewDragStateChanged(int state) {
+        public void onViewDragStateChanged(@State int state) {
           if (state == ViewDragHelper.STATE_DRAGGING && draggable) {
             setStateInternal(STATE_DRAGGING);
           }
@@ -1935,7 +1942,7 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
      * @deprecated Use {@link #SavedState(Parcelable, BottomSheetBehavior)} instead.
      */
     @Deprecated
-    public SavedState(Parcelable superstate, int state) {
+    public SavedState(Parcelable superstate, @State int state) {
       super(superstate);
       this.state = state;
     }
@@ -2114,19 +2121,20 @@ public class BottomSheetBehavior<V extends View> extends CoordinatorLayout.Behav
   }
 
   private void replaceAccessibilityActionForState(
-      V child, AccessibilityActionCompat action, int state) {
+      V child, AccessibilityActionCompat action, @State int state) {
     ViewCompat.replaceAccessibilityAction(
         child, action, null, createAccessibilityViewCommandForState(state));
   }
 
-  private int addAccessibilityActionForState(V child, @StringRes int stringResId, int state) {
+  private int addAccessibilityActionForState(
+      V child, @StringRes int stringResId, @State int state) {
     return ViewCompat.addAccessibilityAction(
         child,
         child.getResources().getString(stringResId),
         createAccessibilityViewCommandForState(state));
   }
 
-  private AccessibilityViewCommand createAccessibilityViewCommandForState(final int state) {
+  private AccessibilityViewCommand createAccessibilityViewCommandForState(@State final int state) {
     return new AccessibilityViewCommand() {
       @Override
       public boolean perform(@NonNull View view, @Nullable CommandArguments arguments) {

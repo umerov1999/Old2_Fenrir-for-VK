@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.SendAttachmentsActivity;
@@ -57,12 +58,12 @@ import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.DownloadWorkUtils;
 import dev.ragnarok.fenrir.util.Mp3InfoHelper;
+import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
+import dev.ragnarok.fenrir.util.hls.M3U8;
 import dev.ragnarok.fenrir.view.WeakViewAnimatorAdapter;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleOnSubscribe;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class AudioContainer extends LinearLayout {
@@ -126,21 +127,28 @@ public class AudioContainer extends LinearLayout {
     }
 
     private void getMp3AndBitrate(int accountId, Audio audio) {
-        if (isEmpty(audio.getUrl()) || audio.isHLS()) {
-            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(audio)).compose(RxUtils.applySingleIOToMainSchedulers())
-                    .subscribe(t -> getBitrate(t.get(0).getUrl(), t.get(0).getDuration()), e -> getBitrate(audio.getUrl(), audio.getDuration()));
+        Pair<Boolean, Boolean> mode = audio.needRefresh();
+        if (mode.getFirst()) {
+            audioListDisposable = mAudioInteractor.getByIdOld(accountId, Collections.singletonList(audio), mode.getSecond()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(t -> getBitrate(t.get(0)), e -> getBitrate(audio));
         } else {
-            getBitrate(audio.getUrl(), audio.getDuration());
+            getBitrate(audio);
         }
     }
 
-    private void getBitrate(String url, int duration) {
-        if (isEmpty(url)) {
+    private void getBitrate(@NonNull Audio audio) {
+        if (isEmpty(audio.getUrl())) {
             return;
         }
-        audioListDisposable = Mp3InfoHelper.getLength(Audio.getMp3FromM3u8(url)).compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(r -> CustomToast.CreateCustomToast(getContext()).showToast(Mp3InfoHelper.getBitrate(getContext(), duration, r)),
-                        e -> Utils.showErrorInAdapter((Activity) getContext(), e));
+        if (audio.isHLS()) {
+            audioListDisposable = new M3U8(audio.getUrl()).getLength().compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> CustomToast.CreateCustomToast(getContext()).showToast(Mp3InfoHelper.getBitrate(getContext(), audio.getDuration(), r)),
+                            e -> Utils.showErrorInAdapter((Activity) getContext(), e));
+        } else {
+            audioListDisposable = Mp3InfoHelper.getLength(audio.getUrl()).compose(RxUtils.applySingleIOToMainSchedulers())
+                    .subscribe(r -> CustomToast.CreateCustomToast(getContext()).showToast(Mp3InfoHelper.getBitrate(getContext(), audio.getDuration(), r)),
+                            e -> Utils.showErrorInAdapter((Activity) getContext(), e));
+        }
     }
 
     private void get_lyrics(Audio audio) {
@@ -170,6 +178,17 @@ public class AudioContainer extends LinearLayout {
     public void dispose() {
         mPlayerDisposable.dispose();
         audios = Collections.emptyList();
+    }
+
+    private void updateDownloadState(@NonNull AudioHolder holder, @NonNull Audio audio) {
+        if (audio.getDownloadIndicator() == 2) {
+            holder.saved.setImageResource(R.drawable.remote_cloud);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(getContext()));
+        } else {
+            holder.saved.setImageResource(R.drawable.save);
+            Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(getContext()));
+        }
+        holder.saved.setVisibility(audio.getDownloadIndicator() != 0 ? View.VISIBLE : View.GONE);
     }
 
     private void doMenu(AudioHolder holder, AttachmentsViewBinder.OnAttachmentsActionCallback mAttachmentsActionCallback, int position, View view, Audio audio, ArrayList<Audio> audios) {
@@ -250,9 +269,8 @@ public class AudioContainer extends LinearLayout {
                         }
                         break;
                     }
-                    holder.saved.setVisibility(View.VISIBLE);
-                    holder.saved.setImageResource(R.drawable.save);
-                    Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(getContext()));
+                    audio.setDownloadIndicator(1);
+                    updateDownloadState(holder, audio);
                     int ret = DownloadWorkUtils.doDownloadAudio(getContext(), audio, Settings.get().accounts().getCurrent(), false, false);
                     if (ret == 0)
                         CustomToast.CreateCustomToast(getContext()).showToastBottom(R.string.saved_audio);
@@ -260,7 +278,8 @@ public class AudioContainer extends LinearLayout {
                         Utils.ThemedSnack(view, ret == 1 ? R.string.audio_force_download : R.string.audio_force_download_pc, BaseTransientBottomBar.LENGTH_LONG).setAction(R.string.button_yes,
                                 v1 -> DownloadWorkUtils.doDownloadAudio(getContext(), audio, Settings.get().accounts().getCurrent(), true, false)).show();
                     } else {
-                        holder.saved.setVisibility(View.GONE);
+                        audio.setDownloadIndicator(0);
+                        updateDownloadState(holder, audio);
                         CustomToast.CreateCustomToast(getContext()).showToastBottom(R.string.error_audio);
                     }
                     break;
@@ -323,7 +342,7 @@ public class AudioContainer extends LinearLayout {
                 holder.tvTitle.setText(audio.getArtist());
                 holder.tvSubtitle.setText(audio.getTitle());
 
-                if (!audio.isLocal() && !audio.isLocalServer() && Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID && !audio.isHLS()) {
+                if (!audio.isLocal() && !audio.isLocalServer() && Constants.DEFAULT_ACCOUNT_TYPE == AccountType.VK_ANDROID && !audio.isHLS()) {
                     holder.quality.setVisibility(View.VISIBLE);
                     if (audio.getIsHq()) {
                         holder.quality.setImageResource(R.drawable.high_quality);
@@ -372,18 +391,7 @@ public class AudioContainer extends LinearLayout {
                     holder.time.setText(AppTextUtils.getDurationString(audio.getDuration()));
                 }
 
-                audioListDisposable = Single.create((SingleOnSubscribe<Integer>) emitter -> emitter.onSuccess(DownloadWorkUtils.TrackIsDownloaded(audio)))
-                        .compose(RxUtils.applySingleIOToMainSchedulers())
-                        .subscribe(v -> {
-                            if (v == 2) {
-                                holder.saved.setImageResource(R.drawable.remote_cloud);
-                                Utils.setColorFilter(holder.saved, CurrentTheme.getColorSecondary(getContext()));
-                            } else {
-                                holder.saved.setImageResource(R.drawable.save);
-                                Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(getContext()));
-                            }
-                            holder.saved.setVisibility(v != 0 ? View.VISIBLE : View.GONE);
-                        }, RxUtils.ignore());
+                updateDownloadState(holder, audio);
                 holder.lyric.setVisibility(audio.getLyricsId() != 0 ? View.VISIBLE : View.GONE);
 
                 holder.my.setVisibility(audio.getOwnerId() == Settings.get().accounts().getCurrent() ? View.VISIBLE : View.GONE);
@@ -394,9 +402,8 @@ public class AudioContainer extends LinearLayout {
                         }
                         return false;
                     }
-                    holder.saved.setVisibility(View.VISIBLE);
-                    holder.saved.setImageResource(R.drawable.save);
-                    Utils.setColorFilter(holder.saved, CurrentTheme.getColorPrimary(getContext()));
+                    audio.setDownloadIndicator(1);
+                    updateDownloadState(holder, audio);
                     int ret = DownloadWorkUtils.doDownloadAudio(getContext(), audio, Settings.get().accounts().getCurrent(), false, false);
                     if (ret == 0)
                         CustomToast.CreateCustomToast(getContext()).showToastBottom(R.string.saved_audio);
@@ -405,7 +412,8 @@ public class AudioContainer extends LinearLayout {
                                 v1 -> DownloadWorkUtils.doDownloadAudio(getContext(), audio, Settings.get().accounts().getCurrent(), true, false)).show();
 
                     } else {
-                        holder.saved.setVisibility(View.GONE);
+                        audio.setDownloadIndicator(0);
+                        updateDownloadState(holder, audio);
                         CustomToast.CreateCustomToast(getContext()).showToastBottom(R.string.error_audio);
                     }
                     return true;

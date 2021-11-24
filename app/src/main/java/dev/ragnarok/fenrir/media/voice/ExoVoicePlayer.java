@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -18,7 +19,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.media.exo.ExoUtil;
 import dev.ragnarok.fenrir.model.ProxyConfig;
@@ -32,7 +33,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
 
     private final Context app;
     private final ProxyConfig proxyConfig;
-    private SimpleExoPlayer exoPlayer;
+    private ExoPlayer exoPlayer;
     private int status;
     private AudioEntry playingEntry;
     private boolean supposedToBePlaying;
@@ -94,7 +95,7 @@ public class ExoVoicePlayer implements IVoicePlayer {
         exoPlayer = new SimpleExoPlayer.Builder(app, new DefaultRenderersFactory(app).setExtensionRendererMode(extensionRenderer)).build();
         exoPlayer.setWakeMode(C.WAKE_MODE_NETWORK);
 
-        String userAgent = Constants.USER_AGENT(Account_Types.BY_TYPE);
+        String userAgent = Constants.USER_AGENT(AccountType.BY_TYPE);
 
         String url = isOpusSupported() ? Utils.firstNonEmptyString(playingEntry.getAudio().getLinkOgg(), playingEntry.getAudio().getLinkMp3()) : playingEntry.getAudio().getLinkMp3();
 

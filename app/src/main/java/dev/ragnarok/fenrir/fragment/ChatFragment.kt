@@ -32,7 +32,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.yalantis.ucrop.UCrop
 import dev.ragnarok.fenrir.*
-import dev.ragnarok.fenrir.CheckDonate.DonateFutures
 import dev.ragnarok.fenrir.Extensions.Companion.nullOrEmpty
 import dev.ragnarok.fenrir.activity.*
 import dev.ragnarok.fenrir.adapter.AttachmentsBottomSheetAdapter
@@ -171,9 +170,6 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPresenter, IChatView>(), IChatV
         StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            if (!CheckDonate.isFullVersion(requireActivity(), DonateFutures.SEND_CUSTOM_VOICE)) {
-                return@registerForActivityResult
-            }
             result.data?.getStringExtra(FileManagerFragment.returnFileParameter)?.let {
                 MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.info)
@@ -1710,24 +1706,10 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPresenter, IChatView>(), IChatV
     }
 
     private fun doDownloadChat(action: String) {
-        if (!CheckDonate.isFullVersion(
-                requireActivity(),
-                CheckDonate.DonateFutures.DOWNLOADING_MESSAGES
-            )
-        ) {
-            return
-        }
         presenter?.fireChatDownloadClick(requireActivity(), action)
     }
 
     override fun onMyStickerClick(file: Sticker.LocalSticker) {
-        if (!CheckDonate.isFullVersion(
-                requireActivity(),
-                CheckDonate.DonateFutures.DOWNLOAD_STICKERS
-            )
-        ) {
-            return
-        }
         presenter?.fireSendMyStickerClick(file)
     }
 

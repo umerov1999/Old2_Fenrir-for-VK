@@ -55,7 +55,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
+import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
@@ -463,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                             .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
 
                     Utils.checkMusicInPC(this);
+                    CheckDonate.floodControl();
 
                     if (!Settings.get().other().appStoredVersionEqual()) {
                         PreferencesFragment.cleanUICache(this, false);
@@ -591,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
             } else {
                 mToolbar.setNavigationIcon(R.drawable.arrow_left);
                 if (getMainActivityTransform() != MainActivityTransforms.SWIPEBLE) {
-                    mToolbar.setNavigationOnClickListener(v -> openNavigationPage(AbsNavigationFragment.SECTION_ITEM_FEED));
+                    mToolbar.setNavigationOnClickListener(v -> openNavigationPage(AbsNavigationFragment.SECTION_ITEM_FEED, false));
                 } else {
                     mToolbar.setNavigationOnClickListener(v -> onBackPressed());
                 }
@@ -612,6 +614,9 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         updateNotificationCount(newAccountId);
         if (!Settings.get().other().isDeveloper_mode()) {
             MusicPlaybackController.stop();
+        }
+        if (isAuthValid()) {
+            CheckDonate.floodControl();
         }
     }
 
@@ -680,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                             Artist = arr[0];
                             TrackName = TrackName.replace(Artist + " - ", "");
                         }
-                        Audio tmp = new Audio().setIsLocal(true).setThumb_image_big("share_" + i).setThumb_image_little("share_" + i).setUrl(i.toString()).setOwnerId(mAccountId).setArtist(Artist).setTitle(TrackName).setId(i.toString().hashCode());
+                        Audio tmp = new Audio().setIsLocal().setThumb_image_big("share_" + i).setThumb_image_little("share_" + i).setUrl(i.toString()).setOwnerId(mAccountId).setArtist(Artist).setTitle(TrackName).setId(i.toString().hashCode());
                         playlist.add(tmp);
                     }
                     intent.removeExtra(Intent.EXTRA_STREAM);
@@ -692,13 +697,13 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
         if (extras != null && ActivityUtils.checkInputExist(this)) {
             mCurrentFrontSection = AbsNavigationFragment.SECTION_ITEM_DIALOGS;
-            openNavigationPage(mCurrentFrontSection);
+            openNavigationPage(mCurrentFrontSection, false);
             return true;
         }
 
         if (ACTION_SEND_ATTACHMENTS.equals(action)) {
             mCurrentFrontSection = AbsNavigationFragment.SECTION_ITEM_DIALOGS;
-            openNavigationPage(mCurrentFrontSection);
+            openNavigationPage(mCurrentFrontSection, false);
             return true;
         }
 
@@ -752,7 +757,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                     Artist = arr[0];
                     TrackName = TrackName.replace(Artist + " - ", "");
                 }
-                Audio tmp = new Audio().setIsLocal(true).setThumb_image_big("share_" + data).setThumb_image_little("share_" + data).setUrl(data.toString()).setOwnerId(mAccountId).setArtist(Artist).setTitle(TrackName).setId(data.toString().hashCode());
+                Audio tmp = new Audio().setIsLocal().setThumb_image_big("share_" + data).setThumb_image_little("share_" + data).setUrl(data.toString()).setOwnerId(mAccountId).setArtist(Artist).setTitle(TrackName).setId(data.toString().hashCode());
                 MusicPlaybackService.startForPlayList(this, new ArrayList<>(Collections.singletonList(tmp)), 0, false);
                 PlaceFactory.getPlayerPlace(mAccountId).tryOpenWith(this);
                 return false;
@@ -821,7 +826,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         }
 
         if (item.getType() == AbsMenuItem.TYPE_ICON) {
-            openNavigationPage(item, clearBackStack);
+            openNavigationPage(item, clearBackStack, true);
         }
 
         if (item.getType() == AbsMenuItem.TYPE_RECENT_CHAT) {
@@ -836,8 +841,8 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         return (AbsNavigationFragment) fm.findFragmentById(R.id.additional_navigation_menu);
     }
 
-    private void openNavigationPage(@NonNull AbsMenuItem item) {
-        openNavigationPage(item, true);
+    private void openNavigationPage(@NonNull AbsMenuItem item, boolean menu) {
+        openNavigationPage(item, true, menu);
     }
 
     private void startAccountsActivity() {
@@ -863,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         Logger.d(TAG, "Back stack was cleared");
     }
 
-    private void openNavigationPage(@NonNull AbsMenuItem item, boolean clearBackStack) {
+    private void openNavigationPage(@NonNull AbsMenuItem item, boolean clearBackStack, boolean menu) {
         if (item.getType() == AbsMenuItem.TYPE_RECENT_CHAT) {
             openRecentChat((RecentChat) item);
             return;
@@ -878,6 +883,9 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         mCurrentFrontSection = item;
         getNavigationFragment().selectPage(item);
 
+        if (Settings.get().other().isDo_not_clear_back_stack() && menu && MusicPlaybackController.isPlaying()) {
+            clearBackStack = !clearBackStack;
+        }
         if (clearBackStack) {
             clearBackStack();
         }
@@ -1009,11 +1017,11 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             if (getMainActivityTransform() != MainActivityTransforms.SWIPEBLE) {
                 if (isFragmentWithoutNavigation()) {
-                    openNavigationPage(AbsNavigationFragment.SECTION_ITEM_FEED);
+                    openNavigationPage(AbsNavigationFragment.SECTION_ITEM_FEED, false);
                     return;
                 }
                 if (isChatFragment()) {
-                    openNavigationPage(AbsNavigationFragment.SECTION_ITEM_DIALOGS);
+                    openNavigationPage(AbsNavigationFragment.SECTION_ITEM_DIALOGS, false);
                     return;
                 }
             }
@@ -1380,6 +1388,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
             case Place.SIMPLE_PHOTO_GALLERY:
             case Place.VK_PHOTO_TMP_SOURCE:
             case Place.VK_PHOTO_ALBUM_GALLERY_SAVED:
+            case Place.VK_PHOTO_ALBUM_GALLERY_NATIVE:
                 attachToFront(PhotoPagerFragment.newInstance(place.getType(), args));
                 break;
 
@@ -1400,7 +1409,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 break;
 
             case Place.NOTIFICATIONS:
-                if (Settings.get().accounts().getType(mAccountId) == Account_Types.VK_ANDROID || Settings.get().accounts().getType(mAccountId) == Account_Types.VK_ANDROID_HIDDEN) {
+                if (Settings.get().accounts().getType(mAccountId) == AccountType.VK_ANDROID || Settings.get().accounts().getType(mAccountId) == AccountType.VK_ANDROID_HIDDEN) {
                     attachToFront(AnswerVKOfficialFragment.newInstance(Settings.get().accounts().getCurrent()));
                     break;
                 }
@@ -1564,7 +1573,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 break;
 
             case Place.ARTIST:
-                if (Settings.get().accounts().getType(mAccountId) == Account_Types.VK_ANDROID || Settings.get().accounts().getType(mAccountId) == Account_Types.VK_ANDROID_HIDDEN) {
+                if (Settings.get().accounts().getType(mAccountId) == AccountType.VK_ANDROID || Settings.get().accounts().getType(mAccountId) == AccountType.VK_ANDROID_HIDDEN) {
                     attachToFront(AudioCatalogFragment.newInstance(args));
                     break;
                 }
@@ -1697,7 +1706,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
             getNavigationFragment().closeSheet();
             onSheetItemSelected(item, false);
         } else {
-            openNavigationPage(item);
+            openNavigationPage(item, true);
         }
     }
 

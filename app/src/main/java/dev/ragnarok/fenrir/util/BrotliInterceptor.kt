@@ -11,7 +11,7 @@ import okio.source
 
 object BrotliInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response =
-        if (chain.request().header("Accept-Encoding") == null) {
+        if (chain.request().header("Accept-Encoding") == null && Utils.isCompressTraffic()) {
             val request = chain.request().newBuilder()
                 .header("Accept-Encoding", "br,gzip")
                 .build()

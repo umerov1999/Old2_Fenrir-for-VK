@@ -35,8 +35,6 @@ import com.google.android.material.textview.MaterialTextView
 import com.squareup.picasso3.BitmapSafeResize.isOverflowCanvas
 import com.squareup.picasso3.BitmapSafeResize.setHardwareRendering
 import com.squareup.picasso3.BitmapSafeResize.setMaxResolution
-import dev.ragnarok.fenrir.CheckDonate.DonateFutures.*
-import dev.ragnarok.fenrir.CheckDonate.isFullVersion
 import dev.ragnarok.fenrir.Constants.API_VERSION
 import dev.ragnarok.fenrir.Constants.USER_AGENT_ACCOUNT
 import dev.ragnarok.fenrir.Extensions.Companion.fromIOToMain
@@ -50,6 +48,8 @@ import dev.ragnarok.fenrir.activity.alias.*
 import dev.ragnarok.fenrir.api.model.LocalServerSettings
 import dev.ragnarok.fenrir.api.model.PlayerCoverBackgroundSettings
 import dev.ragnarok.fenrir.db.DBHelper
+import dev.ragnarok.fenrir.db.Stores
+import dev.ragnarok.fenrir.dedicated.DedicatedDialog.Companion.showDedicated
 import dev.ragnarok.fenrir.domain.InteractorFactory
 import dev.ragnarok.fenrir.filepicker.model.DialogConfigs
 import dev.ragnarok.fenrir.filepicker.model.DialogProperties
@@ -94,7 +94,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             changeDrawerBackground(false, result.data)
-            //requireActivity().recreate();
+            //requireActivity().recreate()
         }
     }
     private val requestDarkBackground = registerForActivityResult(
@@ -102,7 +102,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
             changeDrawerBackground(true, result.data)
-            //requireActivity().recreate();
+            //requireActivity().recreate()
         }
     }
     private val requestPin = registerForActivityResult(
@@ -123,7 +123,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val root = super.onCreateView(inflater, container, savedInstanceState)!!
+        val root = super.onCreateView(inflater, container, savedInstanceState)
         val searchView: MySearchView = root.findViewById(R.id.searchview)
         searchView.setOnQueryTextListener(object : MySearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -289,9 +289,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("player_background")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                if (!isFullVersion(requireActivity(), PAYER_BACKGROUND_SETTINGS)) {
-                    return@OnPreferenceClickListener false
-                }
                 val view = View.inflate(requireActivity(), R.layout.entry_player_background, null)
                 val enabledRotation: MaterialCheckBox = view.findViewById(R.id.enabled_anim)
                 val invertRotation: MaterialCheckBox = view.findViewById(R.id.edit_invert_rotation)
@@ -374,9 +371,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             }
         findPreference<Preference>("local_media_server")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                if (!isFullVersion(requireActivity(), LOCAL_MEDIA_SERVER)) {
-                    return@OnPreferenceClickListener false
-                }
                 val view = View.inflate(requireActivity(), R.layout.entry_local_server, null)
                 val url: TextInputEditText = view.findViewById(R.id.edit_url)
                 val password: TextInputEditText = view.findViewById(R.id.edit_password)
@@ -529,14 +523,15 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
         findPreference<Preference>("refresh_audio_token")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
-                disposables.add(RefreshToken.upgradeTokenRx(
-                    accountId,
-                    Settings.get().accounts().getAccessToken(accountId)
-                )
-                    .fromIOToMain()
-                    .subscribe({
-                        CreateCustomToast(requireActivity()).showToast(if (it) R.string.success else (R.string.error))
-                    }, RxUtils.ignore())
+                disposables.add(
+                    RefreshToken.upgradeTokenRx(
+                        accountId,
+                        Settings.get().accounts().getAccessToken(accountId)
+                    )
+                        .fromIOToMain()
+                        .subscribe({
+                            CreateCustomToast(requireActivity()).showToast(if (it) R.string.success else (R.string.error))
+                        }, RxUtils.ignore())
                 )
                 true
             }
@@ -565,10 +560,22 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 }
                 MaterialAlertDialogBuilder(requireActivity())
                     .setView(view)
+                    .setOnDismissListener {
+                        showDedicated(
+                            requireActivity(),
+                            accountId
+                        )
+                    }
                     .show()
                 true
             }
         }
+
+        findPreference<Preference>("dedicated")?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                showDedicated(requireActivity(), accountId)
+                true
+            }
 
         findPreference<Preference>("additional_debug")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
@@ -914,6 +921,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             }
         findPreference<Preference>("cache_cleaner")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
+                Stores.getInstance().tempStore().clearAll()
                 cleanUICache(requireActivity(), false)
                 cleanCache(requireActivity(), true)
                 true
@@ -959,6 +967,12 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 } else {
                     KeepLongpollService.stop(preference.context)
                 }
+                true
+            }
+        findPreference<Preference>("compress_traffic")?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _: Preference, newValue: Any ->
+                val enable = newValue as Boolean
+                Utils.setCompressTraffic(enable)
                 true
             }
     }
@@ -1042,9 +1056,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun showSelectIcon() {
-        if (!isFullVersion(requireActivity(), CHANGE_APP_ICON)) {
-            return
-        }
         val view = View.inflate(requireActivity(), R.layout.icon_select_alert, null)
         view.findViewById<View>(R.id.default_icon).setOnClickListener {
             ToggleAlias().toggleTo(

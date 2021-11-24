@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -51,9 +51,9 @@ public class RefreshToken {
     }
 
     public static boolean upgradeToken(int account, String oldToken) {
-        if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.KATE) {
+        if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.KATE) {
             return upgradeTokenKate(account, oldToken);
-        } else if (Constants.DEFAULT_ACCOUNT_TYPE == Account_Types.VK_ANDROID) {
+        } else if (Constants.DEFAULT_ACCOUNT_TYPE == AccountType.VK_ANDROID) {
             return upgradeTokenOfficial(account, oldToken);
         }
         return false;

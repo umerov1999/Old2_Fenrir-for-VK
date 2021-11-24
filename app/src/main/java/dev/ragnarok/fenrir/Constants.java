@@ -15,23 +15,23 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class Constants {
-    public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 15;
+    public static final int RANDOM_PAGAN_SYMBOL_NUMBER = 16;
     public static final Integer[] RANDOM_EXCLUDE_PAGAN_SYMBOLS = null;
 
     public static final String API_VERSION = "5.131";
     public static final int DATABASE_VERSION = 11;
 
-    public static final @Account_Types
+    public static final @AccountType
     int DEFAULT_ACCOUNT_TYPE = BuildConfig.DEFAULT_ACCOUNT_TYPE;
 
-    public static final boolean IS_HAS_LOGIN_WEB = DEFAULT_ACCOUNT_TYPE == Account_Types.KATE;
-    public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == Account_Types.KATE ? API_VERSION : "5.122";
+    public static final boolean IS_HAS_LOGIN_WEB = DEFAULT_ACCOUNT_TYPE == AccountType.KATE;
+    public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == AccountType.KATE ? API_VERSION : "5.122";
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".file_provider";
 
-    public static final String VK_ANDROID_APP_VERSION_NAME = "6.59";
-    public static final String VK_ANDROID_APP_VERSION_CODE = "9802";
-    public static final String KATE_APP_VERSION_NAME = "80 lite";
-    public static final String KATE_APP_VERSION_CODE = "502";
+    public static final String VK_ANDROID_APP_VERSION_NAME = "7.2";
+    public static final String VK_ANDROID_APP_VERSION_CODE = "10076";
+    public static final String KATE_APP_VERSION_NAME = "81 lite";
+    public static final String KATE_APP_VERSION_CODE = "503";
     public static final int API_ID = BuildConfig.VK_API_APP_ID;
     public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;
     public static final String MAIN_OWNER_FIELDS = UserColumns.API_FIELDS + "," + GroupColumns.API_FIELDS;
@@ -58,22 +58,22 @@ public class Constants {
     }
 
     @NonNull
-    private static String getTypedUserAgent(@Account_Types int type) {
-        if (type == Account_Types.VK_ANDROID_HIDDEN || type == Account_Types.KATE_HIDDEN) {
+    private static String getTypedUserAgent(@AccountType int type) {
+        if (type == AccountType.VK_ANDROID_HIDDEN || type == AccountType.KATE_HIDDEN) {
             String device = Settings.get().accounts().getDevice(Settings.get().accounts().getCurrent());
             if (!Utils.isEmpty(device)) {
-                return type == Account_Types.KATE_HIDDEN ? String.format(Locale.US, "KateMobileAndroid/%s-%s (Android %s; SDK %d; %s; %s; %s; %s)", KATE_APP_VERSION_NAME, KATE_APP_VERSION_CODE, Build.VERSION.RELEASE, Build.VERSION.SDK_INT, BuildConfig.FAKE_ABI, device, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION()) : String.format(Locale.US, "VKAndroidApp/%s-%s (Android %s; SDK %d; %s; %s; %s; %s)", VK_ANDROID_APP_VERSION_NAME, VK_ANDROID_APP_VERSION_CODE, Build.VERSION.RELEASE, Build.VERSION.SDK_INT, BuildConfig.FAKE_ABI, device, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
+                return type == AccountType.KATE_HIDDEN ? String.format(Locale.US, "KateMobileAndroid/%s-%s (Android %s; SDK %d; %s; %s; %s; %s)", KATE_APP_VERSION_NAME, KATE_APP_VERSION_CODE, Build.VERSION.RELEASE, Build.VERSION.SDK_INT, BuildConfig.FAKE_ABI, device, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION()) : String.format(Locale.US, "VKAndroidApp/%s-%s (Android %s; SDK %d; %s; %s; %s; %s)", VK_ANDROID_APP_VERSION_NAME, VK_ANDROID_APP_VERSION_CODE, Build.VERSION.RELEASE, Build.VERSION.SDK_INT, BuildConfig.FAKE_ABI, device, DEVICE_COUNTRY_CODE, SCREEN_RESOLUTION());
             }
         }
         switch (type) {
-            case Account_Types.BY_TYPE:
-            case Account_Types.VK_ANDROID:
+            case AccountType.BY_TYPE:
+            case AccountType.VK_ANDROID:
                 return VK_ANDROID_USER_AGENT;
-            case Account_Types.VK_ANDROID_HIDDEN:
+            case AccountType.VK_ANDROID_HIDDEN:
                 return VK_ANDROID_USER_AGENT_FAKE;
-            case Account_Types.KATE:
+            case AccountType.KATE:
                 return KATE_USER_AGENT;
-            case Account_Types.KATE_HIDDEN:
+            case AccountType.KATE_HIDDEN:
                 return KATE_USER_AGENT_FAKE;
         }
         return Utils.BY_DEFAULT_ACCOUNT_TYPE(VK_ANDROID_USER_AGENT, KATE_USER_AGENT);
@@ -89,8 +89,8 @@ public class Constants {
     }
 
     @NonNull
-    public static String USER_AGENT(@Account_Types int type) {
-        if (type != Account_Types.BY_TYPE) {
+    public static String USER_AGENT(@AccountType int type) {
+        if (type != AccountType.BY_TYPE) {
             return getTypedUserAgent(type);
         }
         int account_id = Settings.get().accounts().getCurrent();

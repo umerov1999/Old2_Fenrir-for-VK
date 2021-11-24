@@ -138,7 +138,10 @@ public class AudioInteractor implements IAudioInteractor {
     }
 
     @Override
-    public Single<List<Audio>> getByIdOld(int accountId, @NonNull List<Audio> audios) {
+    public Single<List<Audio>> getByIdOld(int accountId, @NonNull List<Audio> audios, boolean old) {
+        if (!old) {
+            return getById(accountId, audios);
+        }
         return networker.vkDefault(accountId)
                 .audio()
                 .getByIdOld(audios)

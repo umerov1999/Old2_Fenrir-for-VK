@@ -51,7 +51,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
@@ -324,7 +324,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
         resolveEmptyText();
     }
 
-    private void processNewAccount(int uid, String token, @Account_Types int type, String Login, String Password, String TwoFA, boolean isCurrent, boolean needSave) {
+    private void processNewAccount(int uid, String token, @AccountType int type, String Login, String Password, String TwoFA, boolean isCurrent, boolean needSave) {
         //Accounts account = new Accounts(token, uid);
 
         // важно!! Если мы получили новый токен, то необходимо удалить запись
@@ -604,7 +604,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                             int id = Integer.parseInt(((TextInputEditText) root.findViewById(R.id.edit_user_id)).getText().toString().trim());
                             String access_token = ((TextInputEditText) root.findViewById(R.id.edit_access_token)).getText().toString().trim();
                             int selected = ((Spinner) root.findViewById(R.id.access_token_type)).getSelectedItemPosition();
-                            int[] types = {Account_Types.VK_ANDROID, Account_Types.KATE, Account_Types.VK_ANDROID_HIDDEN, Account_Types.KATE_HIDDEN};
+                            int[] types = {AccountType.VK_ANDROID, AccountType.KATE, AccountType.VK_ANDROID_HIDDEN, AccountType.KATE_HIDDEN};
                             if (!Utils.isEmpty(access_token) && id != 0 && selected >= 0 && selected < 3) {
                                 processNewAccount(id, access_token, types[selected], null, null, "fenrir_app", false, false);
                             }

@@ -28,9 +28,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import ealvatag.audio.wav.WavOptions;
-import ealvatag.audio.wav.WavSaveOptions;
-import ealvatag.audio.wav.WavSaveOrder;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
@@ -42,8 +39,6 @@ import ealvatag.tag.options.PadNumberOption;
 import ealvatag.tag.reference.GenreTypes;
 import ealvatag.tag.reference.ID3V2Version;
 import ealvatag.tag.reference.Languages;
-import ealvatag.tag.vorbiscomment.VorbisAlbumArtistReadOptions;
-import ealvatag.tag.vorbiscomment.VorbisAlbumArtistSaveOptions;
 import ealvatag.utils.Check;
 
 @SuppressWarnings("unused")
@@ -54,11 +49,6 @@ public class TagOptionSingleton {
     private static final Lock tagOptionTableLock = new ReentrantLock();
     private static String defaultOptions = DEFAULT;
     private boolean isWriteWavForTwonky;
-    private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
-    private WavSaveOptions wavSaveOptions = WavSaveOptions.SAVE_BOTH;
-    private WavSaveOrder wavSaveOrder = WavSaveOrder.INFO_THEN_ID3;
-    private VorbisAlbumArtistSaveOptions vorbisAlbumArtistSaveOptions = VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST;
-    private VorbisAlbumArtistReadOptions vorbisAlbumArtistReadOptions = VorbisAlbumArtistReadOptions.READ_ALBUMARTIST_THEN_JRIVER;
     private HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>> keywordMap = new HashMap<>();
 
     /**
@@ -299,46 +289,6 @@ public class TagOptionSingleton {
 
     public void setInstanceKey(String instanceKey) {
         defaultOptions = instanceKey;
-    }
-
-    public WavOptions getWavOptions() {
-        return wavOptions;
-    }
-
-    public void setWavOptions(WavOptions wavOptions) {
-        this.wavOptions = wavOptions;
-    }
-
-    public WavSaveOptions getWavSaveOptions() {
-        return wavSaveOptions;
-    }
-
-    public void setWavSaveOptions(WavSaveOptions wavSaveOptions) {
-        this.wavSaveOptions = wavSaveOptions;
-    }
-
-    public WavSaveOrder getWavSaveOrder() {
-        return wavSaveOrder;
-    }
-
-    public void setWavSaveOrder(WavSaveOrder wavSaveOrder) {
-        this.wavSaveOrder = wavSaveOrder;
-    }
-
-    public VorbisAlbumArtistSaveOptions getVorbisAlbumArtistSaveOptions() {
-        return vorbisAlbumArtistSaveOptions;
-    }
-
-    public void setVorbisAlbumArtistSaveOptions(VorbisAlbumArtistSaveOptions vorbisAlbumArtistSaveOptions) {
-        this.vorbisAlbumArtistSaveOptions = vorbisAlbumArtistSaveOptions;
-    }
-
-    public void setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions vorbisAlbumArtistReadOptions) {
-        this.vorbisAlbumArtistReadOptions = vorbisAlbumArtistReadOptions;
-    }
-
-    public VorbisAlbumArtistReadOptions getVorbisAlbumArtisReadOptions() {
-        return vorbisAlbumArtistReadOptions;
     }
 
     public boolean isFilenameTagSave() {
@@ -633,8 +583,6 @@ public class TagOptionSingleton {
      */
     public void setToDefault() {
         isWriteWavForTwonky = false;
-        wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
-        wavSaveOptions = WavSaveOptions.SAVE_BOTH;
         keywordMap = new HashMap<>();
         filenameTagSave = false;
         id3v1Save = true;

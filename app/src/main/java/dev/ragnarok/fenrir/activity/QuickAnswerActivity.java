@@ -337,7 +337,7 @@ public class QuickAnswerActivity extends AppCompatActivity {
                 public void onVoicePlayButtonClick(int voiceHolderId, int voiceMessageId, @NonNull VoiceMessage voiceMessage) {
                     Audio audio = new Audio().setId(voiceMessage.getId()).setOwnerId(voiceMessage.getOwnerId())
                             .setTitle(voiceMessage.getId() + "_" + voiceMessage.getOwnerId()).setArtist("Voice")
-                            .setIsLocal(true).setDuration(voiceMessage.getDuration()).setUrl(firstNonEmptyString(voiceMessage.getLinkMp3(), voiceMessage.getLinkOgg()));
+                            .setIsLocal().setDuration(voiceMessage.getDuration()).setUrl(firstNonEmptyString(voiceMessage.getLinkMp3(), voiceMessage.getLinkOgg()));
                     MusicPlaybackService.startForPlayList(QuickAnswerActivity.this, new ArrayList<>(Collections.singletonList(audio)), 0, false);
                 }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.customview.widget.ViewDragHelper
 import dev.ragnarok.fenrir.settings.Settings
+import dev.ragnarok.fenrir.view.TouchImageView
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -32,7 +33,6 @@ class VerticalSwipeBehavior<V : View> : CoordinatorLayout.Behavior<V> {
     var clamp: VerticalClamp = FractionClamp(1f, 1f)
     var settle: PostAction = OriginSettleAction()
     var listener: SwipeListener? = null
-    var canSwipe = true
 
     @Suppress("unused")
     constructor() : super()
@@ -50,9 +50,7 @@ class VerticalSwipeBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         private var originTop: Int = 0
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-            if (!canSwipe)
-                return false
-            return currentPointer == INVALID_POINTER_ID || pointerId == currentPointer
+            return (currentPointer == INVALID_POINTER_ID || pointerId == currentPointer) && (child !is TouchImageView || !child.isZoomed)
         }
 
         override fun onViewCaptured(child: View, activePointerId: Int) {

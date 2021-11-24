@@ -1,7 +1,7 @@
 package dev.ragnarok.fenrir.settings.theme
 
-import android.os.Build
 import androidx.annotation.StyleRes
+import com.google.android.material.color.DynamicColors
 import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.R
 import dev.ragnarok.fenrir.settings.Settings
@@ -280,7 +280,7 @@ object ThemesController {
             R.style.App_DayNight_Dynamic,
             R.style.App_DayNight_Dynamic_Amoled,
             R.style.App_DayNight_Dynamic_MD1
-        ).toast("#4D7198", "#448AFF").enable(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S),
+        ).toast("#4D7198", "#448AFF").enable(DynamicColors.isDynamicColorAvailable()),
     )
     private var randSymbol =
         Utils.nextIntInRangeButExclude(

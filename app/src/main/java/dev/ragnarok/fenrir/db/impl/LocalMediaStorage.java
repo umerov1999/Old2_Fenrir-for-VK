@@ -72,7 +72,7 @@ class LocalMediaStorage extends AbsStorage implements ILocalMediaStorage {
             dur /= 1000;
         }
 
-        Audio ret = new Audio().setId(data.hashCode()).setOwnerId(accountId).setDuration(dur).setIsLocal(true)
+        Audio ret = new Audio().setIsLocal().setId(data.hashCode()).setOwnerId(accountId).setDuration(dur)
                 .setUrl(data).setTitle(TrackName).setArtist(Artist);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return ret.setThumb_image_big(data).setThumb_image_little(data);

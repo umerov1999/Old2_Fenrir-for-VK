@@ -128,6 +128,7 @@ public class ChatActivityBubbles extends NoMainActivity implements PlaceProvider
             case Place.SIMPLE_PHOTO_GALLERY:
             case Place.VK_PHOTO_TMP_SOURCE:
             case Place.VK_PHOTO_ALBUM_GALLERY_SAVED:
+            case Place.VK_PHOTO_ALBUM_GALLERY_NATIVE:
                 attachToFront(PhotoPagerFragment.newInstance(place.getType(), args));
                 break;
 

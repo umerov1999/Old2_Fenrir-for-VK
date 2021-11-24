@@ -19,6 +19,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +33,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import dev.ragnarok.fenrir.util.Utils;
+import io.reactivex.rxjava3.core.Single;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -41,10 +44,10 @@ public class M3U8 {
     private final String url;
     private final OutputStream output;
 
-    public M3U8(String url, String savefilename) {
+    public M3U8(@NonNull String url, @NonNull String filename) {
         try {
             this.url = url;
-            File file = new File(savefilename).getAbsoluteFile();
+            File file = new File(filename).getAbsoluteFile();
             file.getParentFile().mkdirs();
             output = new FileOutputStream(file);
         } catch (FileNotFoundException ex) {
@@ -52,9 +55,9 @@ public class M3U8 {
         }
     }
 
-    public M3U8(String url, OutputStream stream) {
+    public M3U8(@NonNull String url) {
         this.url = url;
-        output = stream;
+        output = null;
     }
 
     private static @Nullable
@@ -73,7 +76,8 @@ public class M3U8 {
         }
     }
 
-    private static Property checkProperty(String line) {
+    private static @Nullable
+    Property checkProperty(String line) {
         Property property = parseLine(line);
         if (property.type.equals("FILE")) return property;
         if (property.type.equals("EXT-X-STREAM-INF") && property.properties != null) {
@@ -173,7 +177,103 @@ public class M3U8 {
         return list.toArray(new String[]{});
     }
 
-    public boolean run(@NonNull OkHttpClient client) {
+    public Single<Long> getLength() {
+        return Single.create(ss -> {
+            long ret = 0L;
+            OkHttpClient client = Utils.createOkHttp(60).build();
+            try {
+                URL mediaURL;
+                URL m3u8Url = new URL(url);
+                try (InputStream is = getStream(client, m3u8Url)) {
+                    if (is == null) {
+                        ss.onSuccess(0L);
+                        return;
+                    }
+                    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+                        String line;
+                        ArrayList<Map.Entry<Long, URL>> urls = new ArrayList<>();
+                        long newurl = 0;
+                        while ((line = br.readLine()) != null) {
+                            line = line.trim();
+                            Property property = checkProperty(line);
+                            if (property == null) {
+                                newurl = 0;
+                            } else if (property.type.equals("EXT-X-STREAM-INF")) {
+                                if (property.properties.get("BANDWIDTH") != null)
+                                    newurl = Long.parseLong(property.properties.get("BANDWIDTH"));
+                                else newurl = 1;
+                            } else if (property.type.equals("FILE") && newurl > 0) {
+                                urls.add(new AbstractMap.SimpleEntry<>(newurl, new URL(m3u8Url, line)));
+                                newurl = 0;
+                            } else {
+                                newurl = 0;
+                            }
+                        }
+                        Collections.sort(urls, (o1, o2) -> -Long.compare(o1.getKey(), o2.getKey()));
+                        if (urls.size() > 0) {
+                            m3u8Url = urls.get(0).getValue();
+                        }
+                    }
+                }
+                mediaURL = m3u8Url;
+                ArrayList<TSDownload> list = new ArrayList<>();
+                InputStream iis = getStream(client, mediaURL);
+                if (iis == null) {
+                    ss.onSuccess(0L);
+                    return;
+                }
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(iis))) {
+                    KeyType type = KeyType.NONE;
+                    byte[] key = new byte[16];
+                    byte[] iv = new byte[16];
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        line = line.trim();
+                        Property property = checkProperty(line);
+                        if (property == null) {
+                            continue;
+                        } else if (property.type.equals("FILE")) {
+                            URL tsUrl = new URL(mediaURL, line);
+                            list.add(new TSDownload(tsUrl, type, key, iv));
+                            for (int i = iv.length; i > 0; i--) {
+                                iv[i - 1] = (byte) (iv[i - 1] + 1);
+                                if (iv[i - 1] != 0) break;
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < list.size(); i++) {
+                    for (int j = i; j < list.size() && j < i + 1; j++) {
+                        Response response = client.newCall(new Request.Builder()
+                                .url(list.get(j).url)
+                                .build()).execute();
+                        if (response.isSuccessful()) {
+                            String v = response.header("Content-Length");
+                            response.body().close();
+                            if (Utils.isEmpty(v)) {
+                                ss.onSuccess(0L);
+                                return;
+                            }
+                            ret += Long.parseLong(v);
+                        } else {
+                            ss.onSuccess(0L);
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ss.onSuccess(0L);
+                return;
+            }
+            long vtt = (ret / 188L);
+            ss.onSuccess(ret - vtt * 4);
+        });
+    }
+
+    public boolean run() {
+        OkHttpClient client = Utils.createOkHttp(60).build();
         try {
             URL mediaURL;
             URL m3u8Url = new URL(url);
@@ -195,7 +295,7 @@ public class M3U8 {
                                 newurl = Long.parseLong(property.properties.get("BANDWIDTH"));
                             else newurl = 1;
                         } else if (property.type.equals("FILE") && newurl > 0) {
-                            urls.add(new java.util.AbstractMap.SimpleEntry<>(newurl, new URL(m3u8Url, line)));
+                            urls.add(new AbstractMap.SimpleEntry<>(newurl, new URL(m3u8Url, line)));
                             newurl = 0;
                         } else {
                             newurl = 0;
@@ -334,7 +434,7 @@ public class M3U8 {
             return iv;
         }
 
-        public boolean start(OkHttpClient client) {
+        public boolean start(@NonNull OkHttpClient client) {
             try {
                 InputStream iis = getStream(client, getUrl());
                 if (iis == null) {

@@ -26,7 +26,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import com.squareup.picasso3.BitmapTarget
 import com.squareup.picasso3.Picasso.LoadedFrom
@@ -127,7 +127,7 @@ class MusicPlaybackService : Service() {
         shutdownIntent.action = SHUTDOWN
         mAlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         mShutdownIntent =
-            PendingIntent.getService(this, 0, shutdownIntent, PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getService(this, 0, shutdownIntent, Utils.makeMutablePendingIntent(0))
 
         // Listen for the idle state
         scheduleDelayedShutdown()
@@ -893,7 +893,7 @@ class MusicPlaybackService : Service() {
 
     private class MultiPlayer(service: MusicPlaybackService) {
         val mService: WeakReference<MusicPlaybackService> = WeakReference(service)
-        var mCurrentMediaPlayer: SimpleExoPlayer = SimpleExoPlayer.Builder(
+        var mCurrentMediaPlayer: ExoPlayer = ExoPlayer.Builder(
             service, DefaultRenderersFactory(service)
                 .setExtensionRendererMode(
                     when (Settings.get().other().fFmpegPlugin) {
@@ -907,11 +907,11 @@ class MusicPlaybackService : Service() {
         var isInitialized = false
         var isPreparing = false
         val factory = Utils.getExoPlayerFactory(
-            Constants.USER_AGENT(Account_Types.BY_TYPE),
+            Constants.USER_AGENT(AccountType.BY_TYPE),
             Injection.provideProxySettings().activeProxy
         )
         val factoryLocal =
-            DefaultDataSourceFactory(service, Constants.USER_AGENT(Account_Types.BY_TYPE))
+            DefaultDataSource.Factory(service)
         val audioInteractor: IAudioInteractor = InteractorFactory.createAudioInteractor()
         val compositeDisposable = CompositeDisposable()
 

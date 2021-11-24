@@ -74,7 +74,7 @@ public class PreferenceRecyclerViewAccessibilityDelegate
         }
     };
 
-    public PreferenceRecyclerViewAccessibilityDelegate(RecyclerView recyclerView) {
+    public PreferenceRecyclerViewAccessibilityDelegate(@NonNull RecyclerView recyclerView) {
         super(recyclerView);
         mRecyclerView = recyclerView;
     }

@@ -200,6 +200,7 @@
         <item>Hel</item>
         <item>Odin</item>
         <item>Viking</item>
+        <item>Fire</item>
         <item>[Random]</item>
     </string-array>
 
@@ -220,6 +221,7 @@
         <item>13</item>
         <item>14</item>
         <item>15</item>
+        <item>16</item>
     </string-array>
 
     <string-array name="array_accounts_input">
@@ -250,26 +252,8 @@
     <string name="first_pagan">First pagan</string>
     <string name="repo">Repository: https://github.com/umerov1999/Fenrir-for-VK</string>
     <string name="repo_local_server">Repository: https://github.com/umerov1999/FenrirMediaServer/releases</string>
-    <string name="go_buy" translatable="false">Google Play</string>
-    <string name="in_full_version">Available in full version!</string>
-    <string name="features">Features:</string>
-    <string-array name="array_features_full">
-        <item>Downloading music</item>
-        <item>Download video</item>
-        <item>Downloading voice</item>
-        <item>Downloading Stickers</item>
-        <item>Sending your stickers</item>
-        <item>Downloading messages</item>
-        <item>Mentions</item>
-        <item>Hide chats</item>
-        <item>Products</item>
-        <item>All photo comments</item>
-        <item>Change app icon</item>
-        <item>Local media server</item>
-        <item>Player background settings</item>
-        <item>Sending custom voice</item>
-        <item>Rename User</item>
-    </string-array>
+    <string name="project_dedicated_summary">Kate Arnoldova</string>
+    <string name="project_dedicated">Project Dedicated</string>
 
     <!-- Dialogs-->
     <string name="dialogs">Dialogs</string>
@@ -1413,7 +1397,7 @@
     <string name="report">Report</string>
     <string name="rename">Rename</string>
     <string name="rename_local">Rename local</string>
-    <string name="mentions">User mentions</string>
+    <string name="mentions">Mentions</string>
     <string name="is_to_blacklist">Unblock</string>
     <string name="button_activate">Activate</string>
     <string name="proxy_address_helper_text">Server address</string>
@@ -1601,8 +1585,8 @@
     <string name="audio_force_download">Already downloaded. Download anyway?</string>
     <string name="audio_force_download_pc">On the computer. Download anyway?</string>
     <string name="null_image_link">Missing download link</string>
-    <string name="use_hls_downloader">HLS Audio Demuxer</string>
-    <string name="use_hls_downloader_summary">If VK Api 5.90 dead</string>
+    <string name="use_api_5_90_for_audio">Use VK Api 5.90 for audio</string>
+    <string name="use_api_5_90_for_audio_summary">If downloading not work, disable it</string>
     <string name="expires">%1$s %2$s</string>
     <string name="disable_history">Don\'t show Stories</string>
     <string name="audio_round_icon">Rounded audio covers</string>
@@ -1892,4 +1876,6 @@
     <string name="reset_notifications_groups">Reset notifications</string>
     <string name="not_available">NOT AVAILABLE</string>
     <string name="refresh_audio_token">Refresh Audio Token</string>
+    <string name="compress_traffic">Compress Traffic</string>
+    <string name="do_not_clear_back_stack">Don\'t clear backstack when music</string>
 </resources>

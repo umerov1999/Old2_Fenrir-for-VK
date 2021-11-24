@@ -14,7 +14,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.work.*
 import com.google.gson.Gson
-import dev.ragnarok.fenrir.CheckDonate
 import dev.ragnarok.fenrir.Constants
 import dev.ragnarok.fenrir.Extra
 import dev.ragnarok.fenrir.R
@@ -263,9 +262,6 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadVideo(context: Context, video: Video, url: String, Res: String) {
-        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_VIDEO)) {
-            return
-        }
         val result_filename = DownloadInfo(
             makeLegalFilename(
                 optString(video.title) +
@@ -290,9 +286,6 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadVoice(context: Context, doc: VoiceMessage) {
-        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_VOICE)) {
-            return
-        }
         if (Utils.isEmpty(doc.linkMp3))
             return
         val result_filename = DownloadInfo(
@@ -318,9 +311,6 @@ object DownloadWorkUtils {
 
     @JvmStatic
     fun doDownloadSticker(context: Context, sticker: Sticker) {
-        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_STICKERS)) {
-            return
-        }
         val link: String? = if (sticker.isAnimated) {
             Utils.firstNonEmptyString(
                 sticker.getAnimationByType("light"),
@@ -422,9 +412,6 @@ object DownloadWorkUtils {
         Force: Boolean,
         isLocal: Boolean
     ): Int {
-        if (!CheckDonate.isFullVersion(context, CheckDonate.DonateFutures.DOWNLOAD_MUSIC)) {
-            return 3
-        }
         if (!Utils.isEmpty(audio.url) && (audio.url.contains("file://") || audio.url.contains("content://")))
             return 3
 
@@ -520,8 +507,7 @@ object DownloadWorkUtils {
         @Suppress("DEPRECATION")
         protected fun doHLSDownload(
             url: String,
-            file_v: DownloadInfo,
-            UseMediaScanner: Boolean
+            file_v: DownloadInfo
         ): Boolean {
             var mBuilder = createNotification(
                 applicationContext,
@@ -537,21 +523,19 @@ object DownloadWorkUtils {
             val file = file_v.build()
             try {
                 val file_u = DownloadInfo(file_v.file, file_v.path, "ts")
-                if (!M3U8(url, file_u.build()).run(Utils.createOkHttp(5).build())) {
+                if (!M3U8(url, file_u.build()).run()) {
                     throw Exception("M3U8 error download")
                 }
                 if (!TSDemuxer.unpackTS(file_u.build(), file, false, false)) {
                     throw Exception("Error TSDemuxer")
                 }
                 File(file_u.build()).delete()
-                if (UseMediaScanner) {
-                    applicationContext.sendBroadcast(
-                        Intent(
-                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                            Uri.fromFile(File(file))
-                        )
+                applicationContext.sendBroadcast(
+                    Intent(
+                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.fromFile(File(file))
                     )
-                }
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
 
@@ -757,30 +741,30 @@ object DownloadWorkUtils {
                     ), MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(file_v.ext)
                 ).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val ReadPendingIntent = PendingIntent.getActivity(
+                val readPendingIntent = PendingIntent.getActivity(
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+                    Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
                 )
-                mBuilder.setContentIntent(ReadPendingIntent)
+                mBuilder.setContentIntent(readPendingIntent)
 
                 if (Settings.get().other().isDeveloper_mode) {
-                    val DeleteIntent = QuickReplyService.intentForDeleteFile(
+                    val deleteIntent = QuickReplyService.intentForDeleteFile(
                         applicationContext,
                         file_v.build(),
                         NotificationHelper.NOTIFICATION_DOWNLOAD,
                         id.toString()
                     )
-                    val DeletePendingIntent = PendingIntent.getService(
+                    val deletePendingIntent = PendingIntent.getService(
                         applicationContext,
                         id.hashCode(),
-                        DeleteIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+                        deleteIntent,
+                        Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,
-                        applicationContext.resources.getString(R.string.delete), DeletePendingIntent
+                        applicationContext.resources.getString(R.string.delete), deletePendingIntent
                     )
                         .build()
                     mBuilder.addAction(actionDelete)
@@ -804,6 +788,7 @@ object DownloadWorkUtils {
 
     }
 
+    @Suppress("DEPRECATION")
     class TrackDownloadWorker(context: Context, workerParams: WorkerParameters) :
         DefaultDownloadWorker(context, workerParams) {
         override fun doWork(): Result {
@@ -816,40 +801,28 @@ object DownloadWorkUtils {
             val account_id =
                 inputData.getInt(ExtraDwn.ACCOUNT, ISettings.IAccountsSettings.INVALID_ID)
 
-            if (Settings.get().other().isUse_hls_downloader && FenrirNative.isNativeLoaded()) {
-                if (Utils.isEmpty(audio.url)) {
-                    val link = RxUtils.BlockingGetSingle(
-                        InteractorFactory
-                            .createAudioInteractor()
-                            .getById(account_id, listOf(audio))
-                            .map { e: List<Audio> -> e[0].url }, audio.url
-                    )
-                    if (!Utils.isEmpty(link)) {
-                        audio.url = link
-                    }
+            val mode = audio.needRefresh()
+            if (mode.first) {
+                val link: String? = RxUtils.BlockingGetSingle(
+                    InteractorFactory
+                        .createAudioInteractor()
+                        .getByIdOld(account_id, listOf(audio), mode.second)
+                        .map { e: List<Audio> -> e[0].url }, audio.url
+                )
+                if (!Utils.isEmpty(link)) {
+                    audio.url = link
                 }
-            } else {
-                if (Utils.isEmpty(audio.url) || audio.isHLS) {
-                    val link = RxUtils.BlockingGetSingle(
-                        InteractorFactory
-                            .createAudioInteractor()
-                            .getByIdOld(account_id, listOf(audio))
-                            .map { e: List<Audio> -> e[0].url }, audio.url
-                    )
-                    if (!Utils.isEmpty(link)) {
-                        audio.url = link
-                    }
-                }
-
-                audio.url = Audio.getMp3FromM3u8(audio.url)
             }
-            if (Utils.isEmpty(audio.url)) {
+
+            if (Utils.isEmpty(audio.url) || !FenrirNative.isNativeLoaded() && audio.isHLS) {
                 return Result.failure()
             }
 
-            val ret = if (Settings.get().other().isUse_hls_downloader
-                && FenrirNative.isNativeLoaded() && audio.isHLS
-            ) doHLSDownload(audio.url, file_v, true) else doDownload(audio.url, file_v, true)
+            val ret = if (audio.isHLS) doHLSDownload(audio.url, file_v) else doDownload(
+                audio.url,
+                file_v,
+                true
+            )
             if (ret) {
                 val cover =
                     Utils.firstNonEmptyString(
@@ -904,6 +877,13 @@ object DownloadWorkUtils {
                             audioFile.save()
                             Cover.delete()
                             updated_tag = true
+                            applicationContext.sendBroadcast(
+                                Intent(
+                                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                                    Uri.fromFile(File(file_v.build()))
+                                )
+                            )
+
                         } catch (e: Throwable) {
                             Utils.inMainThread {
                                 CustomToast.CreateCustomToast(applicationContext)
@@ -937,7 +917,7 @@ object DownloadWorkUtils {
                     applicationContext,
                     id.hashCode(),
                     intent_open,
-                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+                    Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
                 )
                 mBuilder.setContentIntent(ReadPendingIntent)
 
@@ -952,7 +932,7 @@ object DownloadWorkUtils {
                         applicationContext,
                         id.hashCode(),
                         DeleteIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
+                        Utils.makeMutablePendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
                     )
                     val actionDelete = NotificationCompat.Action.Builder(
                         R.drawable.ic_outline_delete,

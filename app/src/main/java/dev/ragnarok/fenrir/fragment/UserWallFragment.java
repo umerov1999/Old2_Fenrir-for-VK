@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.ActivityUtils;
@@ -76,7 +75,6 @@ import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
 import dev.ragnarok.fenrir.view.OnlineView;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView;
 import me.minetsh.imaging.IMGEditActivity;
 
 public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPresenter>
@@ -317,7 +315,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             callPresenter(UserWallPresenter::fireAvatarLongClick);
             return true;
         });
-        setupPaganContent(mHeaderHolder.Runes, mHeaderHolder.paganSymbol, mHeaderHolder.paganVideo);
+        setupPaganContent(mHeaderHolder.Runes, mHeaderHolder.paganSymbol);
     }
 
     @NonNull
@@ -462,9 +460,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
 
     @Override
     public void showMention(int accountId, int ownerId) {
-        if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.MENTION)) {
-            return;
-        }
         PlaceFactory.getMentionsPlace(accountId, ownerId).tryOpenWith(requireActivity());
     }
 
@@ -490,9 +485,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             return true;
         });
         menu.add(R.string.rename).setOnMenuItemClickListener(item -> {
-            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.RENAME_USER)) {
-                return true;
-            }
             new InputTextDialog.Builder(requireActivity())
                     .setTitleRes(R.string.rename_local)
                     .setAllowEmpty(true)
@@ -544,9 +536,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             return true;
         });
         menu.add(R.string.mentions).setOnMenuItemClickListener(item -> {
-            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.MENTION)) {
-                return true;
-            }
             callPresenter(UserWallPresenter::fireMentions);
             return true;
         });
@@ -579,7 +568,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         final RLottieImageView bDonate;
 
         final RLottieImageView paganSymbol;
-        final AnimatedShapeableImageView paganVideo;
         final View Runes;
 
         final HorizontalOptionsAdapter<PostFilter> mPostFilterAdapter;
@@ -606,7 +594,6 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             fabMoreInfo = root.findViewById(R.id.info_btn);
             bPrimaryAction = root.findViewById(R.id.subscribe_btn);
             paganSymbol = root.findViewById(R.id.pagan_symbol);
-            paganVideo = root.findViewById(R.id.pagan_video);
             Runes = root.findViewById(R.id.runes_container);
             ivVerified = root.findViewById(R.id.item_verified);
             bDonate = root.findViewById(R.id.donated_anim);
@@ -629,11 +616,7 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
             root.findViewById(R.id.header_user_profile_friends_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderFriendsClick));
             root.findViewById(R.id.header_user_profile_audios_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderAudiosClick));
             root.findViewById(R.id.header_user_profile_articles_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderArticlesClick));
-            root.findViewById(R.id.header_user_profile_products_container).setOnClickListener(v -> {
-                if (CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.PRODUCTS)) {
-                    callPresenter(UserWallPresenter::fireHeaderProductsClick);
-                }
-            });
+            root.findViewById(R.id.header_user_profile_products_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderProductsClick));
             root.findViewById(R.id.header_user_profile_groups_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderGroupsClick));
             root.findViewById(R.id.header_user_profile_videos_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderVideosClick));
             root.findViewById(R.id.header_user_profile_gifts_container).setOnClickListener(v -> callPresenter(UserWallPresenter::fireHeaderGiftsClick));

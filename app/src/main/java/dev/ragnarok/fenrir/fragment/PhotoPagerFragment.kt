@@ -125,6 +125,27 @@ class PhotoPagerFragment : BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
         }
 
         @JvmStatic
+        fun buildArgsForAlbum(
+            aid: Int,
+            albumId: Int,
+            ownerId: Int,
+            parcelNativePointer: Long,
+            position: Int,
+            readOnly: Boolean,
+            invert: Boolean
+        ): Bundle {
+            val args = Bundle()
+            args.putInt(Extra.ACCOUNT_ID, aid)
+            args.putInt(Extra.OWNER_ID, ownerId)
+            args.putInt(Extra.ALBUM_ID, albumId)
+            args.putInt(Extra.INDEX, position)
+            args.putBoolean(Extra.READONLY, readOnly)
+            args.putBoolean(Extra.INVERT, invert)
+            args.putLong(EXTRA_PHOTOS, parcelNativePointer)
+            return args
+        }
+
+        @JvmStatic
         fun buildArgsForFave(aid: Int, photos: ArrayList<Photo>, index: Int): Bundle {
             val args = Bundle()
             args.putInt(Extra.ACCOUNT_ID, aid)
@@ -372,7 +393,7 @@ class PhotoPagerFragment : BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
                             saveInstanceState
                         )
                     }
-                    Place.VK_PHOTO_ALBUM_GALLERY -> {
+                    Place.VK_PHOTO_ALBUM_GALLERY, Place.VK_PHOTO_ALBUM_GALLERY_NATIVE -> {
                         val indexx = requireArguments().getInt(Extra.INDEX)
                         val ownerId = requireArguments().getInt(Extra.OWNER_ID)
                         val albumId = requireArguments().getInt(Extra.ALBUM_ID)
@@ -732,12 +753,10 @@ class PhotoPagerFragment : BaseMvpFragment<PhotoPagerPresenter, IPhotoPagerView>
                 ) {
                     when (event.action) {
                         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                            ui.canSwipe = false
                             container.requestDisallowInterceptTouchEvent(true)
                             return@setOnTouchListener false
                         }
                         MotionEvent.ACTION_UP -> {
-                            ui.canSwipe = true
                             container.requestDisallowInterceptTouchEvent(false)
                             return@setOnTouchListener true
                         }

@@ -74,7 +74,6 @@ import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.util.ViewUtils;
 import dev.ragnarok.fenrir.view.LoadMoreFooterHelper;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import dev.ragnarok.fenrir.view.natives.video.AnimatedShapeableImageView;
 
 public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPresenter<V>>
         extends PlaceSupportMvpFragment<P, V> implements IWallView, WallAdapter.ClickListener, WallAdapter.NonPublishedPostActionListener {
@@ -146,7 +145,7 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
         view.setEnabled(count > 0);
     }
 
-    protected void setupPaganContent(@NonNull View Runes, @NonNull RLottieImageView paganSymbol, @NonNull AnimatedShapeableImageView paganVideo) {
+    protected void setupPaganContent(@NonNull View Runes, @NonNull RLottieImageView paganSymbol) {
         Runes.setVisibility(Settings.get().other().isRunes_show() ? View.VISIBLE : View.GONE);
         int symbol = ThemesController.INSTANCE.paganSymbol();
         paganSymbol.setVisibility(symbol != 0 ? View.VISIBLE : View.GONE);
@@ -202,6 +201,9 @@ public abstract class AbsWallFragment<V extends IWallView, P extends AbsWallPres
                 break;
             case 14:
                 paganSymbol.setImageResource(R.drawable.ic_viking);
+                break;
+            case 15:
+                paganSymbol.setImageResource(R.drawable.ic_fire);
                 break;
             default:
                 paganSymbol.setImageResource(R.drawable.ic_cat);

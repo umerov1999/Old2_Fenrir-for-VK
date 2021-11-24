@@ -101,6 +101,11 @@ public class TempDataStorage implements ITempDataStorage {
     }
 
     @Override
+    public void clearAll() {
+        helper().getWritableDatabase().delete(TempDataColumns.TABLENAME, null, null);
+    }
+
+    @Override
     public Completable delete(int ownerId) {
         return Completable.fromAction(() -> {
             long start = System.currentTimeMillis();

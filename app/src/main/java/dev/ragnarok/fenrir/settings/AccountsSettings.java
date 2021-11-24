@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.push.IPushRegistrationResolver;
@@ -231,7 +231,7 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     }
 
     @Override
-    public void storeTokenType(int accountId, @Account_Types int type) {
+    public void storeTokenType(int accountId, @AccountType int type) {
         types.put(accountId, type);
         preferences.edit()
                 .putInt(typeAccKeyFor(accountId), type)
@@ -244,7 +244,7 @@ class AccountsSettings implements ISettings.IAccountsSettings {
     }
 
     @Override
-    public @Account_Types
+    public @AccountType
     int getType(int accountId) {
         if (types.containsKey(accountId)) {
             Integer ret = types.get(accountId);

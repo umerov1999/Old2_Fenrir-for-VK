@@ -31,6 +31,7 @@ import dev.ragnarok.fenrir.model.Token;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
 import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IGroupWallView;
+import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.ShortcutUtils;
@@ -529,6 +530,10 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         appendDisposable(faveInteractor.removePage(accountId, ownerId, false)
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
                 .subscribe(this::onExecuteComplete, this::onExecuteError));
+    }
+
+    public void fireMentions() {
+        PlaceFactory.getMentionsPlace(getAccountId(), getOwnerId()).tryOpenWith(context);
     }
 
     private void onExecuteError(Throwable t) {

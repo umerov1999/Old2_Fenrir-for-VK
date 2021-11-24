@@ -6,15 +6,15 @@ import android.view.SurfaceHolder;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.App;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.model.ProxyConfig;
@@ -50,7 +50,7 @@ public class ExoGifPlayer implements IGifPlayer {
             onInternalPlayerStateChanged(state);
         }
     };
-    private SimpleExoPlayer internalPlayer;
+    private ExoPlayer internalPlayer;
     private boolean supposedToBePlaying;
 
     public ExoGifPlayer(String url, ProxyConfig proxyConfig, boolean isRepeat) {
@@ -60,12 +60,12 @@ public class ExoGifPlayer implements IGifPlayer {
         status = IStatus.INIT;
     }
 
-    private static void pausePlayer(SimpleExoPlayer internalPlayer) {
+    private static void pausePlayer(ExoPlayer internalPlayer) {
         internalPlayer.setPlayWhenReady(false);
         internalPlayer.getPlaybackState();
     }
 
-    private static void startPlayer(SimpleExoPlayer internalPlayer) {
+    private static void startPlayer(ExoPlayer internalPlayer) {
         internalPlayer.setPlayWhenReady(true);
         internalPlayer.getPlaybackState();
     }
@@ -97,10 +97,10 @@ public class ExoGifPlayer implements IGifPlayer {
 
     private void preparePlayer() {
         setStatus(IStatus.PREPARING);
-        internalPlayer = new SimpleExoPlayer.Builder(App.getInstance()).build();
+        internalPlayer = new ExoPlayer.Builder(App.getInstance()).build();
 
 
-        String userAgent = Constants.USER_AGENT(Account_Types.BY_TYPE);
+        String userAgent = Constants.USER_AGENT(AccountType.BY_TYPE);
 
         // This is the MediaSource representing the media to be played:
         // FOR SD CARD SOURCE:

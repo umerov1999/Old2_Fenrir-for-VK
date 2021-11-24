@@ -991,7 +991,7 @@ public class Dto2Model {
                 .setThumb_image_little(dto.thumb_image_little)
                 .setThumb_image_very_big(dto.thumb_image_very_big)
                 .setIsHq(dto.isHq)
-                .setMain_artists(dto.main_artists);
+                .setMain_artists(dto.main_artists).updateDownloadIndicator();
     }
 
     public static AudioPlaylist transform(@NonNull VKApiAudioPlaylist dto) {

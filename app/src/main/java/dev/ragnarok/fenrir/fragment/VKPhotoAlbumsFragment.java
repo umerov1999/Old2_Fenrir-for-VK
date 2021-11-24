@@ -26,7 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Collections;
 import java.util.List;
 
-import dev.ragnarok.fenrir.CheckDonate;
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
@@ -299,9 +298,6 @@ public class VKPhotoAlbumsFragment extends BaseMvpFragment<PhotoAlbumsPresenter,
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_photo_comments) {
-            if (!CheckDonate.isFullVersion(requireActivity(), CheckDonate.DonateFutures.ALL_PHOTO_COMMENTS)) {
-                return false;
-            }
             callPresenter(PhotoAlbumsPresenter::fireAllComments);
             return true;
         }

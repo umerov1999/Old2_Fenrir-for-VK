@@ -13,4 +13,6 @@ public interface ITempDataStorage {
     <T> Completable put(int ownerId, int sourceId, List<T> data, ISerializeAdapter<T> serializer);
 
     Completable delete(int ownerId);
+
+    void clearAll();
 }

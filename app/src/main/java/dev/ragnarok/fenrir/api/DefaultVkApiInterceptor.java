@@ -2,7 +2,7 @@ package dev.ragnarok.fenrir.api;
 
 import com.google.gson.Gson;
 
-import dev.ragnarok.fenrir.Account_Types;
+import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.settings.Settings;
 
 public class DefaultVkApiInterceptor extends AbsVkApiInterceptor {
@@ -22,7 +22,7 @@ public class DefaultVkApiInterceptor extends AbsVkApiInterceptor {
     }
 
     @Override
-    protected @Account_Types
+    protected @AccountType
     int getType() {
         return Settings.get()
                 .accounts()

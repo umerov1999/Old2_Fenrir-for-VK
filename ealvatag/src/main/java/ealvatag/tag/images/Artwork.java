@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import java.io.File;
 import java.io.IOException;
 
-import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
-
 /**
  * Represents artwork in a format independent  way
  */
@@ -57,11 +55,4 @@ public interface Artwork {
     Artwork setPictureType(int pictureType);
 
     Artwork setFromFile(File file) throws IOException;
-
-    /**
-     * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
-     *
-     * @param coverArt block data picture
-     */
-    Artwork setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt);
 }

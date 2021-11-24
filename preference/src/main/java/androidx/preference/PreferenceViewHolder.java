@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.ViewCompat;
@@ -41,7 +42,7 @@ public class PreferenceViewHolder extends RecyclerView.ViewHolder {
     private boolean mDividerAllowedAbove;
     private boolean mDividerAllowedBelow;
 
-    PreferenceViewHolder(View itemView) {
+    PreferenceViewHolder(@NonNull View itemView) {
         super(itemView);
 
         TextView titleView = itemView.findViewById(android.R.id.title);
@@ -68,7 +69,8 @@ public class PreferenceViewHolder extends RecyclerView.ViewHolder {
      * @hide
      */
     @RestrictTo(RestrictTo.Scope.TESTS)
-    public static PreferenceViewHolder createInstanceForTests(View itemView) {
+    @NonNull
+    public static PreferenceViewHolder createInstanceForTests(@NonNull View itemView) {
         return new PreferenceViewHolder(itemView);
     }
 

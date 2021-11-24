@@ -712,7 +712,7 @@ public class Entity2Model {
                 .setThumb_image_little(dbo.getThumb_image_little())
                 .setThumb_image_very_big(dbo.getThumb_image_very_big())
                 .setIsHq(dbo.getIsHq())
-                .setMain_artists(dbo.getMain_artists());
+                .setMain_artists(dbo.getMain_artists()).updateDownloadIndicator();
     }
 
     public static AudioPlaylist buildAudioPlaylistFromDbo(AudioPlaylistEntity dto) {

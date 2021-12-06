@@ -33,8 +33,8 @@ public class SwipebleActivity extends MainActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
         super.onCreate(savedInstanceState);
+        Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
         // потому, что в onBackPressed к этому числу будут прибавлять 2000 !!!! и выход за границы
         mLastBackPressedTime = Long.MAX_VALUE - DOUBLE_BACK_PRESSED_TIMEOUT;
     }

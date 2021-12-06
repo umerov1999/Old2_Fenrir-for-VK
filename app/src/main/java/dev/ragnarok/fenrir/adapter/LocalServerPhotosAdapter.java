@@ -15,22 +15,32 @@ import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.PhotoSize;
+import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.AspectRatioImageView;
+import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class LocalServerPhotosAdapter extends RecyclerView.Adapter<LocalServerPhotosAdapter.ViewHolder> {
+    private final int colorPrimary;
     private final int mColorSecondaryWithAlpha;
     private final Context mContext;
     private List<Photo> data;
     private PhotoSelectionListener photoSelectionListener;
+    private int currentPosition = -1;
 
     public LocalServerPhotosAdapter(Context context, List<Photo> data) {
         this.data = data;
         mContext = context;
         mColorSecondaryWithAlpha = Utils.adjustAlpha(CurrentTheme.getColorSecondary(context), 0.60F);
+        colorPrimary = CurrentTheme.getColorPrimary(context);
+    }
+
+    public void updateCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,6 +53,17 @@ public class LocalServerPhotosAdapter extends RecyclerView.Adapter<LocalServerPh
     @Override
     public void onBindViewHolder(@NonNull LocalServerPhotosAdapter.ViewHolder viewHolder, int position) {
         Photo photo = data.get(position);
+
+        if (FenrirNative.isNativeLoaded()) {
+            if (currentPosition == position) {
+                viewHolder.current.setVisibility(View.VISIBLE);
+                viewHolder.current.fromRes(R.raw.donater_fire, Utils.dp(100), Utils.dp(100), new int[]{0xFF812E, colorPrimary}, true);
+                viewHolder.current.playAnimation();
+            } else {
+                viewHolder.current.setVisibility(View.GONE);
+                viewHolder.current.clearAnimationDrawable();
+            }
+        }
 
         PicassoInstance.with()
                 .load(photo.getUrlForSize(PhotoSize.X, false))
@@ -82,12 +103,14 @@ public class LocalServerPhotosAdapter extends RecyclerView.Adapter<LocalServerPh
         final AspectRatioImageView photoImageView;
         final TextView tvDate;
         final ViewGroup bottomTop;
+        final RLottieImageView current;
 
         public ViewHolder(View itemView) {
             super(itemView);
             photoImageView = itemView.findViewById(R.id.imageView);
             tvDate = itemView.findViewById(R.id.vk_photo_item_date);
             bottomTop = itemView.findViewById(R.id.vk_photo_item_top);
+            current = itemView.findViewById(R.id.current);
         }
     }
 }

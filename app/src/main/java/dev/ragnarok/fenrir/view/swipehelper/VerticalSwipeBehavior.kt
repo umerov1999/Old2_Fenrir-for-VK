@@ -50,7 +50,9 @@ class VerticalSwipeBehavior<V : View> : CoordinatorLayout.Behavior<V> {
         private var originTop: Int = 0
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-            return (currentPointer == INVALID_POINTER_ID || pointerId == currentPointer) && (child !is TouchImageView || !child.isZoomed)
+            return (currentPointer == INVALID_POINTER_ID || pointerId == currentPointer) && (child !is TouchImageView || (!child.isZoomed && !child.canScrollVertically(
+                -1
+            ) && !child.canScrollVertically(1)))
         }
 
         override fun onViewCaptured(child: View, activePointerId: Int) {

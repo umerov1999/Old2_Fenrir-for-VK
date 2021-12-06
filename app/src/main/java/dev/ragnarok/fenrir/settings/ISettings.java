@@ -338,7 +338,7 @@ public interface ISettings {
 
         boolean isPlayer_support_volume();
 
-        boolean isCustomTabEnabled();
+        int isOpenUrlInternal();
 
         @Nullable
         Integer getUploadImageSize();

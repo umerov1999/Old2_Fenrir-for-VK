@@ -3,7 +3,6 @@ package dev.ragnarok.fenrir.activity;
 import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +11,8 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -30,7 +31,7 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.settings.theme.ThemesController;
 import dev.ragnarok.fenrir.util.Logger;
 
-public class ValidateActivity extends Activity {
+public class ValidateActivity extends AppCompatActivity {
 
     private static final String TAG = ValidateActivity.class.getSimpleName();
     private static final String EXTRA_VALIDATE = "validate";
@@ -73,10 +74,10 @@ public class ValidateActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
         setTheme(ThemesController.INSTANCE.currentStyle());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
 
         WebView webview = findViewById(R.id.vkontakteview);
         webview.getSettings().setJavaScriptEnabled(true);

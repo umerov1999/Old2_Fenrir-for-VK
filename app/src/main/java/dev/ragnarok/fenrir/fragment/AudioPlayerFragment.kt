@@ -44,7 +44,6 @@ import dev.ragnarok.fenrir.fragment.search.criteria.AudioSearchCriteria
 import dev.ragnarok.fenrir.materialpopupmenu.MaterialPopupMenuBuilder
 import dev.ragnarok.fenrir.model.Audio
 import dev.ragnarok.fenrir.module.FenrirNative
-import dev.ragnarok.fenrir.module.qrcode.QrGenerator.generateQR
 import dev.ragnarok.fenrir.picasso.PicassoInstance
 import dev.ragnarok.fenrir.picasso.transforms.BlurTransformation
 import dev.ragnarok.fenrir.place.PlaceFactory
@@ -235,19 +234,10 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener
 
     @Suppress("DEPRECATION")
     private fun fireAudioQR() {
-        if (!FenrirNative.isNativeLoaded()) {
-            return
-        }
         val audio = MusicPlaybackController.getCurrentAudio() ?: return
-        val qr = Utils.renderSVG(
-            generateQR(
-                "https://vk.com/audio/" + audio.ownerId + "_" + audio.id,
-                CurrentTheme.getColorPrimary(requireActivity()),
-                CurrentTheme.getColorSecondary(requireActivity()),
-                Color.parseColor("#ffffff"),
-                Color.parseColor("#000000"),
-                3
-            ), 650, 650
+        val qr = Utils.generateQR(
+            "https://vk.com/audio/" + audio.ownerId + "_" + audio.id,
+            requireActivity()
         )
         val dlgAlert = MaterialAlertDialogBuilder(requireActivity())
         dlgAlert.setCancelable(true)

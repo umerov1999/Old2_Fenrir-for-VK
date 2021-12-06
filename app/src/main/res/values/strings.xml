@@ -160,6 +160,18 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="array_is_open_url_internal_names">
+        <item>Disable</item>
+        <item>Only VK</item>
+        <item>All Url</item>
+    </string-array>
+
+    <string-array name="array_is_open_url_internal_items" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="array_pager_transform_names" translatable="false">
         <item>Off</item>
         <item>Depth Transformer</item>
@@ -200,6 +212,7 @@
         <item>Hel</item>
         <item>Odin</item>
         <item>Viking</item>
+        <item>Raven</item>
         <item>Fire</item>
         <item>[Random]</item>
     </string-array>
@@ -222,6 +235,7 @@
         <item>14</item>
         <item>15</item>
         <item>16</item>
+        <item>17</item>
     </string-array>
 
     <string-array name="array_accounts_input">

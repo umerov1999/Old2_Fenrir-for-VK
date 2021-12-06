@@ -26,6 +26,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -39,11 +40,6 @@ import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.AccessibilityDelegateCompat;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.MarginLayoutParamsCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatDrawableManager;
@@ -80,6 +76,11 @@ import androidx.annotation.StyleRes;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.core.text.BidiFormatter;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.MarginLayoutParamsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.customview.view.AbsSavedState;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
@@ -240,6 +241,7 @@ public class TextInputLayout extends LinearLayout {
   @Nullable private MaterialShapeDrawable boxBackground;
   @Nullable private MaterialShapeDrawable boxUnderline;
   @NonNull private ShapeAppearanceModel shapeAppearanceModel;
+  private boolean areCornerRadiiRtl;
 
   private final int boxLabelCutoutPaddingPx;
   @BoxBackgroundMode private int boxBackgroundMode;
@@ -1292,17 +1294,26 @@ public class TextInputLayout extends LinearLayout {
       float boxCornerRadiusTopEnd,
       float boxCornerRadiusBottomStart,
       float boxCornerRadiusBottomEnd) {
+    areCornerRadiiRtl = ViewUtils.isLayoutRtl(this);
+    float boxCornerRadiusTopLeft =
+        areCornerRadiiRtl ? boxCornerRadiusTopEnd : boxCornerRadiusTopStart;
+    float boxCornerRadiusTopRight =
+        areCornerRadiiRtl ? boxCornerRadiusTopStart : boxCornerRadiusTopEnd;
+    float boxCornerRadiusBottomLeft =
+        areCornerRadiiRtl ? boxCornerRadiusBottomEnd : boxCornerRadiusBottomStart;
+    float boxCornerRadiusBottomRight =
+        areCornerRadiiRtl ? boxCornerRadiusBottomStart : boxCornerRadiusBottomEnd;
     if (boxBackground == null
-        || boxBackground.getTopLeftCornerResolvedSize() != boxCornerRadiusTopStart
-        || boxBackground.getTopRightCornerResolvedSize() != boxCornerRadiusTopEnd
-        || boxBackground.getBottomRightCornerResolvedSize() != boxCornerRadiusBottomEnd
-        || boxBackground.getBottomLeftCornerResolvedSize() != boxCornerRadiusBottomStart) {
+        || boxBackground.getTopLeftCornerResolvedSize() != boxCornerRadiusTopLeft
+        || boxBackground.getTopRightCornerResolvedSize() != boxCornerRadiusTopRight
+        || boxBackground.getBottomLeftCornerResolvedSize() != boxCornerRadiusBottomLeft
+        || boxBackground.getBottomRightCornerResolvedSize() != boxCornerRadiusBottomRight) {
       shapeAppearanceModel =
           shapeAppearanceModel.toBuilder()
-              .setTopLeftCornerSize(boxCornerRadiusTopStart)
-              .setTopRightCornerSize(boxCornerRadiusTopEnd)
-              .setBottomRightCornerSize(boxCornerRadiusBottomEnd)
-              .setBottomLeftCornerSize(boxCornerRadiusBottomStart)
+              .setTopLeftCornerSize(boxCornerRadiusTopLeft)
+              .setTopRightCornerSize(boxCornerRadiusTopRight)
+              .setBottomLeftCornerSize(boxCornerRadiusBottomLeft)
+              .setBottomRightCornerSize(boxCornerRadiusBottomRight)
               .build();
       applyBoxAttributes();
     }
@@ -1315,7 +1326,9 @@ public class TextInputLayout extends LinearLayout {
    * @see #setBoxCornerRadii(float, float, float, float)
    */
   public float getBoxCornerRadiusTopStart() {
-    return boxBackground.getTopLeftCornerResolvedSize();
+    return ViewUtils.isLayoutRtl(this)
+        ? shapeAppearanceModel.getTopRightCornerSize().getCornerSize(tmpRectF)
+        : shapeAppearanceModel.getTopLeftCornerSize().getCornerSize(tmpRectF);
   }
 
   /**
@@ -1325,7 +1338,9 @@ public class TextInputLayout extends LinearLayout {
    * @see #setBoxCornerRadii(float, float, float, float)
    */
   public float getBoxCornerRadiusTopEnd() {
-    return boxBackground.getTopRightCornerResolvedSize();
+    return ViewUtils.isLayoutRtl(this)
+        ? shapeAppearanceModel.getTopLeftCornerSize().getCornerSize(tmpRectF)
+        : shapeAppearanceModel.getTopRightCornerSize().getCornerSize(tmpRectF);
   }
 
   /**
@@ -1335,7 +1350,9 @@ public class TextInputLayout extends LinearLayout {
    * @see #setBoxCornerRadii(float, float, float, float)
    */
   public float getBoxCornerRadiusBottomEnd() {
-    return boxBackground.getBottomLeftCornerResolvedSize();
+    return ViewUtils.isLayoutRtl(this)
+        ? shapeAppearanceModel.getBottomLeftCornerSize().getCornerSize(tmpRectF)
+        : shapeAppearanceModel.getBottomRightCornerSize().getCornerSize(tmpRectF);
   }
 
   /**
@@ -1345,7 +1362,9 @@ public class TextInputLayout extends LinearLayout {
    * @see #setBoxCornerRadii(float, float, float, float)
    */
   public float getBoxCornerRadiusBottomStart() {
-    return boxBackground.getBottomRightCornerResolvedSize();
+    return ViewUtils.isLayoutRtl(this)
+        ? shapeAppearanceModel.getBottomRightCornerSize().getCornerSize(tmpRectF)
+        : shapeAppearanceModel.getBottomLeftCornerSize().getCornerSize(tmpRectF);
   }
 
   /**
@@ -2266,8 +2285,22 @@ public class TextInputLayout extends LinearLayout {
    * @see #getPlaceholderText()
    */
   public void setPlaceholderText(@Nullable final CharSequence placeholderText) {
-    // If placeholder text is null, disable placeholder if it's enabled.
-    if (placeholderEnabled && TextUtils.isEmpty(placeholderText)) {
+    if (placeholderTextView == null) {
+      placeholderTextView = new AppCompatTextView(getContext());
+      placeholderTextView.setId(R.id.textinput_placeholder);
+      ViewCompat.setImportantForAccessibility(
+          placeholderTextView, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO);
+
+      placeholderFadeIn = createPlaceholderFadeTransition();
+      placeholderFadeIn.setStartDelay(PLACEHOLDER_START_DELAY);
+      placeholderFadeOut = createPlaceholderFadeTransition();
+
+      setPlaceholderTextAppearance(placeholderTextAppearance);
+      setPlaceholderTextColor(placeholderTextColor);
+    }
+
+    // If placeholder text is null, disable placeholder.
+    if (TextUtils.isEmpty(placeholderText)) {
       setPlaceholderTextEnabled(false);
     } else {
       if (!placeholderEnabled) {
@@ -2298,19 +2331,6 @@ public class TextInputLayout extends LinearLayout {
 
     // Otherwise, adjust enabled state.
     if (placeholderEnabled) {
-      placeholderTextView = new AppCompatTextView(getContext());
-      placeholderTextView.setId(R.id.textinput_placeholder);
-
-      placeholderFadeIn = createPlaceholderFadeTransition();
-      placeholderFadeIn.setStartDelay(PLACEHOLDER_START_DELAY);
-
-      placeholderFadeOut = createPlaceholderFadeTransition();
-
-      ViewCompat.setAccessibilityLiveRegion(
-          placeholderTextView, ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE);
-
-      setPlaceholderTextAppearance(placeholderTextAppearance);
-      setPlaceholderTextColor(placeholderTextColor);
       addPlaceholderTextView();
     } else {
       removePlaceholderTextView();
@@ -2339,11 +2359,14 @@ public class TextInputLayout extends LinearLayout {
   }
 
   private void showPlaceholderText() {
-    if (placeholderTextView != null && placeholderEnabled) {
+    if (placeholderTextView != null && placeholderEnabled && !TextUtils.isEmpty(placeholderText)) {
       placeholderTextView.setText(placeholderText);
       TransitionManager.beginDelayedTransition(inputFrame, placeholderFadeIn);
       placeholderTextView.setVisibility(VISIBLE);
       placeholderTextView.bringToFront();
+      if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
+        announceForAccessibility(placeholderText);
+      }
     }
   }
 
@@ -2680,9 +2703,9 @@ public class TextInputLayout extends LinearLayout {
     switch (boxBackgroundMode) {
       case BOX_BACKGROUND_OUTLINE:
         return (int) (collapsingTextHelper.getCollapsedTextHeight() / 2);
-      case BOX_BACKGROUND_FILLED:
       case BOX_BACKGROUND_NONE:
         return (int) collapsingTextHelper.getCollapsedTextHeight();
+      case BOX_BACKGROUND_FILLED:
       default:
         return 0;
     }
@@ -2694,7 +2717,7 @@ public class TextInputLayout extends LinearLayout {
       throw new IllegalStateException();
     }
     Rect bounds = tmpBoundsRect;
-    boolean isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL;
+    boolean isRtl = ViewUtils.isLayoutRtl(this);
 
     bounds.bottom = rect.bottom;
     switch (boxBackgroundMode) {
@@ -2796,7 +2819,12 @@ public class TextInputLayout extends LinearLayout {
       return;
     }
 
-    boxBackground.setShapeAppearanceModel(shapeAppearanceModel);
+    if (boxBackground.getShapeAppearanceModel() != shapeAppearanceModel) {
+      boxBackground.setShapeAppearanceModel(shapeAppearanceModel);
+      // The outlined background of the dropdown menu is created in the end icon delegate, so it
+      // needs to be updated based on the new shape appearance model.
+      updateDropdownMenuBackground();
+    }
 
     if (canDrawOutlineStroke()) {
       boxBackground.setStroke(boxStrokeWidthPx, boxStrokeColor);
@@ -2830,6 +2858,17 @@ public class TextInputLayout extends LinearLayout {
 
   private boolean canDrawStroke() {
     return boxStrokeWidthPx > -1 && boxStrokeColor != Color.TRANSPARENT;
+  }
+
+  /*
+   * This method should be called if the outlined ripple background should be updated. For example,
+   * if a new {@link ShapeAppearanceModel} is set on the text field.
+   */
+  private void updateDropdownMenuBackground() {
+    if (endIconMode == END_ICON_DROPDOWN_MENU && boxBackgroundMode == BOX_BACKGROUND_OUTLINE) {
+      ((DropdownMenuEndIconDelegate) endIconDelegates.get(END_ICON_DROPDOWN_MENU))
+          .updateOutlinedRippleEffect((AutoCompleteTextView) editText);
+    }
   }
 
   void updateEditTextBackground() {
@@ -3050,6 +3089,30 @@ public class TextInputLayout extends LinearLayout {
     if (expandedHintEnabled != enabled) {
       expandedHintEnabled = enabled;
       updateLabelState(false);
+    }
+  }
+
+  @Override
+  public void onRtlPropertiesChanged(int layoutDirection) {
+    super.onRtlPropertiesChanged(layoutDirection);
+    boolean isLayoutDirectionRtl = layoutDirection == ViewCompat.LAYOUT_DIRECTION_RTL;
+    if (isLayoutDirectionRtl != areCornerRadiiRtl) {
+      // Switch corner radius values from LTR to RTL or vice versa.
+      boolean shouldCornersBeRtl = isLayoutDirectionRtl && !areCornerRadiiRtl;
+      float boxCornerRadiusTopLeft =
+          shapeAppearanceModel.getTopLeftCornerSize().getCornerSize(tmpRectF);
+      float boxCornerRadiusTopRight =
+          shapeAppearanceModel.getTopRightCornerSize().getCornerSize(tmpRectF);
+      float boxCornerRadiusBottomLeft =
+          shapeAppearanceModel.getBottomLeftCornerSize().getCornerSize(tmpRectF);
+      float boxCornerRadiusBottomRight =
+          shapeAppearanceModel.getBottomRightCornerSize().getCornerSize(tmpRectF);
+      setBoxCornerRadii(
+          shouldCornersBeRtl ? boxCornerRadiusTopLeft : boxCornerRadiusTopRight,
+          shouldCornersBeRtl ? boxCornerRadiusTopRight : boxCornerRadiusTopLeft,
+          shouldCornersBeRtl ? boxCornerRadiusBottomLeft : boxCornerRadiusBottomRight,
+          shouldCornersBeRtl ? boxCornerRadiusBottomRight : boxCornerRadiusBottomLeft
+      );
     }
   }
 
@@ -4080,6 +4143,12 @@ public class TextInputLayout extends LinearLayout {
     drawBoxUnderline(canvas);
   }
 
+  @Override
+  protected void onConfigurationChanged(@NonNull Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    collapsingTextHelper.maybeUpdateFontWeightAdjustment(newConfig);
+  }
+
   private void drawHint(@NonNull Canvas canvas) {
     if (hintEnabled) {
       collapsingTextHelper.draw(canvas);
@@ -4454,8 +4523,11 @@ public class TextInputLayout extends LinearLayout {
         info.setError(showingError ? errorText : counterOverflowDesc);
       }
 
-      if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1 && editText != null) {
-        editText.setLabelFor(R.id.textinput_helper_text);
+      if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+        View helperTextView = layout.indicatorViewController.getHelperTextView();
+        if (helperTextView != null) {
+          info.setLabelFor(helperTextView);
+        }
       }
     }
   }

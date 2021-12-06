@@ -4,6 +4,7 @@ package dev.ragnarok.fenrir.activity.slidr.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
@@ -696,8 +697,13 @@ public class SliderPanel extends FrameLayout {
 
         // Setup the dimmer view
         scrimPaint = new Paint();
-        scrimPaint.setColor(config.getScrimColor());
-        scrimPaint.setAlpha(toAlpha(config.getScrimStartAlpha()));
+        if (config.getScrimColor() >= 0) {
+            scrimPaint.setColor(config.getScrimColor());
+            scrimPaint.setAlpha(toAlpha(config.getScrimStartAlpha()));
+        } else {
+            scrimPaint.setColor(Color.BLACK);
+            scrimPaint.setAlpha(0);
+        }
         scrimRenderer = new ScrimRenderer(this, decorView);
 
         /*
@@ -741,6 +747,9 @@ public class SliderPanel extends FrameLayout {
     }
 
     private void applyScrim(float percent) {
+        if (config.getScrimColor() < 0) {
+            return;
+        }
         float alpha = (percent * (config.getScrimStartAlpha() - config.getScrimEndAlpha())) + config.getScrimEndAlpha();
         scrimPaint.setAlpha(toAlpha(alpha));
         //invalidate(scrimRenderer.getDirtyRect(config.getPosition()));

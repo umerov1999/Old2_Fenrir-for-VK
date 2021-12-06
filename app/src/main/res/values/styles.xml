@@ -71,15 +71,6 @@
 
     <style name="App.DayNight.Swipes" parent="App.DayNight">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="App.DayNight.Swipes.SlidableWithTranslucentWindow" parent="App.DayNight.Swipes">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-    <style name="App.DayNight.Swipes.SlidableWithTransparentStatusBar" parent="App.DayNight.Swipes">
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="App.DayNight.Ice" parent="App.DayNight">

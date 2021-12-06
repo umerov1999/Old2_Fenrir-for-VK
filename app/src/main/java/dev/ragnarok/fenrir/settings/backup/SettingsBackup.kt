@@ -32,7 +32,7 @@ class SettingsBackup {
         SettingCollector("pref_display_photo_size", SettingTypes.TYPE_INT),
         SettingCollector("photo_rounded_view", SettingTypes.TYPE_STRING),
         SettingCollector("font_size", SettingTypes.TYPE_STRING),
-        SettingCollector("custom_tabs", SettingTypes.TYPE_BOOL),
+        SettingCollector("is_open_url_internal", SettingTypes.TYPE_STRING),
         SettingCollector("webview_night_mode", SettingTypes.TYPE_BOOL),
         SettingCollector("load_history_notif", SettingTypes.TYPE_BOOL),
         SettingCollector("snow_mode", SettingTypes.TYPE_BOOL),

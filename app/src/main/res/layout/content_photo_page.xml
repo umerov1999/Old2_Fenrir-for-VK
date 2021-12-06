@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            app:layout_behavior="dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior" />
+            android:layout_centerVertical="true" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView

@@ -103,7 +103,7 @@ class ViewHostDelegate<P : IPresenter<V>, V : IMvpView> {
         return onDefault
     }
 
-    fun postPrenseterReceive(action: PresenterAction<P, V>) {
+    fun postPresenterReceive(action: PresenterAction<P, V>) {
         presenter?.run {
             action.call(this)
         } ?: run {

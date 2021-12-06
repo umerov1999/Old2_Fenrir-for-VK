@@ -13,7 +13,6 @@ import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,12 +50,9 @@ import dev.ragnarok.fenrir.model.LoadMoreState;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.Story;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
-import dev.ragnarok.fenrir.module.FenrirNative;
-import dev.ragnarok.fenrir.module.qrcode.QrGenerator;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
 import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IWallView;
-import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
 import dev.ragnarok.fenrir.util.CustomToast;
@@ -436,47 +432,9 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
 
         onRefresh();
     }
-/*
-    private Bitmap TextToImageEncode(String Value) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(
-                    Value,
-                    BarcodeFormat.QR_CODE,
-                    500, 500, null
-            );
 
-        } catch (IllegalArgumentException Illegalargumentexception) {
-
-            return null;
-        }
-        int bitMatrixWidth = bitMatrix.getWidth();
-
-        int bitMatrixHeight = bitMatrix.getHeight();
-
-        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
-
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-
-            for (int x = 0; x < bitMatrixWidth; x++) {
-
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        Color.parseColor("#000000") : Color.parseColor("#ffffff");
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_8888);
-
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bitmap;
-    }
- */
-
-    public void fireShowQR(Context context) {
-        if (!FenrirNative.isNativeLoaded()) {
-            return;
-        }
-        Bitmap qr = Utils.renderSVG(QrGenerator.generateQR("https://vk.com/" + (ownerId < 0 ? "club" : "id") + Math.abs(ownerId), CurrentTheme.getColorPrimary(context), CurrentTheme.getColorSecondary(context), Color.parseColor("#ffffff"), Color.parseColor("#000000"), 3), 650, 650);
+    public void fireShowQR(@NonNull Context context) {
+        Bitmap qr = Utils.generateQR("https://vk.com/" + (ownerId < 0 ? "club" : "id") + Math.abs(ownerId), context);
         View view = LayoutInflater.from(context).inflate(R.layout.qr, null);
         ShapeableImageView imageView = view.findViewById(R.id.qr);
         imageView.setImageBitmap(qr);

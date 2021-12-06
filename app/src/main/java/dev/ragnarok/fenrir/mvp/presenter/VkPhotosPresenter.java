@@ -382,6 +382,22 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
         return false;
     }
 
+    public void updateInfo(int position, long ptr) {
+        List<Photo> p = ParcelNative.fromNative(ptr).readParcelableList(Photo.NativeCreator);
+        photos.clear();
+        photos.addAll(wrappersOf(p));
+        photos.get(position).setCurrent(true);
+        if (!Utils.isEmpty(mDownloads)) {
+            for (SelectablePhotoWrapper i : photos) {
+                i.setDownloaded(existPhoto(i.getPhoto()));
+            }
+        }
+        callView(v -> {
+            v.notifyDataSetChanged();
+            v.scrollTo(position);
+        });
+    }
+
     private void onInitialDataReceived(Pair<List<Photo>, List<Upload>> data) {
         photos.clear();
         photos.addAll(wrappersOf(data.getFirst()));

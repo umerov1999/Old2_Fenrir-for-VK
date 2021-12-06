@@ -18,6 +18,10 @@ import dev.ragnarok.fenrir.domain.IPhotosInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.TmpSource;
+import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
+import dev.ragnarok.fenrir.mvp.view.IPhotoPagerView;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
 import dev.ragnarok.fenrir.util.RxUtils;
 
@@ -125,6 +129,16 @@ public class PhotoAlbumPagerPresenter extends PhotoPagerPresenter {
 
     private void onActualDataGetError(Throwable t) {
         callView(v -> showError(v, getCauseIfRuntime(t)));
+    }
+
+    @Override
+    public void close() {
+        if (Settings.get().other().isNative_parcel_photo() && FenrirNative.isNativeLoaded()) {
+            long ptr = ParcelNative.create().writeParcelableList(getData()).getNativePointer();
+            callView(v -> v.returnInfo(getCurrentIndex(), ptr));
+        } else {
+            callView(IPhotoPagerView::finalize);
+        }
     }
 
     private void onActualPhotosReceived(List<Photo> data) {

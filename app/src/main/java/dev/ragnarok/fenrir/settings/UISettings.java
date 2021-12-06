@@ -6,8 +6,6 @@ import android.content.res.Configuration;
 
 import androidx.preference.PreferenceManager;
 
-import java.util.Objects;
-
 import dev.ragnarok.fenrir.fragment.PreferencesFragment;
 import dev.ragnarok.fenrir.fragment.fave.FaveTabsFragment;
 import dev.ragnarok.fenrir.fragment.friends.FriendsTabsFragment;
@@ -65,9 +63,12 @@ class UISettings implements ISettings.IUISettings {
     @NightMode
     @Override
     public int getNightMode() {
-        String mode = PreferenceManager.getDefaultSharedPreferences(app)
-                .getString("night_switch", String.valueOf(NightMode.ENABLE));
-        return Integer.parseInt(mode);
+        try {
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app)
+                    .getString("night_switch", String.valueOf(NightMode.ENABLE)).trim());
+        } catch (Exception e) {
+            return NightMode.ENABLE;
+        }
     }
 
     @Override
@@ -165,7 +166,7 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public int isPhoto_swipe_triggered_pos() {
         try {
-            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("photo_swipe_triggered_pos", "180"));
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("photo_swipe_triggered_pos", "180").trim());
         } catch (Exception e) {
             return 180;
         }
@@ -180,7 +181,7 @@ class UISettings implements ISettings.IUISettings {
     @Override
     public int getSwipes_chat_mode() {
         try {
-            return Integer.parseInt(Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("swipes_for_chats", "1")));
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("swipes_for_chats", "1").trim());
         } catch (Exception e) {
             return SwipesChatMode.SLIDR;
         }

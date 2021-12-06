@@ -71,6 +71,12 @@
         <item>Огненное кольцо</item>
     </string-array>
 
+    <string-array name="array_is_open_url_internal_names">
+        <item>Выключить.</item>
+        <item>Только ВК</item>
+        <item>Все ссылки</item>
+    </string-array>
+
     <string-array name="array_pagan_symbol_names">
         <item>Выкл.</item>
         <item>Кот</item>
@@ -87,6 +93,7 @@
         <item>Хель</item>
         <item>Один</item>
         <item>Викинг</item>
+        <item>Ворон</item>
         <item>Файер</item>
         <item>[Рандом]</item>
     </string-array>

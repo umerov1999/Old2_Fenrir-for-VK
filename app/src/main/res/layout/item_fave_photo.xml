@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aspect="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="?message_bubble_color"
-    card_view:cardCornerRadius="6dp"
-    card_view:cardElevation="1dp"
-    card_view:cardUseCompatPadding="true">
+    app:cardBackgroundColor="?message_bubble_color"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -23,10 +22,21 @@
             android:background="?attr/messages_background_color"
             android:gravity="center"
             android:scaleType="centerCrop"
-            aspect:aspectRatioEnabled="true"
-            aspect:aspectRatioH="1"
-            aspect:aspectRatioW="1"
-            aspect:dominantMeasurement="width" />
+            app:aspectRatioEnabled="true"
+            app:aspectRatioH="1"
+            app:aspectRatioW="1"
+            app:dominantMeasurement="width" />
+
+        <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
+            android:id="@+id/current"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/imageView"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@+id/imageView"
+            android:visibility="gone"
+            app:loopAnimation="true" />
 
         <RelativeLayout
             android:id="@+id/vk_photo_item_bottom"

@@ -24,14 +24,17 @@ import dev.ragnarok.fenrir.adapter.multidata.DifferentDataAdapter;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.PhotoSize;
 import dev.ragnarok.fenrir.model.wrappers.SelectablePhotoWrapper;
+import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.picasso.Content_Local;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.upload.Upload;
 import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.Logger;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.CircleRoadProgress;
+import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class BigVkPhotosAdapter extends DifferentDataAdapter {
 
@@ -79,7 +82,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_PHOTO:
-                return new PhotoViewHolder(LayoutInflater.from(mContext).inflate(R.layout.vk_photo_item, parent, false));
+                return new PhotoViewHolder(LayoutInflater.from(mContext).inflate(R.layout.vk_photo_item_big, parent, false));
             case VIEW_TYPE_UPLOAD:
                 return new UploadViewHolder(LayoutInflater.from(mContext).inflate(R.layout.vk_upload_photo_item, parent, false));
         }
@@ -154,6 +157,17 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
             holder.tvDate.setText(AppTextUtils.getDateFromUnixTimeShorted(mContext, photo.getDate()));
         } else {
             holder.bottomTop.setVisibility(View.GONE);
+        }
+
+        if (Settings.get().other().isNative_parcel_photo() && FenrirNative.isNativeLoaded()) {
+            if (photoWrapper.getCurrent()) {
+                holder.current.setVisibility(View.VISIBLE);
+                holder.current.fromRes(R.raw.donater_fire, Utils.dp(100), Utils.dp(100), new int[]{0xFF812E, CurrentTheme.getColorPrimary(mContext)}, true);
+                holder.current.playAnimation();
+            } else {
+                holder.current.setVisibility(View.GONE);
+                holder.current.clearAnimationDrawable();
+            }
         }
 
         holder.setSelected(photoWrapper.isSelected());
@@ -303,6 +317,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
         final ImageView ivLike;
         final ImageView ivComment;
         final ImageView ivDownload;
+        final RLottieImageView current;
 
         PhotoViewHolder(View itemView) {
             super(itemView);
@@ -317,6 +332,7 @@ public class BigVkPhotosAdapter extends DifferentDataAdapter {
             tvComment = itemView.findViewById(R.id.vk_photo_item_comment_counter);
             ivDownload = itemView.findViewById(R.id.is_downloaded);
             tvDate = itemView.findViewById(R.id.vk_photo_item_date);
+            current = itemView.findViewById(R.id.current);
         }
 
         public void setSelected(boolean selected) {

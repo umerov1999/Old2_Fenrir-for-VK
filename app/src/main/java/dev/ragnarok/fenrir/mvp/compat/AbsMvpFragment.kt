@@ -70,7 +70,7 @@ abstract class AbsMvpFragment<P : IPresenter<V>, V : IMvpView> : androidx.fragme
         return delegate.callPresenter(action, onDefault)
     }
 
-    fun postPrenseterReceive(action: PresenterAction<P, V>) {
-        delegate.postPrenseterReceive(action)
+    fun postPresenterReceive(action: PresenterAction<P, V>) {
+        delegate.postPresenterReceive(action)
     }
 }

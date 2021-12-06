@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.slidr.Slidr;
@@ -21,13 +24,12 @@ import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
 import dev.ragnarok.fenrir.activity.slidr.model.SlidrListener;
 import dev.ragnarok.fenrir.fragment.AudioPlayerFragment;
 import dev.ragnarok.fenrir.fragment.ChatFragment;
-import dev.ragnarok.fenrir.fragment.GifPagerFragment;
 import dev.ragnarok.fenrir.fragment.NotReadMessagesFragment;
-import dev.ragnarok.fenrir.fragment.PhotoPagerFragment;
-import dev.ragnarok.fenrir.fragment.SinglePhotoFragment;
 import dev.ragnarok.fenrir.listener.AppStyleable;
+import dev.ragnarok.fenrir.model.Document;
 import dev.ragnarok.fenrir.model.Peer;
 import dev.ragnarok.fenrir.place.Place;
+import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.place.PlaceProvider;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.AssertUtils;
@@ -48,6 +50,7 @@ public class NotReadMessagesActivity extends NoMainActivity implements PlaceProv
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Slidr.attach(this, new SlidrConfig.Builder().listener(new SlidrListener() {
             @Override
             public void onSlideStateChanged(int state) {
@@ -75,7 +78,6 @@ public class NotReadMessagesActivity extends NoMainActivity implements PlaceProv
                 return true;
             }
         }).scrimColor(CurrentTheme.getColorBackground(this)).build());
-        super.onCreate(savedInstanceState);
         if (Objects.isNull(savedInstanceState)) {
             handleIntent(getIntent());
             getSupportFragmentManager().addOnBackStackChangedListener(mOnBackStackChangedListener);
@@ -130,15 +132,30 @@ public class NotReadMessagesActivity extends NoMainActivity implements PlaceProv
             case Place.VK_PHOTO_TMP_SOURCE:
             case Place.VK_PHOTO_ALBUM_GALLERY_SAVED:
             case Place.VK_PHOTO_ALBUM_GALLERY_NATIVE:
-                attachToFront(PhotoPagerFragment.newInstance(place.getType(), args));
+                place.launchActivityForResult(this, PhotoPagerActivity.newInstance(this, place.getType(), args));
                 break;
-
             case Place.SINGLE_PHOTO:
-                attachToFront(SinglePhotoFragment.newInstance(args));
-                break;
-
             case Place.GIF_PAGER:
-                attachToFront(GifPagerFragment.newInstance(args));
+                Intent ph = new Intent(this, PhotoFullScreenActivity.class);
+                ph.setAction(PhotoFullScreenActivity.ACTION_OPEN_PLACE);
+                ph.putExtra(Extra.PLACE, place);
+                startActivity(ph);
+                break;
+            case Place.DOC_PREVIEW:
+                Document document = args.getParcelable(Extra.DOC);
+                if (document != null && document.hasValidGifVideoLink()) {
+                    int aid = args.getInt(Extra.ACCOUNT_ID);
+                    ArrayList<Document> documents = new ArrayList<>(Collections.singletonList(document));
+                    Intent gf = new Intent(this, PhotoFullScreenActivity.class);
+                    gf.setAction(PhotoFullScreenActivity.ACTION_OPEN_PLACE);
+                    gf.putExtra(Extra.PLACE, PlaceFactory.getGifPagerPlace(aid, documents, 0));
+                    startActivity(gf);
+                } else {
+                    Intent docI = new Intent(this, SwipebleActivity.class);
+                    docI.setAction(MainActivity.ACTION_OPEN_PLACE);
+                    docI.putExtra(Extra.PLACE, place);
+                    SwipebleActivity.start(this, docI);
+                }
                 break;
             case Place.PLAYER:
                 Fragment player = getSupportFragmentManager().findFragmentByTag("audio_player");

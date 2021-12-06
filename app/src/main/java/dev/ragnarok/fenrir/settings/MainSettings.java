@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
-import java.util.Objects;
-
 import dev.ragnarok.fenrir.model.PhotoSize;
 import dev.ragnarok.fenrir.settings.theme.ThemeOverlay;
 import dev.ragnarok.fenrir.upload.Upload;
@@ -18,7 +16,6 @@ import dev.ragnarok.fenrir.view.pager.Transformers_Types;
 class MainSettings implements ISettings.IMainSettings {
 
     private static final String KEY_IMAGE_SIZE = "image_size";
-    private static final String KEY_CUSTOM_TABS = "custom_tabs";
 
     private final Context app;
 
@@ -38,7 +35,7 @@ class MainSettings implements ISettings.IMainSettings {
     public @ThemeOverlay
     int getThemeOverlay() {
         try {
-            return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("theme_overlay", "0")));
+            return Integer.parseInt(getDefaultPreferences().getString("theme_overlay", "0").trim());
         } catch (Exception e) {
             return ThemeOverlay.OFF;
         }
@@ -114,13 +111,17 @@ class MainSettings implements ISettings.IMainSettings {
 
     @Override
     public int getUploadImageSizePref() {
-        return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString(KEY_IMAGE_SIZE, "0")));
+        try {
+            return Integer.parseInt(getDefaultPreferences().getString(KEY_IMAGE_SIZE, "0").trim());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int getStart_newsMode() {
         try {
-            return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("start_news", "2")));
+            return Integer.parseInt(getDefaultPreferences().getString("start_news", "2").trim());
         } catch (Exception e) {
             return 2;
         }
@@ -140,7 +141,7 @@ class MainSettings implements ISettings.IMainSettings {
     @Override
     public int cryptVersion() {
         try {
-            return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("crypt_version", "1")));
+            return Integer.parseInt(getDefaultPreferences().getString("crypt_version", "1").trim());
         } catch (Exception e) {
             return 1;
         }
@@ -149,7 +150,7 @@ class MainSettings implements ISettings.IMainSettings {
     @PhotoSize
     private int restorePhotoPreviewSize() {
         try {
-            return Integer.parseInt(getDefaultPreferences().getString("photo_preview_size", String.valueOf(PhotoSize.Y)));
+            return Integer.parseInt(getDefaultPreferences().getString("photo_preview_size", String.valueOf(PhotoSize.Y)).trim());
         } catch (Exception e) {
             return PhotoSize.Y;
         }
@@ -159,7 +160,7 @@ class MainSettings implements ISettings.IMainSettings {
     @Transformers_Types
     public int getViewpager_page_transform() {
         try {
-            return Integer.parseInt(getDefaultPreferences().getString("viewpager_page_transform", String.valueOf(Transformers_Types.OFF)));
+            return Integer.parseInt(getDefaultPreferences().getString("viewpager_page_transform", String.valueOf(Transformers_Types.OFF)).trim());
         } catch (Exception e) {
             return Transformers_Types.OFF;
         }
@@ -169,7 +170,7 @@ class MainSettings implements ISettings.IMainSettings {
     @Transformers_Types
     public int getPlayer_cover_transform() {
         try {
-            return Integer.parseInt(getDefaultPreferences().getString("player_cover_transform", String.valueOf(Transformers_Types.DEPTH_TRANSFORMER)));
+            return Integer.parseInt(getDefaultPreferences().getString("player_cover_transform", String.valueOf(Transformers_Types.DEPTH_TRANSFORMER)).trim());
         } catch (Exception e) {
             return Transformers_Types.DEPTH_TRANSFORMER;
         }
@@ -192,12 +193,20 @@ class MainSettings implements ISettings.IMainSettings {
 
     @Override
     public int getPhotoRoundMode() {
-        return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("photo_rounded_view", "0")));
+        try {
+            return Integer.parseInt(getDefaultPreferences().getString("photo_rounded_view", "0").trim());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int getFontSize() {
-        return Integer.parseInt(Objects.requireNonNull(getDefaultPreferences().getString("font_size", "0")));
+        try {
+            return Integer.parseInt(getDefaultPreferences().getString("font_size", "0").trim());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
@@ -209,8 +218,12 @@ class MainSettings implements ISettings.IMainSettings {
     }
 
     @Override
-    public boolean isCustomTabEnabled() {
-        return getDefaultPreferences().getBoolean(KEY_CUSTOM_TABS, false);
+    public int isOpenUrlInternal() {
+        try {
+            return Integer.parseInt(getDefaultPreferences().getString("is_open_url_internal", "1").trim());
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
     @Override

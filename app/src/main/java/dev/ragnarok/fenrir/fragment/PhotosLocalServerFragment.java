@@ -1,12 +1,16 @@
 package dev.ragnarok.fenrir.fragment;
 
+import static android.app.Activity.RESULT_OK;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -15,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,8 +45,15 @@ import dev.ragnarok.fenrir.view.MySearchView;
 
 public class PhotosLocalServerFragment extends BaseMvpFragment<PhotosLocalServerPresenter, IPhotosLocalServerView>
         implements MySearchView.OnQueryTextListener, LocalServerPhotosAdapter.PhotoSelectionListener, IPhotosLocalServerView {
+    private final ActivityResultLauncher<Intent> requestPhotoUpdate = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getExtras() != null) {
+                    postPresenterReceive(p -> p.updateInfo(result.getData().getExtras().getInt(Extra.POSITION), result.getData().getExtras().getLong(Extra.PTR)));
+                }
+            });
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LocalServerPhotosAdapter mPhotoRecyclerAdapter;
+    private RecyclerView recyclerView;
 
     public static PhotosLocalServerFragment newInstance(int accountId) {
         Bundle args = new Bundle();
@@ -51,6 +61,12 @@ public class PhotosLocalServerFragment extends BaseMvpFragment<PhotosLocalServer
         PhotosLocalServerFragment fragment = new PhotosLocalServerFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void scrollTo(int position) {
+        mPhotoRecyclerAdapter.updateCurrentPosition(position);
+        recyclerView.scrollToPosition(position);
     }
 
     @Override
@@ -71,7 +87,7 @@ public class PhotosLocalServerFragment extends BaseMvpFragment<PhotosLocalServer
         mSwipeRefreshLayout.setOnRefreshListener(() -> callPresenter(p -> p.fireRefresh(false)));
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
+        recyclerView = root.findViewById(R.id.recycler_view);
         int columns = requireActivity().getResources().getInteger(R.integer.photos_column_count);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(columns, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
@@ -146,8 +162,8 @@ public class PhotosLocalServerFragment extends BaseMvpFragment<PhotosLocalServer
     }
 
     @Override
-    public void displayGalleryUnSafe(int accountId, int albumId, int ownerId, ArrayList<Photo> photos, int position, boolean reversed) {
-        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, photos, position, true, reversed).tryOpenWith(requireActivity());
+    public void displayGalleryUnSafe(int accountId, int albumId, int ownerId, long parcelNativePointer, int position, boolean reversed) {
+        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, parcelNativePointer, position, true, reversed).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
     }
 
     @Override

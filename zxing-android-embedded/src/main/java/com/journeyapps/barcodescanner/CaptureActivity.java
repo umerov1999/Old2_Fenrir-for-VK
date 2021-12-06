@@ -1,17 +1,17 @@
 package com.journeyapps.barcodescanner;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.client.android.R;
 
 /**
  *
  */
-public class CaptureActivity extends Activity {
+public class CaptureActivity extends AppCompatActivity {
     private CaptureManager capture;
     private DecoratedBarcodeView barcodeScannerView;
 
@@ -62,6 +62,7 @@ public class CaptureActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         capture.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 

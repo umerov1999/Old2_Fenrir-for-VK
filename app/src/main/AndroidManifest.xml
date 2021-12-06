@@ -378,6 +378,20 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
+            android:name=".activity.PhotoPagerActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/photos"
+            android:theme="@style/App.DayNight.Swipes"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name=".activity.PhotoFullScreenActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/photos"
+            android:theme="@style/App.DayNight.Swipes"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
             android:name=".activity.NotReadMessagesActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/not_read"

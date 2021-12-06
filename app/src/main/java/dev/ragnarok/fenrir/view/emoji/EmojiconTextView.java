@@ -17,6 +17,7 @@
 package dev.ragnarok.fenrir.view.emoji;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -42,15 +43,10 @@ import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.ClickableForegroundColorSpan;
 import dev.ragnarok.fenrir.view.WrapWidthTextView;
 
-/**
- * Здесь умер:
- * Emin Guliev
- * 03.01.1998 - 04.02.2018
- * R.I.P
- */
 public class EmojiconTextView extends WrapWidthTextView implements ClickableForegroundColorSpan.OnHashTagClickListener {
 
-    private static final Pattern URL_PATTERN = Pattern.compile("((http|https|rstp)://\\S*)");
+    private static final Pattern URL_VK_PATTERN = Pattern.compile("(((http|https|rstp)://)?(\\w+.)?vk\\.(com|me|cc)/\\S*)");
+    private static final Pattern URL_NON_VK_PATTERN = Pattern.compile("((http|https|rstp)://(?!(\\w+.)?vk\\.(com|me|cc)/)\\S*)");
     private int mEmojiconSize;
     private int mTextStart;
     private int mTextLength = -1;
@@ -155,9 +151,13 @@ public class EmojiconTextView extends WrapWidthTextView implements ClickableFore
             if (!Settings.get().ui().isSystemEmoji()) {
                 EmojiconHandler.addEmojis(getContext(), spannable, mEmojiconSize, mTextStart, mTextLength);
             }
+            int mode = Settings.get().main().isOpenUrlInternal();
 
-            if (Settings.get().main().isCustomTabEnabled()) {
-                linkifyUrl(spannable);
+            if (mode > 0) {
+                linkifyVKUrl(spannable);
+            }
+            if (mode > 1) {
+                linkifyNonVKUrl(spannable);
             }
 
             super.setText(spannable, type);
@@ -166,8 +166,22 @@ public class EmojiconTextView extends WrapWidthTextView implements ClickableFore
         }
     }
 
-    public void linkifyUrl(Spannable spannable) {
-        Matcher m = URL_PATTERN.matcher(spannable);
+    public void linkifyVKUrl(Spannable spannable) {
+        Matcher m = URL_VK_PATTERN.matcher(spannable);
+        while (m.find()) {
+            String url = spannable.toString().substring(m.start(), m.end());
+            ClickableSpan urlSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    LinkHelper.openUrl((Activity) getContext(), Settings.get().accounts().getCurrent(), url);
+                }
+            };
+            spannable.setSpan(urlSpan, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+    }
+
+    public void linkifyNonVKUrl(Spannable spannable) {
+        Matcher m = URL_NON_VK_PATTERN.matcher(spannable);
         while (m.find()) {
             String url = spannable.toString().substring(m.start(), m.end());
             ClickableSpan urlSpan = new ClickableSpan() {

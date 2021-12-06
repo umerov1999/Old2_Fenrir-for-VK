@@ -1,14 +1,18 @@
 package dev.ragnarok.fenrir.place;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+
+import dev.ragnarok.fenrir.util.Objects;
 
 public class Place implements Parcelable {
 
@@ -122,6 +126,7 @@ public class Place implements Parcelable {
     private final int type;
     private String requestListenerKey;
     private FragmentResultListener requestListener;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     private Bundle args;
 
     public Place(int type) {
@@ -142,6 +147,11 @@ public class Place implements Parcelable {
     public Place setFragmentListener(@NonNull String requestListenerKey, @NonNull FragmentResultListener requestListener) {
         this.requestListenerKey = requestListenerKey;
         this.requestListener = requestListener;
+        return this;
+    }
+
+    public Place setActivityResultLauncher(@NonNull ActivityResultLauncher<Intent> activityResultLauncher) {
+        this.activityResultLauncher = activityResultLauncher;
         return this;
     }
 
@@ -180,6 +190,11 @@ public class Place implements Parcelable {
         return this;
     }
 
+    public Place withLongExtra(String name, long value) {
+        prepareArguments().putLong(name, value);
+        return this;
+    }
+
     public Bundle prepareArguments() {
         if (args == null) {
             args = new Bundle();
@@ -188,13 +203,17 @@ public class Place implements Parcelable {
         return args;
     }
 
-    public boolean hasListener() {
-        return requestListener != null;
+    public void applyFragmentListener(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager) {
+        if (Objects.nonNull(requestListener)) {
+            fragmentManager.setFragmentResultListener(requestListenerKey, fragment, requestListener);
+        }
     }
 
-    public void applyFragmentListener(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager) {
-        if (hasListener()) {
-            fragmentManager.setFragmentResultListener(requestListenerKey, fragment, requestListener);
+    public void launchActivityForResult(@NonNull Context context, @NonNull Intent intent) {
+        if (Objects.nonNull(activityResultLauncher)) {
+            activityResultLauncher.launch(intent);
+        } else {
+            context.startActivity(intent);
         }
     }
 

@@ -55,7 +55,7 @@ public class UserBannedFragment extends BaseMvpFragment<UserBannedPresenter, IUs
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     ArrayList<Owner> users = result.getData().getParcelableArrayListExtra(Extra.OWNERS);
                     AssertUtils.requireNonNull(users);
-                    postPrenseterReceive(presenter -> presenter.fireUsersSelected(users));
+                    postPresenterReceive(presenter -> presenter.fireUsersSelected(users));
                 }
             });
     private SwipeRefreshLayout mSwipeRefreshLayout;

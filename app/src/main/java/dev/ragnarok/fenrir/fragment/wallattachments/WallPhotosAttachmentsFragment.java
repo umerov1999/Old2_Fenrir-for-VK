@@ -1,13 +1,17 @@
 package dev.ragnarok.fenrir.fragment.wallattachments;
 
+import static android.app.Activity.RESULT_OK;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -45,6 +49,15 @@ public class WallPhotosAttachmentsFragment extends PlaceSupportMvpFragment<WallP
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FavePhotosAdapter mAdapter;
     private FloatingActionButton mLoadMore;
+    private RecyclerView recyclerView;
+    private final ActivityResultLauncher<Intent> requestPhotoUpdate = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getExtras() != null) {
+                    int ps = result.getData().getExtras().getInt(Extra.POSITION);
+                    mAdapter.updateCurrentPosition(ps);
+                    recyclerView.scrollToPosition(ps);
+                }
+            });
 
     public static WallPhotosAttachmentsFragment newInstance(int accountId, int ownerId) {
         Bundle args = new Bundle();
@@ -65,7 +78,7 @@ public class WallPhotosAttachmentsFragment extends PlaceSupportMvpFragment<WallP
         int columns = getResources().getInteger(R.integer.photos_column_count);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireActivity(), columns);
 
-        RecyclerView recyclerView = root.findViewById(android.R.id.list);
+        recyclerView = root.findViewById(android.R.id.list);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -170,7 +183,12 @@ public class WallPhotosAttachmentsFragment extends PlaceSupportMvpFragment<WallP
 
     @Override
     public void goToTempPhotosGallery(int accountId, @NonNull TmpSource source, int index) {
-        PlaceFactory.getTmpSourceGalleryPlace(accountId, source, index).tryOpenWith(requireActivity());
+        PlaceFactory.getTmpSourceGalleryPlace(accountId, source, index).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void goToTempPhotosGallery(int accountId, long ptr, int index) {
+        PlaceFactory.getTmpSourceGalleryPlace(accountId, ptr, index).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
     }
 
     @Override

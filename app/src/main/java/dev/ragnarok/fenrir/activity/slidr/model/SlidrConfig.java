@@ -1,8 +1,6 @@
 package dev.ragnarok.fenrir.activity.slidr.model;
 
 
-import android.graphics.Color;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.customview.widget.ViewDragHelper;
@@ -14,11 +12,10 @@ import androidx.customview.widget.ViewDragHelper;
  */
 public class SlidrConfig {
 
-    private int colorPrimary = -1;
-    private int colorSecondary = -1;
+    private boolean fromUnColoredToColoredStatusBar;
     private float touchSize = -1f;
     private float sensitivity = 0.5f;
-    private int scrimColor = Color.BLACK;
+    private int scrimColor = -1;
     private float scrimStartAlpha = 0.8f;
     private float scrimEndAlpha;
     private float velocityThreshold = 5f;
@@ -26,6 +23,7 @@ public class SlidrConfig {
     private boolean edgeOnly;
     private float edgeSize = 0.18f;
     private boolean ignoreChildScroll;
+    private boolean alphaForView = true;
 
     private SlidrPosition position = SlidrPosition.LEFT;
     private SlidrListener listener;
@@ -35,34 +33,20 @@ public class SlidrConfig {
         // Unused.
     }
 
+    public boolean isFromUnColoredToColoredStatusBar() {
+        return fromUnColoredToColoredStatusBar;
+    }
 
     /***********************************************************************************************
      *
-     * Getters
+     * Setters
      *
      */
 
-    /**
-     * Get the primary color that the slider will interpolate. That is this color is the color
-     * of the status bar of the Activity you are returning to
-     *
-     * @return the primary status bar color
-     */
-    public int getPrimaryColor() {
-        return colorPrimary;
+
+    public void setFromUnColoredToColoredStatusBar(boolean en) {
+        fromUnColoredToColoredStatusBar = en;
     }
-
-
-    /**
-     * Get the secondary color that the slider will interpolatel That is the color of the Activity
-     * that you are making slidable
-     *
-     * @return the secondary status bar color
-     */
-    public int getSecondaryColor() {
-        return colorSecondary;
-    }
-
 
     /**
      * Get the color of the background scrim
@@ -170,6 +154,14 @@ public class SlidrConfig {
         this.sensitivity = sensitivity;
     }
 
+    public boolean isAlphaForView() {
+        return alphaForView;
+    }
+
+    public void setAlphaForView(boolean alphaForView) {
+        this.alphaForView = alphaForView;
+    }
+
     /**
      * Get the slidr listener set by the user to respond to certain events in the sliding
      * mechanism.
@@ -208,21 +200,6 @@ public class SlidrConfig {
         return ignoreChildScroll;
     }
 
-    /***********************************************************************************************
-     *
-     * Setters
-     *
-     */
-
-
-    public void setColorPrimary(int colorPrimary) {
-        this.colorPrimary = colorPrimary;
-    }
-
-    public void setColorSecondary(int colorSecondary) {
-        this.colorSecondary = colorSecondary;
-    }
-
     /**
      * The Builder for this configuration class. This is the only way to create a
      * configuration
@@ -235,13 +212,8 @@ public class SlidrConfig {
             config = new SlidrConfig();
         }
 
-        public Builder primaryColor(@ColorInt int color) {
-            config.colorPrimary = color;
-            return this;
-        }
-
-        public Builder secondaryColor(@ColorInt int color) {
-            config.colorSecondary = color;
+        public Builder fromUnColoredToColoredStatusBar(boolean en) {
+            config.fromUnColoredToColoredStatusBar = en;
             return this;
         }
 
@@ -297,6 +269,11 @@ public class SlidrConfig {
 
         public Builder ignoreChildScroll(boolean ignoreChildScroll) {
             config.ignoreChildScroll = ignoreChildScroll;
+            return this;
+        }
+
+        public Builder setAlphaForView(boolean alphaForView) {
+            config.alphaForView = alphaForView;
             return this;
         }
 

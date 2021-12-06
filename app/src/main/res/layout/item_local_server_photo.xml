@@ -25,6 +25,17 @@
             app:aspectRatioW="1"
             app:dominantMeasurement="width" />
 
+        <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
+            android:id="@+id/current"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/imageView"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBottom="@+id/imageView"
+            android:visibility="gone"
+            app:loopAnimation="true" />
+
         <FrameLayout
             android:id="@+id/vk_photo_item_top"
             android:layout_width="match_parent"

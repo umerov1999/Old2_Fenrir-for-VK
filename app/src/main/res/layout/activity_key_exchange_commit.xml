@@ -42,7 +42,7 @@
             android:gravity="center"
             android:padding="8dp"
             android:textSize="16sp"
-            tools:text="Ruslan Kolbasa" />
+            tools:text="Umerov Artem" />
 
         <LinearLayout
             android:layout_width="wrap_content"

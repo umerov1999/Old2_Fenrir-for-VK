@@ -316,7 +316,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
         PlaceFactory.getCommentCreatePlace(accountId, draftCommentId, sourceOwnerId, draftCommentBody)
                 .setFragmentListener(CommentCreateFragment.REQUEST_CREATE_COMMENT, (requestKey, result) -> {
                     String body = result.getString(Extra.BODY);
-                    postPrenseterReceive(presenter -> presenter.fireEditBodyResult(body));
+                    postPresenterReceive(presenter -> presenter.fireEditBodyResult(body));
                 })
                 .tryOpenWith(requireActivity());
     }
@@ -350,7 +350,7 @@ public class CommentsFragment extends PlaceSupportMvpFragment<CommentsPresenter,
                     Comment comment1 = result.getParcelable(Extra.COMMENT);
 
                     if (nonNull(comment1)) {
-                        postPrenseterReceive(presenter -> presenter.fireCommentEditResult(comment1));
+                        postPresenterReceive(presenter -> presenter.fireCommentEditResult(comment1));
                     }
                 })
                 .tryOpenWith(requireActivity());

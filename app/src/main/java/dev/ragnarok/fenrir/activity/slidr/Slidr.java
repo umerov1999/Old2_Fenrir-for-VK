@@ -2,10 +2,10 @@ package dev.ragnarok.fenrir.activity.slidr;
 
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import dev.ragnarok.fenrir.R;
@@ -30,30 +30,22 @@ public final class Slidr {
      */
     @NonNull
     public static SlidrInterface attach(@NonNull Activity activity) {
-        return attach(activity, -1, -1);
+        return attach(activity, false, true);
     }
 
 
-    /**
-     * Attach a slideable mechanism to an activity that adds the slide to dismiss functionality
-     * and allows for the statusbar to transition between colors
-     *
-     * @param activity        the activity to attach the slider to
-     * @param statusBarColor1 the primaryDark status bar color of the interface that this will slide back to
-     * @param statusBarColor2 the primaryDark status bar color of the activity this is attaching to that will transition
-     *                        back to the statusBarColor1 color
-     * @return a {@link dev.ragnarok.fenrir.activity.slidr.model.SlidrInterface} that allows
-     * the user to lock/unlock the sliding mechanism for whatever purpose.
-     */
     @NonNull
-    public static SlidrInterface attach(@NonNull Activity activity, @ColorInt int statusBarColor1,
-                                        @ColorInt int statusBarColor2) {
+    public static SlidrInterface attach(@NonNull Activity activity, boolean fromUnColoredToColoredStatusBar, boolean useAlpha) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.setTranslucent(true);
+        }
+        activity.getWindow().setBackgroundDrawableResource(R.color.transparent);
 
         // Setup the slider panel and attach it to the decor
         SliderPanel panel = attachSliderPanel(activity, null);
 
         // Set the panel slide listener for when it becomes closed or opened
-        panel.setOnPanelSlideListener(new ColorPanelSlideListener(activity, statusBarColor1, statusBarColor2));
+        panel.setOnPanelSlideListener(new ColorPanelSlideListener(activity, fromUnColoredToColoredStatusBar, useAlpha));
 
         // Return the lock interface
         return panel.getDefaultInterface();
@@ -70,7 +62,10 @@ public final class Slidr {
      */
     @NonNull
     public static SlidrInterface attach(@NonNull Activity activity, @NonNull SlidrConfig config) {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.setTranslucent(true);
+        }
+        activity.getWindow().setBackgroundDrawableResource(R.color.transparent);
         // Setup the slider panel and attach it to the decor
         SliderPanel panel = attachSliderPanel(activity, config);
 

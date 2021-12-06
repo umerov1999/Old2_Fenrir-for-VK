@@ -74,7 +74,7 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     ArrayList<Owner> owners = result.getData().getParcelableArrayListExtra(Extra.OWNERS);
                     AssertUtils.requireNonNull(owners);
-                    postPrenseterReceive(presenter -> presenter.fireAddToFaveList(requireActivity(), owners));
+                    postPresenterReceive(presenter -> presenter.fireAddToFaveList(requireActivity(), owners));
                 }
             });
     private FeedAdapter mAdapter;

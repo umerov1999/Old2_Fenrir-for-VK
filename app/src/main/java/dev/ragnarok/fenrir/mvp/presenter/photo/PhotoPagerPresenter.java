@@ -90,6 +90,10 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         AssertUtils.requireNonNull(mPhotos, "'mPhotos' not initialized");
     }
 
+    public void close() {
+        callView(IPhotoPagerView::finalize);
+    }
+
     @Override
     public void saveState(@NonNull Bundle outState) {
         super.saveState(outState);

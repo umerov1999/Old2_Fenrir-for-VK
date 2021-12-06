@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:windowBackground"
+        android:background="?colorSurfaceVariant"
         android:orientation="vertical"
         android:paddingBottom="4dp">
 
@@ -90,7 +90,7 @@
     <dev.ragnarok.fenrir.view.SawView
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        app:sawBackground="?android:windowBackground"
+        app:sawBackground="?colorSurfaceVariant"
         app:sawToothPrefWidht="8dp" />
 
     <include layout="@layout/attachments_buttons_bar" />

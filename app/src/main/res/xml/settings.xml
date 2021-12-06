@@ -233,11 +233,14 @@
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="custom_tabs"
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/array_is_open_url_internal_names"
+            android:entryValues="@array/array_is_open_url_internal_items"
+            android:key="is_open_url_internal"
             android:title="@string/open_links_in_app"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
         <SwitchPreference
             android:defaultValue="false"

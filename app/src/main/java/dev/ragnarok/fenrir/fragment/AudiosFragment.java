@@ -149,13 +149,13 @@ public class AudiosFragment extends BaseMvpFragment<AudiosPresenter, IAudiosView
         searchView.setOnQueryTextListener(new MySearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                postPrenseterReceive(p -> p.fireSearchRequestChanged(query));
+                postPresenterReceive(p -> p.fireSearchRequestChanged(query));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                postPrenseterReceive(p -> p.fireSearchRequestChanged(newText));
+                postPresenterReceive(p -> p.fireSearchRequestChanged(newText));
                 return false;
             }
         });

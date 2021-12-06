@@ -7,6 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,7 +35,7 @@ public abstract class NoMainActivity extends AppCompatActivity {
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         isZoomPhoto = Settings.get().other().isDo_zoom_photo();
-        setContentView(R.layout.activity_no_main);
+        setContentView(getNoMainContentView());
 
         Window w = getWindow();
         w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -56,6 +57,11 @@ public abstract class NoMainActivity extends AppCompatActivity {
             return super.dispatchTouchEvent(ev);
         }
         return ZoomHelper.Companion.getInstance().dispatchTouchEvent(ev, this) || super.dispatchTouchEvent(ev);
+    }
+
+    @LayoutRes
+    protected int getNoMainContentView() {
+        return R.layout.activity_no_main;
     }
 
     @IdRes

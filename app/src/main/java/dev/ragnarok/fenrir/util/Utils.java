@@ -49,18 +49,18 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.stream.JsonReader;
+import com.google.zxing.qrcode.CustomQRCodeWriter;
 
 import java.io.Closeable;
 import java.io.File;
@@ -1472,6 +1472,24 @@ public class Utils {
         }
     }
 
+    public static int clamp(int value, int min, int max) {
+        if (value > max) {
+            return max;
+        } else if (value < min) {
+            return min;
+        }
+        return value;
+    }
+
+    public static float clamp(float value, float min, float max) {
+        if (value > max) {
+            return max;
+        } else if (value < min) {
+            return min;
+        }
+        return value;
+    }
+
     @SuppressLint("CheckResult")
     public static void inMainThread(@NonNull safeCallInt function) {
         Completable.complete()
@@ -1782,22 +1800,8 @@ public class Utils {
     }
 
     @Nullable
-    public static Bitmap renderSVG(@Nullable String str, int width, int height) {
-        if (isEmpty(str)) {
-            return null;
-        }
-        try {
-            SVG svg = SVG.getFromString(str);
-            svg.setDocumentWidth(width);
-            svg.setDocumentHeight(height);
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            svg.renderToCanvas(canvas);
-            return bitmap;
-        } catch (SVGParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Bitmap generateQR(@NonNull String url, @NonNull Context context) {
+        return new CustomQRCodeWriter().encode(url, 768, 768, ResourcesCompat.getDrawable(context.getResources(), R.drawable.for_qr, context.getTheme()));
     }
 
     public static int makeMutablePendingIntent(int flags) {
@@ -1833,14 +1837,14 @@ public class Utils {
     }
 
     public static int nextIntInRangeButExclude(int start, int end, Integer[] excludes) {
+        if (excludes == null || excludes.length <= 0) {
+            return rnd(start, end);
+        }
         List<Integer> ints = new ArrayList<>(end - start + 1);
         for (int i = start; i <= end; i++) {
             ints.add(i);
         }
-        if (excludes != null && excludes.length > 0) {
-            ints.removeAll(Arrays.asList(excludes));
-        }
-
+        ints.removeAll(Arrays.asList(excludes));
         return getRandomFromList(ints);
     }
 

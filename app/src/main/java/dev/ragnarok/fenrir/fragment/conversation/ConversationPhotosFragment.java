@@ -1,7 +1,12 @@
 package dev.ragnarok.fenrir.fragment.conversation;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,6 +27,15 @@ import dev.ragnarok.fenrir.place.PlaceFactory;
 
 public class ConversationPhotosFragment extends AbsChatAttachmentsFragment<Photo, ChatAttachmentPhotoPresenter,
         IChatAttachmentPhotosView> implements FavePhotosAdapter.PhotoSelectionListener, FavePhotosAdapter.PhotoConversationListener, IChatAttachmentPhotosView {
+
+    private final ActivityResultLauncher<Intent> requestPhotoUpdate = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getExtras() != null) {
+                    int ps = result.getData().getExtras().getInt(Extra.POSITION);
+                    ((FavePhotosAdapter) getAdapter()).updateCurrentPosition(ps);
+                    mRecyclerView.scrollToPosition(ps);
+                }
+            });
 
     @Override
     protected RecyclerView.LayoutManager createLayoutManager() {
@@ -60,7 +74,12 @@ public class ConversationPhotosFragment extends AbsChatAttachmentsFragment<Photo
 
     @Override
     public void goToTempPhotosGallery(int accountId, @NonNull TmpSource source, int index) {
-        PlaceFactory.getTmpSourceGalleryPlace(accountId, source, index).tryOpenWith(requireActivity());
+        PlaceFactory.getTmpSourceGalleryPlace(accountId, source, index).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
+    }
+
+    @Override
+    public void goToTempPhotosGallery(int accountId, long ptr, int index) {
+        PlaceFactory.getTmpSourceGalleryPlace(accountId, ptr, index).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
     }
 
     @Override

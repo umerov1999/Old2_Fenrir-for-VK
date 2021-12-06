@@ -1,26 +1,47 @@
 package dev.ragnarok.fenrir.activity.slidr;
 
+import static dev.ragnarok.fenrir.util.Objects.nonNull;
+
 import android.animation.ArgbEvaluator;
 import android.app.Activity;
-import android.os.Build;
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.ColorInt;
+import androidx.core.graphics.ColorUtils;
 
 import dev.ragnarok.fenrir.activity.slidr.widget.SliderPanel;
+import dev.ragnarok.fenrir.settings.CurrentTheme;
+import dev.ragnarok.fenrir.util.Utils;
 
 
 class ColorPanelSlideListener implements SliderPanel.OnPanelSlideListener {
 
     private final Activity activity;
-    private final int primaryColor;
-    private final int secondaryColor;
+    private final boolean fromUnColoredToColoredStatusBar;
+    private final boolean useAlpha;
     private final ArgbEvaluator evaluator = new ArgbEvaluator();
 
+    private final @ColorInt
+    int statusBarNonColored;
+    private final @ColorInt
+    int statusBarColored;
+    private final @ColorInt
+    int navigationBarNonColored;
+    private final @ColorInt
+    int navigationBarColored;
 
-    ColorPanelSlideListener(Activity activity, @ColorInt int primaryColor, @ColorInt int secondaryColor) {
+    ColorPanelSlideListener(Activity activity, boolean fromUnColoredToColoredStatusBar, boolean useAlpha) {
         this.activity = activity;
-        this.primaryColor = primaryColor;
-        this.secondaryColor = secondaryColor;
+        this.fromUnColoredToColoredStatusBar = fromUnColoredToColoredStatusBar;
+        this.useAlpha = useAlpha;
+
+        statusBarNonColored = CurrentTheme.getStatusBarNonColored(activity);
+        statusBarColored = CurrentTheme.getStatusBarColor(activity);
+
+        navigationBarNonColored = Color.BLACK;
+        navigationBarColored = CurrentTheme.getNavigationBarColor(activity);
     }
 
 
@@ -42,27 +63,56 @@ class ColorPanelSlideListener implements SliderPanel.OnPanelSlideListener {
         // Unused.
     }
 
+    private boolean isDark(@ColorInt int color) {
+        return ColorUtils.calculateLuminance(color) < 0.5;
+    }
+
 
     @Override
     public void onSlideChange(float percent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && areColorsValid()) {
-            int newColor = (int) evaluator.evaluate(percent, getPrimaryColor(), getSecondaryColor());
-            activity.getWindow().setStatusBarColor(newColor);
+        try {
+            if (isFromUnColoredToColoredStatusBar()) {
+
+                int statusColor = (int) evaluator.evaluate(percent, statusBarColored, statusBarNonColored);
+                int navigationColor = (int) evaluator.evaluate(percent, navigationBarColored, navigationBarNonColored);
+                Window w = activity.getWindow();
+                if (nonNull(w)) {
+                    w.setStatusBarColor(statusColor);
+                    w.setNavigationBarColor(navigationColor);
+                    boolean invertIcons = !isDark(statusColor);
+                    if (Utils.hasMarshmallow()) {
+                        int flags = w.getDecorView().getSystemUiVisibility();
+                        if (invertIcons) {
+                            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                        } else {
+                            flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                        }
+                        w.getDecorView().setSystemUiVisibility(flags);
+                    }
+
+                    if (Utils.hasOreo()) {
+                        int flags = w.getDecorView().getSystemUiVisibility();
+                        if (invertIcons) {
+                            flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                        } else {
+                            flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                        }
+                        w.getDecorView().setSystemUiVisibility(flags);
+                    }
+                }
+            }
+            if (isUseAlpha()) {
+                activity.getWindow().getDecorView().getRootView().setAlpha(Utils.clamp(percent, 0f, 1f));
+            }
+        } catch (Exception ignored) {
         }
     }
 
-
-    protected int getPrimaryColor() {
-        return primaryColor;
+    boolean isFromUnColoredToColoredStatusBar() {
+        return fromUnColoredToColoredStatusBar;
     }
 
-
-    protected int getSecondaryColor() {
-        return secondaryColor;
-    }
-
-
-    protected boolean areColorsValid() {
-        return getPrimaryColor() != -1 && getSecondaryColor() != -1;
+    boolean isUseAlpha() {
+        return useAlpha;
     }
 }

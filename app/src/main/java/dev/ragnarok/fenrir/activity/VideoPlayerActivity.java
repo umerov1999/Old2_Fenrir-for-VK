@@ -15,11 +15,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +32,7 @@ import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.activity.slidr.Slidr;
 import dev.ragnarok.fenrir.activity.slidr.model.SlidrConfig;
+import dev.ragnarok.fenrir.listener.AppStyleable;
 import dev.ragnarok.fenrir.media.video.ExoVideoPlayer;
 import dev.ragnarok.fenrir.media.video.IVideoPlayer;
 import dev.ragnarok.fenrir.model.Commented;
@@ -52,7 +55,7 @@ import dev.ragnarok.fenrir.view.VideoControllerView;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback,
-        VideoControllerView.MediaPlayerControl, IVideoPlayer.IVideoSizeChangeListener {
+        VideoControllerView.MediaPlayerControl, IVideoPlayer.IVideoSizeChangeListener, AppStyleable {
 
     public static final String EXTRA_VIDEO = "video";
     public static final String EXTRA_SIZE = "size";
@@ -151,15 +154,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Settings.get().other().isVideo_swipes()) {
-            Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).build());
-        }
-
         setTheme(ThemesController.INSTANCE.currentStyle());
         Utils.prepareDensity(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
-        getWindow().setStatusBarColor(Color.BLACK);
+        if (Settings.get().other().isVideo_swipes()) {
+            Slidr.attach(this, new SlidrConfig.Builder().scrimColor(CurrentTheme.getColorBackground(this)).fromUnColoredToColoredStatusBar(true).build());
+        }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mDecorView = getWindow().getDecorView();
@@ -253,6 +254,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     protected void onResume() {
         super.onResume();
+
+        new ActivityFeatures.Builder()
+                .begin()
+                .setHideNavigationMenu(true)
+                .setBarsColored(false, false)
+                .build()
+                .apply(this);
+
         onStopCalled = false;
 
         ActionBar actionBar = getSupportActionBar();
@@ -466,5 +475,51 @@ public class VideoPlayerActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void onVideoSizeChanged(@NonNull IVideoPlayer player, VideoSize size) {
         Frame.setAspectRatio(size.getWidth(), size.getHeight());
+    }
+
+    @Override
+    public void hideMenu(boolean hide) {
+
+    }
+
+    @Override
+    public void openMenu(boolean open) {
+
+    }
+
+    @Override
+    public void setStatusbarColored(boolean colored, boolean invertIcons) {
+        int statusbarNonColored = CurrentTheme.getStatusBarNonColored(this);
+        int statusbarColored = CurrentTheme.getStatusBarColor(this);
+
+        Window w = getWindow();
+        w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        w.setStatusBarColor(colored ? statusbarColored : statusbarNonColored);
+        @ColorInt
+        int navigationColor = colored ? CurrentTheme.getNavigationBarColor(this) : Color.BLACK;
+        w.setNavigationBarColor(navigationColor);
+
+        if (Utils.hasMarshmallow()) {
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
+            if (invertIcons) {
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+            getWindow().getDecorView().setSystemUiVisibility(flags);
+        }
+
+        if (Utils.hasOreo()) {
+            int flags = getWindow().getDecorView().getSystemUiVisibility();
+            if (invertIcons) {
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                w.getDecorView().setSystemUiVisibility(flags);
+                w.setNavigationBarColor(Color.WHITE);
+            } else {
+                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                w.getDecorView().setSystemUiVisibility(flags);
+            }
+        }
     }
 }

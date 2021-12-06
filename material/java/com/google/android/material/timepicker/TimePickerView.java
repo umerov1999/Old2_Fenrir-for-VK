@@ -25,8 +25,7 @@ import static java.util.Calendar.PM;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.core.view.AccessibilityDelegateCompat;
-import androidx.core.view.ViewCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -39,6 +38,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.button.MaterialButtonToggleGroup.OnButtonCheckedListener;
 import com.google.android.material.chip.Chip;
@@ -202,8 +203,12 @@ class TimePickerView extends ConstraintLayout implements TimePickerControls {
     Locale current = getResources().getConfiguration().locale;
     String minuteFormatted = String.format(current, TimeModel.ZERO_LEADING_NUMBER_FORMAT, minute);
     String hourFormatted = String.format(current, TimeModel.ZERO_LEADING_NUMBER_FORMAT, hourOfDay);
-    minuteView.setText(minuteFormatted);
-    hourView.setText(hourFormatted);
+    if (!TextUtils.equals(minuteView.getText(), minuteFormatted)) {
+      minuteView.setText(minuteFormatted);
+    }
+    if (!TextUtils.equals(hourView.getText(), hourFormatted)) {
+      hourView.setText(hourFormatted);
+    }
   }
 
   @Override

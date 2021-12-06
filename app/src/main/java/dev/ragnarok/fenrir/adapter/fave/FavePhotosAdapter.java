@@ -16,10 +16,12 @@ import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.PhotoSize;
+import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.picasso.PicassoInstance;
 import dev.ragnarok.fenrir.settings.CurrentTheme;
 import dev.ragnarok.fenrir.util.AppTextUtils;
 import dev.ragnarok.fenrir.util.Utils;
+import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
 
 public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.ViewHolder> {
 
@@ -27,10 +29,16 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
     private List<Photo> data;
     private PhotoSelectionListener photoSelectionListener;
     private PhotoConversationListener photoConversationListener;
+    private int currentPosition = -1;
 
     public FavePhotosAdapter(Context context, List<Photo> data) {
         this.data = data;
         colorPrimary = CurrentTheme.getColorPrimary(context);
+    }
+
+    public void updateCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -56,6 +64,17 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
 
         viewHolder.vgBottom.setBackgroundColor(Utils.adjustAlpha(colorPrimary, 0.75F));
         viewHolder.vgBottom.setVisibility(photo.getLikesCount() + photo.getCommentsCount() > 0 ? View.VISIBLE : View.GONE);
+
+        if (FenrirNative.isNativeLoaded()) {
+            if (currentPosition == position) {
+                viewHolder.current.setVisibility(View.VISIBLE);
+                viewHolder.current.fromRes(R.raw.donater_fire, Utils.dp(100), Utils.dp(100), new int[]{0xFF812E, colorPrimary}, true);
+                viewHolder.current.playAnimation();
+            } else {
+                viewHolder.current.setVisibility(View.GONE);
+                viewHolder.current.clearAnimationDrawable();
+            }
+        }
 
         PicassoInstance.with()
                 .load(photo.getUrlForSize(PhotoSize.X, false))
@@ -112,6 +131,7 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
         final TextView tvComment;
         final ImageView ivLike;
         final ImageView ivComment;
+        final RLottieImageView current;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -122,6 +142,7 @@ public class FavePhotosAdapter extends RecyclerView.Adapter<FavePhotosAdapter.Vi
             tvLike = itemView.findViewById(R.id.vk_photo_item_like_counter);
             ivComment = itemView.findViewById(R.id.vk_photo_item_comment);
             tvComment = itemView.findViewById(R.id.vk_photo_item_comment_counter);
+            current = itemView.findViewById(R.id.current);
         }
     }
 }

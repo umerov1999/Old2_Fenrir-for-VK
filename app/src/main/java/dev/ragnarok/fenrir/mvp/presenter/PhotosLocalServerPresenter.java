@@ -20,6 +20,7 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.TmpSource;
 import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
 import dev.ragnarok.fenrir.mvp.view.IPhotosLocalServerView;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -193,19 +194,25 @@ public class PhotosLocalServerPresenter extends AccountDependencyPresenter<IPhot
         }
     }
 
-    public void firePhotoClick(Photo photo) {
+    public void updateInfo(int position, long ptr) {
+        List<Photo> p = ParcelNative.fromNative(ptr).readParcelableList(Photo.NativeCreator);
+        photos.clear();
+        photos.addAll(p);
+        callView(v -> v.scrollTo(position));
+    }
+
+    public void firePhotoClick(Photo wrapper) {
         int Index = 0;
-        int it = 0;
         boolean trig = false;
-        for (Photo i : photos) {
-            if (!trig && i.getId() == photo.getId() && i.getOwnerId() == photo.getOwnerId()) {
-                Index = it;
-                trig = true;
-            }
-            it++;
-        }
-        int finalIndex = Index;
         if (!FenrirNative.isNativeLoaded() || !Settings.get().other().isNative_parcel_photo()) {
+            for (int i = 0; i < photos.size(); i++) {
+                Photo photo = photos.get(i);
+                if (!trig && photo.getId() == wrapper.getId() && photo.getOwnerId() == wrapper.getOwnerId()) {
+                    Index = i;
+                    trig = true;
+                }
+            }
+            int finalIndex = Index;
             TmpSource source = new TmpSource(getInstanceId(), 0);
             fireTempDataUsage();
             appendDisposable(Stores.getInstance()
@@ -214,7 +221,18 @@ public class PhotosLocalServerPresenter extends AccountDependencyPresenter<IPhot
                     .compose(RxUtils.applyCompletableIOToMainSchedulers())
                     .subscribe(() -> callView(view -> view.displayGallery(getAccountId(), -311, getAccountId(), source, finalIndex, reverse)), Analytics::logUnexpectedError));
         } else {
-            callView(view -> view.displayGalleryUnSafe(getAccountId(), -311, getAccountId(), new ArrayList<>(photos), finalIndex, reverse));
+            ParcelNative mem = ParcelNative.create();
+            mem.writeInt(photos.size());
+            for (int i = 0; i < photos.size(); i++) {
+                Photo photo = photos.get(i);
+                mem.writeParcelable(photo);
+                if (!trig && photo.getId() == wrapper.getId() && photo.getOwnerId() == wrapper.getOwnerId()) {
+                    Index = i;
+                    trig = true;
+                }
+            }
+            int finalIndex = Index;
+            callView(view -> view.displayGalleryUnSafe(getAccountId(), -311, getAccountId(), mem.getNativePointer(), finalIndex, reverse));
         }
     }
 

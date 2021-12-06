@@ -692,17 +692,29 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Lang
     @Override
     public int getLanguage() {
-        return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("language_ui", "0")));
+        try {
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("language_ui", "0").trim());
+        } catch (Exception e) {
+            return Lang.DEFAULT;
+        }
     }
 
     @Override
     public int getRendering_mode() {
-        return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("rendering_mode", "0")));
+        try {
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("rendering_mode", "0").trim());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int getEndListAnimation() {
-        return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("end_list_anim", "0")));
+        try {
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("end_list_anim", "0").trim());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
@@ -713,7 +725,7 @@ class OtherSettings implements ISettings.IOtherSettings {
     @Override
     public int getPaganSymbol() {
         try {
-            return Integer.parseInt(java.util.Objects.requireNonNull(PreferenceManager.getDefaultSharedPreferences(app).getString("pagan_symbol", "1")));
+            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(app).getString("pagan_symbol", "1").trim());
         } catch (Exception e) {
             return 1;
         }

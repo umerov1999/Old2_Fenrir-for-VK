@@ -50,7 +50,7 @@ public class CommunityManagersFragment extends BaseMvpFragment<CommunityManagers
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     ArrayList<Owner> users = result.getData().getParcelableArrayListExtra(Extra.OWNERS);
                     AssertUtils.requireNonNull(users);
-                    postPrenseterReceive(presenter -> presenter.fireProfilesSelected(users));
+                    postPresenterReceive(presenter -> presenter.fireProfilesSelected(users));
                 }
             });
     private SwipeRefreshLayout mSwipeRefreshLayout;

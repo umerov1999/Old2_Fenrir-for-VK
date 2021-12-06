@@ -108,7 +108,6 @@ import dev.ragnarok.fenrir.fragment.NotReadMessagesFragment;
 import dev.ragnarok.fenrir.fragment.NotificationPreferencesFragment;
 import dev.ragnarok.fenrir.fragment.OwnerArticlesFragment;
 import dev.ragnarok.fenrir.fragment.PhotoAllCommentFragment;
-import dev.ragnarok.fenrir.fragment.PhotoPagerFragment;
 import dev.ragnarok.fenrir.fragment.PhotosLocalServerFragment;
 import dev.ragnarok.fenrir.fragment.PlaylistsInCatalogFragment;
 import dev.ragnarok.fenrir.fragment.PollFragment;
@@ -119,7 +118,6 @@ import dev.ragnarok.fenrir.fragment.RequestExecuteFragment;
 import dev.ragnarok.fenrir.fragment.SecurityPreferencesFragment;
 import dev.ragnarok.fenrir.fragment.ShortedLinksFragment;
 import dev.ragnarok.fenrir.fragment.SideDrawerEditFragment;
-import dev.ragnarok.fenrir.fragment.SinglePhotoFragment;
 import dev.ragnarok.fenrir.fragment.StoryPagerFragment;
 import dev.ragnarok.fenrir.fragment.ThemeFragment;
 import dev.ragnarok.fenrir.fragment.TopicsFragment;
@@ -1234,9 +1232,10 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 if (document != null && document.hasValidGifVideoLink()) {
                     int aid = args.getInt(Extra.ACCOUNT_ID);
                     ArrayList<Document> documents = new ArrayList<>(Collections.singletonList(document));
-
-                    Bundle argsForGifs = GifPagerFragment.buildArgs(aid, documents, 0);
-                    attachToFront(GifPagerFragment.newInstance(argsForGifs));
+                    Intent ph = new Intent(this, PhotoFullScreenActivity.class);
+                    ph.setAction(PhotoFullScreenActivity.ACTION_OPEN_PLACE);
+                    ph.putExtra(Extra.PLACE, PlaceFactory.getGifPagerPlace(aid, documents, 0));
+                    startActivity(ph);
                 } else {
                     attachToFront(DocPreviewFragment.newInstance(args));
                 }
@@ -1384,7 +1383,14 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
             case Place.VK_PHOTO_TMP_SOURCE:
             case Place.VK_PHOTO_ALBUM_GALLERY_SAVED:
             case Place.VK_PHOTO_ALBUM_GALLERY_NATIVE:
-                attachToFront(PhotoPagerFragment.newInstance(place.getType(), args));
+                place.launchActivityForResult(this, PhotoPagerActivity.newInstance(this, place.getType(), args));
+                break;
+            case Place.SINGLE_PHOTO:
+            case Place.GIF_PAGER:
+                Intent ph = new Intent(this, PhotoFullScreenActivity.class);
+                ph.setAction(PhotoFullScreenActivity.ACTION_OPEN_PLACE);
+                ph.putExtra(Extra.PLACE, place);
+                startActivity(ph);
                 break;
 
             case Place.POLL:
@@ -1446,10 +1452,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
             case Place.UNREAD_MESSAGES:
                 attachToFront(NotReadMessagesFragment.newInstance(args));
-                break;
-
-            case Place.GIF_PAGER:
-                attachToFront(GifPagerFragment.newInstance(args));
                 break;
 
             case Place.SECURITY:
@@ -1561,10 +1563,6 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
             case Place.SIDE_DRAWER_EDIT:
                 attachToFront(SideDrawerEditFragment.newInstance());
-                break;
-
-            case Place.SINGLE_PHOTO:
-                attachToFront(SinglePhotoFragment.newInstance(args));
                 break;
 
             case Place.ARTIST:

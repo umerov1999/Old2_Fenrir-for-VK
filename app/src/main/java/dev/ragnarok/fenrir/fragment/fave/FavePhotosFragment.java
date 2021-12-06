@@ -1,13 +1,17 @@
 package dev.ragnarok.fenrir.fragment.fave;
 
+import static android.app.Activity.RESULT_OK;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -38,6 +42,15 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
     private TextView mEmpty;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FavePhotosAdapter mAdapter;
+    private RecyclerView recyclerView;
+    private final ActivityResultLauncher<Intent> requestPhotoUpdate = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getExtras() != null) {
+                    int ps = result.getData().getExtras().getInt(Extra.POSITION);
+                    mAdapter.updateCurrentPosition(ps);
+                    recyclerView.scrollToPosition(ps);
+                }
+            });
 
     public static FavePhotosFragment newInstance(int accountId) {
         Bundle args = new Bundle();
@@ -50,7 +63,7 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_fave_photos, container, false);
-        RecyclerView recyclerView = root.findViewById(android.R.id.list);
+        recyclerView = root.findViewById(android.R.id.list);
         mEmpty = root.findViewById(R.id.empty);
 
         int columns = getResources().getInteger(R.integer.photos_column_count);
@@ -126,7 +139,7 @@ public class FavePhotosFragment extends BaseMvpFragment<FavePhotosPresenter, IFa
 
     @Override
     public void goToGallery(int accountId, ArrayList<Photo> photos, int position) {
-        PlaceFactory.getFavePhotosGallery(accountId, photos, position)
+        PlaceFactory.getFavePhotosGallery(accountId, photos, position).setActivityResultLauncher(requestPhotoUpdate)
                 .tryOpenWith(requireActivity());
     }
 

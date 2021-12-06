@@ -1525,14 +1525,13 @@ class ChatFragment : PlaceSupportMvpFragment<ChatPresenter, IChatView>(), IChatV
         ActivityFeatures.Builder()
             .begin()
             .setHideNavigationMenu(true)
-            .setBarsColored(activity, true)
+            .setBarsColored(requireActivity(), true)
             .build()
             .apply(requireActivity())
     }
 
     @SuppressLint("ResourceType")
     fun PrepareOptionsMenu(menu: Menu) {
-
         menu.run {
             findItem(R.id.action_leave_chat).isVisible =
                 optionMenuSettings.get(LEAVE_CHAT_VISIBLE, false)

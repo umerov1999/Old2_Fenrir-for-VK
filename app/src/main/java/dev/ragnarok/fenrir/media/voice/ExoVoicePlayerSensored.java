@@ -22,7 +22,6 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -165,7 +164,7 @@ public class ExoVoicePlayerSensored implements IVoicePlayer, SensorEventListener
                 extensionRenderer = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
                 break;
         }
-        exoPlayer = new SimpleExoPlayer.Builder(app, new DefaultRenderersFactory(app).setExtensionRendererMode(extensionRenderer)).build();
+        exoPlayer = new ExoPlayer.Builder(app, new DefaultRenderersFactory(app).setExtensionRendererMode(extensionRenderer)).build();
         exoPlayer.setWakeMode(C.WAKE_MODE_NETWORK);
 
         // DefaultBandwidthMeter bandwidthMeterA = new DefaultBandwidthMeter();

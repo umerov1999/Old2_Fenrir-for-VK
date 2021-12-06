@@ -55,4 +55,6 @@ public interface IVkPhotosView extends IMvpView, IAccountDependencyView, IErrorV
     void onToggleShowDate(boolean isShow);
 
     void displayToolbarSubtitle(@Nullable PhotoAlbum album, @NonNull String text);
+
+    void scrollTo(int position);
 }

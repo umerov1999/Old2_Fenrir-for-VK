@@ -53,7 +53,7 @@ public class ChatUsersFragment extends BaseMvpFragment<ChatMembersPresenter, ICh
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     ArrayList<Owner> users = result.getData().getParcelableArrayListExtra(Extra.OWNERS);
                     AssertUtils.requireNonNull(users);
-                    postPrenseterReceive(presenter -> presenter.fireUserSelected(users));
+                    postPresenterReceive(presenter -> presenter.fireUserSelected(users));
                 }
             });
     private SwipeRefreshLayout mSwipeRefreshLayout;

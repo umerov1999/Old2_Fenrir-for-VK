@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-            tools:text="Ruslan Kolbasa" />
+            tools:text="Umerov Artem" />
 
         <TextView
             android:id="@+id/date_and_admin_info"

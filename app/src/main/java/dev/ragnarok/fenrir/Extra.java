@@ -101,4 +101,5 @@ public class Extra {
     public static final String TOP = "top";
     public static final String READONLY = "readonly";
     public static final String INVERT = "invert";
+    public static final String PTR = "ptr";
 }

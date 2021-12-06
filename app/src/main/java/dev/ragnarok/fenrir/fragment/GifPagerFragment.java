@@ -36,9 +36,7 @@ import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.Utils;
 import dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout;
 import dev.ragnarok.fenrir.view.CircleCounterButton;
-import dev.ragnarok.fenrir.view.FlingRelativeLayout;
 import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView;
-import dev.ragnarok.fenrir.view.pager.CloseOnFlingListener;
 
 public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresenter, IGifPagerView>
         implements IGifPagerView {
@@ -105,10 +103,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
         resolveFullscreenViews();
         return root;
-    }
-
-    private void goBack() {
-        requireActivity().onBackPressed();
     }
 
     @Override
@@ -250,15 +244,6 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
         Holder(View rootView) {
             super(rootView);
-            FlingRelativeLayout flingRelativeLayout = rootView.findViewById(R.id.fling_root_view);
-            flingRelativeLayout.setOnClickListener(v -> toggleFullscreen());
-            flingRelativeLayout.setOnSingleFlingListener(new CloseOnFlingListener(rootView.getContext()) {
-                @Override
-                public boolean onVerticalFling(float distanceByY) {
-                    goBack();
-                    return true;
-                }
-            });
 
             mSurfaceView = rootView.findViewById(R.id.surface_view);
             mSurfaceHolder = mSurfaceView.getHolder();
@@ -266,6 +251,7 @@ public class GifPagerFragment extends AbsDocumentPreviewFragment<GifPagerPresent
 
             mAspectRatioLayout = rootView.findViewById(R.id.aspect_ratio_layout);
             mProgressBar = rootView.findViewById(R.id.preparing_progress_bar);
+            mAspectRatioLayout.setOnClickListener(v -> toggleFullscreen());
         }
 
         @Override

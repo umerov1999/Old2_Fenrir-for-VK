@@ -81,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                            tools:text="Emin Guliev" />
+                            tools:text="Umerov Artem" />
 
                     </LinearLayout>
                 </LinearLayout>

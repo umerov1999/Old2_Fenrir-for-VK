@@ -69,8 +69,8 @@ abstract class AbsMvpDialogFragment<P : IPresenter<V>, V : IMvpView> :
         return delegate.callPresenter(action, onDefault)
     }
 
-    fun postPrenseterReceive(action: PresenterAction<P, V>) {
-        delegate.postPrenseterReceive(action)
+    fun postPresenterReceive(action: PresenterAction<P, V>) {
+        delegate.postPresenterReceive(action)
     }
 
     override fun onDestroy() {

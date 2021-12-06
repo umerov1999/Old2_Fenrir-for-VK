@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.ragnarok.fenrir.Extra;
+import dev.ragnarok.fenrir.activity.PhotoPagerActivity;
 import dev.ragnarok.fenrir.activity.VideoPlayerActivity;
 import dev.ragnarok.fenrir.dialog.ResolveDomainDialog;
 import dev.ragnarok.fenrir.fragment.AbsWallFragment;
@@ -32,7 +33,6 @@ import dev.ragnarok.fenrir.fragment.LikesFragment;
 import dev.ragnarok.fenrir.fragment.MarketViewFragment;
 import dev.ragnarok.fenrir.fragment.MessagesLookFragment;
 import dev.ragnarok.fenrir.fragment.NotReadMessagesFragment;
-import dev.ragnarok.fenrir.fragment.PhotoPagerFragment;
 import dev.ragnarok.fenrir.fragment.PollFragment;
 import dev.ragnarok.fenrir.fragment.PreferencesFragment;
 import dev.ragnarok.fenrir.fragment.SinglePhotoFragment;
@@ -144,6 +144,13 @@ public class PlaceFactory {
                 .withParcelableExtra(Extra.SOURCE, source);
     }
 
+    public static Place getTmpSourceGalleryPlace(int accountId, long ptr, int index) {
+        return new Place(Place.VK_PHOTO_TMP_SOURCE)
+                .withIntExtra(Extra.ACCOUNT_ID, accountId)
+                .withIntExtra(Extra.INDEX, index)
+                .withLongExtra(Extra.SOURCE, ptr);
+    }
+
     public static Place getCommunityAddBanPlace(int accountId, int groupId, ArrayList<User> users) {
         Place place = new Place(Place.COMMUNITY_ADD_BAN)
                 .withIntExtra(Extra.ACCOUNT_ID, accountId)
@@ -207,27 +214,27 @@ public class PlaceFactory {
 
     public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, long parcelNativePointer, int position, boolean readOnly, boolean invert) {
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY_NATIVE)
-                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, parcelNativePointer, position, readOnly, invert));
+                .setArguments(PhotoPagerActivity.buildArgsForAlbum(accountId, albumId, ownerId, parcelNativePointer, position, readOnly, invert));
     }
 
     public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, @NonNull ArrayList<Photo> photos, int position, boolean readOnly, boolean invert) {
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY)
-                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, photos, position, readOnly, invert));
+                .setArguments(PhotoPagerActivity.buildArgsForAlbum(accountId, albumId, ownerId, photos, position, readOnly, invert));
     }
 
     public static Place getPhotoAlbumGalleryPlace(int accountId, int albumId, int ownerId, @NonNull TmpSource source, int position, boolean readOnly, boolean invert) {
         return new Place(Place.VK_PHOTO_ALBUM_GALLERY_SAVED)
-                .setArguments(PhotoPagerFragment.buildArgsForAlbum(accountId, albumId, ownerId, source, position, readOnly, invert));
+                .setArguments(PhotoPagerActivity.buildArgsForAlbum(accountId, albumId, ownerId, source, position, readOnly, invert));
     }
 
     public static Place getSimpleGalleryPlace(int accountId, @NonNull ArrayList<Photo> photos, int position, boolean needRefresh) {
         return new Place(Place.SIMPLE_PHOTO_GALLERY)
-                .setArguments(PhotoPagerFragment.buildArgsForSimpleGallery(accountId, position, photos, needRefresh));
+                .setArguments(PhotoPagerActivity.buildArgsForSimpleGallery(accountId, position, photos, needRefresh));
     }
 
     public static Place getFavePhotosGallery(int accountId, @NonNull ArrayList<Photo> photos, int position) {
         return new Place(Place.FAVE_PHOTOS_GALLERY)
-                .setArguments(PhotoPagerFragment.buildArgsForFave(accountId, photos, position));
+                .setArguments(PhotoPagerActivity.buildArgsForFave(accountId, photos, position));
     }
 
     public static Place getCreatePollPlace(int accountId, int ownerId) {

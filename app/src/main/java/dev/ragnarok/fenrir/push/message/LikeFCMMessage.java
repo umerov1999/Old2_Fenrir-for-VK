@@ -34,7 +34,7 @@ public class LikeFCMMessage {
 
 // key: id, value: like_216143660_photo280186075_456239045, class: class java.lang.String
 // key: url, value: https://vk.com/photo280186075_456239045?access_key=d7d37c46854499dd3f, class: class java.lang.String
-// key: body, value: Emin Guliev liked your photo, class: class java.lang.String
+// key: body, value: Umerov Artem liked your photo, class: class java.lang.String
 // key: icon, value: like_24, class: class java.lang.String
 // key: time, value: 1529682146, class: class java.lang.String
 // key: type, value: like, class: class java.lang.String

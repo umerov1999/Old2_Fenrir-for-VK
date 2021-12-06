@@ -14,7 +14,7 @@ class ConfigPanelSlideListener extends ColorPanelSlideListener {
 
 
     ConfigPanelSlideListener(@NonNull Activity activity, @NonNull SlidrConfig config) {
-        super(activity, -1, -1);
+        super(activity, false, true);
         this.config = config;
     }
 
@@ -54,15 +54,13 @@ class ConfigPanelSlideListener extends ColorPanelSlideListener {
         }
     }
 
-
     @Override
-    protected int getPrimaryColor() {
-        return config.getPrimaryColor();
+    boolean isFromUnColoredToColoredStatusBar() {
+        return config.isFromUnColoredToColoredStatusBar();
     }
 
-
     @Override
-    protected int getSecondaryColor() {
-        return config.getSecondaryColor();
+    boolean isUseAlpha() {
+        return config.isAlphaForView();
     }
 }

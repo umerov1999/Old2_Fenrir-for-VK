@@ -23,7 +23,7 @@ public class ViewHelper {
     }
 
     private static View findScrollableViewContains(View mView, SlidrPosition direction, int x, int y) {
-        if (isScrollableView(mView) && canScroll(mView, direction)) {
+        if (isScrollableView(mView) && (canScroll(mView, direction) || mView instanceof TouchImageView && ((TouchImageView) mView).isZoomed())) {
             return mView;
         }
         if (!(mView instanceof ViewGroup)) return null;
@@ -86,7 +86,7 @@ public class ViewHelper {
         ViewInfo viewInfo = new ViewInfo(parent, x, y);
         while (viewInfo != null) {
             View mView = viewInfo.view;
-            if (isScrollableView(mView) && canScroll(mView, direction)) {
+            if (isScrollableView(mView) && (canScroll(mView, direction) || mView instanceof TouchImageView && ((TouchImageView) mView).isZoomed())) {
                 return mView;
             }
             if (mView instanceof ViewGroup) {

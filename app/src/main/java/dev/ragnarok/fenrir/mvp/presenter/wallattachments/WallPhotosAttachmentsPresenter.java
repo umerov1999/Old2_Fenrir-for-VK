@@ -21,9 +21,12 @@ import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.TmpSource;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
+import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
 import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.wallattachments.IWallPhotosAttachmentsView;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -55,15 +58,19 @@ public class WallPhotosAttachmentsPresenter extends PlaceSupportPresenter<IWallP
 
     @SuppressWarnings("unused")
     public void firePhotoClick(int position, Photo photo) {
-        TmpSource source = new TmpSource(getInstanceId(), 0);
+        if (FenrirNative.isNativeLoaded() && Settings.get().other().isNative_parcel_photo()) {
+            callView(view -> view.goToTempPhotosGallery(getAccountId(), ParcelNative.create().writeParcelableList(mPhotos).getNativePointer(), position));
+        } else {
+            TmpSource source = new TmpSource(getInstanceId(), 0);
 
-        fireTempDataUsage();
+            fireTempDataUsage();
 
-        actualDataDisposable.add(Stores.getInstance()
-                .tempStore()
-                .put(source.getOwnerId(), source.getSourceId(), mPhotos, Serializers.PHOTOS_SERIALIZER)
-                .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                .subscribe(() -> onPhotosSavedToTmpStore(position, source), Analytics::logUnexpectedError));
+            actualDataDisposable.add(Stores.getInstance()
+                    .tempStore()
+                    .put(source.getOwnerId(), source.getSourceId(), mPhotos, Serializers.PHOTOS_SERIALIZER)
+                    .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                    .subscribe(() -> onPhotosSavedToTmpStore(position, source), Analytics::logUnexpectedError));
+        }
     }
 
     private void onPhotosSavedToTmpStore(int index, TmpSource source) {

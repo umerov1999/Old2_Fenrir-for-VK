@@ -4,26 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <dev.ragnarok.fenrir.view.FlingRelativeLayout
-        android:id="@+id/fling_root_view"
+    <dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout
+        android:id="@+id/aspect_ratio_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
 
-        <dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout
-            android:id="@+id/aspect_ratio_layout"
+        <SurfaceView
+            android:id="@+id/surface_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true">
+            android:layout_height="match_parent" />
 
-            <SurfaceView
-                android:id="@+id/surface_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout>
-
-
-    </dev.ragnarok.fenrir.view.FlingRelativeLayout>
+    </dev.ragnarok.fenrir.view.AlternativeAspectRatioFrameLayout>
 
 
     <dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView

@@ -77,7 +77,11 @@ public class LinkHelper {
                             Utils.showRedTopToast(context, R.string.link_banned);
                         } else {
                             if (!openVKlink(context, accountId, t.link)) {
-                                PlaceFactory.getExternalLinkPlace(accountId, t.link).tryOpenWith(context);
+                                if (Settings.get().main().isOpenUrlInternal() > 0) {
+                                    openLinkInBrowser(context, t.link);
+                                } else {
+                                    PlaceFactory.getExternalLinkPlace(accountId, t.link).tryOpenWith(context);
+                                }
                             }
                         }
                     }, e -> Utils.showErrorInAdapter(context, e));
@@ -87,7 +91,11 @@ public class LinkHelper {
                     .subscribe(t -> PlaceFactory.getChatPlace(accountId, accountId, new Peer(Peer.fromChatId(t.chat_id))).tryOpenWith(context), e -> Utils.showErrorInAdapter(context, e));
         } else {
             if (!openVKlink(context, accountId, link)) {
-                PlaceFactory.getExternalLinkPlace(accountId, link).tryOpenWith(context);
+                if (Settings.get().main().isOpenUrlInternal() > 0) {
+                    openLinkInBrowser(context, link);
+                } else {
+                    PlaceFactory.getExternalLinkPlace(accountId, link).tryOpenWith(context);
+                }
             }
         }
     }

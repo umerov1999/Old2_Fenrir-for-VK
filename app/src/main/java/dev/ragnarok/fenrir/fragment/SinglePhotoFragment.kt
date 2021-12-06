@@ -34,9 +34,6 @@ import dev.ragnarok.fenrir.view.natives.rlottie.RLottieImageView
 import dev.ragnarok.fenrir.view.pager.GoBackCallback
 import dev.ragnarok.fenrir.view.pager.WeakGoBackAnimationAdapter
 import dev.ragnarok.fenrir.view.pager.WeakPicassoLoadCallback
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior.Companion.from
-import dev.ragnarok.fenrir.view.swipehelper.VerticalSwipeBehavior.SettleOnTopAction
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -81,22 +78,7 @@ class SinglePhotoFragment : BaseFragment(), GoBackCallback, BackPressCallback {
         }
         val ret = PhotoViewHolder(root)
         ret.bindTo(url)
-        val ui = from(ret.photo)
-        ui.settle = SettleOnTopAction()
-        ui.sideEffect =
-            VerticalSwipeBehavior.PropertySideEffect(View.ALPHA, View.SCALE_X, View.SCALE_Y)
-        val clampDelegate = VerticalSwipeBehavior.BelowFractionalClamp(3f, 3f)
-        ui.clamp = VerticalSwipeBehavior.SensitivityClamp(0.5f, clampDelegate, 0.5f)
-        ui.listener = object : VerticalSwipeBehavior.SwipeListener {
-            override fun onReleased() {}
-            override fun onCaptured() {}
-            override fun onPreSettled(diff: Int) {}
-            override fun onPostSettled(success: Boolean) {
-                if (success) {
-                    goBack()
-                }
-            }
-        }
+
         ret.photo.setOnLongClickListener {
             doSaveOnDrive(true)
             true

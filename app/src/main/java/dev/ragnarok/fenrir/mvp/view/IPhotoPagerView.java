@@ -48,4 +48,10 @@ public interface IPhotoPagerView extends IMvpView, IAccountDependencyView, IErro
     void setToolbarVisible(boolean visible);
 
     void rebindPhotoAt(int position);
+
+    void finalize();
+
+    void returnInfo(int position, long parcelNativePtr);
+
+    void returnOnlyPos(int position);
 }

@@ -13,6 +13,7 @@ import dev.ragnarok.fenrir.db.Stores;
 import dev.ragnarok.fenrir.db.serialize.Serializers;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.TmpSource;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.util.Analytics;
 import dev.ragnarok.fenrir.util.RxUtils;
 
@@ -23,6 +24,19 @@ public class TmpGalleryPagerPresenter extends PhotoPagerPresenter {
         super(new ArrayList<>(0), accountId, false, context, savedInstanceState);
         setCurrentIndex(index);
         loadDataFromDatabase(source);
+    }
+
+    public TmpGalleryPagerPresenter(int accountId, long source, int index, Context context,
+                                    @Nullable Bundle savedInstanceState) {
+        super(new ArrayList<>(0), accountId, false, context, savedInstanceState);
+        setCurrentIndex(index);
+        changeLoadingNowState(true);
+        onInitialLoadingFinished(ParcelNative.fromNative(source).readParcelableList(Photo.NativeCreator));
+    }
+
+    @Override
+    public void close() {
+        callView(v -> v.returnOnlyPos(getCurrentIndex()));
     }
 
     @Override

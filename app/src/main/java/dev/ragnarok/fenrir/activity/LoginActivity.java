@@ -3,7 +3,6 @@ package dev.ragnarok.fenrir.activity;
 import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +11,8 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import dev.ragnarok.fenrir.util.CustomToast;
 import dev.ragnarok.fenrir.util.Logger;
 import dev.ragnarok.fenrir.util.Utils;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private static final String EXTRA_CLIENT_ID = "client_id";

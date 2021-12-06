@@ -26,5 +26,7 @@ public interface IWallPhotosAttachmentsView extends IAccountDependencyView, IMvp
 
     void goToTempPhotosGallery(int accountId, @NonNull TmpSource source, int index);
 
+    void goToTempPhotosGallery(int accountId, long ptr, int index);
+
     void onSetLoadingStatus(int isLoad);
 }

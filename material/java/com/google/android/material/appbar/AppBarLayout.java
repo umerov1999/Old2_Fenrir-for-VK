@@ -18,10 +18,10 @@ package com.google.android.material.appbar;
 
 import com.google.android.material.R;
 
-import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_BACKWARD;
-import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_FORWARD;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 import static androidx.core.math.MathUtils.clamp;
+import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_BACKWARD;
+import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_FORWARD;
 import static com.google.android.material.theme.overlay.MaterialThemeOverlay.wrap;
 import static java.lang.Math.abs;
 
@@ -40,12 +40,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.util.ObjectsCompat;
-import androidx.core.view.NestedScrollingChild;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.ViewCompat.NestedScrollType;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
-import androidx.core.view.accessibility.AccessibilityViewCommand;
 import androidx.appcompat.content.res.AppCompatResources;
 import android.util.AttributeSet;
 import android.view.View;
@@ -66,6 +60,12 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.NestedScrollingChild;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewCompat.NestedScrollType;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
+import androidx.core.view.accessibility.AccessibilityViewCommand;
 import androidx.customview.view.AbsSavedState;
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.internal.ThemeEnforcement;
@@ -1526,10 +1526,11 @@ public class AppBarLayout extends LinearLayout implements CoordinatorLayout.Atta
     }
 
     private int getChildIndexOnOffset(@NonNull T abl, final int offset) {
+      final int ablTopInset = abl.getTopInset() + abl.getPaddingTop();
       for (int i = 0, count = abl.getChildCount(); i < count; i++) {
         View child = abl.getChildAt(i);
-        int top = child.getTop();
-        int bottom = child.getBottom();
+        int top = child.getTop() - ablTopInset;
+        int bottom = child.getBottom() - ablTopInset;
 
         final LayoutParams lp = (LayoutParams) child.getLayoutParams();
         if (checkFlag(lp.getScrollFlags(), LayoutParams.SCROLL_FLAG_SNAP_MARGINS)) {
@@ -1552,16 +1553,12 @@ public class AppBarLayout extends LinearLayout implements CoordinatorLayout.Atta
         final View offsetChild = abl.getChildAt(offsetChildIndex);
         final LayoutParams lp = (LayoutParams) offsetChild.getLayoutParams();
         final int flags = lp.getScrollFlags();
+        final int ablTopInset = abl.getTopInset() + abl.getPaddingTop();
 
         if ((flags & LayoutParams.FLAG_SNAP) == LayoutParams.FLAG_SNAP) {
           // We're set the snap, so animate the offset to the nearest edge
-          int snapTop = -offsetChild.getTop();
-          int snapBottom = -offsetChild.getBottom();
-
-          if (offsetChildIndex == abl.getChildCount() - 1) {
-            // If this is the last child, we need to take the top inset and padding into account
-            snapBottom += abl.getTopInset() + abl.getPaddingTop();
-          }
+          int snapTop = -offsetChild.getTop() + ablTopInset;
+          int snapBottom = -offsetChild.getBottom() + ablTopInset;
 
           if (checkFlag(flags, LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED)) {
             // If the view is set only exit until it is collapsed, we'll abide by that

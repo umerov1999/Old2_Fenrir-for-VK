@@ -36,6 +36,11 @@ public class FavePhotoPagerPresenter extends PhotoPagerPresenter {
         }
     }
 
+    @Override
+    public void close() {
+        callView(v -> v.returnOnlyPos(getCurrentIndex()));
+    }
+
     private void refresh(int index) {
         if (mUpdated[index] || refreshing[index]) {
             return;

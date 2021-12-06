@@ -50,7 +50,7 @@ public class CommunityBlacklistFragment extends BaseMvpFragment<CommunityBlackli
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     ArrayList<Owner> users = result.getData().getParcelableArrayListExtra(Extra.OWNERS);
                     AssertUtils.requireNonNull(users);
-                    postPrenseterReceive(presenter -> presenter.fireAddToBanUsersSelected(users));
+                    postPresenterReceive(presenter -> presenter.fireAddToBanUsersSelected(users));
                 }
             });
     private SwipeRefreshLayout mSwipeRefreshLayout;

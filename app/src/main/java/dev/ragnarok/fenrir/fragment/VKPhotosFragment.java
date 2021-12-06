@@ -1,10 +1,10 @@
 package dev.ragnarok.fenrir.fragment;
 
+import static android.app.Activity.RESULT_OK;
 import static dev.ragnarok.fenrir.util.Objects.nonNull;
 import static dev.ragnarok.fenrir.util.Utils.nonEmpty;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -63,7 +63,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     private static final String TAG = VKPhotosFragment.class.getSimpleName();
     private final ActivityResultLauncher<Intent> requestUploadPhoto = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == RESULT_OK) {
                     ArrayList<LocalPhoto> photos = result.getData().getParcelableArrayListExtra(Extra.PHOTOS);
                     if (nonEmpty(photos)) {
                         onPhotosForUploadSelected(photos);
@@ -76,11 +76,18 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     private final AppPerms.doRequestPermissions requestReadPermissionForLoadDownload = AppPerms.requestPermissions(this,
             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
             () -> callPresenter(VkPhotosPresenter::loadDownload));
+    private final ActivityResultLauncher<Intent> requestPhotoUpdate = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getExtras() != null) {
+                    postPresenterReceive(p -> p.updateInfo(result.getData().getExtras().getInt(Extra.POSITION), result.getData().getExtras().getLong(Extra.PTR)));
+                }
+            });
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BigVkPhotosAdapter mAdapter;
     private TextView mEmptyText;
     private FloatingActionButton mFab;
     private String mAction;
+    private RecyclerView mRecyclerView;
 
     public static Bundle buildArgs(int accountId, int ownerId, int albumId, String action) {
         Bundle args = new Bundle();
@@ -121,7 +128,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
 
         ViewUtils.setupSwipeRefreshLayoutWithCurrentTheme(requireActivity(), mSwipeRefreshLayout);
 
-        RecyclerView mRecyclerView = root.findViewById(R.id.list);
+        mRecyclerView = root.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addOnScrollListener(new PicassoPauseOnScrollListener(TAG));
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -290,7 +297,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
 
     @Override
     public void displayGalleryUnSafe(int accountId, int albumId, int ownerId, long parcelNativePointer, int position) {
-        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, parcelNativePointer, position, false, Settings.get().other().isInvertPhotoRev()).tryOpenWith(requireActivity());
+        PlaceFactory.getPhotoAlbumGalleryPlace(accountId, albumId, ownerId, parcelNativePointer, position, false, Settings.get().other().isInvertPhotoRev()).setActivityResultLauncher(requestPhotoUpdate).tryOpenWith(requireActivity());
     }
 
     @Override
@@ -308,6 +315,11 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     }
 
     @Override
+    public void scrollTo(int position) {
+        mRecyclerView.scrollToPosition(position);
+    }
+
+    @Override
     public void setDrawerPhotosSelected(boolean selected) {
         if (requireActivity() instanceof OnSectionResumeCallback) {
             if (selected) {
@@ -322,7 +334,7 @@ public class VKPhotosFragment extends BaseMvpFragment<VkPhotosPresenter, IVkPhot
     public void returnSelectionToParent(List<Photo> selected) {
         Intent intent = new Intent();
         intent.putParcelableArrayListExtra(Extra.ATTACHMENTS, new ArrayList<>(selected));
-        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().setResult(RESULT_OK, intent);
         requireActivity().finish();
     }
 

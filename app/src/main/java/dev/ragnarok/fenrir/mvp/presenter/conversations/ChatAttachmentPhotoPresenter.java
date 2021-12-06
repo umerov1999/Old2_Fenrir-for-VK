@@ -19,8 +19,11 @@ import dev.ragnarok.fenrir.db.serialize.Serializers;
 import dev.ragnarok.fenrir.domain.mappers.Dto2Model;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.TmpSource;
+import dev.ragnarok.fenrir.module.FenrirNative;
+import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.conversations.IChatAttachmentPhotosView;
+import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
 import dev.ragnarok.fenrir.util.DisposableHolder;
 import dev.ragnarok.fenrir.util.Pair;
@@ -74,17 +77,18 @@ public class ChatAttachmentPhotoPresenter extends BaseChatAttachmentsPresenter<P
 
     @SuppressWarnings("unused")
     public void firePhotoClick(int position, Photo photo) {
-        List<Photo> photos = data;
+        if (FenrirNative.isNativeLoaded() && Settings.get().other().isNative_parcel_photo()) {
+            callView(view -> view.goToTempPhotosGallery(getAccountId(), ParcelNative.create().writeParcelableList(data).getNativePointer(), position));
+        } else {
+            TmpSource source = new TmpSource(getInstanceId(), 0);
+            fireTempDataUsage();
 
-        TmpSource source = new TmpSource(getInstanceId(), 0);
-
-        fireTempDataUsage();
-
-        openGalleryDisposableHolder.append(Stores.getInstance()
-                .tempStore()
-                .put(source.getOwnerId(), source.getSourceId(), data, Serializers.PHOTOS_SERIALIZER)
-                .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                .subscribe(() -> onPhotosSavedToTmpStore(position, source), Analytics::logUnexpectedError));
+            openGalleryDisposableHolder.append(Stores.getInstance()
+                    .tempStore()
+                    .put(source.getOwnerId(), source.getSourceId(), data, Serializers.PHOTOS_SERIALIZER)
+                    .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                    .subscribe(() -> onPhotosSavedToTmpStore(position, source), Analytics::logUnexpectedError));
+        }
     }
 
     private void onPhotosSavedToTmpStore(int index, TmpSource source) {

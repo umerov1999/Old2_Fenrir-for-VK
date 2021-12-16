@@ -20,8 +20,6 @@ import dev.ragnarok.fenrir.util.RxUtils;
 
 public class BaseDocumentPresenter<V extends IBasicDocumentView> extends AccountDependencyPresenter<V> {
 
-    private static final String TAG = BaseDocumentPresenter.class.getSimpleName();
-
     private final IDocsInteractor docsInteractor;
 
     public BaseDocumentPresenter(int accountId, @Nullable Bundle savedInstanceState) {

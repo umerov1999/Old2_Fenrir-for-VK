@@ -41,7 +41,6 @@ import dev.ragnarok.fenrir.media.record.AudioRecordWrapper
 import dev.ragnarok.fenrir.media.record.Recorder
 import dev.ragnarok.fenrir.model.*
 import dev.ragnarok.fenrir.module.encoder.ToMp4Audio
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated
 import dev.ragnarok.fenrir.mvp.view.IChatView
 import dev.ragnarok.fenrir.place.PlaceFactory
 import dev.ragnarok.fenrir.push.OwnerInfo
@@ -533,7 +532,27 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
+    override fun onGuiCreated(viewHost: IChatView) {
+        super.onGuiCreated(viewHost)
+        resolvePinnedMessageView()
+        resolveEditedMessageViews()
+        resolveLoadUpHeaderView()
+        resolveEmptyTextVisibility()
+        resolveAttachmentsCounter()
+        resolveDraftMessageText()
+        resolveToolbarTitle()
+        resolveToolbarAvatar()
+        resolvePrimaryButton()
+        resolveRecordPauseButton()
+        resolveRecordingTimeView()
+        resolveActionMode()
+        resolveToolbarSubtitle()
+        hideWriting()
+        resolveResumePeer()
+        resolveInputImagesUploading()
+        resolveOptionMenu()
+    }
+
     private fun resolvePinnedMessageView() {
         conversation?.run {
             view?.displayPinnedMessage(pinned, hasFlag(acl, Conversation.AclFlags.CAN_CHANGE_PIN))
@@ -548,7 +567,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveEditedMessageViews() {
         view?.displayEditingMessage(edited?.message)
     }
@@ -743,7 +761,6 @@ class ChatPresenter(
         return data.isNotEmpty() && !isLoadingFromDbNow && !isLoadingFromNetNow && !chronologyInvert && !endOfContent
     }
 
-    @OnGuiCreated
     private fun resolveLoadUpHeaderView() {
         val loading = isLoadingNow
         view?.setupLoadUpHeaderState(if (loading) LoadMoreState.LOADING else if (endOfContent) LoadMoreState.END_OF_LIST else LoadMoreState.CAN_LOAD_MORE)
@@ -973,7 +990,6 @@ class ChatPresenter(
         return calculateAttachmentsCount() > 0 || trimmedNonEmpty(draftMessageText) || nowUploadingToEditingMessage()
     }
 
-    @OnGuiCreated
     private fun resolveEmptyTextVisibility() {
         view?.setEmptyTextVisible(safeIsEmpty(data) && !isLoadingNow)
     }
@@ -989,7 +1005,6 @@ class ChatPresenter(
         )
     }
 
-    @OnGuiCreated
     private fun resolveAttachmentsCounter() {
         edited?.run {
             view?.displayDraftMessageAttachmentsCount(calculateAttachmentsCount(this))
@@ -998,7 +1013,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveDraftMessageText() {
         edited?.run {
             view?.displayDraftMessageText(body)
@@ -1007,12 +1021,10 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveToolbarTitle() {
         view?.displayToolbarTitle(peer.title)
     }
 
-    @OnGuiCreated
     private fun resolveToolbarAvatar() {
         view?.displayToolbarAvatar(peer)
     }
@@ -1100,7 +1112,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolvePrimaryButton() {
         if (isRecordingNow) {
             view?.setupPrimaryButtonAsRecording()
@@ -1116,7 +1127,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveRecordPauseButton() {
         val paused = audioRecordWrapper.recorderStatus == Recorder.Status.PAUSED
         val available = audioRecordWrapper.isPauseSupported
@@ -1157,7 +1167,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveRecordingTimeView() {
         if (isRecordingNow) {
             view?.displayRecordingDuration(audioRecordWrapper.currentRecordDuration)
@@ -1385,7 +1394,6 @@ class ChatPresenter(
         return true
     }
 
-    @OnGuiCreated
     override fun resolveActionMode() {
         val selectionCount = countOfSelection(data)
         if (selectionCount > 0) {
@@ -1417,12 +1425,10 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveToolbarSubtitle() {
         view?.displayToolbarSubtitle(subtitle)
     }
 
-    @OnGuiCreated
     private fun hideWriting() {
         view?.hideWriting()
     }
@@ -1902,7 +1908,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveResumePeer() {
         view?.notifyChatResume(accountId, peerId, peer.title, peer.avaUrl)
         if (Objects.nonNull(conversation)) {
@@ -1956,7 +1961,6 @@ class ChatPresenter(
         outConfig.uploadFilesMimeType = null
     }
 
-    @OnGuiCreated
     private fun resolveInputImagesUploading() {
         if (outConfig.uploadFiles.nonEmpty() && outConfig.uploadFilesMimeType.nonEmpty()) {
             uploadStreams(outConfig.uploadFiles, outConfig.uploadFilesMimeType)
@@ -2008,7 +2012,6 @@ class ChatPresenter(
         }
     }
 
-    @OnGuiCreated
     private fun resolveOptionMenu() {
         val chat = isGroupChat
 

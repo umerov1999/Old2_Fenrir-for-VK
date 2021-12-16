@@ -13,10 +13,8 @@ import dev.ragnarok.fenrir.domain.IPollInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Poll;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IPollView;
 import dev.ragnarok.fenrir.util.RxUtils;
-
 
 public class PollPresenter extends AccountDependencyPresenter<IPollView> {
 
@@ -76,7 +74,6 @@ public class PollPresenter extends AccountDependencyPresenter<IPollView> {
         resolvePhotoView();
     }
 
-    @OnGuiCreated
     private void resolveButtonView() {
         callView(v -> {
             v.displayLoading(loadingNow);
@@ -84,34 +81,40 @@ public class PollPresenter extends AccountDependencyPresenter<IPollView> {
         });
     }
 
-    @OnGuiCreated
     private void resolveVotesListView() {
         callView(v -> v.displayVotesList(mPoll.getAnswers(), !isVoted(), mPoll.isMultiple(), mTempCheckedId));
     }
 
-    @OnGuiCreated
     private void resolveVotesCountView() {
         callView(v -> v.displayVoteCount(mPoll.getVoteCount()));
     }
 
-    @OnGuiCreated
     private void resolvePollTypeView() {
         callView(v -> v.displayType(mPoll.isAnonymous()));
     }
 
-    @OnGuiCreated
     private void resolveQuestionView() {
         callView(v -> v.displayQuestion(mPoll.getQuestion()));
     }
 
-    @OnGuiCreated
     private void resolveCreationTimeView() {
         callView(v -> v.displayCreationTime(mPoll.getCreationTime()));
     }
 
-    @OnGuiCreated
     private void resolvePhotoView() {
         callView(v -> v.displayPhoto(mPoll.getPhoto()));
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull IPollView view) {
+        super.onGuiCreated(view);
+        resolveButtonView();
+        resolveVotesListView();
+        resolveVotesCountView();
+        resolvePollTypeView();
+        resolveQuestionView();
+        resolveCreationTimeView();
+        resolvePhotoView();
     }
 
     public void fireVoteChecked(Set<Integer> newid) {

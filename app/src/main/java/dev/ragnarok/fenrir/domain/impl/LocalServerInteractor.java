@@ -82,9 +82,9 @@ public class LocalServerInteractor implements ILocalServerInteractor {
     }
 
     @Override
-    public Single<List<Video>> searchVideos(String q, int offset, int count) {
+    public Single<List<Video>> searchVideos(String q, int offset, int count, boolean reverse) {
         return networker.localServerApi()
-                .searchVideos(q, offset, count)
+                .searchVideos(q, offset, count, reverse)
                 .flatMap(items -> {
                     List<VKApiVideo> dtos = listEmptyIfNull(items.getItems());
                     List<VideoEntity> dbos = new ArrayList<>(dtos.size());
@@ -100,9 +100,9 @@ public class LocalServerInteractor implements ILocalServerInteractor {
     }
 
     @Override
-    public Single<List<Audio>> searchAudios(String q, int offset, int count) {
+    public Single<List<Audio>> searchAudios(String q, int offset, int count, boolean reverse) {
         return networker.localServerApi()
-                .searchAudios(q, offset, count)
+                .searchAudios(q, offset, count, reverse)
                 .map(items -> listEmptyIfNull(items.getItems()))
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
@@ -113,9 +113,9 @@ public class LocalServerInteractor implements ILocalServerInteractor {
     }
 
     @Override
-    public Single<List<Audio>> searchDiscography(String q, int offset, int count) {
+    public Single<List<Audio>> searchDiscography(String q, int offset, int count, boolean reverse) {
         return networker.localServerApi()
-                .searchDiscography(q, offset, count)
+                .searchDiscography(q, offset, count, reverse)
                 .map(items -> listEmptyIfNull(items.getItems()))
                 .map(out -> {
                     List<Audio> ret = new ArrayList<>();
@@ -126,9 +126,9 @@ public class LocalServerInteractor implements ILocalServerInteractor {
     }
 
     @Override
-    public Single<List<Photo>> searchPhotos(String q, int offset, int count) {
+    public Single<List<Photo>> searchPhotos(String q, int offset, int count, boolean reverse) {
         return networker.localServerApi()
-                .searchPhotos(q, offset, count)
+                .searchPhotos(q, offset, count, reverse)
                 .map(items -> listEmptyIfNull(items.getItems()))
                 .map(out -> {
                     List<Photo> ret = new ArrayList<>();

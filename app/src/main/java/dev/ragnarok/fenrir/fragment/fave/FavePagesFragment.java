@@ -155,8 +155,8 @@ public class FavePagesFragment extends BaseMvpFragment<FavePagesPresenter, IFave
     @Override
     public IPresenterFactory<FavePagesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FavePagesPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getBoolean(Extra.USER),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getBoolean(Extra.USER),
                 saveInstanceState
         );
     }

@@ -14,7 +14,6 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IFriendsByPhonesView;
 import dev.ragnarok.fenrir.util.RxUtils;
 
@@ -34,7 +33,6 @@ public class FriendsByPhonesPresenter extends AccountDependencyPresenter<IFriend
         requestActualData();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.displayLoading(netLoadingNow));
     }
@@ -70,6 +68,8 @@ public class FriendsByPhonesPresenter extends AccountDependencyPresenter<IFriend
     public void onGuiCreated(@NonNull IFriendsByPhonesView view) {
         super.onGuiCreated(view);
         view.displayData(data);
+
+        resolveRefreshingView();
     }
 
     public void fireRefresh() {

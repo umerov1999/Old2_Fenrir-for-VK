@@ -143,8 +143,8 @@ public class WallPostQueryAttachmentsFragment extends PlaceSupportMvpFragment<Wa
     @Override
     public IPresenterFactory<WallPostQueryAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new WallPostQueryAttachmentsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.OWNER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.OWNER_ID),
                 saveInstanceState
         );
     }

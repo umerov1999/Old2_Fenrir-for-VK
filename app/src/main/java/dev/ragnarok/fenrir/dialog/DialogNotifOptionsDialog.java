@@ -48,8 +48,8 @@ public class DialogNotifOptionsDialog extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        peerId = getArguments().getInt(Extra.PEER_ID);
+        accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        peerId = requireArguments().getInt(Extra.PEER_ID);
 
         mask = Settings.get()
                 .notifications()

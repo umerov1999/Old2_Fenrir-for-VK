@@ -41,7 +41,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     private final ICommunitiesInteractor communitiesInteractor;
     private final CompositeDisposable actualDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private final CompositeDisposable netSeacrhDisposable = new CompositeDisposable();
+    private final CompositeDisposable netSearchDisposable = new CompositeDisposable();
     private final CompositeDisposable filterDisposable = new CompositeDisposable();
     private final boolean isNotFriendShow;
     private boolean actualEndOfContent;
@@ -49,8 +49,10 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     private boolean actualLoadingNow;
     //private int actualLoadingOffset;
     private boolean cacheLoadingNow;
-    private boolean netSeacrhNow;
+    private boolean netSearchNow;
     private String filter;
+    private List<Owner> not_communities;
+    private List<Owner> add_communities;
 
     public CommunitiesPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -154,7 +156,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     //private int netSearchOffset;
 
     private void resolveRefreshing() {
-        callResumedView(v -> v.displayRefreshing(actualLoadingNow || netSeacrhNow));
+        callResumedView(v -> v.displayRefreshing(actualLoadingNow || netSearchNow));
     }
 
     private void onActualDataGetError(Throwable t) {
@@ -168,6 +170,25 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     public void onGuiCreated(@NonNull ICommunitiesView view) {
         super.onGuiCreated(view);
         view.displayData(own, filtered, search);
+
+        checkAndShowModificationCommunities();
+    }
+
+    private void checkAndShowModificationCommunities() {
+        if (!Utils.isEmpty(add_communities) || !Utils.isEmpty(not_communities)) {
+            callView(view -> view.showModCommunities(add_communities, not_communities, getAccountId()));
+        }
+    }
+
+    public void clearModificationCommunities(boolean add, boolean not) {
+        if (add && !Utils.isEmpty(add_communities)) {
+            add_communities.clear();
+            add_communities = null;
+        }
+        if (not && !Utils.isEmpty(not_communities)) {
+            not_communities.clear();
+            not_communities = null;
+        }
     }
 
     private void onActualDataReceived(int offset, List<Community> communities, boolean do_scan) {
@@ -179,22 +200,20 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         actualEndOfContent = communities.isEmpty();
 
         if (do_scan && isNotFriendShow) {
-            List<Owner> not_communities = new ArrayList<>();
+            not_communities = new ArrayList<>();
             for (Community i : own.get()) {
                 if (Utils.indexOfOwner(communities, i.getOwnerId()) == -1) {
                     not_communities.add(i);
                 }
             }
 
-            List<Owner> add_communities = new ArrayList<>();
+            add_communities = new ArrayList<>();
             for (Community i : communities) {
                 if (Utils.indexOfOwner(own.get(), i.getOwnerId()) == -1) {
                     add_communities.add(i);
                 }
             }
-            if (add_communities.size() > 0 || not_communities.size() > 0) {
-                callView(view -> view.showAddCommunities(add_communities, not_communities, getAccountId()));
-            }
+            checkAndShowModificationCommunities();
         }
 
         if (offset == 0) {
@@ -264,9 +283,9 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         callView(ICommunitiesView::notifyDataSetChanged);
 
         filterDisposable.clear();
-        netSeacrhDisposable.clear();
+        netSearchDisposable.clear();
         //netSearchOffset = 0;
-        netSeacrhNow = false;
+        netSearchNow = false;
 
         if (searchNow) {
             filterDisposable.add(filter(own.get(), filter)
@@ -295,23 +314,23 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
             single = searchSingle;
         }
 
-        netSeacrhNow = true;
+        netSearchNow = true;
         //this.netSearchOffset = offset;
 
         resolveRefreshing();
-        netSeacrhDisposable.add(single
+        netSearchDisposable.add(single
                 .compose(RxUtils.applySingleIOToMainSchedulers())
-                .subscribe(data -> onSearchDataReceived(offset, data), this::onSeacrhError));
+                .subscribe(data -> onSearchDataReceived(offset, data), this::onSearchError));
     }
 
-    private void onSeacrhError(Throwable t) {
-        netSeacrhNow = false;
+    private void onSearchError(Throwable t) {
+        netSearchNow = false;
         resolveRefreshing();
         callView(v -> showError(v, getCauseIfRuntime(t)));
     }
 
     private void onSearchDataReceived(int offset, List<Community> communities) {
-        netSeacrhNow = false;
+        netSearchNow = false;
         netSearchEndOfContent = communities.isEmpty();
 
         resolveRefreshing();
@@ -340,7 +359,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
     public void fireUnsubscribe(Community community) {
         actualDisposable.add(communitiesInteractor.leave(getAccountId(), community.getId())
                 .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                .subscribe(this::fireRefresh, this::onSeacrhError));
+                .subscribe(this::fireRefresh, this::onSearchError));
     }
 
     public boolean fireCommunityLongClick(Community community) {
@@ -356,14 +375,14 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
         actualDisposable.dispose();
         cacheDisposable.dispose();
         filterDisposable.dispose();
-        netSeacrhDisposable.dispose();
+        netSearchDisposable.dispose();
         super.onDestroyed();
     }
 
     public void fireRefresh() {
         if (isSearchNow()) {
-            netSeacrhDisposable.clear();
-            netSeacrhNow = false;
+            netSearchDisposable.clear();
+            netSearchNow = false;
 
             startNetSearch(0, false);
         } else {
@@ -380,7 +399,7 @@ public class CommunitiesPresenter extends AccountDependencyPresenter<ICommunitie
 
     public void fireScrollToEnd() {
         if (isSearchNow()) {
-            if (!netSeacrhNow && !netSearchEndOfContent) {
+            if (!netSearchNow && !netSearchEndOfContent) {
                 int offset = search.size();
                 startNetSearch(offset, false);
             }

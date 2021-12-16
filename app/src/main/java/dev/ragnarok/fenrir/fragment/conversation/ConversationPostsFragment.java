@@ -43,8 +43,8 @@ public class ConversationPostsFragment extends AbsChatAttachmentsFragment<Link, 
     @Override
     public IPresenterFactory<ChatAttachmentPostsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ChatAttachmentPostsPresenter(
-                getArguments().getInt(Extra.PEER_ID),
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.PEER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

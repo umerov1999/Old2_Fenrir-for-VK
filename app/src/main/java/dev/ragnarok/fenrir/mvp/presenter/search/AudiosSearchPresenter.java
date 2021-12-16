@@ -41,8 +41,8 @@ public class AudiosSearchPresenter extends AbsSearchPresenter<IAudioSearchView, 
     }
 
     @Override
-    void onSeacrhError(Throwable throwable) {
-        super.onSeacrhError(throwable);
+    void onSearchError(Throwable throwable) {
+        super.onSearchError(throwable);
         callResumedView(v -> showError(v, Utils.getCauseIfRuntime(throwable)));
     }
 

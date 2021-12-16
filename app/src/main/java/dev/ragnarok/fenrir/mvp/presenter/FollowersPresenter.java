@@ -4,6 +4,7 @@ import static dev.ragnarok.fenrir.util.Utils.getCauseIfRuntime;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
     private boolean endOfContent;
     private boolean cacheLoadingNow;
     private boolean doLoadTabs;
+    private List<Owner> not_followers;
+    private List<Owner> add_followers;
 
     public FollowersPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -67,6 +70,12 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
     }
 
     @Override
+    public void onGuiCreated(@NonNull IFollowersView view) {
+        super.onGuiCreated(view);
+        checkAndShowModificationFriends();
+    }
+
+    @Override
     public void onGuiResumed() {
         super.onGuiResumed();
         resolveRefreshingView();
@@ -92,29 +101,38 @@ public class FollowersPresenter extends SimpleOwnersPresenter<IFollowersView> {
         resolveRefreshingView();
     }
 
+    private void checkAndShowModificationFriends() {
+        if (!Utils.isEmpty(add_followers) || !Utils.isEmpty(not_followers)) {
+            callView(view -> view.showModFollowers(add_followers, not_followers, getAccountId()));
+        }
+    }
+
+    public void clearModificationFollowers(boolean add, boolean not) {
+        if (add && !Utils.isEmpty(add_followers)) {
+            add_followers.clear();
+            add_followers = null;
+        }
+        if (not && !Utils.isEmpty(not_followers)) {
+            not_followers.clear();
+            not_followers = null;
+        }
+    }
+
     private void onActualDataReceived(int offset, List<User> users, boolean do_scan) {
         if (do_scan && isNotFriendShow) {
-            List<Owner> not_friends = new ArrayList<>();
+            not_followers = new ArrayList<>();
             for (Owner i : data) {
                 if (Utils.indexOf(users, i.getOwnerId()) == -1) {
-                    not_friends.add(i);
+                    not_followers.add(i);
                 }
             }
-            if (userId == getAccountId()) {
-                if (not_friends.size() > 0) {
-                    callView(view -> view.showNotFollowers(not_friends, getAccountId()));
-                }
-            } else {
-                List<Owner> add_friends = new ArrayList<>();
-                for (User i : users) {
-                    if (Utils.indexOfOwner(data, i.getId()) == -1) {
-                        add_friends.add(i);
-                    }
-                }
-                if (add_friends.size() > 0 || not_friends.size() > 0) {
-                    callView(view -> view.showAddFollowers(add_friends, not_friends, getAccountId()));
+            add_followers = new ArrayList<>();
+            for (User i : users) {
+                if (Utils.indexOfOwner(data, i.getId()) == -1) {
+                    add_followers.add(i);
                 }
             }
+            checkAndShowModificationFriends();
         }
         actualDataLoading = false;
         cacheDisposable.clear();

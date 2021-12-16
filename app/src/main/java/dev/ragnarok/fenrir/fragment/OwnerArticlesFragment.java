@@ -146,7 +146,7 @@ public class OwnerArticlesFragment extends BaseMvpFragment<OwnerArticlesPresente
     @NonNull
     @Override
     public IPresenterFactory<OwnerArticlesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new OwnerArticlesPresenter(getArguments().getInt(Extra.ACCOUNT_ID), getArguments().getInt(Extra.OWNER_ID), saveInstanceState);
+        return () -> new OwnerArticlesPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), requireArguments().getInt(Extra.OWNER_ID), saveInstanceState);
     }
 
     @Override

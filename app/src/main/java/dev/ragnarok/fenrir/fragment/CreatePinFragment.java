@@ -27,7 +27,6 @@ import dev.ragnarok.fenrir.view.KeyboardView;
 public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICreatePinView>
         implements ICreatePinView, KeyboardView.OnKeyboardClickListener, BackPressCallback {
 
-    private static final String TAG = CreatePinFragment.class.getSimpleName();
     private static final String EXTRA_PIN_VALUE = "pin_value";
     private TextView mTitle;
     private View mValuesRoot;
@@ -87,12 +86,6 @@ public class CreatePinFragment extends BaseMvpFragment<CreatePinPresenter, ICrea
             boolean visible = values[i] != noValueConstant;
             mValuesCircles[i].setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
-    }
-
-    @Override
-    public void sendSkipAndClose() {
-        requireActivity().setResult(Activity.RESULT_CANCELED);
-        requireActivity().finish();
     }
 
     @Override

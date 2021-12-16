@@ -16,7 +16,6 @@ import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.GroupChats;
 import dev.ragnarok.fenrir.model.LoadMoreState;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IGroupChatsView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -95,6 +94,9 @@ public class GroupChatsPresenter extends AccountDependencyPresenter<IGroupChatsV
     public void onGuiCreated(@NonNull IGroupChatsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(chats);
+
+        resolveRefreshingView();
+        resolveLoadMoreFooter();
     }
 
     @Override
@@ -103,12 +105,10 @@ public class GroupChatsPresenter extends AccountDependencyPresenter<IGroupChatsV
         super.onDestroyed();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
 
-    @OnGuiCreated
     private void resolveLoadMoreFooter() {
         if (netLoadingNow && netLoadingNowOffset > 0) {
             callView(v -> v.setupLoadMore(LoadMoreState.LOADING));

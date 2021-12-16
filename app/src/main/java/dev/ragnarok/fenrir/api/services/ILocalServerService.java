@@ -40,25 +40,29 @@ public interface ILocalServerService {
     @POST("audio.search")
     Single<BaseResponse<Items<VKApiAudio>>> searchAudios(@Field("q") String query,
                                                          @Field("offset") Integer offset,
-                                                         @Field("count") Integer count);
+                                                         @Field("count") Integer count,
+                                                         @Field("reverse") Integer reverse);
 
     @FormUrlEncoded
     @POST("discography.search")
     Single<BaseResponse<Items<VKApiAudio>>> searchDiscography(@Field("q") String query,
                                                               @Field("offset") Integer offset,
-                                                              @Field("count") Integer count);
+                                                              @Field("count") Integer count,
+                                                              @Field("reverse") Integer reverse);
 
     @FormUrlEncoded
     @POST("video.search")
     Single<BaseResponse<Items<VKApiVideo>>> searchVideos(@Field("q") String query,
                                                          @Field("offset") Integer offset,
-                                                         @Field("count") Integer count);
+                                                         @Field("count") Integer count,
+                                                         @Field("reverse") Integer reverse);
 
     @FormUrlEncoded
     @POST("photos.search")
     Single<BaseResponse<Items<VKApiPhoto>>> searchPhotos(@Field("q") String query,
                                                          @Field("offset") Integer offset,
-                                                         @Field("count") Integer count);
+                                                         @Field("count") Integer count,
+                                                         @Field("reverse") Integer reverse);
 
     @FormUrlEncoded
     @POST("update_time")

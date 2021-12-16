@@ -63,8 +63,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerView> {
 
-    private static final String TAG = PhotoPagerPresenter.class.getSimpleName();
-
     private static final String SAVE_INDEX = "save-index";
     private static final String SAVE_DATA = "save-data";
     final IPhotosInteractor photosInteractor;
@@ -263,7 +261,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
         new MaterialAlertDialogBuilder(context)
                 .setTitle(context.getString(R.string.uploaded) + " " + AppTextUtils.getDateFromUnixTime(photo.getDate()))
                 .setView(Utils.createAlertRecycleFrame(context, adapter, Utils.isEmpty(photo.getText()) ? null : context.getString(R.string.description_hint) + ": " + photo.getText(), getAccountId()))
-                .setPositiveButton("OK", null)
+                .setPositiveButton(R.string.button_ok, null)
                 .setCancelable(true)
                 .show();
     }
@@ -545,7 +543,7 @@ public class PhotoPagerPresenter extends AccountDependencyPresenter<IPhotoPagerV
                             ButtonAdapter adapter = new ButtonAdapter(context, buttons);
                             new MaterialAlertDialogBuilder(context)
                                     .setTitle(R.string.has_tags)
-                                    .setPositiveButton("OK", null)
+                                    .setPositiveButton(R.string.button_ok, null)
                                     .setCancelable(true)
                                     .setView(Utils.createAlertRecycleFrame(context, adapter, null, getAccountId()))
                                     .show();

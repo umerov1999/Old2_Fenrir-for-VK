@@ -21,8 +21,6 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class LocalPhotosPresenter extends RxSupportPresenter<ILocalPhotosView> {
 
-    private static final String TAG = LocalPhotosPresenter.class.getSimpleName();
-
     private final LocalImageAlbum mLocalImageAlbum;
     private final int mSelectionCountMax;
 

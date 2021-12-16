@@ -66,8 +66,8 @@ public class ArtistSearchFragment extends AbsSearchFragment<ArtistSearchPresente
     @Override
     public IPresenterFactory<ArtistSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ArtistSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

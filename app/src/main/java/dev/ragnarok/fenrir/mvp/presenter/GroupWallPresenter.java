@@ -29,7 +29,6 @@ import dev.ragnarok.fenrir.model.Peer;
 import dev.ragnarok.fenrir.model.PostFilter;
 import dev.ragnarok.fenrir.model.Token;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IGroupWallView;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.settings.ISettings;
@@ -78,17 +77,14 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         return community;
     }
 
-    @OnGuiCreated
     private void resolveBaseCommunityViews() {
         callView(v -> v.displayBaseCommunityData(community, details));
     }
 
-    @OnGuiCreated
     private void resolveMenu() {
         callView(IGroupWallView::InvalidateOptionsMenu);
     }
 
-    @OnGuiCreated
     private void resolveCounters() {
         callView(v -> v.displayCounters(community.getMembersCount(), details.getTopicsCount(),
                 details.getDocsCount(), details.getPhotosCount(),
@@ -188,6 +184,11 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
     public void onGuiCreated(@NonNull IGroupWallView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayWallFilters(filters);
+
+        resolveBaseCommunityViews();
+        resolveMenu();
+        resolveCounters();
+        resolveActionButtons();
     }
 
     public void firePrimaryButtonClick() {
@@ -276,7 +277,6 @@ public class GroupWallPresenter extends AbsWallPresenter<IGroupWallView> {
         }
     }
 
-    @OnGuiCreated
     private void resolveActionButtons() {
         @StringRes
         Integer primaryText = null;

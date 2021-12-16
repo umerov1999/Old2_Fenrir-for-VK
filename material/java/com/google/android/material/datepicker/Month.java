@@ -15,6 +15,7 @@
  */
 package com.google.android.material.datepicker;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.IntDef;
@@ -188,9 +189,9 @@ final class Month implements Comparable<Month>, Parcelable {
 
   /** Returns a localized String representation of the month name and year. */
   @NonNull
-  String getLongName() {
+  String getLongName(Context context) {
     if (longName == null) {
-      longName = DateStrings.getYearMonth(firstOfMonth.getTimeInMillis());
+      longName = DateStrings.getYearMonth(context, firstOfMonth.getTimeInMillis());
     }
     return longName;
   }

@@ -29,8 +29,6 @@ import dev.ragnarok.fenrir.view.emoji.EmojiconsPopup;
 
 public class InputViewController {
 
-    private static final String TAG = InputViewController.class.getSimpleName();
-
     private final Context mActivity;
     private final OnInputActionCallback callback;
     private final EmojiconEditText mInputField;

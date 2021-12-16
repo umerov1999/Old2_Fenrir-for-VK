@@ -36,7 +36,6 @@ import dev.ragnarok.fenrir.view.steppers.impl.CreatePhotoAlbumStepsHost;
 public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPresenter, IEditPhotoAlbumView>
         implements BackPressCallback, IEditPhotoAlbumView, CreatePhotoAlbumStep4Holder.ActionListener, CreatePhotoAlbumStep3Holder.ActionListener, CreatePhotoAlbumStep2Holder.ActionListener, CreatePhotoAlbumStep1Holder.ActionListener {
 
-    private static final String TAG = CreatePhotoAlbumFragment.class.getSimpleName();
     private static final String EXTRA_EDITOR = "editor";
 
     private RecyclerView mRecyclerView;
@@ -171,16 +170,16 @@ public class CreatePhotoAlbumFragment extends BaseMvpFragment<EditPhotoAlbumPres
     @Override
     public IPresenterFactory<EditPhotoAlbumPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
 
-            if (getArguments().containsKey(Extra.ALBUM)) {
-                PhotoAlbum abum = getArguments().getParcelable(Extra.ALBUM);
-                PhotoAlbumEditor editor = getArguments().getParcelable(EXTRA_EDITOR);
+            if (requireArguments().containsKey(Extra.ALBUM)) {
+                PhotoAlbum abum = requireArguments().getParcelable(Extra.ALBUM);
+                PhotoAlbumEditor editor = requireArguments().getParcelable(EXTRA_EDITOR);
                 AssertUtils.requireNonNull(abum);
                 AssertUtils.requireNonNull(editor);
                 return new EditPhotoAlbumPresenter(accountId, abum, editor, requireActivity(), saveInstanceState);
             } else {
-                int ownerId = getArguments().getInt(Extra.OWNER_ID);
+                int ownerId = requireArguments().getInt(Extra.OWNER_ID);
                 return new EditPhotoAlbumPresenter(accountId, ownerId, requireActivity(), saveInstanceState);
             }
         };

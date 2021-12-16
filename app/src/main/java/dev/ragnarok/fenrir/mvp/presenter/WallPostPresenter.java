@@ -30,15 +30,12 @@ import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.ParcelableOwnerWrapper;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IWallPostView;
 import dev.ragnarok.fenrir.util.AssertUtils;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.core.Completable;
 
-
 public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
-
     private static final String SAVE_POST = "save-post";
     private static final String SAVE_OWNER = "save-owner";
 
@@ -172,21 +169,29 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         resolveRepostsView();
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull IWallPostView view) {
+        super.onGuiCreated(view);
+
+        resolveRepostsView();
+        resolveLikesView();
+        resolveCommentsView();
+        resolveContentRootView();
+        resolveToolbarView();
+    }
+
     private void resolveRepostsView() {
         if (nonNull(post)) {
             callView(v -> v.displayReposts(post.getRepostCount(), post.isUserReposted()));
         }
     }
 
-    @OnGuiCreated
     private void resolveLikesView() {
         if (nonNull(post)) {
             callView(v -> v.displayLikes(post.getLikesCount(), post.isUserLikes()));
         }
     }
 
-    @OnGuiCreated
     private void resolveCommentsView() {
         if (nonNull(post)) {
             callView(v -> v.displayCommentCount(post.getCommentsCount()));
@@ -194,7 +199,6 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
         }
     }
 
-    @OnGuiCreated
     private void resolveContentRootView() {
         if (nonNull(post)) {
             callView(v -> v.displayPostInfo(post));
@@ -360,9 +364,7 @@ public class WallPostPresenter extends PlaceSupportPresenter<IWallPostView> {
                 .show();
     }
 
-    @OnGuiCreated
     private void resolveToolbarView() {
-
         if (nonNull(post)) {
             int type = IWallPostView.SUBTITLE_NORMAL;
 

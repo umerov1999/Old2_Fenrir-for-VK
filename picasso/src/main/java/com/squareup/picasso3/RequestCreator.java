@@ -190,7 +190,7 @@ public class RequestCreator {
      * You can either use simple {@link String} tags or objects that naturally
      * define the scope of your requests within your app such as a
      * {@link android.content.Context}, an {@link android.app.Activity}, or a
-     * {@link android.app.Fragment}.
+     * Fragment.
      *
      * <strong>WARNING:</strong>: Picasso will keep a reference to the tag for
      * as long as this tag is paused and/or has active requests. Look out for
@@ -460,7 +460,7 @@ public class RequestCreator {
      * up the cache with an image.
      * <p>
      * <em>Note:</em> The {@link Callback} param is a strong reference and will prevent your
-     * {@link android.app.Activity} or {@link android.app.Fragment} from being garbage collected
+     * {@link android.app.Activity} or Fragment from being garbage collected
      * until the request is completed.
      */
     public void fetch(@Nullable Callback callback) {
@@ -693,7 +693,7 @@ public class RequestCreator {
      * target {@link Callback} if it's not {@code null}.
      * <p>
      * <em>Note:</em> The {@link Callback} param is a strong reference and will prevent your
-     * {@link android.app.Activity} or {@link android.app.Fragment} from being garbage collected. If
+     * {@link android.app.Activity} or Fragment from being garbage collected. If
      * you use this method, it is <b>strongly</b> recommended you invoke an adjacent
      * {@link Picasso#cancelRequest(android.widget.ImageView)} call to prevent temporary leaking.
      */

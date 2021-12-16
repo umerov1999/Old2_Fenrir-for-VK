@@ -33,7 +33,6 @@ import dev.ragnarok.fenrir.model.News;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IFeedView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.CustomToast;
@@ -197,6 +196,8 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
         viewHost.displayFeed(mFeed, mTmpFeedScrollOnGuiReady);
 
         mTmpFeedScrollOnGuiReady = null;
+        resolveRefreshingView();
+        resolveLoadMoreFooterView();
     }
 
     private void setCacheLoadingNow(boolean cacheLoadingNow) {
@@ -318,7 +319,6 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
         return loadingNow && nonEmpty(loadingNowNextFrom);
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(isRefreshing()));
     }
@@ -333,7 +333,6 @@ public class FeedPresenter extends PlaceSupportPresenter<IFeedView> {
         return -1;
     }
 
-    @OnGuiCreated
     private void resolveLoadMoreFooterView() {
         if (mFeed.isEmpty() || isEmpty(mNextFrom)) {
             callView(v -> v.setupLoadMoreFooter(LoadMoreState.END_OF_LIST));

@@ -60,8 +60,8 @@ public class ConversationPhotosFragment extends AbsChatAttachmentsFragment<Photo
     @Override
     public IPresenterFactory<ChatAttachmentPhotoPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            int peerId = getArguments().getInt(Extra.PEER_ID);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            int peerId = requireArguments().getInt(Extra.PEER_ID);
             return new ChatAttachmentPhotoPresenter(peerId, accountId, saveInstanceState);
         };
     }

@@ -2,9 +2,7 @@ package dev.ragnarok.fenrir.mvp.core
 
 import android.os.Bundle
 import androidx.annotation.CallSuper
-import dev.ragnarok.fenrir.mvp.reflect.AnnotatedHandlerFinder
 import java.lang.ref.WeakReference
-import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.atomic.AtomicInteger
 
 abstract class AbsPresenter<V : IMvpView>(savedInstanceState: Bundle?) : IPresenter<V> {
@@ -71,19 +69,6 @@ abstract class AbsPresenter<V : IMvpView>(savedInstanceState: Bundle?) : IPresen
 
     }
 
-    private fun executeAllResolveViewMethods() {
-        val resolveMethodHandlers =
-            AnnotatedHandlerFinder.findAllOnGuiCreatedHandlers(this, AbsPresenter::class.java)
-
-        for (handler in resolveMethodHandlers) {
-            try {
-                handler.handle()
-            } catch (ignored: InvocationTargetException) {
-
-            }
-        }
-    }
-
     @CallSuper
     protected open fun onGuiDestroyed() {
 
@@ -126,7 +111,6 @@ abstract class AbsPresenter<V : IMvpView>(savedInstanceState: Bundle?) : IPresen
 
     final override fun createView(view: V) {
         isGuiReady = true
-        executeAllResolveViewMethods()
         onGuiCreated(view)
     }
 

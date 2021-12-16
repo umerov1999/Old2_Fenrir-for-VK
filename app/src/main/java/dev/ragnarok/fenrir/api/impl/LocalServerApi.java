@@ -61,30 +61,30 @@ class LocalServerApi implements ILocalServerApi {
     }
 
     @Override
-    public Single<Items<VKApiVideo>> searchVideos(String query, Integer offset, Integer count) {
+    public Single<Items<VKApiVideo>> searchVideos(String query, Integer offset, Integer count, boolean reverse) {
         return service.provideLocalServerService()
-                .flatMap(service -> service.searchVideos(query, offset, count)
+                .flatMap(service -> service.searchVideos(query, offset, count, reverse ? 1 : 0)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
-    public Single<Items<VKApiPhoto>> searchPhotos(String query, Integer offset, Integer count) {
+    public Single<Items<VKApiPhoto>> searchPhotos(String query, Integer offset, Integer count, boolean reverse) {
         return service.provideLocalServerService()
-                .flatMap(service -> service.searchPhotos(query, offset, count)
+                .flatMap(service -> service.searchPhotos(query, offset, count, reverse ? 1 : 0)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
-    public Single<Items<VKApiAudio>> searchAudios(String query, Integer offset, Integer count) {
+    public Single<Items<VKApiAudio>> searchAudios(String query, Integer offset, Integer count, boolean reverse) {
         return service.provideLocalServerService()
-                .flatMap(service -> service.searchAudios(query, offset, count)
+                .flatMap(service -> service.searchAudios(query, offset, count, reverse ? 1 : 0)
                         .map(extractResponseWithErrorHandling()));
     }
 
     @Override
-    public Single<Items<VKApiAudio>> searchDiscography(String query, Integer offset, Integer count) {
+    public Single<Items<VKApiAudio>> searchDiscography(String query, Integer offset, Integer count, boolean reverse) {
         return service.provideLocalServerService()
-                .flatMap(service -> service.searchDiscography(query, offset, count)
+                .flatMap(service -> service.searchDiscography(query, offset, count, reverse ? 1 : 0)
                         .map(extractResponseWithErrorHandling()));
     }
 

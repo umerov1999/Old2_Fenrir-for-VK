@@ -28,7 +28,6 @@ import dev.ragnarok.fenrir.model.LocalPhoto;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.Poll;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IBaseAttachmentsEditView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.upload.IUploadManager;
@@ -36,7 +35,6 @@ import dev.ragnarok.fenrir.upload.Upload;
 import dev.ragnarok.fenrir.util.FileUtil;
 import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.Predicate;
-
 
 public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEditView>
         extends AccountDependencyPresenter<V> {
@@ -100,12 +98,10 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
         return data;
     }
 
-    @OnGuiCreated
     void resolveTimerInfoView() {
         callView(v -> v.setTimerValue(timerValue));
     }
 
-    @OnGuiCreated
     void resolveTextView() {
         callView(v -> v.setTextBody(textBody));
     }
@@ -201,6 +197,9 @@ public abstract class AbsAttachmentsEditPresenter<V extends IBaseAttachmentsEdit
     public void onGuiCreated(@NonNull V viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayInitialModels(data);
+
+        resolveTimerInfoView();
+        resolveTextView();
     }
 
     public final void fireRemoveClick(int index, @NonNull AttachmenEntry attachment) {

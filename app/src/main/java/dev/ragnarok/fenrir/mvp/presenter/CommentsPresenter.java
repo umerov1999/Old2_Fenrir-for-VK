@@ -53,7 +53,6 @@ import dev.ragnarok.fenrir.model.Sticker;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.model.WallReply;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICommentsView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -66,10 +65,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-
 public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
-
-    private static final String TAG = CommentsPresenter.class.getSimpleName();
     private static final int COUNT = 20;
     private static final String REPLY_PATTERN = "[post%s|%s], ";
     private final Commented commented;
@@ -155,7 +151,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 .subscribe(this::onAuthorDataReceived, this::onAuthorDataGetError));
     }
 
-    @OnGuiCreated
     private void resolveAuthorAvatarView() {
         String avatarUrl = nonNull(author) ? (author instanceof User ? ((User) author).getPhoto50() : ((Community) author).getPhoto50()) : null;
         callView(v -> v.displayAuthorAvatar(avatarUrl));
@@ -402,12 +397,10 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         resolveCenterProgressView();
     }
 
-    @OnGuiCreated
     private void resolveEmptyTextVisibility() {
         callView(v -> v.setEpmtyTextVisible(loadingState == LoadingState.NO && data.isEmpty()));
     }
 
-    @OnGuiCreated
     private void resolveHeaderFooterViews() {
 
         if (data.isEmpty()) {
@@ -473,7 +466,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         return nonEmpty(data) ? data.get(data.size() - 1) : null;
     }
 
-    @OnGuiCreated
     private void resolveCenterProgressView() {
         callView(v -> v.setCenterProgressVisible(loadingState == LoadingState.INITIAL && data.isEmpty()));
     }
@@ -483,7 +475,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         return nonEmpty(data) ? data.get(0) : null;
     }
 
-    @OnGuiCreated
     private void resolveBodyView() {
         callView(v -> v.displayBody(draftCommentBody));
     }
@@ -492,7 +483,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         return draftCommentAttachmentsCount > 0 || trimmedNonEmpty(draftCommentBody);
     }
 
-    @OnGuiCreated
     private void resolveSendButtonAvailability() {
         callView(v -> v.setButtonSendAvailable(canSendComment()));
     }
@@ -508,7 +498,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         return saveSingle().blockingGet();
     }
 
-    @OnGuiCreated
     private void resolveAttachmentsCounter() {
         callView(v -> v.displayAttachmentsCount(draftCommentAttachmentsCount));
     }
@@ -803,7 +792,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         resolveProgressDialog();
     }
 
-    @OnGuiCreated
     private void resolveProgressDialog() {
         if (sendingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.publication, false));
@@ -1006,7 +994,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         requestInitialData();
     }
 
-    @OnGuiCreated
     private void checkFocusToCommentDone() {
         if (nonNull(focusToComment)) {
             for (int i = 0; i < data.size(); i++) {
@@ -1055,7 +1042,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 .subscribe(this::onCachedDataReceived, ignore()));
     }
 
-    @OnGuiCreated
     private void resolveCanSendAsAdminView() {
         callView(v -> v.setCanSendSelectAuthor(commented.getSourceType() == CommentedType.POST || adminLevel >= VKApiCommunity.AdminLevel.MODERATOR));
     }
@@ -1081,6 +1067,18 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
                 view.setToolbarSubtitle(getString(R.string.for_topic));
                 break;
         }
+
+        resolveCanSendAsAdminView();
+        resolveReplyViews();
+        checkFocusToCommentDone();
+        resolveEmptyTextVisibility();
+        resolveProgressDialog();
+        resolveAttachmentsCounter();
+        resolveSendButtonAvailability();
+        resolveAuthorAvatarView();
+        resolveBodyView();
+        resolveHeaderFooterViews();
+        resolveCenterProgressView();
     }
 
     private void onCachedDataReceived(List<Comment> comments) {
@@ -1108,7 +1106,6 @@ public class CommentsPresenter extends PlaceSupportPresenter<ICommentsView> {
         super.onDestroyed();
     }
 
-    @OnGuiCreated
     private void resolveReplyViews() {
         callView(v -> v.setupReplyViews(nonNull(replyTo) ? replyTo.getFullAuthorName() : null));
     }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.conversations.IBaseChatAttachmentsView;
 import dev.ragnarok.fenrir.util.DisposableHolder;
 import dev.ragnarok.fenrir.util.Pair;
@@ -42,6 +41,8 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
     public void onGuiCreated(@NonNull V viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayAttachments(data);
+
+        resolveEmptyTextVisibility();
     }
 
     @Override
@@ -99,12 +100,11 @@ public abstract class BaseChatAttachmentsPresenter<T, V extends IBaseChatAttachm
             callView(IBaseChatAttachmentsView::notifyDatasetChanged);
         }
 
-        resolveEmptyTextVisiblity();
+        resolveEmptyTextVisibility();
         onDataChanged();
     }
 
-    @OnGuiCreated
-    private void resolveEmptyTextVisiblity() {
+    private void resolveEmptyTextVisibility() {
         callView(v -> v.setEmptyTextVisible(safeIsEmpty(data)));
     }
 

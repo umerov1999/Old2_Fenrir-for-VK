@@ -10,15 +10,21 @@ import dev.ragnarok.fenrir.util.Objects;
 
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
-    private static final int MIN_DELAY = 100;
-    private static final int VISIBILITY_THRESHOLD = 0; //elements to the end
+    private final int MIN_DELAY;
+    private final int VISIBILITY_THRESHOLD; //elements to the end
     private Long mLastInterceptTime;
     private int visibleItemCount;
     private int totalItemCount;
     private int pastVisibleItems;
 
     public EndlessRecyclerOnScrollListener() {
+        MIN_DELAY = 100;
+        VISIBILITY_THRESHOLD = 0;
+    }
 
+    public EndlessRecyclerOnScrollListener(int visibilityThreshold, int minDelay) {
+        MIN_DELAY = minDelay;
+        VISIBILITY_THRESHOLD = visibilityThreshold;
     }
 
     private boolean isAllowScrollIntercept(long minDelay) {

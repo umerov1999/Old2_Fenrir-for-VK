@@ -67,10 +67,6 @@ public abstract class BaseMvpActivity<P extends AbsPresenter<V>, V extends IMvpV
         return getIntent().getExtras();
     }
 
-    protected boolean hasHideToolbarExtra() {
-        return nonNull(getArguments()) && getArguments().getBoolean(EXTRA_HIDE_TOOLBAR);
-    }
-
     @Override
     public void showToast(@StringRes int titleTes, boolean isLong, Object... params) {
         if (!isFinishing()) {

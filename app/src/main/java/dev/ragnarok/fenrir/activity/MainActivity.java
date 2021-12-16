@@ -143,6 +143,7 @@ import dev.ragnarok.fenrir.fragment.search.AudioSearchTabsFragment;
 import dev.ragnarok.fenrir.fragment.search.SearchTabsFragment;
 import dev.ragnarok.fenrir.fragment.search.SingleTabSearchFragment;
 import dev.ragnarok.fenrir.fragment.wallattachments.WallAttachmentsFragmentFactory;
+import dev.ragnarok.fenrir.fragment.wallattachments.WallSearchCommentsAttachmentsFragment;
 import dev.ragnarok.fenrir.link.LinkHelper;
 import dev.ragnarok.fenrir.listener.AppStyleable;
 import dev.ragnarok.fenrir.listener.BackPressCallback;
@@ -454,11 +455,11 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                     checkFCMRegistration(false);
                     mCompositeDisposable.add(InteractorFactory.createAudioInteractor().PlaceToAudioCache(this)
                             .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                            .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
+                            .subscribe(RxUtils.dummy(), RxUtils.ignore()));
 
                     mCompositeDisposable.add(InteractorFactory.createStickersInteractor().PlaceToStickerCache(this)
                             .compose(RxUtils.applyCompletableIOToMainSchedulers())
-                            .subscribe(RxUtils.dummy(), t -> {/*TODO*/}));
+                            .subscribe(RxUtils.dummy(), RxUtils.ignore()));
 
                     Utils.checkMusicInPC(this);
 
@@ -1212,10 +1213,7 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
                 if (getMainActivityTransform() == MainActivityTransforms.SWIPEBLE) {
                     attachToFront(StoryPagerFragment.newInstance(args));
                 } else {
-                    Intent intent = new Intent(this, SwipebleActivity.class);
-                    intent.setAction(ACTION_OPEN_PLACE);
-                    intent.putExtra(Extra.PLACE, place);
-                    SwipebleActivity.start(this, intent);
+                    Utils.openPlaceWithSwipebleActivity(this, place);
                 }
                 break;
 
@@ -1448,6 +1446,10 @@ public class MainActivity extends AppCompatActivity implements AbsNavigationFrag
 
             case Place.MESSAGE_LOOKUP:
                 attachToFront(MessagesLookFragment.newInstance(args));
+                break;
+
+            case Place.SEARCH_COMMENTS:
+                attachToFront(WallSearchCommentsAttachmentsFragment.newInstance(args));
                 break;
 
             case Place.UNREAD_MESSAGES:

@@ -21,7 +21,7 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core:$coreVersion"
-    implementation 'androidx.activity:activity:1.4.0'
+    implementation "androidx.activity:activity:$activityVersion"
     implementation "androidx.fragment:fragment:$fragmentVersion"
     implementation fenrirMinSDK >= 26 ? 'com.google.zxing:core:3.4.1' : 'com.google.zxing:core:3.3.3'
     implementation "androidx.annotation:annotation:$annotationVersion"

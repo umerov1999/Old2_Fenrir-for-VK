@@ -25,6 +25,7 @@ import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import androidx.appcompat.widget.AppCompatEditText;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -206,6 +207,10 @@ public class TextInputEditText extends AppCompatEditText {
     CharSequence hintText = layout.getHint();
     boolean showingText = !TextUtils.isEmpty(inputText);
     boolean hasHint = !TextUtils.isEmpty(hintText);
+
+    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+      setLabelFor(R.id.textinput_helper_text);
+    }
 
     String hint = hasHint ? hintText.toString() : "";
 

@@ -14,15 +14,15 @@ import android.os.RemoteException;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 import dev.ragnarok.fenrir.R;
@@ -36,9 +36,9 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public final class MusicPlaybackController {
 
-    public static final HashMap<Integer, ArrayList<Audio>> Audios = new HashMap<>();
-    public static final Set<String> CachedAudios = new ArraySet<>();
-    public static final Set<String> RemoteAudios = new ArraySet<>();
+    public static final Map<Integer, ArrayList<Audio>> Audios = new LinkedHashMap<>();
+    public static final List<String> CachedAudios = new LinkedList<>();
+    public static final List<String> RemoteAudios = new LinkedList<>();
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
     private static final PublishSubject<Integer> SERVICE_BIND_PUBLISHER = PublishSubject.create();
     private static final String TAG = MusicPlaybackController.class.getSimpleName();

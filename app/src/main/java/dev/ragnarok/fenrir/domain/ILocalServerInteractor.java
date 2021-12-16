@@ -16,13 +16,13 @@ public interface ILocalServerInteractor {
 
     Single<List<Photo>> getPhotos(int offset, int count, boolean reverse);
 
-    Single<List<Video>> searchVideos(String q, int offset, int count);
+    Single<List<Video>> searchVideos(String q, int offset, int count, boolean reverse);
 
-    Single<List<Audio>> searchAudios(String q, int offset, int count);
+    Single<List<Audio>> searchAudios(String q, int offset, int count, boolean reverse);
 
-    Single<List<Audio>> searchDiscography(String q, int offset, int count);
+    Single<List<Audio>> searchDiscography(String q, int offset, int count, boolean reverse);
 
-    Single<List<Photo>> searchPhotos(String q, int offset, int count);
+    Single<List<Photo>> searchPhotos(String q, int offset, int count, boolean reverse);
 
     Single<Integer> update_time(String hash);
 

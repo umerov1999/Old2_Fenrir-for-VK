@@ -22,16 +22,16 @@ public interface ILocalServerApi {
     Single<Items<VKApiPhoto>> getPhotos(Integer offset, Integer count, boolean reverse);
 
     @CheckResult
-    Single<Items<VKApiVideo>> searchVideos(String query, Integer offset, Integer count);
+    Single<Items<VKApiVideo>> searchVideos(String query, Integer offset, Integer count, boolean reverse);
 
     @CheckResult
-    Single<Items<VKApiAudio>> searchAudios(String query, Integer offset, Integer count);
+    Single<Items<VKApiAudio>> searchAudios(String query, Integer offset, Integer count, boolean reverse);
 
     @CheckResult
-    Single<Items<VKApiAudio>> searchDiscography(String query, Integer offset, Integer count);
+    Single<Items<VKApiAudio>> searchDiscography(String query, Integer offset, Integer count, boolean reverse);
 
     @CheckResult
-    Single<Items<VKApiPhoto>> searchPhotos(String query, Integer offset, Integer count);
+    Single<Items<VKApiPhoto>> searchPhotos(String query, Integer offset, Integer count, boolean reverse);
 
     @CheckResult
     Single<Integer> update_time(String hash);

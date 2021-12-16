@@ -26,7 +26,7 @@ public class RecommendationsFriendsFragment extends AbsOwnersListFragment<Recomm
     @Override
     public IPresenterFactory<RecommendationsFriendsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new RecommendationsFriendsPresenter(
-                getArguments().getInt(Extra.USER_ID),
+                requireArguments().getInt(Extra.USER_ID),
                 saveInstanceState);
     }
 

@@ -65,7 +65,7 @@ public class FeedbackLinkDialog extends DialogFragment implements FeedbackLinkAd
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParcelableFeedbackWrapper wrapper = getArguments().getParcelable("feedback");
+        ParcelableFeedbackWrapper wrapper = requireArguments().getParcelable("feedback");
         mFeedback = wrapper.get();
     }
 
@@ -121,7 +121,7 @@ public class FeedbackLinkDialog extends DialogFragment implements FeedbackLinkAd
     }
 
     private int getAccountId() {
-        return getArguments().getInt(Extra.ACCOUNT_ID);
+        return requireArguments().getInt(Extra.ACCOUNT_ID);
     }
 
     private void close() {

@@ -32,7 +32,7 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
 
     public static final String REQUEST_CODE_SCHOOL = "request_school";
     private static final int COUNT_PER_REQUEST = 1000;
-    private static final int RUN_SEACRH_DELAY = 1000;
+    private static final int RUN_SEARCH_DELAY = 1000;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private int mAccountId;
     private int cityId;
@@ -55,8 +55,8 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        cityId = getArguments().getInt(Extra.CITY_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        cityId = requireArguments().getInt(Extra.CITY_ID);
         mDatabaseInteractor = InteractorFactory.createDatabaseInteractor();
     }
 
@@ -72,7 +72,7 @@ public class SelectSchoolsDialog extends AccountDependencyDialogFragment impleme
             public void afterTextChanged(Editable s) {
                 filter = s.toString();
                 mHandler.removeCallbacks(runSearchRunnable);
-                mHandler.postDelayed(runSearchRunnable, RUN_SEACRH_DELAY);
+                mHandler.postDelayed(runSearchRunnable, RUN_SEARCH_DELAY);
             }
         });
 

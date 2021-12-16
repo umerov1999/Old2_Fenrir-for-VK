@@ -1,5 +1,6 @@
 package dev.ragnarok.fenrir.mvp.view.wallattachments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dev.ragnarok.fenrir.model.Post;
@@ -24,4 +25,6 @@ public interface IWallPostCommentAttachmentsView extends IAccountDependencyView,
     void onSetLoadingStatus(int isLoad);
 
     void openPostEditor(int accountId, Post post);
+
+    void openAllComments(int accountId, int ownerId, ArrayList<Integer> posts);
 }

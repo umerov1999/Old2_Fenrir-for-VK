@@ -135,7 +135,7 @@ public class GiftsFragment extends BaseMvpFragment<GiftsPresenter, IGiftsView>
     @NonNull
     @Override
     public IPresenterFactory<GiftsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new GiftsPresenter(getArguments().getInt(Extra.ACCOUNT_ID), getArguments().getInt(Extra.OWNER_ID), saveInstanceState);
+        return () -> new GiftsPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), requireArguments().getInt(Extra.OWNER_ID), saveInstanceState);
     }
 
     @Override

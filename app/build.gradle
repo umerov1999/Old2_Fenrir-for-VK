@@ -120,6 +120,8 @@ dependencies {
     compileOnly "org.checkerframework:checker-qual-android:$checkerQualVersion"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common:$lifecycleVersion"
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpager2Version"
@@ -130,7 +132,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.webkit:webkit:1.4.0'
     implementation "androidx.exifinterface:exifinterface:$exifinterfaceVersion"
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "io.reactivex.rxjava3:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava3:rxandroid:$rxAndroidVersion"
     implementation 'com.google.firebase:firebase-database:20.0.3'
@@ -148,9 +150,7 @@ dependencies {
     implementation project(path: ':image')
     implementation project(path: ':material')
     implementation project(path: ':zxing-android-embedded')
-    implementation "com.squareup.retrofit2:retrofit:$retrofitLibraryVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitLibraryVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofitLibraryVersion"
+    implementation project(path: ':retrofit')
     implementation "com.squareup.okhttp3:okhttp:$okhttpLibraryVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLibraryVersion"
     implementation "com.squareup.okio:okio:$okioVersion"
@@ -159,7 +159,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
     implementation 'androidx.biometric:biometric-ktx:1.2.0-alpha04'
     implementation 'androidx.media:media:1.5.0-beta01'
-    implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0-beta01"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$coordinatorlayoutVersion"
     implementation "androidx.activity:activity-ktx:$activityVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
     implementation 'androidx.work:work-runtime-ktx:2.7.1'

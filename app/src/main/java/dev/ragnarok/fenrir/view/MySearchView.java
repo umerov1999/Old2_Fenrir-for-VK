@@ -1,6 +1,7 @@
 package dev.ragnarok.fenrir.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,19 +11,24 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.db.Stores;
 import dev.ragnarok.fenrir.listener.TextWatcherAdapter;
 import dev.ragnarok.fenrir.util.Logger;
+import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class MySearchView extends LinearLayout {
 
@@ -35,6 +41,9 @@ public class MySearchView extends LinearLayout {
     private ImageView mButtonClear;
     private ImageView mButtonAdditional;
     private OnQueryTextListener mOnQueryChangeListener;
+    private Disposable mQueryDisposable = Disposable.disposed();
+    private ArrayAdapter<String> listQueries;
+    private int searchId;
     private final TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
 
         /**
@@ -50,26 +59,54 @@ public class MySearchView extends LinearLayout {
     private OnAdditionalButtonClickListener mOnAdditionalButtonClickListener;
     private OnAdditionalButtonLongClickListener mOnAdditionalButtonLongClickListener;
 
-    public MySearchView(Context context) {
+    public MySearchView(@NonNull Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
-    public MySearchView(Context context, AttributeSet attrs) {
+    public MySearchView(@NonNull Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
-    public MySearchView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MySearchView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
-    protected void init() {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mQueryDisposable.dispose();
+    }
+
+    private void loadQueries() {
+        mQueryDisposable.dispose();
+        mQueryDisposable = Stores.getInstance().searchQueriesStore().getQueries(searchId)
+                .compose(RxUtils.applySingleIOToMainSchedulers())
+                .subscribe(s -> {
+                    listQueries.clear();
+                    listQueries.addAll(s);
+                }, RxUtils.ignore());
+    }
+
+    protected void init(@NonNull Context context, AttributeSet attrs) {
         LayoutInflater.from(getContext()).inflate(R.layout.custom_searchview, this);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MySearchView);
+        try {
+            searchId = a.getInt(R.styleable.MySearchView_search_source_id, getId());
+        } finally {
+            a.recycle();
+        }
 
         mInput = findViewById(R.id.input);
         mInput.setOnEditorActionListener(mOnEditorActionListener);
+
+        listQueries = new ArrayAdapter<>(getContext(), R.layout.search_dropdown_item);
+        mInput.setAdapter(listQueries);
+
+        loadQueries();
 
         mButtonBack = findViewById(R.id.button_back);
         mButtonClear = findViewById(R.id.clear);
@@ -79,7 +116,6 @@ public class MySearchView extends LinearLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 mQuery = s.toString();
-
                 if (mOnQueryChangeListener != null) {
                     mOnQueryChangeListener.onQueryTextChange(s.toString());
                 }
@@ -122,6 +158,10 @@ public class MySearchView extends LinearLayout {
     private void onSubmitQuery() {
         CharSequence query = mInput.getText();
         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
+            mQueryDisposable.dispose();
+            mQueryDisposable = Stores.getInstance().searchQueriesStore().insertQuery(searchId, query.toString())
+                    .compose(RxUtils.applyCompletableIOToMainSchedulers())
+                    .subscribe(this::loadQueries, RxUtils.ignore());
             if (mOnQueryChangeListener != null && mOnQueryChangeListener.onQueryTextSubmit(query.toString())) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {

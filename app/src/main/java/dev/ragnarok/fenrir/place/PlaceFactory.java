@@ -54,6 +54,7 @@ import dev.ragnarok.fenrir.fragment.search.SearchContentType;
 import dev.ragnarok.fenrir.fragment.search.SearchTabsFragment;
 import dev.ragnarok.fenrir.fragment.search.SingleTabSearchFragment;
 import dev.ragnarok.fenrir.fragment.search.criteria.BaseSearchCriteria;
+import dev.ragnarok.fenrir.fragment.wallattachments.WallSearchCommentsAttachmentsFragment;
 import dev.ragnarok.fenrir.model.AbsModel;
 import dev.ragnarok.fenrir.model.Banned;
 import dev.ragnarok.fenrir.model.Comment;
@@ -265,6 +266,11 @@ public class PlaceFactory {
     public static Place getMessagesLookupPlace(int aid, int peerId, int focusMessageId, @Nullable Message message) {
         return new Place(Place.MESSAGE_LOOKUP)
                 .setArguments(MessagesLookFragment.buildArgs(aid, peerId, focusMessageId, message));
+    }
+
+    public static Place getWallSearchCommentsAttachmentsPlace(int accountId, int ownerId, @NonNull ArrayList<Integer> posts) {
+        return new Place(Place.SEARCH_COMMENTS)
+                .setArguments(WallSearchCommentsAttachmentsFragment.buildArgs(accountId, ownerId, posts));
     }
 
     public static Place getUnreadMessagesPlace(int aid, int focusMessageId, int incoming, int outgoing, int unreadCount, @NonNull Peer peer) {

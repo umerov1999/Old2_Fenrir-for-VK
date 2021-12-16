@@ -22,7 +22,6 @@ import dev.ragnarok.fenrir.model.Comment;
 import dev.ragnarok.fenrir.model.Commented;
 import dev.ragnarok.fenrir.model.LocalPhoto;
 import dev.ragnarok.fenrir.model.Photo;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICommentEditView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.upload.Upload;
@@ -36,8 +35,6 @@ import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
 
 public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEditView> {
-
-    private static final String TAG = CommentEditPresenter.class.getSimpleName();
 
     private final Comment orig;
     private final UploadDestination destination;
@@ -136,7 +133,14 @@ public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEd
         return Utils.copyToArrayListWithPredicate(getData(), entry -> !(entry.getAttachment() instanceof Upload));
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull ICommentEditView view) {
+        super.onGuiCreated(view);
+
+        resolveButtonsAvailability();
+        resolveProgressDialog();
+    }
+
     private void resolveButtonsAvailability() {
         callView(v -> v.setSupportedButtons(true, true, true, true, false, false));
     }
@@ -192,7 +196,6 @@ public class CommentEditPresenter extends AbsAttachmentsEditPresenter<ICommentEd
         resolveProgressDialog();
     }
 
-    @OnGuiCreated
     private void resolveProgressDialog() {
         if (editingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.saving, false));

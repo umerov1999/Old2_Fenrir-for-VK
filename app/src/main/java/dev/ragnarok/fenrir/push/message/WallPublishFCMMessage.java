@@ -32,8 +32,6 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class WallPublishFCMMessage {
 
-    private static final String TAG = WallPublishFCMMessage.class.getSimpleName();
-
     // collapseKey: wall_publish, extras: Bundle[{from=376771982493, name=Fenrir for VK,
     // text=Тестирование уведомлений, type=wall_publish, place=wall-72124992_4914,
     // group_id=72124992, sandbox=0, collapse_key=wall_publish}]

@@ -37,7 +37,6 @@ public class SearchTabsFragment extends Fragment {
     public static final int TAB_DOCUMENTS = 7;
     public static final int TAB_PHOTOS = 8;
     public static final int TAB_ARTISTS = 9;
-    private static final String TAG = SearchTabsFragment.class.getSimpleName();
     private static final String SAVE_CURRENT_TAB = "save_current_tab";
     private int mCurrentTab;
 
@@ -109,10 +108,10 @@ public class SearchTabsFragment extends Fragment {
             }
         }).attach();
 
-        if (getArguments().containsKey(Extra.TAB)) {
-            mCurrentTab = getArguments().getInt(Extra.TAB);
+        if (requireArguments().containsKey(Extra.TAB)) {
+            mCurrentTab = requireArguments().getInt(Extra.TAB);
 
-            getArguments().remove(Extra.TAB);
+            requireArguments().remove(Extra.TAB);
             mViewPager.setCurrentItem(mCurrentTab);
         }
         return root;

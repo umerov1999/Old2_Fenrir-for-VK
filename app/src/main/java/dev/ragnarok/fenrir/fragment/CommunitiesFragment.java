@@ -104,12 +104,12 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
     }
 
     @Override
-    public void displayData(DataWrapper<Community> own, DataWrapper<Community> filtered, DataWrapper<Community> seacrh) {
+    public void displayData(DataWrapper<Community> own, DataWrapper<Community> filtered, DataWrapper<Community> search) {
         if (nonNull(mAdapter)) {
             List<DataWrapper<Community>> wrappers = new ArrayList<>();
             wrappers.add(own);
             wrappers.add(filtered);
-            wrappers.add(seacrh);
+            wrappers.add(search);
 
             Integer[] titles = {null, R.string.quick_search_title, R.string.other};
             mAdapter.setData(wrappers, titles);
@@ -165,34 +165,38 @@ public class CommunitiesFragment extends BaseMvpFragment<CommunitiesPresenter, I
         }
     }
 
-    private void showNotCommunities(List<Owner> data, int accountId) {
+    private void showNotCommunities(@NonNull List<Owner> data, int accountId) {
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_communities))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", null)
-                .setCancelable(true)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> callPresenter(p -> p.clearModificationCommunities(false, true)))
+                .setCancelable(false)
                 .show();
     }
 
     @Override
-    public void showAddCommunities(List<Owner> add, List<Owner> remove, int accountId) {
-        if (add.size() <= 0 && remove.size() > 0) {
+    public void showModCommunities(@Nullable List<Owner> add, @Nullable List<Owner> remove, int accountId) {
+        if (Utils.isEmpty(add) && Utils.isEmpty(remove)) {
+            return;
+        }
+        if (Utils.isEmpty(add) && !Utils.isEmpty(remove)) {
             showNotCommunities(remove, accountId);
             return;
         }
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), add);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_communities))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", (dialog, which) -> {
-                    if (remove.size() > 0) {
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    callPresenter(p -> p.clearModificationCommunities(true, false));
+                    if (!Utils.isEmpty(remove)) {
                         showNotCommunities(remove, accountId);
                     }
                 })
-                .setCancelable(remove.size() <= 0)
+                .setCancelable(false)
                 .show();
     }
 

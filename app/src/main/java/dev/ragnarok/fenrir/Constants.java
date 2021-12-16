@@ -28,10 +28,10 @@ public class Constants {
     public static final String AUTH_VERSION = DEFAULT_ACCOUNT_TYPE == AccountType.KATE ? API_VERSION : "5.122";
     public static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".file_provider";
 
-    public static final String VK_ANDROID_APP_VERSION_NAME = "7.4";
-    public static final String VK_ANDROID_APP_VERSION_CODE = "10251";
-    public static final String KATE_APP_VERSION_NAME = "81.1 lite";
-    public static final String KATE_APP_VERSION_CODE = "504";
+    public static final String VK_ANDROID_APP_VERSION_NAME = "7.6";
+    public static final String VK_ANDROID_APP_VERSION_CODE = "10425";
+    public static final String KATE_APP_VERSION_NAME = "81.2 lite";
+    public static final String KATE_APP_VERSION_CODE = "506";
     public static final int API_ID = BuildConfig.VK_API_APP_ID;
     public static final String SECRET = BuildConfig.VK_CLIENT_SECRET;
     public static final String MAIN_OWNER_FIELDS = UserColumns.API_FIELDS + "," + GroupColumns.API_FIELDS;

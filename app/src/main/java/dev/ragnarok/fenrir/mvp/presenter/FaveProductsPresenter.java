@@ -19,7 +19,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FaveProductsPresenter extends AccountDependencyPresenter<IFaveProductsView> {
 
-    private static final String TAG = FaveProductsPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IFaveInteractor faveInteractor;
     private final ArrayList<Market> mMarkets;

@@ -18,8 +18,8 @@ package com.google.android.material.textfield;
 
 import com.google.android.material.R;
 
-import static android.view.accessibility.AccessibilityEvent.TYPE_VIEW_CLICKED;
 import static androidx.core.view.ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO;
+import static android.view.accessibility.AccessibilityEvent.TYPE_VIEW_CLICKED;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +35,8 @@ import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -51,8 +53,6 @@ import android.widget.Spinner;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import com.google.android.material.animation.AnimationUtils;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.internal.TextWatcherAdapter;
@@ -131,10 +131,9 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
           // If dropdown is non editable, layout click is what triggers showing/hiding the popup
           // list. Otherwise, arrow icon alone is what triggers it.
           if (event.getEventType() == TYPE_VIEW_CLICKED
-              && accessibilityManager.isEnabled()
+              && accessibilityManager.isTouchExplorationEnabled()
               && !isEditable(textInputLayout.getEditText())) {
             showHideDropdown(editText);
-            updateDropdownPopupDirty();
           }
         }
       };
@@ -153,8 +152,7 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
           autoCompleteTextView.addTextChangedListener(exposedDropdownEndIconTextWatcher);
           textInputLayout.setEndIconCheckable(true);
           textInputLayout.setErrorIconDrawable(null);
-          if (!isEditable(autoCompleteTextView)
-              && accessibilityManager.isTouchExplorationEnabled()) {
+          if (!isEditable(autoCompleteTextView)) {
             ViewCompat.setImportantForAccessibility(endIconView, IMPORTANT_FOR_ACCESSIBILITY_NO);
           }
           textInputLayout.setTextInputAccessibilityDelegate(accessibilityDelegate);
@@ -311,20 +309,6 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
     }
   }
 
-  /*
-  * This method should be called if the outlined ripple background should be updated. For example,
-  * if a new {@link ShapeAppearanceModel} is set on the text field.
-  */
-  void updateOutlinedRippleEffect(@NonNull AutoCompleteTextView editText) {
-    if (isEditable(editText)
-        || textInputLayout.getBoxBackgroundMode() != TextInputLayout.BOX_BACKGROUND_OUTLINE
-        || !(editText.getBackground() instanceof LayerDrawable)) {
-      return;
-    }
-
-    addRippleEffect(editText);
-  }
-
   /* Add ripple effect to non editable layouts. */
   private void addRippleEffect(@NonNull AutoCompleteTextView editText) {
     if (isEditable(editText)) {
@@ -419,7 +403,6 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
                 dropdownPopupDirty = false;
               }
               showHideDropdown(editText);
-              updateDropdownPopupDirty();
             }
             return false;
           }
@@ -430,7 +413,8 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
           new OnDismissListener() {
             @Override
             public void onDismiss() {
-              updateDropdownPopupDirty();
+              dropdownPopupDirty = true;
+              dropdownPopupActivatedAt = System.currentTimeMillis();
               setEndIconChecked(false);
             }
           });
@@ -467,11 +451,6 @@ class DropdownMenuEndIconDelegate extends EndIconDelegate {
     }
 
     return (AutoCompleteTextView) editText;
-  }
-
-  private void updateDropdownPopupDirty() {
-    dropdownPopupDirty = true;
-    dropdownPopupActivatedAt = System.currentTimeMillis();
   }
 
   private static boolean isEditable(@NonNull EditText editText) {

@@ -113,9 +113,9 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
     @Override
     public IPresenterFactory<FriendsTabsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new FriendsTabsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.USER_ID),
-                getArguments().getParcelable(Extra.COUNTERS),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.USER_ID),
+                requireArguments().getParcelable(Extra.COUNTERS),
                 saveInstanceState
         );
     }
@@ -139,9 +139,9 @@ public class FriendsTabsFragment extends BaseMvpFragment<FriendsTabsPresenter, I
         viewPager.setAdapter(adapter);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(adapter.getPageTitle(position))).attach();
 
-        if (getArguments().containsKey(Extra.TAB)) {
-            int tab = getArguments().getInt(Extra.TAB);
-            getArguments().remove(Extra.TAB);
+        if (requireArguments().containsKey(Extra.TAB)) {
+            int tab = requireArguments().getInt(Extra.TAB);
+            requireArguments().remove(Extra.TAB);
             int pos = 0;
             boolean succ = false;
             for (FriendSource i : adapter.mFragmentTitles) {

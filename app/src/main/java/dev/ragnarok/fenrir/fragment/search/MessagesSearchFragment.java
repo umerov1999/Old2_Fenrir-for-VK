@@ -94,8 +94,8 @@ public class MessagesSearchFragment extends AbsSearchFragment<MessagesSearchPres
     @Override
     public IPresenterFactory<MessagesSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            MessageSeachCriteria c = getArguments().getParcelable(Extra.CRITERIA);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            MessageSeachCriteria c = requireArguments().getParcelable(Extra.CRITERIA);
             return new MessagesSearchPresenter(accountId, c, saveInstanceState);
         };
     }

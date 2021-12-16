@@ -14,11 +14,9 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.LoadMoreState;
 import dev.ragnarok.fenrir.model.Topic;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ITopicsView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-
 
 public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
 
@@ -111,6 +109,9 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
     public void onGuiCreated(@NonNull ITopicsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(topics);
+
+        resolveRefreshingView();
+        resolveLoadMoreFooter();
     }
 
     @Override
@@ -120,12 +121,10 @@ public class TopicsPresenter extends AccountDependencyPresenter<ITopicsView> {
         super.onDestroyed();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
 
-    @OnGuiCreated
     private void resolveLoadMoreFooter() {
         if (netLoadingNow && netLoadingNowOffset > 0) {
             callView(v -> v.setupLoadMore(LoadMoreState.LOADING));

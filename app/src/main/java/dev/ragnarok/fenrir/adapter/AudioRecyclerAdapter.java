@@ -157,7 +157,7 @@ public class AudioRecyclerAdapter extends RecyclerBindableAdapter<Audio, AudioRe
                 .setIcon(R.drawable.dir_song)
                 .setMessage(Text)
                 .setTitle(title != null ? title : mContext.getString(R.string.get_lyrics))
-                .setPositiveButton("OK", null)
+                .setPositiveButton(R.string.button_ok, null)
                 .setNeutralButton(R.string.copy_text, (dialog, which) -> {
                     ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("response", Text);

@@ -24,7 +24,6 @@ import dev.ragnarok.fenrir.model.criteria.WallCriteria;
 import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.wallattachments.IWallPhotosAttachmentsView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
@@ -54,6 +53,8 @@ public class WallPhotosAttachmentsPresenter extends PlaceSupportPresenter<IWallP
     public void onGuiCreated(@NonNull IWallPhotosAttachmentsView view) {
         super.onGuiCreated(view);
         view.displayData(mPhotos);
+
+        resolveToolbar();
     }
 
     @SuppressWarnings("unused")
@@ -142,10 +143,11 @@ public class WallPhotosAttachmentsPresenter extends PlaceSupportPresenter<IWallP
             callResumedView(v -> v.onSetLoadingStatus(actualDataLoading ? 1 : 0));
     }
 
-    @OnGuiCreated
     private void resolveToolbar() {
-        callView(v -> v.setToolbarTitle(getString(R.string.attachments_in_wall)));
-        callView(v -> v.setToolbarSubtitle(getString(R.string.photos_count, safeCountOf(mPhotos)) + " " + getString(R.string.posts_analized, loaded)));
+        callView(v -> {
+            v.setToolbarTitle(getString(R.string.attachments_in_wall));
+            v.setToolbarSubtitle(getString(R.string.photos_count, safeCountOf(mPhotos)) + " " + getString(R.string.posts_analized, loaded));
+        });
     }
 
     @Override

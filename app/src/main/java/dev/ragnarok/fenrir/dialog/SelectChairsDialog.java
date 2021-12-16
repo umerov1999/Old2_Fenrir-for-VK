@@ -46,9 +46,9 @@ public class SelectChairsDialog extends AccountDependencyDialogFragment implemen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         mDatabaseInteractor = InteractorFactory.createDatabaseInteractor();
-        facultyId = getArguments().getInt(Extra.FACULTY_ID);
+        facultyId = requireArguments().getInt(Extra.FACULTY_ID);
     }
 
     @NonNull

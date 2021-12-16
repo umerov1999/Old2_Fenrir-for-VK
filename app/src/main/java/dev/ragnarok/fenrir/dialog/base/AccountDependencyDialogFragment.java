@@ -55,11 +55,11 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!getArguments().containsKey(Extra.ACCOUNT_ID)) {
+        if (!requireArguments().containsKey(Extra.ACCOUNT_ID)) {
             throw new IllegalArgumentException("Fragments args does not constains Extra.ACCOUNT_ID");
         }
 
-        accountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         mCompositeDisposable.add(Settings.get()
                 .accounts()
                 .observeChanges()
@@ -86,7 +86,7 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
         beforeAccountChange(oldAid, newAid);
 
         accountId = newAid;
-        getArguments().putInt(Extra.ACCOUNT_ID, newAid);
+        requireArguments().putInt(Extra.ACCOUNT_ID, newAid);
 
         afterAccountChange(oldAid, newAid);
     }
@@ -258,10 +258,10 @@ public abstract class AccountDependencyDialogFragment extends BaseDialogFragment
     }
 
     public boolean isInvalidAccountContext() {
-        return getArguments().getBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT);
+        return requireArguments().getBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT);
     }
 
     protected void setInvalidAccountContext(boolean invalidAccountContext) {
-        getArguments().putBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT, invalidAccountContext);
+        requireArguments().putBoolean(ARGUMENT_INVALID_ACCOUNT_CONTEXT, invalidAccountContext);
     }
 }

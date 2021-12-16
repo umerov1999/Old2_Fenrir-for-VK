@@ -43,8 +43,6 @@ import dev.ragnarok.fenrir.view.LoadMoreFooterHelper;
 public class FeedbackFragment extends PlaceSupportMvpFragment<FeedbackPresenter, IFeedbackView> implements SwipeRefreshLayout.OnRefreshListener,
         IFeedbackView, FeedbackAdapter.ClickListener {
 
-    private static final String TAG = FeedbackFragment.class.getSimpleName();
-
     private FeedbackAdapter mAdapter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;

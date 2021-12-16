@@ -70,8 +70,8 @@ public class ConversationAudiosFragment extends AbsChatAttachmentsFragment<Audio
     @Override
     public IPresenterFactory<ChatAttachmentAudioPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ChatAttachmentAudioPresenter(
-                getArguments().getInt(Extra.PEER_ID),
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.PEER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

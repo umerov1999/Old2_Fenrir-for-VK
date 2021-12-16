@@ -64,10 +64,6 @@ public abstract class BaseMvpBottomSheetDialogFragment<P extends AbsPresenter<V>
         }
     }
 
-    protected boolean hasHideToolbarExtra() {
-        return nonNull(getArguments()) && getArguments().getBoolean(EXTRA_HIDE_TOOLBAR);
-    }
-
     @Override
     public void showToast(@StringRes int titleTes, boolean isLong, Object... params) {
         if (isAdded()) {
@@ -116,7 +112,7 @@ public abstract class BaseMvpBottomSheetDialogFragment<P extends AbsPresenter<V>
                                 .setIcon(R.drawable.ic_error)
                                 .setMessage(Text)
                                 .setTitle(R.string.more_info)
-                                .setPositiveButton("OK", null)
+                                .setPositiveButton(R.string.button_ok, null)
                                 .setCancelable(true)
                                 .show();
                     }).setActionTextColor(Color.WHITE).show();

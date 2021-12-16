@@ -10,7 +10,6 @@ import dev.ragnarok.fenrir.domain.IWallsRepository;
 import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.AttachmenEntry;
 import dev.ragnarok.fenrir.model.Post;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.mvp.view.IRepostView;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -36,9 +35,10 @@ public class RepostPresenter extends AbsAttachmentsEditPresenter<IRepostView> {
     public void onGuiCreated(@NonNull IRepostView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.setSupportedButtons(false, false, false, false, false, false);
+
+        resolveProgressDialog();
     }
 
-    @OnGuiCreated
     private void resolveProgressDialog() {
 
         if (publishingNow) {

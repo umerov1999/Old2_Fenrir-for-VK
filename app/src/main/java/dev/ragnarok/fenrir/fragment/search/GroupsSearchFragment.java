@@ -58,8 +58,8 @@ public class GroupsSearchFragment extends AbsSearchFragment<CommunitiesSearchPre
     @Override
     public IPresenterFactory<CommunitiesSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunitiesSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

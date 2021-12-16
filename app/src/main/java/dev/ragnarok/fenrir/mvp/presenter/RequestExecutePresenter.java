@@ -32,7 +32,6 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.api.Apis;
 import dev.ragnarok.fenrir.api.interfaces.INetworker;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.mvp.view.IRequestExecuteView;
 import dev.ragnarok.fenrir.util.AppPerms;
@@ -50,8 +49,8 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
     private String body;
     private String method;
     private String fullResponseBody;
-    private String trimmedReposenBody;
-    private boolean loadinNow;
+    private String trimmedResponseBody;
+    private boolean loadingNow;
 
     public RequestExecutePresenter(int accountId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -100,7 +99,7 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
             }
         }
 
-        setLoadinNow(true);
+        setLoadingNow(true);
 
         appendDisposable(executeSingle(accountId, trimmedMethod, params)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
@@ -144,31 +143,32 @@ public class RequestExecutePresenter extends AccountDependencyPresenter<IRequest
     @Override
     public void onGuiCreated(@NonNull IRequestExecuteView view) {
         super.onGuiCreated(view);
-        view.displayBody(trimmedReposenBody);
+        view.displayBody(trimmedResponseBody);
+
+        resolveProgressDialog();
     }
 
     private void onRequestResponse(Pair<String, String> body) {
-        setLoadinNow(false);
+        setLoadingNow(false);
 
         fullResponseBody = body.getFirst();
-        trimmedReposenBody = body.getSecond();
+        trimmedResponseBody = body.getSecond();
 
-        callView(view -> view.displayBody(trimmedReposenBody));
+        callView(view -> view.displayBody(trimmedResponseBody));
     }
 
     private void onRequestError(Throwable throwable) {
-        setLoadinNow(false);
+        setLoadingNow(false);
         callView(v -> showError(v, throwable));
     }
 
-    private void setLoadinNow(boolean loadinNow) {
-        this.loadinNow = loadinNow;
-        resolveProgresDialog();
+    private void setLoadingNow(boolean loadingNow) {
+        this.loadingNow = loadingNow;
+        resolveProgressDialog();
     }
 
-    @OnGuiCreated
-    private void resolveProgresDialog() {
-        if (loadinNow) {
+    private void resolveProgressDialog() {
+        if (loadingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.waiting_for_response_message, false));
         } else {
             callView(IProgressView::dismissProgressDialog);

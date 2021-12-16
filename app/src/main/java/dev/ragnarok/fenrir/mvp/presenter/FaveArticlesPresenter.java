@@ -20,7 +20,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FaveArticlesPresenter extends AccountDependencyPresenter<IFaveArticlesView> {
 
-    private static final String TAG = FaveArticlesPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IFaveInteractor faveInteractor;
     private final ArrayList<Article> mArticles;

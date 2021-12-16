@@ -73,10 +73,7 @@ public class PhotoFullScreenActivity extends NoMainActivity implements PlaceProv
                 AudioPlayerFragment.newInstance(args).show(getSupportFragmentManager(), "audio_player");
                 break;
             default:
-                Intent intent = new Intent(this, SwipebleActivity.class);
-                intent.setAction(MainActivity.ACTION_OPEN_PLACE);
-                intent.putExtra(Extra.PLACE, place);
-                SwipebleActivity.start(this, intent);
+                Utils.openPlaceWithSwipebleActivity(this, place);
                 break;
         }
     }

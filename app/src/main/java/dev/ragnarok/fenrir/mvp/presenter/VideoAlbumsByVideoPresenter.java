@@ -12,7 +12,6 @@ import dev.ragnarok.fenrir.domain.IVideosInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.VideoAlbum;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IVideoAlbumsByVideoView;
 import dev.ragnarok.fenrir.util.RxUtils;
 
@@ -38,7 +37,6 @@ public class VideoAlbumsByVideoPresenter extends AccountDependencyPresenter<IVid
         requestActualData();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.displayLoading(netLoadingNow));
     }
@@ -76,6 +74,8 @@ public class VideoAlbumsByVideoPresenter extends AccountDependencyPresenter<IVid
     public void onGuiCreated(@NonNull IVideoAlbumsByVideoView view) {
         super.onGuiCreated(view);
         view.displayData(data);
+
+        resolveRefreshingView();
     }
 
     public void fireItemClick(VideoAlbum album) {

@@ -54,9 +54,7 @@ public class AudiosLocalServerPresenter extends AccountDependencyPresenter<IAudi
 
     public void updateReverse(boolean reverse) {
         this.reverse = reverse;
-        if (!search_at.isSearchMode()) {
-            fireRefresh(false);
-        }
+        fireRefresh(false);
     }
 
     public void updateDiscography(boolean discography) {
@@ -151,7 +149,7 @@ public class AudiosLocalServerPresenter extends AccountDependencyPresenter<IAudi
     private void doSearch() {
         actualDataLoading = true;
         resolveRefreshingView();
-        appendDisposable((discography ? fInteractor.searchDiscography(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT) : fInteractor.searchAudios(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT))
+        appendDisposable((discography ? fInteractor.searchDiscography(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT, reverse) : fInteractor.searchAudios(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT, reverse))
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onSearched(new FindAt(Objects.requireNonNull(search_at.getQuery()), search_at.getOffset() + SEARCH_COUNT, data.size() < SEARCH_COUNT), data), this::onActualDataGetError));
     }

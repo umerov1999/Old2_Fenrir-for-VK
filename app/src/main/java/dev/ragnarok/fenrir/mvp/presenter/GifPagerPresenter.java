@@ -17,7 +17,6 @@ import dev.ragnarok.fenrir.media.gif.IGifPlayer;
 import dev.ragnarok.fenrir.media.gif.PlayerPrepareException;
 import dev.ragnarok.fenrir.model.Document;
 import dev.ragnarok.fenrir.model.VideoSize;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IBasicDocumentView;
 import dev.ragnarok.fenrir.mvp.view.IGifPagerView;
 import dev.ragnarok.fenrir.util.AppPerms;
@@ -53,28 +52,20 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
         outState.putInt(SAVE_PAGER_INDEX, mCurrentIndex);
     }
 
-    @OnGuiCreated
-    private void resolveData() {
-        callView(v -> v.displayData(mDocuments.size(), mCurrentIndex));
-    }
-
     public void fireSurfaceCreated(int adapterPosition) {
         if (mCurrentIndex == adapterPosition) {
             resolvePlayerDisplay();
         }
     }
 
-    @OnGuiCreated
     private void resolveToolbarTitle() {
         callView(v -> v.setToolbarTitle(R.string.gif_player));
     }
 
-    @OnGuiCreated
     private void resolveToolbarSubtitle() {
         callView(v -> v.setToolbarSubtitle(R.string.image_number, mCurrentIndex + 1, mDocuments.size()));
     }
 
-    @OnGuiCreated
     private void resolvePlayerDisplay() {
         if (getGuiIsReady()) {
             callView(v -> v.attachDisplayToPlayer(mCurrentIndex, mGifPlayer));
@@ -115,7 +106,6 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
         initGifPlayer();
     }
 
-    @OnGuiCreated
     private void resolveAddDeleteButton() {
         callView(v -> v.setupAddRemoveButton(!isMy()));
     }
@@ -124,7 +114,6 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
         return mDocuments.get(mCurrentIndex).getOwnerId() == getAccountId();
     }
 
-    @OnGuiCreated
     private void resolveAspectRatio() {
         VideoSize size = mGifPlayer.getVideoSize();
         if (size != null) {
@@ -132,10 +121,22 @@ public class GifPagerPresenter extends BaseDocumentPresenter<IGifPagerView> impl
         }
     }
 
-    @OnGuiCreated
     private void resolvePreparingProgress() {
         boolean preparing = !Objects.isNull(mGifPlayer) && mGifPlayer.getPlayerStatus() == IGifPlayer.IStatus.PREPARING;
         callView(v -> v.setPreparingProgressVisible(mCurrentIndex, preparing));
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull IGifPagerView view) {
+        super.onGuiCreated(view);
+        view.displayData(mDocuments.size(), mCurrentIndex);
+
+        resolvePreparingProgress();
+        resolveAspectRatio();
+        resolveAddDeleteButton();
+        resolvePlayerDisplay();
+        resolveToolbarTitle();
+        resolveToolbarSubtitle();
     }
 
     public void firePageSelected(int position) {

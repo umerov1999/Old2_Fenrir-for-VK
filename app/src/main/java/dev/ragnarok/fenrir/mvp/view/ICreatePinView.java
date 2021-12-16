@@ -11,7 +11,5 @@ public interface ICreatePinView extends IMvpView, IErrorView {
 
     void displayPin(int[] value, int noValue);
 
-    void sendSkipAndClose();
-
     void sendSuccessAndClose(int[] values);
 }

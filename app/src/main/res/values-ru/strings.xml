@@ -1420,6 +1420,7 @@
     <string name="be_online">Быть онлайн</string>
     <string name="wall_attachments">Вложения на стене</string>
     <string name="posts_analized">%1$d постов проверено</string>
+    <string name="comments_analized">%1$d комментариев проверено</string>
     <string name="photo_rounded_view">Скругление краёв изображений</string>
     <string name="font_size">Размер шрифта</string>
     <string name="load_history_notif">Предпросмотр диалога в уведомлениях</string>

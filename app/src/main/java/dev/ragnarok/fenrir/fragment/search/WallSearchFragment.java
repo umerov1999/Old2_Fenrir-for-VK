@@ -36,8 +36,8 @@ public class WallSearchFragment extends AbsSearchFragment<WallSearchPresenter, I
     @Override
     public IPresenterFactory<WallSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            WallSearchCriteria c = getArguments().getParcelable(Extra.CRITERIA);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            WallSearchCriteria c = requireArguments().getParcelable(Extra.CRITERIA);
             return new WallSearchPresenter(accountId, c, saveInstanceState);
         };
     }

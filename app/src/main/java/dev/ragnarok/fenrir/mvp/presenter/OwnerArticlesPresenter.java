@@ -13,7 +13,6 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Article;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IOwnerArticlesView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -21,7 +20,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class OwnerArticlesPresenter extends AccountDependencyPresenter<IOwnerArticlesView> {
 
-    private static final String TAG = OwnerArticlesPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IFaveInteractor faveInteractor;
     private final ArrayList<Article> mArticles;
@@ -40,7 +38,6 @@ public class OwnerArticlesPresenter extends AccountDependencyPresenter<IOwnerArt
         requestAtLast();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
@@ -98,6 +95,8 @@ public class OwnerArticlesPresenter extends AccountDependencyPresenter<IOwnerArt
     public void onGuiCreated(@NonNull IOwnerArticlesView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mArticles);
+
+        resolveRefreshingView();
     }
 
     private boolean canLoadMore() {

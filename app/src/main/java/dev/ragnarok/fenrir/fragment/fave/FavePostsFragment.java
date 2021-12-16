@@ -174,6 +174,6 @@ public class FavePostsFragment extends PlaceSupportMvpFragment<FavePostsPresente
     @NonNull
     @Override
     public IPresenterFactory<FavePostsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new FavePostsPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
+        return () -> new FavePostsPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
     }
 }

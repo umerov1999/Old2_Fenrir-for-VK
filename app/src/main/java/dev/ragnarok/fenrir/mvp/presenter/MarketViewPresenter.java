@@ -18,11 +18,9 @@ import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.Market;
 import dev.ragnarok.fenrir.model.Peer;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IMarketViewView;
 import dev.ragnarok.fenrir.push.OwnerInfo;
 import dev.ragnarok.fenrir.util.RxUtils;
-
 
 public class MarketViewPresenter extends AccountDependencyPresenter<IMarketViewView> {
 
@@ -71,14 +69,20 @@ public class MarketViewPresenter extends AccountDependencyPresenter<IMarketViewV
         resolveMarketView();
     }
 
-    @OnGuiCreated
     private void resolveLoadingView() {
         callView(v -> v.displayLoading(loadingNow));
     }
 
-    @OnGuiCreated
     private void resolveMarketView() {
         callView(v -> v.displayMarket(mMarket, getAccountId()));
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull IMarketViewView view) {
+        super.onGuiCreated(view);
+
+        resolveLoadingView();
+        resolveMarketView();
     }
 
     public void fireSendMarket(Market market) {

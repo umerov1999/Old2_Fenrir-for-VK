@@ -23,6 +23,7 @@ import dev.ragnarok.fenrir.db.interfaces.IOwnersStorage;
 import dev.ragnarok.fenrir.db.interfaces.IPhotoAlbumsStorage;
 import dev.ragnarok.fenrir.db.interfaces.IPhotosStorage;
 import dev.ragnarok.fenrir.db.interfaces.IRelativeshipStorage;
+import dev.ragnarok.fenrir.db.interfaces.ISearchRequestHelperStorage;
 import dev.ragnarok.fenrir.db.interfaces.IStickersStorage;
 import dev.ragnarok.fenrir.db.interfaces.IStorages;
 import dev.ragnarok.fenrir.db.interfaces.ITempDataStorage;
@@ -35,6 +36,7 @@ public class AppStorages extends ContextWrapper implements IStorages {
 
     private static AppStorages sStoresInstance;
     private final ITempDataStorage tempData = new TempDataStorage(this);
+    private final ISearchRequestHelperStorage searchQueries = new SearchRequestHelperStorage(this);
     private IOwnersStorage owners;
     private IFeedStorage feed;
     private IRelativeshipStorage relativeship;
@@ -153,6 +155,11 @@ public class AppStorages extends ContextWrapper implements IStorages {
     @Override
     public ITempDataStorage tempStore() {
         return tempData;
+    }
+
+    @Override
+    public ISearchRequestHelperStorage searchQueriesStore() {
+        return searchQueries;
     }
 
     public IVideoAlbumsStorage videoAlbums() {

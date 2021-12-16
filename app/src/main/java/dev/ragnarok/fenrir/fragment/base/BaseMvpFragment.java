@@ -102,7 +102,7 @@ public abstract class BaseMvpFragment<P extends AbsPresenter<V>, V extends IMvpV
                                 .setIcon(R.drawable.ic_error)
                                 .setMessage(Text)
                                 .setTitle(R.string.more_info)
-                                .setPositiveButton("OK", null)
+                                .setPositiveButton(R.string.button_ok, null)
                                 .setCancelable(true)
                                 .show();
                     }).setActionTextColor(Color.WHITE).show();

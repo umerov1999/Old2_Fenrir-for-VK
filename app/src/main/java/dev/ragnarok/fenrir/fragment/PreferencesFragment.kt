@@ -909,6 +909,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         findPreference<Preference>("cache_cleaner")?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
                 Stores.getInstance().tempStore().clearAll()
+                Stores.getInstance().searchQueriesStore().clearAll()
                 cleanUICache(requireActivity(), false)
                 cleanCache(requireActivity(), true)
                 true

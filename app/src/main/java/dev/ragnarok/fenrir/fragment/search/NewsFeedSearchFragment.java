@@ -102,8 +102,8 @@ public class NewsFeedSearchFragment extends AbsSearchFragment<NewsFeedSearchPres
     @Override
     public IPresenterFactory<NewsFeedSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new NewsFeedSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

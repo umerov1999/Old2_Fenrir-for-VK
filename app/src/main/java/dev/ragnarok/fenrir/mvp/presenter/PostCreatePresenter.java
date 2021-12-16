@@ -41,7 +41,6 @@ import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.Poll;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.WallEditorAttrs;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IPostCreateView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -61,8 +60,6 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
-
-    private static final String TAG = PostCreatePresenter.class.getSimpleName();
 
     private final int ownerId;
 
@@ -122,6 +119,10 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         int toolbarTitleRes = isCommunity() && !isEditorOrHigher() ? R.string.title_suggest_news : R.string.title_activity_create_post;
         view.setToolbarTitle(getString(toolbarTitleRes));
         view.setToolbarSubtitle(getOwner().getFullName());
+
+        resolveSignerInfo();
+        resolveSupportButtons();
+        resolvePublishDialogVisibility();
     }
 
     @Override
@@ -187,9 +188,7 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         resolveSignerInfo();
     }
 
-    @OnGuiCreated
     private void resolveSignerInfo() {
-
         boolean visible = false;
 
         if (isGroup() && !isEditorOrHigher() || !fromGroup.get() || addSignature.get()) {
@@ -440,7 +439,6 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         setTimerValue(unixtime);
     }
 
-    @OnGuiCreated
     private void resolveSupportButtons() {
         callView(v -> v.setSupportedButtons(true, true, true, true, isPollSupported(), isSupportTimer()));
     }
@@ -472,7 +470,6 @@ public class PostCreatePresenter extends AbsPostEditPresenter<IPostCreateView> {
         resolvePublishDialogVisibility();
     }
 
-    @OnGuiCreated
     private void resolvePublishDialogVisibility() {
         if (publishingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.publication, false));

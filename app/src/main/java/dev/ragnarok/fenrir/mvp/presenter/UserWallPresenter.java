@@ -42,7 +42,6 @@ import dev.ragnarok.fenrir.model.PostFilter;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.model.UserDetails;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.mvp.view.IUserWallView;
 import dev.ragnarok.fenrir.mvp.view.IWallView;
@@ -172,7 +171,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         }
     }
 
-    @OnGuiCreated
     private void resolveCounters() {
         callView(v -> v.displayCounters(details.getFriendsCount(),
                 details.getMutualFriendsCount(),
@@ -186,7 +184,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 details.getGiftCount()));
     }
 
-    @OnGuiCreated
     private void resolveBaseUserInfoViews() {
         callView(v -> v.displayBaseUserInfo(user));
     }
@@ -265,6 +262,13 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     public void onGuiCreated(@NonNull IUserWallView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayWallFilters(filters);
+
+        resolveCounters();
+        resolveBaseUserInfoViews();
+        resolvePrimaryActionButton();
+        resolveStatusView();
+        resolveMenu();
+        resolveProgressDialogView();
     }
 
     private List<PostFilter> createPostFilters() {
@@ -339,7 +343,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
     }
 
     @SuppressLint("ResourceType")
-    @OnGuiCreated
     private void resolvePrimaryActionButton() {
         @StringRes
         Integer title = null;
@@ -476,7 +479,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         resolveStatusView();
     }
 
-    @OnGuiCreated
     private void resolveStatusView() {
         String statusText;
         if (nonNull(details.getStatusAudio())) {
@@ -488,7 +490,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         callView(v -> v.displayUserStatus(statusText, nonNull(details.getStatusAudio())));
     }
 
-    @OnGuiCreated
     private void resolveMenu() {
         callView(IUserWallView::InvalidateOptionsMenu);
     }
@@ -585,9 +586,7 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
         callView(v -> showError(v, getCauseIfRuntime(t)));
     }
 
-    @OnGuiCreated
     private void resolveProgressDialogView() {
-
         if (loadingAvatarPhotosNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.loading_owner_photo_album, false));
         } else {
@@ -687,16 +686,6 @@ public class UserWallPresenter extends AbsWallPresenter<IUserWallView> {
                 .setTitle(user.getFullName());
 
         callView(v -> v.openChatWith(accountId, accountId, peer));
-    }
-
-    public void fireNewAvatarPhotoSelected(LocalPhoto photo) {
-        UploadIntent intent = new UploadIntent(getAccountId(), UploadDestination.forProfilePhoto(ownerId))
-                .setAutoCommit(true)
-                .setFileId(photo.getImageId())
-                .setFileUri(photo.getFullImageUri())
-                .setSize(Upload.IMAGE_SIZE_FULL);
-
-        uploadManager.enqueue(Collections.singletonList(intent));
     }
 
     public void fireNewAvatarPhotoSelected(String file) {

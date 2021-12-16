@@ -112,6 +112,7 @@ public class Place implements Parcelable {
     public static final int GROUP_CHATS = 89;
     public static final int LOCAL_SERVER_PHOTO = 90;
     public static final int VK_PHOTO_ALBUM_GALLERY_NATIVE = 91;
+    public static final int SEARCH_COMMENTS = 92;
     public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
         public Place createFromParcel(Parcel in) {

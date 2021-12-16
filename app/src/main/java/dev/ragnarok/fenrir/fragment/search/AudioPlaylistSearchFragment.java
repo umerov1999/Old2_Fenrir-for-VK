@@ -86,8 +86,8 @@ public class AudioPlaylistSearchFragment extends AbsSearchFragment<AudioPlaylist
     @Override
     public IPresenterFactory<AudioPlaylistSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudioPlaylistSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

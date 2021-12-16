@@ -15,7 +15,6 @@ import dev.ragnarok.fenrir.model.LogEvent;
 import dev.ragnarok.fenrir.model.LogEventType;
 import dev.ragnarok.fenrir.model.LogEventWrapper;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ILogsView;
 import dev.ragnarok.fenrir.util.DisposableHolder;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -48,7 +47,6 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         return types;
     }
 
-    @OnGuiCreated
     private void resolveEmptyTextVisibility() {
         callView(v -> v.setEmptyTextVisible(events.isEmpty()));
     }
@@ -63,6 +61,8 @@ public class LogsPresenter extends RxSupportPresenter<ILogsView> {
         super.onGuiCreated(viewHost);
         viewHost.displayData(events);
         viewHost.displayTypes(types);
+
+        resolveEmptyTextVisibility();
     }
 
     @Override

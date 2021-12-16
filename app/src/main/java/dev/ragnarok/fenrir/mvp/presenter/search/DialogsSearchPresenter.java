@@ -55,7 +55,7 @@ public class DialogsSearchPresenter extends AbsSearchPresenter<IDialogsSearchVie
 
     public void fireEntryClick(Conversation o) {
         int accountId = getAccountId();
-        int messagesOwnerId = getAccountId(); // todo Community dialogs seacrh !!!
+        int messagesOwnerId = getAccountId(); // todo Community dialogs search !!!
 
         Peer peer = new Peer(Peer.fromOwnerId(o.getId())).setTitle(o.getTitle()).setAvaUrl(o.getMaxSquareAvatar());
         callView(v -> v.openChatWith(accountId, messagesOwnerId, peer));

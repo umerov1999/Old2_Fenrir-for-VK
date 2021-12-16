@@ -58,7 +58,7 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
 
         if (savedInstanceState != null) {
             restoreFromInstanceState(savedInstanceState);
@@ -107,7 +107,7 @@ public class BrowserFragment extends BaseFragment implements BackPressCallback {
     }
 
     protected void loadAtFirst() {
-        String url = getArguments().getString(Extra.URL);
+        String url = requireArguments().getString(Extra.URL);
         Logger.d(TAG, "url: " + url);
         mWebView.loadUrl(url);
     }

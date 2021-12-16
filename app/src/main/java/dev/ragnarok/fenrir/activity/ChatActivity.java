@@ -116,10 +116,7 @@ public class ChatActivity extends NoMainActivity implements PlaceProvider, AppSt
                     gf.putExtra(Extra.PLACE, PlaceFactory.getGifPagerPlace(aid, documents, 0));
                     startActivity(gf);
                 } else {
-                    Intent docI = new Intent(this, SwipebleActivity.class);
-                    docI.setAction(MainActivity.ACTION_OPEN_PLACE);
-                    docI.putExtra(Extra.PLACE, place);
-                    SwipebleActivity.start(this, docI);
+                    Utils.openPlaceWithSwipebleActivity(this, place);
                 }
                 break;
 
@@ -130,10 +127,7 @@ public class ChatActivity extends NoMainActivity implements PlaceProvider, AppSt
                 AudioPlayerFragment.newInstance(args).show(getSupportFragmentManager(), "audio_player");
                 break;
             default:
-                Intent intent = new Intent(this, SwipebleActivity.class);
-                intent.setAction(MainActivity.ACTION_OPEN_PLACE);
-                intent.putExtra(Extra.PLACE, place);
-                SwipebleActivity.start(this, intent);
+                Utils.openPlaceWithSwipebleActivity(this, place);
                 break;
         }
     }

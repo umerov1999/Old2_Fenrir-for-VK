@@ -36,7 +36,6 @@ import dev.ragnarok.fenrir.model.LocalPhoto;
 import dev.ragnarok.fenrir.model.PhotoSize;
 import dev.ragnarok.fenrir.model.menu.options.DocsOption;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IDocListView;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.place.PlaceUtil;
@@ -147,7 +146,7 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
         uploadsData.addAll(data);
 
         callView(IDocListView::notifyDataSetChanged);
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
     private void onUploadResults(Pair<Upload, UploadResult<?>> pair) {
@@ -266,7 +265,7 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
             }
         }
 
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
     private void onUploadDeleted(int[] ids) {
@@ -278,11 +277,10 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
             }
         }
 
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
-    @OnGuiCreated
-    private void resolveUploadDataVisiblity() {
+    private void resolveUploadDataVisibility() {
         callView(v -> v.setUploadDataVisible(!uploadsData.isEmpty()));
     }
 
@@ -351,6 +349,10 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
         super.onGuiCreated(viewHost);
         viewHost.displayUploads(uploadsData);
         viewHost.displayFilterData(filters);
+
+        resolveUploadDataVisibility();
+        resolveRefreshingView();
+        resolveDocsListData();
     }
 
     private void loadAll() {
@@ -364,7 +366,6 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
                 .subscribe(this::onCacheDataReceived, throwable -> onLoadError(getCauseIfRuntime(throwable))));
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(isNowLoading()));
     }
@@ -377,7 +378,6 @@ public class DocsListPresenter extends AccountDependencyPresenter<IDocListView> 
         resolveDocsListData();
     }
 
-    @OnGuiCreated
     private void resolveDocsListData() {
         callView(v -> v.displayData(mDocuments, isImagesOnly()));
     }

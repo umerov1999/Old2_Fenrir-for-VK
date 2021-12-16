@@ -1,5 +1,7 @@
 package dev.ragnarok.fenrir.mvp.view;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import dev.ragnarok.fenrir.model.Owner;
@@ -22,5 +24,5 @@ public interface IRequestsView extends IMvpView, IErrorView, IAccountDependencyV
 
     void showRefreshing(boolean refreshing);
 
-    void showNotRequests(List<Owner> data, int accountId);
+    void showNotRequests(@NonNull List<Owner> data, int accountId);
 }

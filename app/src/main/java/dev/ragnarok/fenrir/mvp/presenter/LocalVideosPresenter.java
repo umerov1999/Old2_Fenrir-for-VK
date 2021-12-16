@@ -22,8 +22,6 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class LocalVideosPresenter extends RxSupportPresenter<ILocalVideosView> {
 
-    private static final String TAG = LocalVideosPresenter.class.getSimpleName();
-
     private final List<LocalVideo> mLocalVideos;
     private final List<LocalVideo> mLocalVideos_search;
     private boolean mLoadingNow;

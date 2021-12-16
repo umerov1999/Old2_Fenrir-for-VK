@@ -22,6 +22,8 @@ public interface ICommentsInteractor {
     Single<CommentsBundle> getCommentsPortion(int accountId, @NonNull Commented commented, int offset,
                                               int count, Integer startCommentId, Integer threadComment, boolean invalidateCache, String sort);
 
+    Single<List<Comment>> getCommentsNoCache(int accountId, int ownerId, int postId, int offset);
+
     Maybe<DraftComment> restoreDraftComment(int accountId, @NonNull Commented commented);
 
     Single<Integer> safeDraftComment(int accountId, @NonNull Commented commented, String body, int replyToCommentId, int replyToUserId);

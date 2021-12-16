@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import dev.ragnarok.fenrir.Injection;
@@ -36,7 +37,6 @@ import dev.ragnarok.fenrir.model.wrappers.SelectablePhotoWrapper;
 import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.module.parcel.ParcelNative;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IVkPhotosView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.upload.IUploadManager;
@@ -191,7 +191,6 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
         resolveButtonAddVisibility(true);
     }
 
-    @OnGuiCreated
     private void resolveToolbarView() {
         String ownerName = nonNull(owner) ? owner.getFullName() : null;
 
@@ -273,6 +272,7 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
         view.displayData(photos, uploads);
         view.onToggleShowDate(isShowBDate);
         resolveButtonAddVisibility(false);
+        resolveToolbarView();
     }
 
     private void setRequestNow(boolean requestNow) {
@@ -624,7 +624,7 @@ public class VkPhotosPresenter extends AccountDependencyPresenter<IVkPhotosView>
                 return;
             }
             if (mDownloads == null) {
-                mDownloads = new ArrayList<>();
+                mDownloads = new LinkedList<>();
             } else {
                 mDownloads.clear();
             }

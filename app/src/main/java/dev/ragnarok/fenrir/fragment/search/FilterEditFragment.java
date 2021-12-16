@@ -90,8 +90,8 @@ public class FilterEditFragment extends BottomSheetDialogFragment implements Sea
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        mData = getArguments().getParcelableArrayList(Extra.LIST);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        mData = requireArguments().getParcelableArrayList(Extra.LIST);
     }
 
     private void resolveEmptyTextVisibility() {

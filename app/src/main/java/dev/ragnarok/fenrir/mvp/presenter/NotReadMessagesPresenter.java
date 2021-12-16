@@ -23,7 +23,6 @@ import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.LoadMoreState;
 import dev.ragnarok.fenrir.model.Message;
 import dev.ragnarok.fenrir.model.Peer;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IBasicMessageListView;
 import dev.ragnarok.fenrir.mvp.view.INotReadMessagesView;
 import dev.ragnarok.fenrir.util.Objects;
@@ -90,6 +89,9 @@ public class NotReadMessagesPresenter extends AbsMessageListPresenter<INotReadMe
         super.onGuiCreated(viewHost);
         viewHost.displayMessages(getData(), lastReadId);
         loadingState.updateState();
+
+        resolveToolbar();
+        resolveUnreadCount();
     }
 
     private void initRequest() {
@@ -275,12 +277,10 @@ public class NotReadMessagesPresenter extends AbsMessageListPresenter<INotReadMe
         }
     }
 
-    @OnGuiCreated
     private void resolveToolbar() {
         callView(v -> v.displayToolbarAvatar(peer));
     }
 
-    @OnGuiCreated
     private void resolveUnreadCount() {
         callView(v -> v.displayUnreadCount(unreadCount));
     }

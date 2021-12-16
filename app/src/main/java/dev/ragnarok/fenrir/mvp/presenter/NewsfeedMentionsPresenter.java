@@ -21,8 +21,6 @@ import dev.ragnarok.fenrir.util.RxUtils;
 
 public class NewsfeedMentionsPresenter extends PlaceSupportPresenter<INewsfeedCommentsView> {
 
-    private static final String TAG = NewsfeedCommentsPresenter.class.getSimpleName();
-
     private final List<NewsfeedComment> data;
     private final INewsfeedInteractor interactor;
     private final int ownerId;

@@ -656,7 +656,8 @@ class PhotoPagerActivity : BaseMvpActivity<PhotoPagerPresenter, IPhotoPagerView>
     }
 
     override fun finalize() {
-        supportFinishAfterTransition()
+        finish()
+        overridePendingTransition(0, 0)
     }
 
     override fun returnInfo(position: Int, parcelNativePtr: Long) {
@@ -664,7 +665,8 @@ class PhotoPagerActivity : BaseMvpActivity<PhotoPagerPresenter, IPhotoPagerView>
             RESULT_OK,
             Intent().putExtra(Extra.PTR, parcelNativePtr).putExtra(Extra.POSITION, position)
         )
-        supportFinishAfterTransition()
+        finish()
+        overridePendingTransition(0, 0)
     }
 
     override fun returnOnlyPos(position: Int) {
@@ -672,7 +674,8 @@ class PhotoPagerActivity : BaseMvpActivity<PhotoPagerPresenter, IPhotoPagerView>
             RESULT_OK,
             Intent().putExtra(Extra.POSITION, position)
         )
-        supportFinishAfterTransition()
+        finish()
+        overridePendingTransition(0, 0)
     }
 
     override fun hideMenu(hide: Boolean) {}

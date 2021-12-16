@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import dev.ragnarok.fenrir.api.model.CommentsDto;
 import dev.ragnarok.fenrir.api.model.VKApiVideo;
 import dev.ragnarok.fenrir.api.model.VkApiPrivacy;
+import dev.ragnarok.fenrir.util.Utils;
 
 public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKApiVideo> {
     private static final String TAG = VideoDtoAdapter.class.getSimpleName();
@@ -77,11 +78,13 @@ public class VideoDtoAdapter extends AbsAdapter implements JsonDeserializer<VKAp
             dto.live = optString(filesRoot, "live");
         }
 
+        int sz = (!Utils.isEmpty(dto.external) && dto.external.contains("youtube")) ? 320 : 800;
+
         if (hasArray(root, "image")) {
             JsonArray images = root.getAsJsonArray("image");
             if (images.size() > 0) {
                 for (int i = 0; i < images.size(); i++) {
-                    if (images.get(i).getAsJsonObject().get("width").getAsInt() >= 800) {
+                    if (images.get(i).getAsJsonObject().get("width").getAsInt() >= sz) {
                         dto.image = images.get(i).getAsJsonObject().get("url").getAsString();
                         break;
                     }

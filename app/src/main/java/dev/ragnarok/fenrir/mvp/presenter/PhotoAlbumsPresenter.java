@@ -27,7 +27,6 @@ import dev.ragnarok.fenrir.model.PhotoAlbum;
 import dev.ragnarok.fenrir.model.PhotoAlbumEditor;
 import dev.ragnarok.fenrir.model.SimplePrivacy;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IPhotoAlbumsView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
@@ -91,9 +90,13 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
     public void onGuiCreated(@NonNull IPhotoAlbumsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mData);
+
+        resolveDrawerPhotoSection();
+        resolveProgressView();
+        resolveSubtitleView();
+        resolveCreateAlbumButtonVisibility();
     }
 
-    @OnGuiCreated
     private void resolveDrawerPhotoSection() {
         callView(v -> v.seDrawertPhotoSectionActive(isMy()));
     }
@@ -191,7 +194,6 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
         super.onDestroyed();
     }
 
-    @OnGuiCreated
     private void resolveProgressView() {
         callView(v -> v.displayLoading(netLoadingNow));
     }
@@ -201,7 +203,6 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
         callView(IPhotoAlbumsView::notifyDataSetChanged);
     }
 
-    @OnGuiCreated
     private void resolveSubtitleView() {
         callView(v -> v.setToolbarSubtitle(Objects.isNull(mOwner) || isMy() ? null : mOwner.getFullName()));
     }
@@ -252,7 +253,6 @@ public class PhotoAlbumsPresenter extends AccountDependencyPresenter<IPhotoAlbum
         return !album.isSystem() && (isMy() || isAdmin());
     }
 
-    @OnGuiCreated
     private void resolveCreateAlbumButtonVisibility() {
         boolean mustBeVisible = isMy() || isAdmin();
         callView(v -> v.setCreateAlbumFabVisible(mustBeVisible));

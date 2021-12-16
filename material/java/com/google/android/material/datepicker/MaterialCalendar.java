@@ -24,6 +24,9 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import androidx.core.util.Pair;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -45,9 +48,6 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.RestrictTo.Scope;
 import androidx.annotation.StyleRes;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.view.AccessibilityDelegateCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import com.google.android.material.button.MaterialButton;
 import java.util.Calendar;
 
@@ -390,7 +390,7 @@ public final class MaterialCalendar<S> extends PickerFragment<S> {
     yearFrame = root.findViewById(R.id.mtrl_calendar_year_selector_frame);
     dayFrame = root.findViewById(R.id.mtrl_calendar_day_selector_frame);
     setSelector(CalendarSelector.DAY);
-    monthDropSelect.setText(current.getLongName());
+    monthDropSelect.setText(current.getLongName(root.getContext()));
     recyclerView.addOnScrollListener(
         new OnScrollListener() {
           @Override

@@ -20,7 +20,6 @@ import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.model.UsersPart;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IAllFriendsView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Objects;
@@ -34,7 +33,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsView> {
 
     private static final int ALL = 0;
-    private static final int SEACRH_CACHE = 1;
+    private static final int SEARCH_CACHE = 1;
     private static final int SEARCH_WEB = 2;
 
     private static final int WEB_SEARCH_DELAY = 1000;
@@ -46,7 +45,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
     private final ArrayList<UsersPart> data;
     private final CompositeDisposable actualDataDisposable = new CompositeDisposable();
     private final CompositeDisposable cacheDisposable = new CompositeDisposable();
-    private final CompositeDisposable seacrhDisposable = new CompositeDisposable();
+    private final CompositeDisposable searchDisposable = new CompositeDisposable();
     private final boolean isNotFriendShow;
     private String q;
     private boolean actualDataReceived;
@@ -55,6 +54,8 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
     private boolean cacheLoadingNow;
     private boolean searchRunNow;
     private boolean doLoadTabs;
+    private List<Owner> not_friends;
+    private List<Owner> add_friends;
 
     public AllFriendsPresenter(int accountId, int userId, @Nullable Bundle savedInstanceState) {
         super(accountId, savedInstanceState);
@@ -63,7 +64,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
 
         data = new ArrayList<>(3);
         data.add(ALL, new UsersPart(R.string.all_friends, new ArrayList<>(), true));
-        data.add(SEACRH_CACHE, new UsersPart(R.string.results_in_the_cache, new ArrayList<>(), false));
+        data.add(SEARCH_CACHE, new UsersPart(R.string.results_in_the_cache, new ArrayList<>(), false));
         data.add(SEARCH_WEB, new UsersPart(R.string.results_in_a_network, new ArrayList<>(), false));
         isNotFriendShow = Settings.get().other().isNot_friend_show();
     }
@@ -108,36 +109,50 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
     @Override
     public void onGuiCreated(@NonNull IAllFriendsView view) {
         super.onGuiCreated(view);
-        view.displayData(data, isSeacrhNow());
+        view.displayData(data, isSearchNow());
+
+        resolveSwipeRefreshAvailability();
+        checkAndShowModificationFriends();
     }
 
     private void resolveRefreshingView() {
-        callResumedView(v -> v.showRefreshing(!isSeacrhNow() && actualDataLoadingNow));
+        callResumedView(v -> v.showRefreshing(!isSearchNow() && actualDataLoadingNow));
+    }
+
+    private void checkAndShowModificationFriends() {
+        if (!Utils.isEmpty(add_friends) || !Utils.isEmpty(not_friends)) {
+            callView(view -> view.showModFriends(add_friends, not_friends, getAccountId()));
+        }
+    }
+
+    public void clearModificationFriends(boolean add, boolean not) {
+        if (add && !Utils.isEmpty(add_friends)) {
+            add_friends.clear();
+            add_friends = null;
+        }
+        if (not && !Utils.isEmpty(not_friends)) {
+            not_friends.clear();
+            not_friends = null;
+        }
     }
 
     private void onActualDataReceived(int offset, List<User> users, boolean do_scan) {
         if (do_scan && isNotFriendShow) {
-            List<Owner> not_friends = new ArrayList<>();
+            not_friends = new ArrayList<>();
             for (User i : getAllData()) {
                 if (Utils.indexOf(users, i.getId()) == -1) {
                     not_friends.add(i);
                 }
             }
-            if (userId == getAccountId()) {
-                if (not_friends.size() > 0) {
-                    callView(view -> view.showNotFriends(not_friends, getAccountId()));
-                }
-            } else {
-                List<Owner> add_friends = new ArrayList<>();
+            if (userId != getAccountId()) {
+                add_friends = new ArrayList<>();
                 for (User i : users) {
                     if (Utils.indexOf(getAllData(), i.getId()) == -1) {
                         add_friends.add(i);
                     }
                 }
-                if (add_friends.size() > 0 || not_friends.size() > 0) {
-                    callView(view -> view.showAddFriends(add_friends, not_friends, getAccountId()));
-                }
             }
+            checkAndShowModificationFriends();
         }
         // reset cache loading
         cacheDisposable.clear();
@@ -151,14 +166,14 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
             int startSize = getAllData().size();
             getAllData().addAll(users);
 
-            if (!isSeacrhNow()) {
+            if (!isSearchNow()) {
                 callView(view -> view.notifyItemRangeInserted(startSize, users.size()));
             }
         } else {
             getAllData().clear();
             getAllData().addAll(users);
 
-            if (!isSeacrhNow()) {
+            if (!isSearchNow()) {
                 safelyNotifyDataSetChanged();
             }
         }
@@ -196,7 +211,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
     }
 
     private void safelyNotifyDataSetChanged() {
-        callView(v -> v.notifyDatasetChanged(isSeacrhNow()));
+        callView(v -> v.notifyDatasetChanged(isSearchNow()));
     }
 
     private List<User> getAllData() {
@@ -204,7 +219,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
     }
 
     public void fireRefresh() {
-        if (!isSeacrhNow()) {
+        if (!isSearchNow()) {
             cacheDisposable.clear();
             actualDataDisposable.clear();
             cacheLoadingNow = false;
@@ -214,22 +229,22 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         }
     }
 
-    private void onSearchQueryChanged(boolean seacrhStateChanged) {
-        seacrhDisposable.clear();
+    private void onSearchQueryChanged(boolean searchStateChanged) {
+        searchDisposable.clear();
 
-        if (seacrhStateChanged) {
+        if (searchStateChanged) {
             resolveSwipeRefreshAvailability();
         }
 
-        if (!isSeacrhNow()) {
+        if (!isSearchNow()) {
             data.get(ALL).enable = true;
 
             data.get(SEARCH_WEB).users.clear();
             data.get(SEARCH_WEB).enable = false;
             data.get(SEARCH_WEB).displayCount = null;
 
-            data.get(SEACRH_CACHE).users.clear();
-            data.get(SEACRH_CACHE).enable = false;
+            data.get(SEARCH_CACHE).users.clear();
+            data.get(SEARCH_CACHE).enable = false;
 
             callView(view -> view.notifyDatasetChanged(false));
             return;
@@ -238,7 +253,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         data.get(ALL).enable = false;
 
         reFillCache();
-        data.get(SEACRH_CACHE).enable = true;
+        data.get(SEARCH_CACHE).enable = true;
 
         data.get(SEARCH_WEB).users.clear();
         data.get(SEARCH_WEB).enable = true;
@@ -246,22 +261,22 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
 
         callView(view -> view.notifyDatasetChanged(true));
 
-        runNetSeacrh(0, true);
+        runNetSearch(0, true);
     }
 
-    private void runNetSeacrh(int offset, boolean withDelay) {
+    private void runNetSearch(int offset, boolean withDelay) {
         if (trimmedIsEmpty(q)) {
             return;
         }
 
-        seacrhDisposable.clear();
+        searchDisposable.clear();
         searchRunNow = true;
 
         String query = q;
         int accountId = getAccountId();
 
         Single<Pair<List<User>, Integer>> single;
-        Single<Pair<List<User>, Integer>> netSingle = relationshipInteractor.seacrhFriends(accountId, userId, WEB_SEARCH_COUNT_PER_LOAD, offset, query);
+        Single<Pair<List<User>, Integer>> netSingle = relationshipInteractor.searchFriends(accountId, userId, WEB_SEARCH_COUNT_PER_LOAD, offset, query);
 
         if (withDelay) {
             single = Single.just(new Object())
@@ -271,7 +286,7 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
             single = netSingle;
         }
 
-        seacrhDisposable.add(single
+        searchDisposable.add(single
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(pair -> onSearchDataReceived(offset, pair.getFirst(), pair.getSecond()), this::onSearchError));
     }
@@ -291,17 +306,17 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         if (offset == 0) {
             searchData.clear();
             searchData.addAll(users);
-            callView(view -> view.notifyDatasetChanged(isSeacrhNow()));
+            callView(view -> view.notifyDatasetChanged(isSearchNow()));
         } else {
             int sizeBefore = searchData.size();
-            int currentCacheSize = data.get(SEACRH_CACHE).users.size();
+            int currentCacheSize = data.get(SEARCH_CACHE).users.size();
             searchData.addAll(users);
             callView(view -> view.notifyItemRangeInserted(sizeBefore + currentCacheSize, users.size()));
         }
     }
 
     private void reFillCache() {
-        data.get(SEACRH_CACHE).users.clear();
+        data.get(SEARCH_CACHE).users.clear();
 
         List<User> db = data.get(ALL).users;
 
@@ -310,21 +325,20 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
         int count = 0;
         for (User user : db) {
             if (allow(user, preparedQ)) {
-                data.get(SEACRH_CACHE).users.add(user);
+                data.get(SEARCH_CACHE).users.add(user);
                 count++;
             }
         }
 
-        data.get(SEACRH_CACHE).displayCount = count;
+        data.get(SEARCH_CACHE).displayCount = count;
     }
 
-    private boolean isSeacrhNow() {
+    private boolean isSearchNow() {
         return nonEmpty(q);
     }
 
-    @OnGuiCreated
     private void resolveSwipeRefreshAvailability() {
-        callView(v -> v.setSwipeRefreshEnabled(!isSeacrhNow()));
+        callView(v -> v.setSwipeRefreshEnabled(!isSearchNow()));
     }
 
     public void fireSearchRequestChanged(String q) {
@@ -334,27 +348,27 @@ public class AllFriendsPresenter extends AccountDependencyPresenter<IAllFriendsV
             return;
         }
 
-        boolean wasSearch = isSeacrhNow();
+        boolean wasSearch = isSearchNow();
         this.q = query;
 
-        onSearchQueryChanged(wasSearch != isSeacrhNow());
+        onSearchQueryChanged(wasSearch != isSearchNow());
     }
 
     @Override
     public void onDestroyed() {
-        seacrhDisposable.dispose();
+        searchDisposable.dispose();
         cacheDisposable.dispose();
         actualDataDisposable.dispose();
         super.onDestroyed();
     }
 
     private void loadMore() {
-        if (isSeacrhNow()) {
+        if (isSearchNow()) {
             if (searchRunNow) {
                 return;
             }
 
-            runNetSeacrh(data.get(SEARCH_WEB).users.size(), false);
+            runNetSearch(data.get(SEARCH_WEB).users.size(), false);
         } else {
             if (actualDataLoadingNow || cacheLoadingNow || !actualDataReceived || actualDataEndOfContent) {
                 return;

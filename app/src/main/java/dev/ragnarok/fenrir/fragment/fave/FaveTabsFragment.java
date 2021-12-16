@@ -88,7 +88,7 @@ public class FaveTabsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
     }
 
     public int getAccountId() {
@@ -109,9 +109,9 @@ public class FaveTabsFragment extends BaseFragment {
         viewPager.setPageTransformer(Utils.createPageTransform(Settings.get().main().getViewpager_page_transform()));
         setupViewPager(viewPager, view);
 
-        if (getArguments().containsKey(Extra.TAB)) {
-            int tab = getArguments().getInt(Extra.TAB);
-            getArguments().remove(Extra.TAB);
+        if (requireArguments().containsKey(Extra.TAB)) {
+            int tab = requireArguments().getInt(Extra.TAB);
+            requireArguments().remove(Extra.TAB);
             viewPager.setCurrentItem(tab);
         }
     }

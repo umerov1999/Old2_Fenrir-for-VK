@@ -8,7 +8,6 @@ import dev.ragnarok.fenrir.domain.Repository.messages
 import dev.ragnarok.fenrir.model.Message
 import dev.ragnarok.fenrir.model.Peer
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated
 import dev.ragnarok.fenrir.mvp.view.ILocalJsonToChatView
 import dev.ragnarok.fenrir.util.Pair
 import dev.ragnarok.fenrir.util.PersistentLogger
@@ -32,6 +31,7 @@ class LocalJsonToChatPresenter(
     override fun onGuiCreated(viewHost: ILocalJsonToChatView) {
         super.onGuiCreated(viewHost)
         viewHost.displayData(mPost)
+        resolveToolbar()
     }
 
     var uAttachmentType: Int
@@ -159,7 +159,6 @@ class LocalJsonToChatPresenter(
         resumedView?.showRefreshing(isLoading)
     }
 
-    @OnGuiCreated
     private fun resolveToolbar() {
         view?.setToolbarTitle(peer.title)
         view?.setToolbarSubtitle(

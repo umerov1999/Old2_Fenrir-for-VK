@@ -36,7 +36,7 @@ public interface IRelationshipInteractor {
 
     Single<List<User>> getRequests(int accountId, Integer offset, Integer count);
 
-    Single<Pair<List<User>, Integer>> seacrhFriends(int accountId, int userId, int count, int offset, String q);
+    Single<Pair<List<User>, Integer>> searchFriends(int accountId, int userId, int count, int offset, String q);
 
     Single<FriendsCounters> getFriendsCounters(int accountId, int userId);
 

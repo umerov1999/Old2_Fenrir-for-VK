@@ -6,6 +6,7 @@ import static dev.ragnarok.fenrir.util.Utils.getCauseIfRuntime;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.DateFormat;
@@ -22,7 +23,6 @@ import dev.ragnarok.fenrir.model.BlockReason;
 import dev.ragnarok.fenrir.model.IdOption;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICommunityBanEditView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.util.Logger;
@@ -77,25 +77,21 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         return users.get(index);
     }
 
-    @OnGuiCreated
     private void resolveCommentViews() {
         callView(v -> v.diplayComment(comment));
         callView(v -> v.setShowCommentChecked(showCommentToUser));
     }
 
-    @OnGuiCreated
     private void resolveBanStatusView() {
         if (nonNull(banned)) {
             callView(v -> v.displayBanStatus(banned.getAdmin().getId(), banned.getAdmin().getFullName(), banned.getInfo().getEndDate()));
         }
     }
 
-    @OnGuiCreated
     private void resolveUserInfoViews() {
         callView(v -> v.displayUserInfo(currentBanned()));
     }
 
-    @OnGuiCreated
     private void resolveBlockForView() {
 
         String blockForText;
@@ -136,8 +132,7 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         callView(v -> v.displayBlockFor(blockForText));
     }
 
-    @OnGuiCreated
-    private void resolveResonView() {
+    private void resolveReasonView() {
         switch (reason) {
             case BlockReason.SPAM:
                 callView(v -> v.displayReason(getString(R.string.reason_spam)));
@@ -162,13 +157,24 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
         resolveProgressView();
     }
 
-    @OnGuiCreated
     private void resolveProgressView() {
         if (requestNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.saving, false));
         } else {
             callView(IProgressView::dismissProgressDialog);
         }
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull ICommunityBanEditView view) {
+        super.onGuiCreated(view);
+
+        resolveUserInfoViews();
+        resolveProgressView();
+        resolveReasonView();
+        resolveBlockForView();
+        resolveBanStatusView();
+        resolveCommentViews();
     }
 
     public void fireButtonSaveClick() {
@@ -240,7 +246,7 @@ public class CommunityBanEditPresenter extends AccountDependencyPresenter<ICommu
 
             case REQUEST_CODE_REASON:
                 reason = idOption.getId();
-                resolveResonView();
+                resolveReasonView();
                 break;
         }
     }

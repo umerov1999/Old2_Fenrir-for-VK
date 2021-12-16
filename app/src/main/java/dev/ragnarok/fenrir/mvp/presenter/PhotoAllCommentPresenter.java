@@ -29,7 +29,6 @@ import dev.ragnarok.fenrir.model.AccessIdPair;
 import dev.ragnarok.fenrir.model.Comment;
 import dev.ragnarok.fenrir.model.WallReply;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IPhotoAllCommentView;
 import dev.ragnarok.fenrir.util.AssertUtils;
 import dev.ragnarok.fenrir.util.DisposableHolder;
@@ -61,7 +60,6 @@ public class PhotoAllCommentPresenter extends PlaceSupportPresenter<IPhotoAllCom
         requestAtLast();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
@@ -121,6 +119,8 @@ public class PhotoAllCommentPresenter extends PlaceSupportPresenter<IPhotoAllCom
     public void onGuiCreated(@NonNull IPhotoAllCommentView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mComments);
+
+        resolveRefreshingView();
     }
 
     private boolean canLoadMore() {

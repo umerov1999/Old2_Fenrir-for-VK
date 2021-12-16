@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.wallattachments.WallPostCommentAttachmentsPresenter;
 import dev.ragnarok.fenrir.mvp.view.wallattachments.IWallPostCommentAttachmentsView;
+import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.place.PlaceUtil;
 import dev.ragnarok.fenrir.util.ViewUtils;
 
@@ -56,10 +58,12 @@ public class WallPostCommentAttachmentsFragment extends PlaceSupportMvpFragment<
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_wall_attachments, container, false);
+        View root = inflater.inflate(R.layout.fragment_wall_attachments_post_comment, container, false);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(root.findViewById(R.id.toolbar));
         mEmpty = root.findViewById(R.id.empty);
         mLoadMore = root.findViewById(R.id.goto_button);
+        FloatingActionButton mComments = root.findViewById(R.id.comments_button);
+        mComments.setOnClickListener(v -> callPresenter(WallPostCommentAttachmentsPresenter::goToPostComments));
 
         RecyclerView recyclerView = root.findViewById(android.R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false));
@@ -125,8 +129,8 @@ public class WallPostCommentAttachmentsFragment extends PlaceSupportMvpFragment<
     @Override
     public IPresenterFactory<WallPostCommentAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new WallPostCommentAttachmentsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.OWNER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.OWNER_ID),
                 saveInstanceState
         );
     }
@@ -216,5 +220,10 @@ public class WallPostCommentAttachmentsFragment extends PlaceSupportMvpFragment<
     @Override
     public void openPostEditor(int accountId, Post post) {
         PlaceUtil.goToPostEditor(requireActivity(), accountId, post);
+    }
+
+    @Override
+    public void openAllComments(int accountId, int ownerId, ArrayList<Integer> posts) {
+        PlaceFactory.getWallSearchCommentsAttachmentsPlace(accountId, ownerId, posts).tryOpenWith(requireActivity());
     }
 }

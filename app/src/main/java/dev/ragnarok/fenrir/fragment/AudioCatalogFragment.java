@@ -226,8 +226,8 @@ public class AudioCatalogFragment extends BaseMvpFragment<AudioCatalogPresenter,
     @Override
     public IPresenterFactory<AudioCatalogPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudioCatalogPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getString(Extra.ARTIST),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getString(Extra.ARTIST),
                 saveInstanceState
         );
     }

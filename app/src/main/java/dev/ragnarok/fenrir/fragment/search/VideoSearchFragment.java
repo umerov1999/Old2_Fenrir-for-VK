@@ -68,8 +68,8 @@ public class VideoSearchFragment extends AbsSearchFragment<VideosSearchPresenter
     @Override
     public IPresenterFactory<VideosSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new VideosSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

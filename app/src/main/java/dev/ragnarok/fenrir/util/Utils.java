@@ -80,6 +80,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -92,8 +93,11 @@ import dev.ragnarok.fenrir.AccountType;
 import dev.ragnarok.fenrir.App;
 import dev.ragnarok.fenrir.BuildConfig;
 import dev.ragnarok.fenrir.Constants;
+import dev.ragnarok.fenrir.Extra;
 import dev.ragnarok.fenrir.Injection;
 import dev.ragnarok.fenrir.R;
+import dev.ragnarok.fenrir.activity.MainActivity;
+import dev.ragnarok.fenrir.activity.SwipebleActivity;
 import dev.ragnarok.fenrir.api.ProxyUtil;
 import dev.ragnarok.fenrir.api.model.Identificable;
 import dev.ragnarok.fenrir.link.internal.LinkActionAdapter;
@@ -106,6 +110,7 @@ import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.ProxyConfig;
 import dev.ragnarok.fenrir.model.Sticker;
 import dev.ragnarok.fenrir.module.rlottie.RLottieDrawable;
+import dev.ragnarok.fenrir.place.Place;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.player.MusicPlaybackController;
 import dev.ragnarok.fenrir.service.ErrorLocalizer;
@@ -131,9 +136,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Utils {
-    private static final List<Integer> reload_news = new ArrayList<>();
-    private static final List<Integer> reload_dialogs = new ArrayList<>();
-    private static final List<Integer> reload_stickers = new ArrayList<>();
+    private static final List<Integer> reload_news = new LinkedList<>();
+    private static final List<Integer> reload_dialogs = new LinkedList<>();
+    private static final List<Integer> reload_stickers = new LinkedList<>();
     private static final List<Sticker.LocalSticker> CachedMyStickers = new ArrayList<>();
     private static final Point displaySize = new Point();
     private static String device_id;
@@ -1846,6 +1851,13 @@ public class Utils {
         }
         ints.removeAll(Arrays.asList(excludes));
         return getRandomFromList(ints);
+    }
+
+    public static void openPlaceWithSwipebleActivity(@NonNull Context context, @NonNull Place place) {
+        Intent intent = new Intent(context, SwipebleActivity.class);
+        intent.setAction(MainActivity.ACTION_OPEN_PLACE);
+        intent.putExtra(Extra.PLACE, place);
+        SwipebleActivity.start(context, intent);
     }
 
     public static String BytesToSize(long Bytes) {

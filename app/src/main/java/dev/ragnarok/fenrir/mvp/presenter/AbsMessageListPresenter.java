@@ -26,7 +26,6 @@ import dev.ragnarok.fenrir.model.LastReadId;
 import dev.ragnarok.fenrir.model.Message;
 import dev.ragnarok.fenrir.model.VoiceMessage;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IBasicMessageListView;
 import dev.ragnarok.fenrir.util.Lookup;
 import dev.ragnarok.fenrir.util.Optional;
@@ -51,7 +50,6 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         mVoiceMessageLookup.setCallback(() -> resolveVoiceMessagePlayingState(true));
     }
 
-    @OnGuiCreated
     private void syncVoiceLookupState() {
         boolean needLookup = mVoicePlayer.isSupposedToPlay() && getGuiIsReady();
 
@@ -62,7 +60,6 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         }
     }
 
-    @OnGuiCreated
     public void resolveListView() {
         callView(v -> v.displayMessages(mData, lastReadId));
     }
@@ -93,7 +90,6 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         return hasChanges;
     }
 
-    @OnGuiCreated
     protected void resolveActionMode() {
         int selectionCount = countOfSelection(getData());
         if (selectionCount > 0) {
@@ -101,6 +97,15 @@ public abstract class AbsMessageListPresenter<V extends IBasicMessageListView> e
         } else {
             callView(IBasicMessageListView::finishActionMode);
         }
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull V view) {
+        super.onGuiCreated(view);
+
+        syncVoiceLookupState();
+        resolveListView();
+        resolveActionMode();
     }
 
     protected void safeNotifyDataChanged() {

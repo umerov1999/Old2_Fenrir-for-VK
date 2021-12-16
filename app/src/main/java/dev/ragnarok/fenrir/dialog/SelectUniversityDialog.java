@@ -32,7 +32,7 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
 
     public static final String REQUEST_CODE_UNIVERSITY = "request_university";
     private static final int COUNT_PER_REQUEST = 1000;
-    private static final int RUN_SEACRH_DELAY = 1000;
+    private static final int RUN_SEARCH_DELAY = 1000;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private int mAccountId;
     private int countryId;
@@ -55,8 +55,8 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        countryId = getArguments().getInt(Extra.COUNTRY_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        countryId = requireArguments().getInt(Extra.COUNTRY_ID);
         mDatabaseInteractor = InteractorFactory.createDatabaseInteractor();
     }
 
@@ -72,7 +72,7 @@ public class SelectUniversityDialog extends AccountDependencyDialogFragment impl
             public void afterTextChanged(Editable s) {
                 filter = s.toString();
                 mHandler.removeCallbacks(runSearchRunnable);
-                mHandler.postDelayed(runSearchRunnable, RUN_SEACRH_DELAY);
+                mHandler.postDelayed(runSearchRunnable, RUN_SEARCH_DELAY);
             }
         });
 

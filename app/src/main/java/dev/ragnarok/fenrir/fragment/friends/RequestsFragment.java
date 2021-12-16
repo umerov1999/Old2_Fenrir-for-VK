@@ -50,9 +50,9 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IReques
         Bundle args = new Bundle();
         args.putInt(Extra.USER_ID, userId);
         args.putInt(Extra.ACCOUNT_ID, accountId);
-        RequestsFragment allFriendsFragment = new RequestsFragment();
-        allFriendsFragment.setArguments(args);
-        return allFriendsFragment;
+        RequestsFragment requestsFragment = new RequestsFragment();
+        requestsFragment.setArguments(args);
+        return requestsFragment;
     }
 
     @Override
@@ -106,8 +106,8 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IReques
     @Override
     public IPresenterFactory<RequestsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new RequestsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.USER_ID), saveInstanceState
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.USER_ID), saveInstanceState
         );
     }
 
@@ -153,14 +153,14 @@ public class RequestsFragment extends BaseMvpFragment<RequestsPresenter, IReques
     }
 
     @Override
-    public void showNotRequests(List<Owner> data, int accountId) {
+    public void showNotRequests(@NonNull List<Owner> data, int accountId) {
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_request))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", null)
-                .setCancelable(true)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> callPresenter(RequestsPresenter::clearModificationRequests))
+                .setCancelable(false)
                 .show();
     }
 

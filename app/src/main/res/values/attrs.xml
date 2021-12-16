@@ -145,6 +145,10 @@
         <attr name="spinner_icon_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="MySearchView">
+        <attr name="search_source_id" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="AspectRatioImageView">
         <attr name="aspectRatioW" format="integer" />
         <attr name="aspectRatioH" format="integer" />

@@ -5,6 +5,7 @@ import static dev.ragnarok.fenrir.util.Utils.safeCountOf;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import dev.ragnarok.fenrir.api.model.VkApiDoc;
 import dev.ragnarok.fenrir.api.model.response.AttachmentsHistoryResponse;
 import dev.ragnarok.fenrir.domain.mappers.Dto2Model;
 import dev.ragnarok.fenrir.model.Document;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.conversations.IChatAttachmentDocsView;
 import dev.ragnarok.fenrir.util.Pair;
 import io.reactivex.rxjava3.core.Single;
@@ -55,9 +55,16 @@ public class ChatAttachmentDocsPresenter extends BaseChatAttachmentsPresenter<Do
                 });
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull IChatAttachmentDocsView view) {
+        super.onGuiCreated(view);
+        resolveToolbar();
+    }
+
     private void resolveToolbar() {
-        callView(v -> v.setToolbarTitle(getString(R.string.attachments_in_chat)));
-        callView(v -> v.setToolbarSubtitle(getString(R.string.documents_count, safeCountOf(data))));
+        callView(v -> {
+            v.setToolbarTitle(getString(R.string.attachments_in_chat));
+            v.setToolbarSubtitle(getString(R.string.documents_count, safeCountOf(data)));
+        });
     }
 }

@@ -22,8 +22,6 @@ import io.reactivex.rxjava3.functions.Function;
 
 public class CommunityLinksPresenter extends AccountDependencyPresenter<ICommunityLinksView> {
 
-    private static final String TAG = CommunityLinksPresenter.class.getSimpleName();
-
     private final int groupId;
     private final INetworker networker;
     private final List<VKApiCommunity.Link> links;

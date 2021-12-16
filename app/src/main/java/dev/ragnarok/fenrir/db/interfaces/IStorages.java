@@ -6,6 +6,8 @@ public interface IStorages {
 
     ITempDataStorage tempStore();
 
+    ISearchRequestHelperStorage searchQueriesStore();
+
     IVideoAlbumsStorage videoAlbums();
 
     IVideoStorage videos();

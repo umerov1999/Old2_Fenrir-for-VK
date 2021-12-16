@@ -26,7 +26,6 @@ import dev.ragnarok.fenrir.model.Commented;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.model.Video;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IVideoPreviewView;
 import dev.ragnarok.fenrir.util.AssertUtils;
 import dev.ragnarok.fenrir.util.CustomToast;
@@ -99,7 +98,6 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
                 .show();
     }
 
-    @OnGuiCreated
     private void resolveSubtitle() {
         callView(v -> v.showSubtitle(nonNull(video) ? video.getTitle() : null));
     }
@@ -115,6 +113,7 @@ public class VideoPreviewPresenter extends AccountDependencyPresenter<IVideoPrev
         } else {
             view.displayLoadingError();
         }
+        resolveSubtitle();
     }
 
     private void displayFullVideoInfo(IVideoPreviewView view, Video video) {

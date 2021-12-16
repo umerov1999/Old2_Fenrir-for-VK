@@ -168,7 +168,7 @@ public class AnswerVKOfficialFragment extends BaseMvpFragment<AnswerVKOfficialPr
     @Override
     public IPresenterFactory<AnswerVKOfficialPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AnswerVKOfficialPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

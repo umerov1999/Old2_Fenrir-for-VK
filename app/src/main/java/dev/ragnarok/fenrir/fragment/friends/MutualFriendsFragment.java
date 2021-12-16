@@ -28,8 +28,8 @@ public class MutualFriendsFragment extends AbsOwnersListFragment<MutualFriendsPr
     @Override
     public IPresenterFactory<MutualFriendsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new MutualFriendsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(EXTRA_TARGET_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(EXTRA_TARGET_ID),
                 saveInstanceState
         );
     }

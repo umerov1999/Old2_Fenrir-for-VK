@@ -128,8 +128,8 @@ public class WallVideosAttachmentsFragment extends PlaceSupportMvpFragment<WallV
     @Override
     public IPresenterFactory<WallVideosAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new WallVideosAttachmentsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.OWNER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.OWNER_ID),
                 saveInstanceState
         );
     }

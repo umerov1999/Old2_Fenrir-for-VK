@@ -20,7 +20,6 @@ import dev.ragnarok.fenrir.model.PhotoSize;
 import dev.ragnarok.fenrir.model.Story;
 import dev.ragnarok.fenrir.model.VideoSize;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IStoryPagerView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.AppPerms;
@@ -65,9 +64,15 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
         outState.putInt(SAVE_PAGER_INDEX, mCurrentIndex);
     }
 
-    @OnGuiCreated
-    private void resolveData() {
-        callView(v -> v.displayData(mStories.size(), mCurrentIndex));
+    @Override
+    public void onGuiCreated(@NonNull IStoryPagerView view) {
+        super.onGuiCreated(view);
+        view.displayData(mStories.size(), mCurrentIndex);
+        resolveToolbarTitle();
+        resolvePlayerDisplay();
+        resolveAspectRatio();
+        resolvePreparingProgress();
+        resolveToolbarSubtitle();
     }
 
     public void fireSurfaceCreated(int adapterPosition) {
@@ -76,12 +81,10 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
         }
     }
 
-    @OnGuiCreated
     private void resolveToolbarTitle() {
         callView(v -> v.setToolbarTitle(R.string.image_number, mCurrentIndex + 1, mStories.size()));
     }
 
-    @OnGuiCreated
     private void resolvePlayerDisplay() {
         if (getGuiIsReady()) {
             callView(v -> v.attachDisplayToPlayer(mCurrentIndex, mGifPlayer));
@@ -135,7 +138,6 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
         return mStories.get(mCurrentIndex).getOwnerId() == getAccountId();
     }
 
-    @OnGuiCreated
     private void resolveAspectRatio() {
         if (mGifPlayer == null) {
             return;
@@ -146,13 +148,11 @@ public class StoryPagerPresenter extends AccountDependencyPresenter<IStoryPagerV
         }
     }
 
-    @OnGuiCreated
     private void resolvePreparingProgress() {
         boolean preparing = !Objects.isNull(mGifPlayer) && mGifPlayer.getPlayerStatus() == IGifPlayer.IStatus.PREPARING;
         callView(v -> v.setPreparingProgressVisible(mCurrentIndex, preparing));
     }
 
-    @OnGuiCreated
     private void resolveToolbarSubtitle() {
         callView(v -> v.setToolbarSubtitle(mStories.get(mCurrentIndex), getAccountId()));
     }

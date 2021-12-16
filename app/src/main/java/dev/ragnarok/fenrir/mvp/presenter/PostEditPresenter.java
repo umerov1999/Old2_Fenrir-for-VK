@@ -30,7 +30,6 @@ import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.Poll;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.WallEditorAttrs;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IBaseAttachmentsEditView;
 import dev.ragnarok.fenrir.mvp.view.IPostEditView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
@@ -196,6 +195,10 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
 
         view.setToolbarTitle(getString(titleRes));
         view.setToolbarSubtitle(getOwner().getFullName());
+
+        resolveSignerInfoVisibility();
+        resolveProgressDialog();
+        resolveSupportButtons();
     }
 
     private Owner getDisplayedSigner() {
@@ -210,7 +213,6 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
         return getMe();
     }
 
-    @OnGuiCreated
     private void resolveSignerInfoVisibility() {
         Owner signer = getDisplayedSigner();
 
@@ -249,7 +251,6 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
         resolveProgressDialog();
     }
 
-    @OnGuiCreated
     private void resolveProgressDialog() {
         if (editingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.publication, false));
@@ -406,7 +407,6 @@ public class PostEditPresenter extends AbsPostEditPresenter<IPostEditView> {
         outState.putParcelable(SAVE_POST, post);
     }
 
-    @OnGuiCreated
     private void resolveSupportButtons() {
         if (post.hasCopyHierarchy()) {
             callView(v -> v.setSupportedButtons(false, false, false, false, false, false));

@@ -45,9 +45,8 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.squareup.picasso3.RequestHandler.Result;
 import com.squareup.picasso3.Utils.PicassoThreadFactory;
@@ -71,7 +70,7 @@ import okhttp3.OkHttpClient;
  * Use {@see PicassoProvider#get()} for a global singleton instance
  * or construct your own instance with {@link Builder}.
  */
-public class Picasso implements LifecycleObserver {
+public class Picasso implements DefaultLifecycleObserver {
 
     public static final String TAG = "Picasso";
     static final Handler HANDLER = new Handler(Looper.getMainLooper()) {
@@ -85,7 +84,6 @@ public class Picasso implements LifecycleObserver {
                 }
                 case REQUEST_BATCH_RESUME:
                     @SuppressWarnings("unchecked") List<Action> batch = (List<Action>) msg.obj;
-                    //noinspection ForLoopReplaceableByForEach
                     for (int i = 0, n = batch.size(); i < n; i++) {
                         Action action = batch.get(i);
                         action.picasso.resumeAction(action);
@@ -156,8 +154,8 @@ public class Picasso implements LifecycleObserver {
         this.loggingEnabled = loggingEnabled;
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    void cancelAll() {
+    @Override
+    public void onDestroy(@NonNull LifecycleOwner owner) {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
@@ -230,8 +228,8 @@ public class Picasso implements LifecycleObserver {
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    void pauseAll() {
+    @Override
+    public void onStop(@NonNull LifecycleOwner owner) {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());
@@ -263,8 +261,8 @@ public class Picasso implements LifecycleObserver {
         dispatcher.dispatchPauseTag(tag);
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    void resumeAll() {
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
         checkMain();
 
         List<Action> actions = new ArrayList<>(targetToAction.values());

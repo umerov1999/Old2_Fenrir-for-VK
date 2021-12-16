@@ -151,7 +151,7 @@ public class FeedFragment extends PlaceSupportMvpFragment<FeedPresenter, IFeedVi
         mRecycleView = root.findViewById(R.id.fragment_feeds_list);
         mRecycleView.setLayoutManager(mFeedLayoutManager);
         mRecycleView.addOnScrollListener(new PicassoPauseOnScrollListener(Constants.PICASSO_TAG));
-        mRecycleView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+        mRecycleView.addOnScrollListener(new EndlessRecyclerOnScrollListener(4, 1000) {
             @Override
             public void onScrollToLastElement() {
                 callPresenter(FeedPresenter::fireScrollToBottom);

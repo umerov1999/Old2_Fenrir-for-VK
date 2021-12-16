@@ -5,6 +5,7 @@ import static dev.ragnarok.fenrir.util.Utils.safeCountOf;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.model.TmpSource;
 import dev.ragnarok.fenrir.module.FenrirNative;
 import dev.ragnarok.fenrir.module.parcel.ParcelNative;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.conversations.IChatAttachmentPhotosView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
@@ -63,10 +63,18 @@ public class ChatAttachmentPhotoPresenter extends BaseChatAttachmentsPresenter<P
         resolveToolbar();
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull IChatAttachmentPhotosView view) {
+        super.onGuiCreated(view);
+
+        resolveToolbar();
+    }
+
     private void resolveToolbar() {
-        callView(v -> v.setToolbarTitle(getString(R.string.attachments_in_chat)));
-        callView(v -> v.setToolbarSubtitle(getString(R.string.photos_count, safeCountOf(data))));
+        callView(v -> {
+            v.setToolbarTitle(getString(R.string.attachments_in_chat));
+            v.setToolbarSubtitle(getString(R.string.photos_count, safeCountOf(data)));
+        });
     }
 
     @Override

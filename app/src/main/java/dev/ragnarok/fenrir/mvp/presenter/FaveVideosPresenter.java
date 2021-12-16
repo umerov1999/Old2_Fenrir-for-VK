@@ -19,7 +19,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FaveVideosPresenter extends AccountDependencyPresenter<IFaveVideosView> {
 
-    private static final String TAG = FaveVideosPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IFaveInteractor faveInteractor;
     private final ArrayList<Video> mVideos;

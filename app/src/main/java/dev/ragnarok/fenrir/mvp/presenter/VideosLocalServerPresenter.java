@@ -55,9 +55,7 @@ public class VideosLocalServerPresenter extends AccountDependencyPresenter<IVide
 
     public void toggleReverse() {
         reverse = !reverse;
-        if (!search_at.isSearchMode()) {
-            fireRefresh(false);
-        }
+        fireRefresh(false);
     }
 
     private void loadActualData(int offset) {
@@ -134,7 +132,7 @@ public class VideosLocalServerPresenter extends AccountDependencyPresenter<IVide
     private void doSearch() {
         actualDataLoading = true;
         resolveRefreshingView();
-        appendDisposable(fInteractor.searchVideos(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT)
+        appendDisposable(fInteractor.searchVideos(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT, reverse)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onSearched(new FindAt(Objects.requireNonNull(search_at.getQuery()), search_at.getOffset() + SEARCH_COUNT, data.size() < SEARCH_COUNT), data), this::onActualDataGetError));
     }

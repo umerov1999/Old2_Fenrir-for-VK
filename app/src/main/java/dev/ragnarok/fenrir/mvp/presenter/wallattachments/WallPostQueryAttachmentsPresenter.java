@@ -28,7 +28,6 @@ import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.Video;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.wallattachments.IWallPostQueryAttachmentsView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import dev.ragnarok.fenrir.util.Utils;
@@ -57,6 +56,8 @@ public class WallPostQueryAttachmentsPresenter extends PlaceSupportPresenter<IWa
     public void onGuiCreated(@NonNull IWallPostQueryAttachmentsView view) {
         super.onGuiCreated(view);
         view.displayData(mPost);
+
+        resolveToolbar();
     }
 
     private void loadActualData(int offset) {
@@ -257,10 +258,11 @@ public class WallPostQueryAttachmentsPresenter extends PlaceSupportPresenter<IWa
             callResumedView(v -> v.onSetLoadingStatus(actualDataLoading ? 1 : 0));
     }
 
-    @OnGuiCreated
     private void resolveToolbar() {
-        callView(v -> v.setToolbarTitle(getString(R.string.attachments_in_wall)));
-        callView(v -> v.setToolbarSubtitle(getString(R.string.query, safeCountOf(mPost)) + " " + getString(R.string.posts_analized, loaded)));
+        callView(v -> {
+            v.setToolbarTitle(getString(R.string.attachments_in_wall));
+            v.setToolbarSubtitle(getString(R.string.query, safeCountOf(mPost)) + " " + getString(R.string.posts_analized, loaded));
+        });
     }
 
     @Override

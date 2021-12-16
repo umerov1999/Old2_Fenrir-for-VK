@@ -27,8 +27,8 @@ public class CommunityControlMembersFragment extends BaseMvpFragment<CommunityMe
     @Override
     public IPresenterFactory<CommunityMembersPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CommunityMembersPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.GROUP_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.GROUP_ID),
                 saveInstanceState
         );
     }

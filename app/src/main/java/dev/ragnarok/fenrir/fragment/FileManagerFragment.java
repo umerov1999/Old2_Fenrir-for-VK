@@ -118,10 +118,10 @@ public class FileManagerFragment extends Fragment implements FileManagerAdapter.
 
         setHasOptionsMenu(true);
 
-        currentAction = getArguments().getInt(Extra.ACTION);
+        currentAction = requireArguments().getInt(Extra.ACTION);
 
-        showHiddenFilesAndDirs = getArguments().getBoolean(EXTRA_SHOW_CANNOT_READ, true);
-        filterFileExtension = getArguments().getString(EXTRA_FILTER_EXTENSION);
+        showHiddenFilesAndDirs = requireArguments().getBoolean(EXTRA_SHOW_CANNOT_READ, true);
+        filterFileExtension = requireArguments().getString(EXTRA_FILTER_EXTENSION);
 
         filter = (dir, filename) -> {
             File sel = new File(dir, filename);

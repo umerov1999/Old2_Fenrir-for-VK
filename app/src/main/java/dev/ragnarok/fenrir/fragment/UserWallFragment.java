@@ -324,10 +324,10 @@ public class UserWallFragment extends AbsWallFragment<IUserWallView, UserWallPre
         return () -> {
             requireArguments();
 
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            int ownerId = getArguments().getInt(Extra.OWNER_ID);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            int ownerId = requireArguments().getInt(Extra.OWNER_ID);
 
-            ParcelableOwnerWrapper wrapper = getArguments().getParcelable(Extra.OWNER);
+            ParcelableOwnerWrapper wrapper = requireArguments().getParcelable(Extra.OWNER);
             AssertUtils.requireNonNull(wrapper);
 
             return new UserWallPresenter(accountId, ownerId, (User) wrapper.get(), requireActivity(), saveInstanceState);

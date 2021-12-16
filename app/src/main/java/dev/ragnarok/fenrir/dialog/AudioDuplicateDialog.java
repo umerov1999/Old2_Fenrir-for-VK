@@ -255,9 +255,9 @@ public class AudioDuplicateDialog extends BaseMvpDialogFragment<AudioDuplicatePr
     @Override
     public IPresenterFactory<AudioDuplicatePresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AudioDuplicatePresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.NEW),
-                getArguments().getParcelable(Extra.OLD),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.NEW),
+                requireArguments().getParcelable(Extra.OLD),
                 saveInstanceState
         );
     }

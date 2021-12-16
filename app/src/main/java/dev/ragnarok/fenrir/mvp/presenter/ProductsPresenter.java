@@ -12,15 +12,12 @@ import dev.ragnarok.fenrir.domain.IOwnersRepository;
 import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.Market;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IProductsView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-
 public class ProductsPresenter extends AccountDependencyPresenter<IProductsView> {
 
-    private static final String TAG = ProductsPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IOwnersRepository ownerInteractor;
     private final ArrayList<Market> mMarkets;
@@ -42,7 +39,6 @@ public class ProductsPresenter extends AccountDependencyPresenter<IProductsView>
         requestAtLast();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
@@ -101,6 +97,8 @@ public class ProductsPresenter extends AccountDependencyPresenter<IProductsView>
     public void onGuiCreated(@NonNull IProductsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mMarkets);
+
+        resolveRefreshingView();
     }
 
     private boolean canLoadMore() {

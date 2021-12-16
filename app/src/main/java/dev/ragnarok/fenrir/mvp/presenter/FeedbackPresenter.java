@@ -17,15 +17,12 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.LoadMoreState;
 import dev.ragnarok.fenrir.model.feedback.Feedback;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IFeedbackView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-
 public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
 
-    private static final String TAG = FeedbackPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 15;
 
     private final List<Feedback> mData;
@@ -49,7 +46,6 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
         requestActualData(null);
     }
 
-    @OnGuiCreated
     private void resolveLoadMoreFooter() {
         if (isEmpty(mData)) {
             callView(v -> v.configLoadMore(LoadMoreState.INVISIBLE));
@@ -78,7 +74,7 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
         int accountId = getAccountId();
 
         resolveLoadMoreFooter();
-        resolveSwiperefreshLoadingView();
+        resolveSwipeRefreshLoadingView();
 
         netDisposable.add(feedbackInteractor.getActualFeedbacks(accountId, COUNT_PER_REQUEST, startFrom)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
@@ -94,7 +90,7 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
         callView(v -> showError(v, getCauseIfRuntime(t)));
 
         resolveLoadMoreFooter();
-        resolveSwiperefreshLoadingView();
+        resolveSwipeRefreshLoadingView();
     }
 
     private void onActualDataReceived(String startFrom, List<Feedback> feedbacks, String nextFrom) {
@@ -117,11 +113,10 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
         }
 
         resolveLoadMoreFooter();
-        resolveSwiperefreshLoadingView();
+        resolveSwipeRefreshLoadingView();
     }
 
-    @OnGuiCreated
-    private void resolveSwiperefreshLoadingView() {
+    private void resolveSwipeRefreshLoadingView() {
         callView(v -> v.showLoading(netLoadingNow && isEmpty(netLoadingStartFrom)));
     }
 
@@ -133,6 +128,9 @@ public class FeedbackPresenter extends PlaceSupportPresenter<IFeedbackView> {
     public void onGuiCreated(@NonNull IFeedbackView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mData);
+
+        resolveLoadMoreFooter();
+        resolveSwipeRefreshLoadingView();
     }
 
     private void loadAllFromDb() {

@@ -13,9 +13,6 @@ import java.util.Set;
 import dev.ragnarok.fenrir.util.Objects;
 
 public class SharedHolders<T extends IdentificableHolder> {
-
-    //private static final String TAG = SharedHolders.class.getSimpleName();
-
     private final SparseArray<Set<WeakReference<T>>> mHoldersCache;
 
     private final boolean mSupportManyHoldersForEntity;

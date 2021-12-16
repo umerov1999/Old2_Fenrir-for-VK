@@ -45,9 +45,9 @@ public class SelectFacultyDialog extends AccountDependencyDialogFragment impleme
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         mDatabaseInteractor = InteractorFactory.createDatabaseInteractor();
-        universityId = getArguments().getInt(Extra.UNIVERSITY_ID);
+        universityId = requireArguments().getInt(Extra.UNIVERSITY_ID);
     }
 
     @NonNull

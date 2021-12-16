@@ -190,7 +190,7 @@ public class PrivacyViewFragment extends AccountDependencyDialogFragment impleme
     }
 
     private Privacy clonePrivacyFromArgs() {
-        Privacy privacy = getArguments().getParcelable(Extra.PRIVACY);
+        Privacy privacy = requireArguments().getParcelable(Extra.PRIVACY);
         if (privacy == null) {
             throw new IllegalArgumentException("Args do not contain Privacy extra");
         }

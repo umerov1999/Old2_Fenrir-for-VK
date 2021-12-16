@@ -19,7 +19,6 @@ import dev.ragnarok.fenrir.domain.IAttachmentsRepository;
 import dev.ragnarok.fenrir.model.AbsModel;
 import dev.ragnarok.fenrir.model.AttachmenEntry;
 import dev.ragnarok.fenrir.model.LocalPhoto;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICreateCommentView;
 import dev.ragnarok.fenrir.upload.Upload;
 import dev.ragnarok.fenrir.upload.UploadDestination;
@@ -32,8 +31,6 @@ import io.reactivex.rxjava3.core.Single;
 
 
 public class CommentCreatePresenter extends AbsAttachmentsEditPresenter<ICreateCommentView> {
-
-    private static final String TAG = CommentCreatePresenter.class.getSimpleName();
 
     private final int commentId;
     private final UploadDestination destination;
@@ -159,7 +156,13 @@ public class CommentCreatePresenter extends AbsAttachmentsEditPresenter<ICreateC
         uploadManager.enqueue(UploadUtils.createIntents(getAccountId(), destination, file, size, true));
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull ICreateCommentView view) {
+        super.onGuiCreated(view);
+
+        resolveButtonsVisibility();
+    }
+
     private void resolveButtonsVisibility() {
         callView(v -> v.setSupportedButtons(true, true, true, true, false, false));
     }

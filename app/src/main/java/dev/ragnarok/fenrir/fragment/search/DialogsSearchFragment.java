@@ -34,8 +34,8 @@ public class DialogsSearchFragment extends AbsSearchFragment<DialogsSearchPresen
     @Override
     public IPresenterFactory<DialogsSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            DialogsSearchCriteria criteria = getArguments().getParcelable(Extra.CRITERIA);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            DialogsSearchCriteria criteria = requireArguments().getParcelable(Extra.CRITERIA);
             return new DialogsSearchPresenter(accountId, criteria, saveInstanceState);
         };
     }

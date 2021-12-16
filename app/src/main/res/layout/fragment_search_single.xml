@@ -15,7 +15,8 @@
             android:id="@+id/searchview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:search_source_id="15" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

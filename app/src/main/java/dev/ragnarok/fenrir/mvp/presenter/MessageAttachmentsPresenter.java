@@ -32,7 +32,6 @@ import dev.ragnarok.fenrir.model.LocalVideo;
 import dev.ragnarok.fenrir.model.ModelsBundle;
 import dev.ragnarok.fenrir.model.Photo;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IMessageAttachmentsView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.upload.IUploadManager;
@@ -138,7 +137,6 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
         }
     }
 
-    @OnGuiCreated
     private void resolveEmptyViewVisibility() {
         callView(v -> v.setEmptyViewVisible(entries.isEmpty()));
     }
@@ -259,6 +257,8 @@ public class MessageAttachmentsPresenter extends RxSupportPresenter<IMessageAtta
     public void onGuiCreated(@NonNull IMessageAttachmentsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayAttachments(entries);
+
+        resolveEmptyViewVisibility();
     }
 
     public void fireAddPhotoButtonClick() {

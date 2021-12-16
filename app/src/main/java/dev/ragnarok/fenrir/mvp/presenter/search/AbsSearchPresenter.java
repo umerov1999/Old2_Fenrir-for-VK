@@ -14,7 +14,6 @@ import java.util.List;
 import dev.ragnarok.fenrir.fragment.search.criteria.BaseSearchCriteria;
 import dev.ragnarok.fenrir.fragment.search.nextfrom.AbsNextFrom;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.search.IBaseSearchView;
 import dev.ragnarok.fenrir.util.Pair;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -59,6 +58,8 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         if (getViewCreationCount() == 1) {
             doSearch();
         }
+        resolveListData();
+        resolveEmptyText();
     }
 
     C getCriteria() {
@@ -92,10 +93,10 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         searchDisposable.add(doSearch(accountId, cloneCriteria, nf)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(pair -> onSearchDataReceived(cloneCriteria, nf, pair.getFirst(), pair.getSecond()),
-                        this::onSeacrhError));
+                        this::onSearchError));
     }
 
-    void onSeacrhError(Throwable throwable) {
+    void onSearchError(Throwable throwable) {
         throwable.printStackTrace();
     }
 
@@ -129,12 +130,10 @@ public abstract class AbsSearchPresenter<V extends IBaseSearchView<T>, C extends
         fireCriteriaChanged();
     }
 
-    @OnGuiCreated
     private void resolveListData() {
         callView(v -> v.displayData(data));
     }
 
-    @OnGuiCreated
     private void resolveEmptyText() {
         callView(v -> v.setEmptyTextVisible(data.isEmpty()));
     }

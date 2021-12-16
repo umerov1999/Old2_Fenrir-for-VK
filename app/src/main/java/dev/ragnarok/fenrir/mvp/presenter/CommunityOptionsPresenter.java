@@ -17,7 +17,6 @@ import dev.ragnarok.fenrir.api.model.VKApiCommunity;
 import dev.ragnarok.fenrir.model.GroupSettings;
 import dev.ragnarok.fenrir.model.IdOption;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICommunityOptionsView;
 
 
@@ -52,14 +51,17 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
         view.setObsceneFilterChecked(settings.isObsceneFilterEnabled());
         view.setObsceneStopWordsChecked(settings.isObsceneStopwordsEnabled());
         view.displayObsceneStopWords(settings.getObsceneWords());
+
+        resolveObsceneWordsEditorVisibility();
+        resolvePublicDateView();
+        resolveCategoryView();
+        resolveSubjectView();
     }
 
-    @OnGuiCreated
     private void resolveObsceneWordsEditorVisibility() {
         callView(v -> v.setObsceneStopWordsVisible(settings.isObsceneStopwordsEnabled()));
     }
 
-    @OnGuiCreated
     private void resolvePublicDateView() {
         callView(v -> {
             v.setPublicDateVisible(community.type == VKApiCommunity.Type.PAGE);
@@ -67,7 +69,6 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
         });
     }
 
-    @OnGuiCreated
     private void resolveCategoryView() {
         boolean available = community.type == VKApiCommunity.Type.PAGE;
         callView(v -> v.setCategoryVisible(available));
@@ -77,7 +78,6 @@ public class CommunityOptionsPresenter extends AccountDependencyPresenter<ICommu
         }
     }
 
-    @OnGuiCreated
     private void resolveSubjectView() {
         boolean available = community.type == VKApiCommunity.Type.GROUP;
 

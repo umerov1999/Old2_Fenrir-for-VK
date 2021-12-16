@@ -113,7 +113,7 @@ public class AccountsFragment extends BaseFragment implements View.OnClickListen
                     new MaterialAlertDialogBuilder(requireActivity())
                             .setMessage(password)
                             .setTitle(R.string.login_password_hint)
-                            .setPositiveButton("OK", null)
+                            .setPositiveButton(R.string.button_ok, null)
                             .setNeutralButton(R.string.full_data, (dialog, which) -> {
                                 ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("response", password);

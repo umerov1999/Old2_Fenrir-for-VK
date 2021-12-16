@@ -15,7 +15,6 @@ import dev.ragnarok.fenrir.activity.ActivityUtils;
 import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.mvp.core.IPresenterFactory;
 import dev.ragnarok.fenrir.mvp.presenter.RepostPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IRepostView;
 
 public class RepostFragment extends AbsAttachmentsEditFragment<RepostPresenter, IRepostView> implements IRepostView {
@@ -52,7 +51,6 @@ public class RepostFragment extends AbsAttachmentsEditFragment<RepostPresenter, 
         setHasOptionsMenu(true);
     }
 
-    @OnGuiCreated
     public void goBack() {
         requireActivity().onBackPressed();
     }
@@ -87,9 +85,9 @@ public class RepostFragment extends AbsAttachmentsEditFragment<RepostPresenter, 
     @Override
     public IPresenterFactory<RepostPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            Post post = getArguments().getParcelable(EXTRA_POST);
-            Integer groupId = getArguments().containsKey(EXTRA_GROUP_ID) ? getArguments().getInt(EXTRA_GROUP_ID) : null;
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
+            Post post = requireArguments().getParcelable(EXTRA_POST);
+            Integer groupId = requireArguments().containsKey(EXTRA_GROUP_ID) ? requireArguments().getInt(EXTRA_GROUP_ID) : null;
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
             return new RepostPresenter(accountId, post, groupId, saveInstanceState);
         };
     }

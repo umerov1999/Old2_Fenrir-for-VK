@@ -51,7 +51,6 @@ import dev.ragnarok.fenrir.model.Post;
 import dev.ragnarok.fenrir.model.Story;
 import dev.ragnarok.fenrir.model.criteria.WallCriteria;
 import dev.ragnarok.fenrir.mvp.presenter.base.PlaceSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IWallView;
 import dev.ragnarok.fenrir.settings.Settings;
 import dev.ragnarok.fenrir.util.Analytics;
@@ -210,6 +209,7 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         super.onGuiCreated(viewHost);
         viewHost.displayWallData(wall);
         viewHost.updateStory(stories);
+        resolveLoadMoreFooterView();
     }
 
     private void loadWallCachedData() {
@@ -318,7 +318,6 @@ public abstract class AbsWallPresenter<V extends IWallView> extends PlaceSupport
         setRequestNow(false);
     }
 
-    @OnGuiCreated
     private void resolveLoadMoreFooterView() {
         @LoadMoreState
         int state;

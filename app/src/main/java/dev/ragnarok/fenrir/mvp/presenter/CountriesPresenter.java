@@ -15,7 +15,6 @@ import dev.ragnarok.fenrir.domain.IDatabaseInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.database.Country;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICountriesView;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -45,6 +44,7 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
     public void onGuiCreated(@NonNull ICountriesView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(filtered);
+        resolveLoadingView();
     }
 
     private void setLoadingNow(boolean loadingNow) {
@@ -52,7 +52,6 @@ public class CountriesPresenter extends RxSupportPresenter<ICountriesView> {
         resolveLoadingView();
     }
 
-    @OnGuiCreated
     private void resolveLoadingView() {
         callView(v -> v.displayLoading(loadingNow));
     }

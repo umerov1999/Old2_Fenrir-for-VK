@@ -50,7 +50,6 @@ import dev.ragnarok.fenrir.view.LoadMoreFooterHelper;
 public class MessagesLookFragment extends PlaceSupportMvpFragment<MessagesLookPresenter, IMessagesLookView>
         implements IMessagesLookView, MessagesAdapter.OnMessageActionListener, BackPressCallback {
 
-    private static final String TAG = MessagesLookFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private FrameLayout toolbarRootView;
     private FrameLayout downMenuGroup;

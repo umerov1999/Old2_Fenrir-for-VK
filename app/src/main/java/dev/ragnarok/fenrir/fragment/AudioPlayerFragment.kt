@@ -579,7 +579,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener
                 dlgAlert.setIcon(R.drawable.ic_error)
                 dlgAlert.setMessage(Text)
                 dlgAlert.setTitle(R.string.more_info)
-                dlgAlert.setPositiveButton("OK", null)
+                dlgAlert.setPositiveButton(R.string.button_ok, null)
                 dlgAlert.setCancelable(true)
                 dlgAlert.create().show()
             }.setActionTextColor(Color.WHITE).show()
@@ -647,7 +647,7 @@ class AudioPlayerFragment : BottomSheetDialogFragment(), TimeBar.OnScrubListener
         dlgAlert.setIcon(R.drawable.dir_song)
         dlgAlert.setMessage(Text)
         dlgAlert.setTitle(title ?: requireActivity().getString(R.string.get_lyrics))
-        dlgAlert.setPositiveButton("OK", null)
+        dlgAlert.setPositiveButton(R.string.button_ok, null)
         dlgAlert.setNeutralButton(requireActivity().getString(R.string.copy_text)) { _: DialogInterface, _: Int ->
             val clipboard =
                 requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

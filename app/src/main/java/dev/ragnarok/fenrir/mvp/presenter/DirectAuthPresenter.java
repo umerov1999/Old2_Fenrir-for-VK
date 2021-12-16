@@ -7,6 +7,7 @@ import static dev.ragnarok.fenrir.util.Utils.trimmedNonEmpty;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import dev.ragnarok.fenrir.AccountType;
@@ -19,7 +20,6 @@ import dev.ragnarok.fenrir.api.interfaces.INetworker;
 import dev.ragnarok.fenrir.api.model.LoginResponse;
 import dev.ragnarok.fenrir.model.Captcha;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IDirectAuthView;
 import dev.ragnarok.fenrir.util.Objects;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -133,17 +133,14 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         }
     }
 
-    @OnGuiCreated
     private void resolveSmsRootVisibility() {
         callView(v -> v.setSmsRootVisible(requireSmsCode));
     }
 
-    @OnGuiCreated
     private void resolveAppCodeRootVisibility() {
         callView(v -> v.setAppCodeRootVisible(requireAppCode));
     }
 
-    @OnGuiCreated
     private void resolveCaptchaViews() {
         callView(v -> v.setCaptchaRootVisible(Objects.nonNull(requiredCaptcha)));
 
@@ -176,9 +173,17 @@ public class DirectAuthPresenter extends RxSupportPresenter<IDirectAuthView> {
         resolveLoadingViews();
     }
 
-    @OnGuiCreated
     private void resolveLoadingViews() {
         callView(v -> v.displayLoading(loginNow));
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull IDirectAuthView view) {
+        super.onGuiCreated(view);
+        resolveLoadingViews();
+        resolveSmsRootVisibility();
+        resolveAppCodeRootVisibility();
+        resolveCaptchaViews();
     }
 
     public void fireLoginViaWebClick() {

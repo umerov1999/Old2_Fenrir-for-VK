@@ -192,7 +192,7 @@ public class PhotoAllCommentFragment extends PlaceSupportMvpFragment<PhotoAllCom
     @NonNull
     @Override
     public IPresenterFactory<PhotoAllCommentPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new PhotoAllCommentPresenter(getArguments().getInt(Extra.ACCOUNT_ID), getArguments().getInt(Extra.OWNER_ID), saveInstanceState);
+        return () -> new PhotoAllCommentPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), requireArguments().getInt(Extra.OWNER_ID), saveInstanceState);
     }
 
     @Override

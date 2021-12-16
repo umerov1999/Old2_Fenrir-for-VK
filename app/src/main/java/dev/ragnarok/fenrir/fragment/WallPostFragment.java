@@ -442,12 +442,12 @@ public class WallPostFragment extends PlaceSupportMvpFragment<WallPostPresenter,
     @Override
     public IPresenterFactory<WallPostPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            ParcelableOwnerWrapper wrapper = getArguments().getParcelable(Extra.OWNER);
+            ParcelableOwnerWrapper wrapper = requireArguments().getParcelable(Extra.OWNER);
             return new WallPostPresenter(
-                    getArguments().getInt(Extra.ACCOUNT_ID),
-                    getArguments().getInt(Extra.POST_ID),
-                    getArguments().getInt(Extra.OWNER_ID),
-                    getArguments().getParcelable(Extra.POST),
+                    requireArguments().getInt(Extra.ACCOUNT_ID),
+                    requireArguments().getInt(Extra.POST_ID),
+                    requireArguments().getInt(Extra.OWNER_ID),
+                    requireArguments().getParcelable(Extra.POST),
                     nonNull(wrapper) ? wrapper.get() : null,
                     requireActivity(),
                     saveInstanceState

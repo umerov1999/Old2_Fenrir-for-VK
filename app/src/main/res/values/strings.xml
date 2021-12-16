@@ -1650,6 +1650,7 @@
     <string name="be_online">Stay online</string>
     <string name="wall_attachments">Wall attachments</string>
     <string name="posts_analized">%1$d posts checked</string>
+    <string name="comments_analized">%1$d comments checked</string>
     <string name="photo_rounded_view">Round image edges</string>
     <string name="font_size">Font size</string>
     <string name="load_history_notif">Dialog preview in notifications</string>

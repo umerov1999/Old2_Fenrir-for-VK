@@ -12,15 +12,12 @@ import dev.ragnarok.fenrir.domain.IOwnersRepository;
 import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.Gift;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IGiftsView;
 import dev.ragnarok.fenrir.util.RxUtils;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-
 public class GiftsPresenter extends AccountDependencyPresenter<IGiftsView> {
 
-    private static final String TAG = ProductsPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 25;
     private final IOwnersRepository ownersRepository;
     private final ArrayList<Gift> mGifts;
@@ -40,7 +37,6 @@ public class GiftsPresenter extends AccountDependencyPresenter<IGiftsView> {
         requestAtLast();
     }
 
-    @OnGuiCreated
     private void resolveRefreshingView() {
         callView(v -> v.showRefreshing(netLoadingNow));
     }
@@ -99,6 +95,8 @@ public class GiftsPresenter extends AccountDependencyPresenter<IGiftsView> {
     public void onGuiCreated(@NonNull IGiftsView viewHost) {
         super.onGuiCreated(viewHost);
         viewHost.displayData(mGifts);
+
+        resolveRefreshingView();
     }
 
     private boolean canLoadMore() {

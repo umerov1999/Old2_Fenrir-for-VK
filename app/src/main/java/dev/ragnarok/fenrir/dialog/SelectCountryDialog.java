@@ -111,7 +111,7 @@ public class SelectCountryDialog extends BaseMvpDialogFragment<CountriesPresente
     @Override
     public IPresenterFactory<CountriesPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new CountriesPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

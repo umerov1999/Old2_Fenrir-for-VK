@@ -45,8 +45,8 @@ public class SelectSchoolClassesDialog extends AccountDependencyDialogFragment i
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        countryId = getArguments().getInt(Extra.COUNTRY_ID);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        countryId = requireArguments().getInt(Extra.COUNTRY_ID);
         mDatabaseInteractor = InteractorFactory.createDatabaseInteractor();
     }
 

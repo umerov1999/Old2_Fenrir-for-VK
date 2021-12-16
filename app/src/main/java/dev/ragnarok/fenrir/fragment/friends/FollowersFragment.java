@@ -34,21 +34,9 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
     @NonNull
     @Override
     public IPresenterFactory<FollowersPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new FollowersPresenter(getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.USER_ID),
+        return () -> new FollowersPresenter(requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.USER_ID),
                 saveInstanceState);
-    }
-
-    @Override
-    public void showNotFollowers(List<Owner> data, int accountId) {
-        OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(requireActivity().getString(R.string.not_follower))
-                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", null)
-                .setCancelable(true)
-                .show();
     }
 
     @Override
@@ -62,23 +50,38 @@ public class FollowersFragment extends AbsOwnersListFragment<FollowersPresenter,
         return true;
     }
 
+    private void showNotFollowers(@NonNull List<Owner> data, int accountId) {
+        OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(requireActivity().getString(R.string.not_follower))
+                .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> callPresenter(p -> p.clearModificationFollowers(false, true)))
+                .setCancelable(false)
+                .show();
+    }
+
     @Override
-    public void showAddFollowers(List<Owner> add, List<Owner> remove, int accountId) {
-        if (add.size() <= 0 && remove.size() > 0) {
+    public void showModFollowers(@Nullable List<Owner> add, @Nullable List<Owner> remove, int accountId) {
+        if (Utils.isEmpty(add) && Utils.isEmpty(remove)) {
+            return;
+        }
+        if (Utils.isEmpty(add) && !Utils.isEmpty(remove)) {
             showNotFollowers(remove, accountId);
             return;
         }
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), add);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_follower))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", (dialog, which) -> {
-                    if (remove.size() > 0) {
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    callPresenter(p -> p.clearModificationFollowers(true, false));
+                    if (!Utils.isEmpty(remove)) {
                         showNotFollowers(remove, accountId);
                     }
                 })
-                .setCancelable(remove.size() <= 0)
+                .setCancelable(false)
                 .show();
     }
 

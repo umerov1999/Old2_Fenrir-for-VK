@@ -105,22 +105,22 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        accountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         docsInteractor = InteractorFactory.createDocsInteractor();
 
         if (savedInstanceState != null) {
             restoreFromInstanceState(savedInstanceState);
         }
 
-        ownerId = getArguments().getInt(Extra.OWNER_ID);
-        documentId = getArguments().getInt(Extra.DOC_ID);
+        ownerId = requireArguments().getInt(Extra.OWNER_ID);
+        documentId = requireArguments().getInt(Extra.DOC_ID);
 
-        if (getArguments().containsKey(Extra.DOC)) {
-            document = getArguments().getParcelable(Extra.DOC);
+        if (requireArguments().containsKey(Extra.DOC)) {
+            document = requireArguments().getParcelable(Extra.DOC);
         }
 
-        if (getArguments().containsKey(Extra.ACCESS_KEY)) {
-            documentAccessKey = getArguments().getString(Extra.ACCESS_KEY);
+        if (requireArguments().containsKey(Extra.ACCESS_KEY)) {
+            documentAccessKey = requireArguments().getString(Extra.ACCESS_KEY);
         }
     }
 
@@ -246,7 +246,7 @@ public class DocPreviewFragment extends BaseFragment implements View.OnClickList
         mLoadingNow = false;
         this.document = document;
 
-        getArguments().putParcelable(Extra.DOC, document);
+        requireArguments().putParcelable(Extra.DOC, document);
 
         resolveAllViews();
         resolveActionBar();

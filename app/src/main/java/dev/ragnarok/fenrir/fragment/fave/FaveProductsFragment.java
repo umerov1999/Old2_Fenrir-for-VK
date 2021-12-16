@@ -128,7 +128,7 @@ public class FaveProductsFragment extends BaseMvpFragment<FaveProductsPresenter,
     @NonNull
     @Override
     public IPresenterFactory<FaveProductsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new FaveProductsPresenter(getArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
+        return () -> new FaveProductsPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), saveInstanceState);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class SelectCityDialog extends AccountDependencyDialogFragment implements
 
     public static final String REQUEST_CODE_CITY = "request_city";
     private static final int COUNT_PER_REQUEST = 1000;
-    private static final int RUN_SEACRH_DELAY = 1000;
+    private static final int RUN_SEARCH_DELAY = 1000;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private int accountId;
     private int countryId;
@@ -55,9 +55,9 @@ public class SelectCityDialog extends AccountDependencyDialogFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        accountId = getArguments().getInt(Extra.ACCOUNT_ID);
+        accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
         databaseInteractor = InteractorFactory.createDatabaseInteractor();
-        countryId = getArguments().getInt(Extra.COUNTRY_ID);
+        countryId = requireArguments().getInt(Extra.COUNTRY_ID);
     }
 
     @NonNull
@@ -72,7 +72,7 @@ public class SelectCityDialog extends AccountDependencyDialogFragment implements
             public void afterTextChanged(Editable s) {
                 filter = s.toString();
                 mHandler.removeCallbacks(mRunSearchRunnable);
-                mHandler.postDelayed(mRunSearchRunnable, RUN_SEACRH_DELAY);
+                mHandler.postDelayed(mRunSearchRunnable, RUN_SEARCH_DELAY);
             }
         });
 

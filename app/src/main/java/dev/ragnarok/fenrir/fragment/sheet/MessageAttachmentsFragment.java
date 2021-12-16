@@ -160,10 +160,10 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
     @Override
     public IPresenterFactory<MessageAttachmentsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> {
-            int accountId = getArguments().getInt(Extra.ACCOUNT_ID);
-            int messageId = getArguments().getInt(Extra.MESSAGE_ID);
-            int messageOwnerId = getArguments().getInt(Extra.OWNER_ID);
-            ModelsBundle bundle = getArguments().getParcelable(Extra.BUNDLE);
+            int accountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+            int messageId = requireArguments().getInt(Extra.MESSAGE_ID);
+            int messageOwnerId = requireArguments().getInt(Extra.OWNER_ID);
+            ModelsBundle bundle = requireArguments().getParcelable(Extra.BUNDLE);
             return new MessageAttachmentsPresenter(accountId, messageOwnerId, messageId, requireActivity(), bundle, saveInstanceState);
         };
     }
@@ -336,7 +336,7 @@ public class MessageAttachmentsFragment extends AbsPresenterBottomSheetFragment<
                                 .setIcon(R.drawable.ic_error)
                                 .setMessage(Text)
                                 .setTitle(R.string.more_info)
-                                .setPositiveButton("OK", null)
+                                .setPositiveButton(R.string.button_ok, null)
                                 .setCancelable(true)
                                 .show();
                     }).setActionTextColor(Color.WHITE).show();

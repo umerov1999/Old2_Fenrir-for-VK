@@ -18,7 +18,6 @@ import dev.ragnarok.fenrir.domain.IOwnersRepository;
 import dev.ragnarok.fenrir.domain.Repository;
 import dev.ragnarok.fenrir.model.Owner;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IEnterPinView;
 import dev.ragnarok.fenrir.settings.ISettings;
 import dev.ragnarok.fenrir.settings.Settings;
@@ -81,7 +80,6 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         callView(IEnterPinView::showBiometricPrompt);
     }
 
-    @OnGuiCreated
     private void resolveAvatarView() {
         String avatar = Objects.isNull(mOwner) ? null : mOwner.getMaxSquareAvatar();
         if (isEmpty(avatar)) {
@@ -104,7 +102,6 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
         return howLongAgoWasFirstAttempt < MAX_ATTEMPT_DELAY ? MAX_ATTEMPT_DELAY - howLongAgoWasFirstAttempt : 0;
     }
 
-    @OnGuiCreated
     private void refreshViewCirclesVisibility() {
         callView(v -> v.displayPin(mValues, NO_VALUE));
     }
@@ -202,6 +199,8 @@ public class EnterPinPresenter extends RxSupportPresenter<IEnterPinView> {
                 view.showBiometricPrompt();
             }
         }
+        resolveAvatarView();
+        refreshViewCirclesVisibility();
     }
 
     private void resetPin() {

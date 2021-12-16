@@ -1,5 +1,7 @@
 package dev.ragnarok.fenrir.mvp.view;
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import dev.ragnarok.fenrir.model.Owner;
@@ -22,7 +24,5 @@ public interface IAllFriendsView extends IMvpView, IErrorView, IAccountDependenc
 
     void showRefreshing(boolean refreshing);
 
-    void showNotFriends(List<Owner> data, int accountId);
-
-    void showAddFriends(List<Owner> add, List<Owner> remove, int accountId);
+    void showModFriends(@Nullable List<Owner> add, @Nullable List<Owner> remove, int accountId);
 }

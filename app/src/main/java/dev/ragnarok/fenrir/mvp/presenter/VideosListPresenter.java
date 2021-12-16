@@ -28,7 +28,6 @@ import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.fragment.search.nextfrom.IntNextFrom;
 import dev.ragnarok.fenrir.model.Video;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IVideosListView;
 import dev.ragnarok.fenrir.upload.IUploadManager;
 import dev.ragnarok.fenrir.upload.Upload;
@@ -161,7 +160,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         uploadsData.addAll(data);
 
         callView(IVideosListView::notifyDataSetChanged);
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
     private void onUploadResults(Pair<Upload, UploadResult<?>> pair) {
@@ -203,7 +202,7 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
             }
         }
 
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
     private void onUploadDeleted(int[] ids) {
@@ -215,11 +214,10 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
             }
         }
 
-        resolveUploadDataVisiblity();
+        resolveUploadDataVisibility();
     }
 
-    @OnGuiCreated
-    private void resolveUploadDataVisiblity() {
+    private void resolveUploadDataVisibility() {
         callView(v -> v.setUploadDataVisible(!uploadsData.isEmpty()));
     }
 
@@ -308,6 +306,8 @@ public class VideosListPresenter extends AccountDependencyPresenter<IVideosListV
         view.displayData(data);
         view.displayUploads(uploadsData);
         view.setToolbarSubtitle(albumTitle);
+
+        resolveUploadDataVisibility();
     }
 
     public void fireFileForUploadSelected(String file) {

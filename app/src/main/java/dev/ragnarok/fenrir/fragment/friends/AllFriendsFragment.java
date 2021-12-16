@@ -106,8 +106,8 @@ public class AllFriendsFragment extends BaseMvpFragment<AllFriendsPresenter, IAl
     @Override
     public IPresenterFactory<AllFriendsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new AllFriendsPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getInt(Extra.USER_ID), saveInstanceState
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.USER_ID), saveInstanceState
         );
     }
 
@@ -152,35 +152,38 @@ public class AllFriendsFragment extends BaseMvpFragment<AllFriendsPresenter, IAl
         }
     }
 
-    @Override
-    public void showNotFriends(List<Owner> data, int accountId) {
+    private void showNotFriends(@NonNull List<Owner> data, int accountId) {
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), data);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.not_friend))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", null)
-                .setCancelable(true)
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> callPresenter(p -> p.clearModificationFriends(false, true)))
+                .setCancelable(false)
                 .show();
     }
 
     @Override
-    public void showAddFriends(List<Owner> add, List<Owner> remove, int accountId) {
-        if (add.size() <= 0 && remove.size() > 0) {
+    public void showModFriends(@Nullable List<Owner> add, @Nullable List<Owner> remove, int accountId) {
+        if (Utils.isEmpty(add) && Utils.isEmpty(remove)) {
+            return;
+        }
+        if (Utils.isEmpty(add) && !Utils.isEmpty(remove)) {
             showNotFriends(remove, accountId);
             return;
         }
         OwnersAdapter adapter = new OwnersAdapter(requireActivity(), add);
-        adapter.setClickListener(owner -> PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null).tryOpenWith(requireContext()));
+        adapter.setClickListener(owner -> Utils.openPlaceWithSwipebleActivity(requireActivity(), PlaceFactory.getOwnerWallPlace(accountId, owner.getOwnerId(), null)));
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(requireActivity().getString(R.string.new_friend))
                 .setView(Utils.createAlertRecycleFrame(requireActivity(), adapter, null, accountId))
-                .setPositiveButton("OK", (dialog, which) -> {
-                    if (remove.size() > 0) {
+                .setPositiveButton(R.string.button_ok, (dialog, which) -> {
+                    callPresenter(p -> p.clearModificationFriends(true, false));
+                    if (!Utils.isEmpty(remove)) {
                         showNotFriends(remove, accountId);
                     }
                 })
-                .setCancelable(remove.size() <= 0)
+                .setCancelable(false)
                 .show();
     }
 

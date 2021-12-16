@@ -213,7 +213,7 @@ public class ShortedLinksFragment extends BaseMvpFragment<ShortedLinksPresenter,
     @Override
     public IPresenterFactory<ShortedLinksPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ShortedLinksPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

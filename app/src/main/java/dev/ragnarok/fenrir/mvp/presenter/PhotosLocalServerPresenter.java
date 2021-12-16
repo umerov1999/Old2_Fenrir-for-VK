@@ -56,9 +56,7 @@ public class PhotosLocalServerPresenter extends AccountDependencyPresenter<IPhot
 
     public void toggleReverse() {
         reverse = !reverse;
-        if (!search_at.isSearchMode()) {
-            fireRefresh(false);
-        }
+        fireRefresh(false);
     }
 
     @Override
@@ -141,7 +139,7 @@ public class PhotosLocalServerPresenter extends AccountDependencyPresenter<IPhot
     private void doSearch() {
         actualDataLoading = true;
         resolveRefreshingView();
-        appendDisposable(fInteractor.searchPhotos(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT)
+        appendDisposable(fInteractor.searchPhotos(search_at.getQuery(), search_at.getOffset(), SEARCH_COUNT, reverse)
                 .compose(RxUtils.applySingleIOToMainSchedulers())
                 .subscribe(data -> onSearched(new FindAt(Objects.requireNonNull(search_at.getQuery()), search_at.getOffset() + SEARCH_COUNT, data.size() < SEARCH_COUNT), data), this::onActualDataGetError));
     }

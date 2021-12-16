@@ -18,7 +18,6 @@ import dev.ragnarok.fenrir.model.ContactInfo;
 import dev.ragnarok.fenrir.model.Manager;
 import dev.ragnarok.fenrir.model.User;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICommunityManagerEditView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -26,8 +25,6 @@ import dev.ragnarok.fenrir.util.Utils;
 
 
 public class CommunityManagerEditPresenter extends AccountDependencyPresenter<ICommunityManagerEditView> {
-
-    private static final String TAG = CommunityManagerEditPresenter.class.getSimpleName();
 
     private final List<User> users;
 
@@ -141,7 +138,18 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         return !isCreator() && !adding;
     }
 
-    @OnGuiCreated
+    @Override
+    public void onGuiCreated(@NonNull ICommunityManagerEditView view) {
+        super.onGuiCreated(view);
+
+        resolveRadioButtonsCheckState();
+        resolveDeleteOptionVisibility();
+        resolveRadioButtonsVisibility();
+        resolveProgressView();
+        resolveContactBlock();
+        resolveUserInfoViews();
+    }
+
     private void resolveRadioButtonsCheckState() {
         if (!isCreator()) {
             switch (adminLevel) {
@@ -158,12 +166,10 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         }
     }
 
-    @OnGuiCreated
-    private void resolveDeleteOptionVisiblity() {
+    private void resolveDeleteOptionVisibility() {
         callView(v -> v.setDeleteOptionVisible(canDelete()));
     }
 
-    @OnGuiCreated
     private void resolveRadioButtonsVisibility() {
         callView(v -> v.configRadioButtons(isCreator()));
     }
@@ -173,9 +179,7 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         resolveProgressView();
     }
 
-    @OnGuiCreated
     private void resolveProgressView() {
-
         if (savingNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.saving, false));
         } else {
@@ -239,7 +243,6 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         }
     }
 
-    @OnGuiCreated
     private void resolveContactBlock() {
         callView(v -> {
             v.setShowAsContactCheched(showAsContact);
@@ -250,7 +253,6 @@ public class CommunityManagerEditPresenter extends AccountDependencyPresenter<IC
         });
     }
 
-    @OnGuiCreated
     private void resolveUserInfoViews() {
         callView(v -> v.displayUserInfo(getCurrentUser()));
     }

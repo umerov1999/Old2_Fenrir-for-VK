@@ -43,8 +43,8 @@ public class ConversationDocsFragment extends AbsChatAttachmentsFragment<Documen
     @Override
     public IPresenterFactory<ChatAttachmentDocsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new ChatAttachmentDocsPresenter(
-                getArguments().getInt(Extra.PEER_ID),
-                getArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getInt(Extra.PEER_ID),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
                 saveInstanceState
         );
     }

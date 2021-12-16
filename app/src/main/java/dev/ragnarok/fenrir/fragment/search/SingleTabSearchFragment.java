@@ -62,9 +62,9 @@ public class SingleTabSearchFragment extends Fragment implements MySearchView.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContentType = getArguments().getInt(Extra.TYPE);
-        mAccountId = getArguments().getInt(Extra.ACCOUNT_ID);
-        mInitialCriteria = getArguments().getParcelable(Extra.CRITERIA);
+        mContentType = requireArguments().getInt(Extra.TYPE);
+        mAccountId = requireArguments().getInt(Extra.ACCOUNT_ID);
+        mInitialCriteria = requireArguments().getParcelable(Extra.CRITERIA);
 
         if (Objects.nonNull(savedInstanceState)) {
             attachedChild = savedInstanceState.getBoolean("attachedChild");

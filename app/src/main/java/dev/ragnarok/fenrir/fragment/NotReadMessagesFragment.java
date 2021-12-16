@@ -54,7 +54,6 @@ import dev.ragnarok.fenrir.view.LoadMoreFooterHelper;
 public class NotReadMessagesFragment extends PlaceSupportMvpFragment<NotReadMessagesPresenter, INotReadMessagesView>
         implements INotReadMessagesView, MessagesAdapter.OnMessageActionListener, BackPressCallback {
 
-    private static final String TAG = NotReadMessagesFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private FrameLayout toolbarRootView;
     private FrameLayout downMenuGroup;

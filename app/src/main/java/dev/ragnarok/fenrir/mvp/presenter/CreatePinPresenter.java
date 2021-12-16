@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import java.util.Arrays;
 
 import dev.ragnarok.fenrir.Constants;
 import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.mvp.presenter.base.RxSupportPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICreatePinView;
 
 public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
@@ -83,7 +84,6 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         resolveTitles();
     }
 
-    @OnGuiCreated
     private void resolveTitles() {
         if (mCurrentStep == STEP_CREATE) {
             callView(v -> v.displayTitle(R.string.create_pin_code_title));
@@ -130,10 +130,6 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         resolveAllViews();
     }
 
-    public void fireSkipButtonClick() {
-        callView(ICreatePinView::sendSkipAndClose);
-    }
-
     private boolean isPinsMatch() {
         for (int i = 0; i < Constants.PIN_DIGITS_COUNT; i++) {
             if (mCreatedPin[i] == NO_VALUE || mRepeatedPin[i] == NO_VALUE || mCreatedPin[i] != mRepeatedPin[i]) {
@@ -164,13 +160,20 @@ public class CreatePinPresenter extends RxSupportPresenter<ICreatePinView> {
         return true;
     }
 
-    @OnGuiCreated
     private void refreshViewCirclesVisibility() {
         if (mCurrentStep == STEP_CREATE) {
             callView(v -> v.displayPin(mCreatedPin, NO_VALUE));
         } else {
             callView(v -> v.displayPin(mRepeatedPin, NO_VALUE));
         }
+    }
+
+    @Override
+    public void onGuiCreated(@NonNull ICreatePinView view) {
+        super.onGuiCreated(view);
+
+        resolveTitles();
+        refreshViewCirclesVisibility();
     }
 
     private void resetPin(int[] pin) {

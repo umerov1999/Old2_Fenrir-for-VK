@@ -1,5 +1,7 @@
 package dev.ragnarok.fenrir.mvp.view;
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import dev.ragnarok.fenrir.model.Community;
@@ -10,7 +12,7 @@ import dev.ragnarok.fenrir.mvp.view.base.IAccountDependencyView;
 
 
 public interface ICommunitiesView extends IAccountDependencyView, IMvpView, IErrorView {
-    void displayData(DataWrapper<Community> own, DataWrapper<Community> filtered, DataWrapper<Community> seacrh);
+    void displayData(DataWrapper<Community> own, DataWrapper<Community> filtered, DataWrapper<Community> search);
 
     void notifyDataSetChanged();
 
@@ -24,5 +26,5 @@ public interface ICommunitiesView extends IAccountDependencyView, IMvpView, IErr
 
     void showCommunityMenu(Community community);
 
-    void showAddCommunities(List<Owner> add, List<Owner> remove, int accountId);
+    void showModCommunities(@Nullable List<Owner> add, @Nullable List<Owner> remove, int accountId);
 }

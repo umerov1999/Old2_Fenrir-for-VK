@@ -63,7 +63,6 @@ import dev.ragnarok.fenrir.util.Utils;
 
 public class ChatDownloadWorker extends Worker {
 
-    private static final String TAG = ChatDownloadWorker.class.getSimpleName();
     private final DateFormat DOWNLOAD_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Utils.getAppLocale());
     private final Map<Integer, String> Avatars = new HashMap<>();
     private final StringBuilder avatars_styles = new StringBuilder();

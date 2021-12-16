@@ -147,7 +147,7 @@ public class RelationshipInteractor implements IRelationshipInteractor {
     }
 
     @Override
-    public Single<Pair<List<User>, Integer>> seacrhFriends(int accountId, int userId, int count, int offset, String q) {
+    public Single<Pair<List<User>, Integer>> searchFriends(int accountId, int userId, int count, int offset, String q) {
         return networker.vkDefault(accountId)
                 .friends()
                 .search(userId, q, UserColumns.API_FIELDS, null, offset, count)

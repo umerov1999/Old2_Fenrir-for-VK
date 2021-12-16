@@ -137,6 +137,20 @@ public class CommentsInteractor implements ICommentsInteractor {
     }
 
     @Override
+    public Single<List<Comment>> getCommentsNoCache(int accountId, int ownerId, int postId, int offset) {
+        return networker.vkDefault(accountId)
+                .comments()
+                .get("post", ownerId, postId, offset, 100, "desc", null, null, null, Constants.MAIN_OWNER_FIELDS)
+                .flatMap(response -> {
+                    List<VKApiComment> commentDtos = nonNull(response.main) ? listEmptyIfNull(response.main.comments) : emptyList();
+                    List<VKApiUser> users = nonNull(response.main) ? listEmptyIfNull(response.main.profiles) : emptyList();
+                    List<VKApiCommunity> groups = nonNull(response.main) ? listEmptyIfNull(response.main.groups) : emptyList();
+
+                    return transform(accountId, new Commented(postId, ownerId, CommentedType.POST, null), commentDtos, users, groups);
+                });
+    }
+
+    @Override
     public Single<CommentsBundle> getCommentsPortion(int accountId, @NonNull Commented commented, int offset, int count, Integer startCommentId, Integer threadComment, boolean invalidateCache, String sort) {
         String type = commented.getTypeForStoredProcedure();
 

@@ -31,7 +31,6 @@ public class AudioSearchTabsFragment extends Fragment {
     public static final int TAB_MUSIC = 0;
     public static final int TAB_AUDIO_PLAYLISTS = 1;
     public static final int TAB_ARTISTS = 2;
-    private static final String TAG = AudioSearchTabsFragment.class.getSimpleName();
 
     public static Bundle buildArgs(int accountId) {
         Bundle args = new Bundle();

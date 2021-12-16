@@ -17,7 +17,6 @@ import dev.ragnarok.fenrir.domain.IPollInteractor;
 import dev.ragnarok.fenrir.domain.InteractorFactory;
 import dev.ragnarok.fenrir.model.Poll;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.ICreatePollView;
 import dev.ragnarok.fenrir.mvp.view.IProgressView;
 import dev.ragnarok.fenrir.util.RxUtils;
@@ -50,6 +49,8 @@ public class CreatePollPresenter extends AccountDependencyPresenter<ICreatePollV
         viewHost.setAnonymous(mAnonymous);
         viewHost.setMultiply(mMultiply);
         viewHost.displayOptions(mOptions);
+
+        resolveProgressDialog();
     }
 
     private void setCreationNow(boolean creationNow) {
@@ -93,7 +94,6 @@ public class CreatePollPresenter extends AccountDependencyPresenter<ICreatePollV
         callView(view -> view.sendResultAndGoBack(poll));
     }
 
-    @OnGuiCreated
     private void resolveProgressDialog() {
         if (creationNow) {
             callView(v -> v.displayProgressDialog(R.string.please_wait, R.string.publication, false));

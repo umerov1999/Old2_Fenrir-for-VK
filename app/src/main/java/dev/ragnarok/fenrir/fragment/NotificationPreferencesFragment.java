@@ -146,7 +146,7 @@ public class NotificationPreferencesFragment extends PreferenceFragmentCompat {
             Ringtone r = RingtoneManager.getRingtone(requireActivity(), Uri.parse(uri));
             current = r;
             r.play();
-        }).setPositiveButton("OK", (dialog, which) -> {
+        }).setPositiveButton(R.string.button_ok, (dialog, which) -> {
             if (selection == -1) {
                 Toast.makeText(requireActivity(), R.string.ringtone_not_selected, Toast.LENGTH_SHORT).show();
             } else {

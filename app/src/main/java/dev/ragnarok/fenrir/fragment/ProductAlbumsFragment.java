@@ -134,7 +134,7 @@ public class ProductAlbumsFragment extends BaseMvpFragment<ProductAlbumsPresente
     @NonNull
     @Override
     public IPresenterFactory<ProductAlbumsPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
-        return () -> new ProductAlbumsPresenter(getArguments().getInt(Extra.ACCOUNT_ID), getArguments().getInt(Extra.OWNER_ID), requireActivity(), saveInstanceState);
+        return () -> new ProductAlbumsPresenter(requireArguments().getInt(Extra.ACCOUNT_ID), requireArguments().getInt(Extra.OWNER_ID), requireActivity(), saveInstanceState);
     }
 
     @Override

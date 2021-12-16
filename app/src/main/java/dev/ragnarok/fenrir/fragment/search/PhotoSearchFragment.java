@@ -62,8 +62,8 @@ public class PhotoSearchFragment extends AbsSearchFragment<PhotoSearchPresenter,
     @Override
     public IPresenterFactory<PhotoSearchPresenter> getPresenterFactory(@Nullable Bundle saveInstanceState) {
         return () -> new PhotoSearchPresenter(
-                getArguments().getInt(Extra.ACCOUNT_ID),
-                getArguments().getParcelable(Extra.CRITERIA),
+                requireArguments().getInt(Extra.ACCOUNT_ID),
+                requireArguments().getParcelable(Extra.CRITERIA),
                 saveInstanceState
         );
     }

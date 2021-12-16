@@ -21,7 +21,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FavePhotosPresenter extends AccountDependencyPresenter<IFavePhotosView> {
 
-    private static final String TAG = FavePhotosPresenter.class.getSimpleName();
     private static final int COUNT_PER_REQUEST = 50;
     private final IFaveInteractor faveInteractor;
     private final ArrayList<Photo> mPhotos;

@@ -19,7 +19,6 @@ import dev.ragnarok.fenrir.R;
 import dev.ragnarok.fenrir.db.Stores;
 import dev.ragnarok.fenrir.model.Audio;
 import dev.ragnarok.fenrir.mvp.presenter.base.AccountDependencyPresenter;
-import dev.ragnarok.fenrir.mvp.reflect.OnGuiCreated;
 import dev.ragnarok.fenrir.mvp.view.IAudiosLocalView;
 import dev.ragnarok.fenrir.place.PlaceFactory;
 import dev.ragnarok.fenrir.player.MusicPlaybackService;
@@ -255,6 +254,7 @@ public class AudiosLocalPresenter extends AccountDependencyPresenter<IAudiosLoca
         super.onGuiCreated(view);
         view.displayList(audios);
         view.displayUploads(uploadsData);
+        resolveUploadDataVisibility();
     }
 
     private void onUploadsDataReceived(List<Upload> data) {
@@ -314,7 +314,6 @@ public class AudiosLocalPresenter extends AccountDependencyPresenter<IAudiosLoca
         resolveUploadDataVisibility();
     }
 
-    @OnGuiCreated
     private void resolveUploadDataVisibility() {
         callView(v -> v.setUploadDataVisible(!uploadsData.isEmpty()));
     }
